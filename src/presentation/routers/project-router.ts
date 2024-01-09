@@ -17,7 +17,7 @@ export default function ProjectRouter(
   router.get("/", async (req: Request, res: Response) => {
     try {
       const projects = await getAllProjectsUseCase.execute();
-      return res.json({ data: projects });
+      return res.json(projects);
     } catch (error) {
       res.status(500).json({ message: "Error fetching data" });
     }
@@ -27,7 +27,7 @@ export default function ProjectRouter(
     try {
       const { id } = req.params;
       const project = await getProjectUseCase.execute(id);
-      return res.json({ data: project });
+      return res.json(project);
     } catch (error) {
       res.status(500).json({ message: "Error fetching data" });
     }
@@ -60,4 +60,6 @@ export default function ProjectRouter(
       res.status(500).json({ message: "Error deleting data" });
     }
   });
+
+  return router;
 }
