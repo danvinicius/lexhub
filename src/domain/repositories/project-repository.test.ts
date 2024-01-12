@@ -1,5 +1,5 @@
 import { Project } from "../entities/project";
-import { ProjectDataSource } from "../interfaces/data-sources/project-data-source";
+import { ProjectDataSource } from "../../data/interfaces/data-sources/project-data-source";
 import { ProjectRepositoryImpl } from "./project-repository";
 
 class MockProjectDataSource implements ProjectDataSource {

@@ -1,5 +1,5 @@
 import { Project } from "../entities/project";
-import { ProjectDataSource } from "../interfaces/data-sources/project-data-source";
+import { ProjectDataSource } from "../../data/interfaces/data-sources/project-data-source";
 import { ProjectRepository } from "../interfaces/repositories/project-repository";
 
 export class ProjectRepositoryImpl implements ProjectRepository {

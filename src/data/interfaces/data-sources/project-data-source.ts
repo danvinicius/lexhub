@@ -1,4 +1,4 @@
-import { Project } from "../../entities/project";
+import { Project } from "../../../domain/entities/project";
 
 export interface ProjectDataSource {
   get(id: string): Promise<Project>;
