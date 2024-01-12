@@ -1,6 +1,6 @@
-import { Project } from "../../entities/project";
-import { ProjectRepository } from "../../interfaces/repositories/project-repository";
-import { GetAllProjects } from "./get-all-projects";
+import { Project } from "../../../../src/domain/entities/project";
+import { ProjectRepository } from "../../../../src/domain/interfaces/repositories/project-repository";
+import { GetAllProjects } from "../../../../src/domain/use-cases/project/get-all-projects";
 
 describe("Get all projects Use Case", () => {
   class MockProjectRepository implements ProjectRepository {

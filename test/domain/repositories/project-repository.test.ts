@@ -1,6 +1,6 @@
-import { Project } from "../entities/project";
-import { ProjectDataSource } from "../../data/interfaces/data-sources/project-data-source";
-import { ProjectRepositoryImpl } from "./project-repository";
+import { Project } from "../../../src/domain/entities/project";
+import { ProjectDataSource } from "../../../src/data/interfaces/data-sources/project-data-source";
+import { ProjectRepositoryImpl } from "../../../src/domain/repositories/project-repository";
 
 class MockProjectDataSource implements ProjectDataSource {
   get(id: string): Promise<Project> {

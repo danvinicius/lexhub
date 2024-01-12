@@ -1,13 +1,13 @@
 import request from "supertest";
 import { describe } from "node:test";
-import { Project } from "../../domain/entities/project";
-import { CreateProjectUseCase } from "../../domain/interfaces/use-cases/project/create-project";
-import { GetProjectUseCase } from "../../domain/interfaces/use-cases/project/get-project";
-import server from "../../server";
-import ProjectRouter from "./project-router";
-import { GetAllProjectsUseCase } from "../../domain/interfaces/use-cases/project/get-all-projects";
-import { UpdateProjectUseCase } from "../../domain/interfaces/use-cases/project/update-project";
-import { DeleteProjectUseCase } from "../../domain/interfaces/use-cases/project/delete-project";
+import { Project } from "../../src/domain/entities/project";
+import { CreateProjectUseCase } from "../../src/domain/interfaces/use-cases/project/create-project";
+import { GetProjectUseCase } from "../../src/domain/interfaces/use-cases/project/get-project";
+import server from "../../src/server";
+import ProjectRouter from "../../src/presentation/routers/project-router";
+import { GetAllProjectsUseCase } from "../../src/domain/interfaces/use-cases/project/get-all-projects";
+import { UpdateProjectUseCase } from "../../src/domain/interfaces/use-cases/project/update-project";
+import { DeleteProjectUseCase } from "../../src/domain/interfaces/use-cases/project/delete-project";
 
 class MockGetProjectUseCase implements GetProjectUseCase {
   execute(id: string): Promise<Project> {
