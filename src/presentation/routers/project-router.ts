@@ -19,6 +19,7 @@ export default function ProjectRouter(
       const projects = await getAllProjectsUseCase.execute();
       return res.json(projects);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "Error fetching data" });
     }
   });
@@ -27,27 +28,33 @@ export default function ProjectRouter(
     try {
       const { id } = req.params;
       const project = await getProjectUseCase.execute(id);
+      if (!project) {
+        return res.status(404).send()
+      }
       return res.json(project);
-    } catch (error) {
-      res.status(500).json({ message: "Error fetching data" });
+    } catch (error: any) {
+      console.log(error);
+      res.status(500).json({ message: error.message });
     }
   });
   router.post("/", async (req: Request, res: Response) => {
     try {
-      const { project } = req.body;
+      const project = req.body;
       await createProjectUseCase.execute(project);
       return res.status(201).json({ message: "Project created" });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "Error saving data" });
     }
   });
   router.put("/:id", async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const { project } = req.body;
+      const project = req.body;
       await updateProjectUseCase.execute(id, project);
       return res.json({ message: "Project updated" });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "Error updating data" });
     }
   });
@@ -57,6 +64,7 @@ export default function ProjectRouter(
       await deleteProjectUseCase.execute(id);
       return res.json({ message: "Project deleted" });
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "Error deleting data" });
     }
   });

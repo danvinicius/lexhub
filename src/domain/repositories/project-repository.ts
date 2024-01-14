@@ -1,28 +1,32 @@
 import { Project } from "../entities/project";
-import { ProjectDataSource } from "../../data/interfaces/data-sources/project-data-source";
+import { ProjectDatabaseWrapper } from "../../data/interfaces/wrapper/project-database-wrapper";
 import { ProjectRepository } from "../interfaces/repositories/project-repository";
 
 export class ProjectRepositoryImpl implements ProjectRepository {
-  private projectDataSource: ProjectDataSource;
+  private projectDbWrapper: ProjectDatabaseWrapper;
 
-  constructor(projectDataSource: ProjectDataSource) {
-    this.projectDataSource = projectDataSource;
+  constructor(projectDbWrapper: ProjectDatabaseWrapper) {
+    this.projectDbWrapper = projectDbWrapper;
   }
-  async getProject(id: string): Promise<Project> {
-    const project = await this.projectDataSource.get(id);
-    return project;
+  async getProject(id: string): Promise<null | Project> {
+    try {
+      const project = await this.projectDbWrapper.findById(id);
+      return project;
+    } catch (error) {
+      throw new Error('Projeto não encontrado')
+    }
   }
   async getAllProjects(): Promise<Project[]> {
-    const projects = await this.projectDataSource.getAll();
+    const projects = await this.projectDbWrapper.findAll();
     return projects;
   }
   async createProject(project: Project): Promise<void> {
-    await this.projectDataSource.create(project);
+    await this.projectDbWrapper.insert(project);
   }
   async updateProject(id: string, project: Project): Promise<void> {
-    await this.projectDataSource.update(id, project);
+    await this.projectDbWrapper.updateById(id, project);
   }
   async deleteProject(id: string): Promise<void> {
-    await this.projectDataSource.delete(id);
+    await this.projectDbWrapper.deleteById(id);
   }
 }
