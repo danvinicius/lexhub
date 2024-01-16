@@ -21,7 +21,7 @@ class MockGetAllProjectsUseCase implements GetAllProjectsUseCase {
   }
 }
 class MockCreateProjectUseCase implements CreateProjectUseCase {
-  execute(project: Project): Promise<void> {
+  execute(project: Project): Promise<string | number> {
     throw new Error("Method not implemented.");
   }
 }

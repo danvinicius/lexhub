@@ -4,8 +4,8 @@ import { GetProjectUseCase } from "../../domain/interfaces/use-cases/project/get
 import { UpdateProjectUseCase } from "../../domain/interfaces/use-cases/project/update-project";
 import { DeleteProjectUseCase } from "../../domain/interfaces/use-cases/project/delete-project";
 import express, { Response, Request, NextFunction } from "express";
-import { NotFoundError } from "../../data/errors/not-found-error";
-import { BadRequestError } from "../../data/errors/bad-request-error";
+import { NotFoundError } from "../errors/not-found-error";
+import { BadRequestError } from "../errors/bad-request-error";
 
 export default function ProjectRouter(
   getProjectUseCase: GetProjectUseCase,

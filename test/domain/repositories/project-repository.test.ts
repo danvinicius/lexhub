@@ -1,23 +1,24 @@
 import { Project } from "../../../src/domain/entities/project";
-import { ProjectDataSource } from "../../../src/data/interfaces/data-sources/project-data-source";
+import { ProjectDatabaseWrapper } from "../../../src/data/interfaces/wrapper/project-database-wrapper";
 import { ProjectRepositoryImpl } from "../../../src/domain/repositories/project-repository";
 
-class MockProjectDataSource implements ProjectDataSource {
-  get(id: string): Promise<Project> {
+class MockProjectDataSource implements ProjectDatabaseWrapper {
+  findById(id: string | number): Promise<Project | null> {
     throw new Error("Method not implemented.");
   }
-  getAll(): Promise<Project[]> {
+  findAll(): Promise<Project[]> {
     throw new Error("Method not implemented.");
   }
-  create(project: Project): Promise<void> {
+  insert(data: any): Promise<string | number> {
     throw new Error("Method not implemented.");
   }
-  update(id: string, project: Project): Promise<void> {
+  updateById(id: string | number, data: Project): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
-  delete(id: string): Promise<void> {
+  deleteById(id: string | number): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
+
 }
 
 describe("Project repository", () => {
@@ -33,7 +34,7 @@ describe("Project repository", () => {
       const expected: Project[] = [
         { id: "1", name: "Project alpha", description: "The alpha project" },
       ];
-      jest.spyOn(mockProjectDataSource, 'getAll').mockImplementation(() => Promise.resolve(expected));
+      jest.spyOn(mockProjectDataSource, 'findAll').mockImplementation(() => Promise.resolve(expected));
       const projectRepository = new ProjectRepositoryImpl(mockProjectDataSource);
       const result = await projectRepository.getAllProjects();
       expect(result).toBe(expected);
