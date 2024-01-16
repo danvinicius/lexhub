@@ -9,12 +9,8 @@ export class CreateProject implements CreateProjectUseCase {
     this.projectRepository = projectRepository;
   }
 
-  async execute(project: Project): Promise<void> {
-    try {
-      await this.projectRepository.createProject(project);
-    } catch (error) {
-      console.log(error);
-      throw new Error("Houve um erro ao criar o projeto");
-    }
+  async execute(project: Project): Promise<string | number> {
+    const projectId = await this.projectRepository.createProject(project);
+    return projectId;
   }
 }

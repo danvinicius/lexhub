@@ -8,6 +8,7 @@ import { UpdateProject } from "./domain/use-cases/project/update-project";
 import { DeleteProject } from "./domain/use-cases/project/delete-project";
 import { MongoDBProjectDatabaseWrapper } from "./data/wrapper/mongodb/mongodb-project-database-wrapper";
 import { getMongoDB } from "./data/mongodb";
+import { errorHandler } from "./presentation/middlewares/error-handler";
 
 (async function () {
   const project = (await getMongoDB()).collection('project');
@@ -23,5 +24,6 @@ import { getMongoDB } from "./data/mongodb";
   );
 
   server.use("/api/project", projectMiddleware);
+  server.use(errorHandler);
   server.listen(3000, () => console.log("Server running on port 3000"));
 })();

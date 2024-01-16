@@ -9,19 +9,16 @@ export class ProjectRepositoryImpl implements ProjectRepository {
     this.projectDbWrapper = projectDbWrapper;
   }
   async getProject(id: string): Promise<null | Project> {
-    try {
-      const project = await this.projectDbWrapper.findById(id);
-      return project;
-    } catch (error) {
-      throw new Error('Projeto não encontrado')
-    }
+    const project = await this.projectDbWrapper.findById(id);
+    return project;
   }
   async getAllProjects(): Promise<Project[]> {
     const projects = await this.projectDbWrapper.findAll();
     return projects;
   }
-  async createProject(project: Project): Promise<void> {
-    await this.projectDbWrapper.insert(project);
+  async createProject(project: Project): Promise<string | number> {
+    const projectId = await this.projectDbWrapper.insert(project);
+    return projectId;
   }
   async updateProject(id: string, project: Project): Promise<void> {
     await this.projectDbWrapper.updateById(id, project);

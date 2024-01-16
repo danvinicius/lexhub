@@ -9,15 +9,6 @@ export class DeleteProject implements DeleteProjectUseCase {
   }
 
   async execute(id: string): Promise<void> {
-    try {
-      const projectExists = await this.projectRepository.getProject(id);
-      if (!projectExists) {
-        throw new Error("Projeto não encontrado");
-      }
-      await this.projectRepository.deleteProject(id);
-    } catch (error) {
-      console.log(error);
-      throw new Error("Houve um erro ao deletar o projeto");
-    }
+    await this.projectRepository.deleteProject(id);
   }
 }

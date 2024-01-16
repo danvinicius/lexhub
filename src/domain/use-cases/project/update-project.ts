@@ -9,15 +9,6 @@ export class UpdateProject implements UpdateProjectUseCase {
     this.projectRepository = projectRepository;
   }
   async execute(id: string, project: Project): Promise<void> {
-    try {
-      const projectExists = await this.projectRepository.getProject(id);
-      if (!projectExists) {
-        throw new Error("Projeto não encontrado");
-      }
-      await this.projectRepository.updateProject(id, project);
-    } catch (error) {
-      console.log(error);
-      throw new Error("Houve um erro ao atualizar o projeto");
-    }
+    await this.projectRepository.updateProject(id, project);
   }
 }

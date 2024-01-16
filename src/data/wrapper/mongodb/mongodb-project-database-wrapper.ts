@@ -1,5 +1,5 @@
 import { Project } from "../../../domain/entities/project";
-import { Collection, Db, Document, ObjectId, WithId } from "mongodb";
+import { Collection, Document, ObjectId, WithId } from "mongodb";
 import { ProjectDatabaseWrapper } from "../../interfaces/wrapper/project-database-wrapper";
 
 export class MongoDBProjectDatabaseWrapper implements ProjectDatabaseWrapper {
@@ -9,15 +9,18 @@ export class MongoDBProjectDatabaseWrapper implements ProjectDatabaseWrapper {
     this.project = project;
   }
 
-  async findById(id: string): Promise<Project> {
+  async findById(id: string): Promise<null | Project> {
     const [result] = await this.project
       .find({ _id: new ObjectId(id) })
       .toArray();
-    return {
-      id: result._id.toString(),
-      name: result.name,
-      description: result.description,
-    };
+    if (result) {
+      return {
+        id: result._id.toString(),
+        name: result.name,
+        description: result.description,
+      };
+    }
+    return null;
   }
   async findAll(): Promise<Project[]> {
     const result = await this.project.find({}).toArray();
@@ -27,19 +30,19 @@ export class MongoDBProjectDatabaseWrapper implements ProjectDatabaseWrapper {
       description: item.description,
     }));
   }
-  async insert(data: Project): Promise<boolean> {
+  async insert(data: Project): Promise<string> {
     const result = await this.project.insertOne(data);
-    return !!result.insertedId;
+    return result?.insertedId.toString();
   }
   async updateById(id: string, data: Project): Promise<boolean> {
     const result = await this.project.updateOne(
       { _id: new ObjectId(id) },
       { $set: data }
     );
-    return result.modifiedCount > 0;
+    return result?.modifiedCount > 0;
   }
   async deleteById(id: string): Promise<boolean> {
     const result = await this.project.deleteOne({ _id: new ObjectId(id) });
-    return result.deletedCount > 0;
+    return result?.deletedCount > 0;
   }
 }
