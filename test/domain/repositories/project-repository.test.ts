@@ -2,7 +2,7 @@ import { Project } from "../../../src/domain/entities/project";
 import { ProjectDatabaseWrapper } from "../../../src/data/interfaces/wrapper/project-database-wrapper";
 import { ProjectRepositoryImpl } from "../../../src/domain/repositories/project-repository";
 
-class MockProjectDataSource implements ProjectDatabaseWrapper {
+class MockProjectDatabaseWrapper implements ProjectDatabaseWrapper {
   findById(id: string | number): Promise<Project | null> {
     throw new Error("Method not implemented.");
   }
@@ -22,11 +22,11 @@ class MockProjectDataSource implements ProjectDatabaseWrapper {
 }
 
 describe("Project repository", () => {
-  let mockProjectDataSource: MockProjectDataSource;
+  let mockProjectDatabaseWrapper: MockProjectDatabaseWrapper;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockProjectDataSource = new MockProjectDataSource();
+    mockProjectDatabaseWrapper = new MockProjectDatabaseWrapper();
   });
 
   describe("Get all projects", () => {
@@ -34,8 +34,8 @@ describe("Project repository", () => {
       const expected: Project[] = [
         { id: "1", name: "Project alpha", description: "The alpha project" },
       ];
-      jest.spyOn(mockProjectDataSource, 'findAll').mockImplementation(() => Promise.resolve(expected));
-      const projectRepository = new ProjectRepositoryImpl(mockProjectDataSource);
+      jest.spyOn(mockProjectDatabaseWrapper, 'findAll').mockImplementation(() => Promise.resolve(expected));
+      const projectRepository = new ProjectRepositoryImpl(mockProjectDatabaseWrapper);
       const result = await projectRepository.getAllProjects();
       expect(result).toBe(expected);
     });
