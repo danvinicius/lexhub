@@ -1,3 +1,3 @@
 export interface DeleteProjectUseCase {
-  execute(id: string): Promise<void>;
+  execute(id: string | number): Promise<void>;
 }

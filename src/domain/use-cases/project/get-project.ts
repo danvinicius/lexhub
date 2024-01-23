@@ -8,7 +8,7 @@ export class GetProject implements GetProjectUseCase {
   constructor(projectRepository: ProjectRepository) {
     this.projectRepository = projectRepository;
   }
-  async execute(id: string): Promise<null | Project> {
+  async execute(id: string | number): Promise<null | Project> {
     const project = this.projectRepository.getProject(id);
     return project;
   }
