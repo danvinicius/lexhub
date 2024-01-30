@@ -8,6 +8,7 @@ export interface Scenario {
   context?: Context;
   episodes?: Episode[];
   groups?: Group[];
+  project: string | number;
 }
 
 export interface Exception {

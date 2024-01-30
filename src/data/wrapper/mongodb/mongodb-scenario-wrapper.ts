@@ -9,24 +9,25 @@ export class MongoDBScenarioDatabaseWrapper implements ScenarioDatabaseWrapper {
     this.scenario = scenario;
   }
 
-  async findById(id: string): Promise<null | Scenario> {
+  async findById(id: string): Promise<Scenario> {
     const [result] = await this.scenario
       .find({ _id: new ObjectId(id) })
       .toArray();
-    if (result) {
-      return {
-        id: result._id.toString(),
-        title: result.title,
-        goal: result.goal,
-        exceptions: result.exceptions,
-        resources: result.resources,
-        actors: result.actors,
-        context: result.context,
-        episodes: result.episodes,
-        groups: result.groups,
-      };
+    if (!result) {
+      throw new Error("Scenario not found");
     }
-    return null;
+    return {
+      id: result._id.toString(),
+      title: result.title,
+      goal: result.goal,
+      exceptions: result.exceptions,
+      resources: result.resources,
+      actors: result.actors,
+      context: result.context,
+      episodes: result.episodes,
+      groups: result.groups,
+      project: result.project,
+    }
   }
   async findAll(): Promise<Scenario[]> {
     const result = await this.scenario.find({}).toArray();
@@ -40,18 +41,24 @@ export class MongoDBScenarioDatabaseWrapper implements ScenarioDatabaseWrapper {
       context: item.context,
       episodes: item.episodes,
       groups: item.groups,
+      project: item.project,
     }));
   }
-  async insert(data: Scenario): Promise<string> {
-    const result = await this.scenario.insertOne(data);
-    return result?.insertedId.toString();
+  async insert(data: Scenario): Promise<undefined | Scenario> {
+    const result = await this.scenario.insertOne({
+      ...data,
+      project: new ObjectId(data.project),
+    });
+    return await this.findById(result?.insertedId.toString());
   }
-  async updateById(id: string, data: Scenario): Promise<boolean> {
+  async updateById(id: string, data: Scenario): Promise<undefined | Scenario> {
     const result = await this.scenario.updateOne(
       { _id: new ObjectId(id) },
       { $set: data }
     );
-    return result?.modifiedCount > 0;
+    if (result?.upsertedId) {
+      return await this.findById(result?.upsertedId.toString());
+    }
   }
   async deleteById(id: string): Promise<boolean> {
     const result = await this.scenario.deleteOne({ _id: new ObjectId(id) });

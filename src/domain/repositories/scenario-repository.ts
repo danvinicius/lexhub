@@ -8,7 +8,7 @@ export class ScenarioRepositoryImpl implements ScenarioRepository {
   constructor(scenarioDbWrapper: ScenarioDatabaseWrapper) {
     this.scenarioDbWrapper = scenarioDbWrapper;
   }
-  async getScenario(id: string): Promise<null | Scenario> {
+  async getScenario(id: string | number): Promise<Scenario> {
     const scenario = await this.scenarioDbWrapper.findById(id);
     return scenario;
   }
@@ -16,12 +16,13 @@ export class ScenarioRepositoryImpl implements ScenarioRepository {
     const scenarios = await this.scenarioDbWrapper.findAll();
     return scenarios;
   }
-  async createScenario(scenario: Scenario): Promise<string | number> {
-    const scenarioId = await this.scenarioDbWrapper.insert(scenario);
-    return scenarioId;
+  async createScenario(scenario: Scenario): Promise<undefined | Scenario> {
+    const createdScenario = await this.scenarioDbWrapper.insert(scenario);
+    return createdScenario;
   }
-  async updateScenario(id: string, scenario: Scenario): Promise<void> {
-    await this.scenarioDbWrapper.updateById(id, scenario);
+  async updateScenario(id: string, scenario: Scenario): Promise<undefined | Scenario> {
+    const updatedScenrio = await this.scenarioDbWrapper.updateById(id, scenario);
+    return updatedScenrio;
   }
   async deleteScenario(id: string): Promise<void> {
     await this.scenarioDbWrapper.deleteById(id);

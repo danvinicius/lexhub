@@ -44,8 +44,8 @@ export default function ScenarioRouter(
   router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const scenario = req.body;
-      const scenarioId = await createScenarioUseCase.execute(scenario);
-      return res.status(201).json({scenarioId});
+      const scenarioCreated = await createScenarioUseCase.execute(scenario);
+      return res.status(201).json(scenarioCreated);
     } catch (error) {
       next(error);
     }
@@ -58,8 +58,8 @@ export default function ScenarioRouter(
         if (!scenarioExists) {
           throw new BadRequestError("This scenario does not exist");
         }
-        await updateScenarioUseCase.execute(id, scenario);
-        return res.json({ message: "Scenario updated" });
+        const scenarioUpdated = await updateScenarioUseCase.execute(id, scenario);
+        return res.json(scenarioUpdated);
       } catch (error) {
         next(error);
       }

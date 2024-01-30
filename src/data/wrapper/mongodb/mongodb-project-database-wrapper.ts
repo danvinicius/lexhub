@@ -18,6 +18,7 @@ export class MongoDBProjectDatabaseWrapper implements ProjectDatabaseWrapper {
         id: result._id.toString(),
         name: result.name,
         description: result.description,
+        scenarios: result.scenarios,
       };
     }
     return null;
@@ -28,6 +29,7 @@ export class MongoDBProjectDatabaseWrapper implements ProjectDatabaseWrapper {
       id: item._id.toString(),
       name: item.name,
       description: item.description,
+      scenarios: item.scenarios,
     }));
   }
   async insert(data: Project): Promise<string> {

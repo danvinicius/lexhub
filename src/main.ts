@@ -60,8 +60,8 @@ import { getMongoDB } from "./data/mongodb";
   const scenarioRouter = ScenarioRouter(
     new GetScenario(scenarioRepository),
     new GetAllScenarios(scenarioRepository),
-    new CreateScenario(scenarioRepository),
-    new UpdateScenario(scenarioRepository),
+    new CreateScenario(scenarioRepository, projectRepository),
+    new UpdateScenario(scenarioRepository, projectRepository),
     new DeleteScenario(scenarioRepository)
   );
 

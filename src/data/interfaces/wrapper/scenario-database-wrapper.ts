@@ -1,9 +1,9 @@
 import { Scenario } from "../../../domain/entities/scenario";
 
 export interface ScenarioDatabaseWrapper {
-  findById(id: string | number): Promise<null | Scenario>;
+  findById(id: string | number): Promise<Scenario>;
   findAll(): Promise<Scenario[]>;
-  insert(data: any): Promise<string | number>;
-  updateById(id: string | number, data: Scenario): Promise<boolean>;
+  insert(data: any): Promise<undefined | Scenario>;
+  updateById(id: string | number, data: Scenario): Promise<undefined | Scenario>;
   deleteById(id: string | number): Promise<boolean>;
 }
