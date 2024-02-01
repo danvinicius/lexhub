@@ -1,7 +1,7 @@
 import { Scenario } from "../../entities/scenario";
-import { ProjectRepository } from "../../interfaces/repositories/project-repository";
-import { ScenarioRepository } from "../../interfaces/repositories/scenario-repository";
-import { CreateScenarioUseCase } from "../../interfaces/use-cases/scenario/create-scenario";
+import { ProjectRepository } from "../../../interfaces/repositories/project-repository";
+import { ScenarioRepository } from "../../../interfaces/repositories/scenario-repository";
+import { CreateScenarioUseCase } from "../../../interfaces/use-cases/scenario/create-scenario";
 
 export class CreateScenario implements CreateScenarioUseCase {
   private scenarioRepository: ScenarioRepository;

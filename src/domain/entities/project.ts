@@ -1,9 +1,10 @@
 import { Scenario } from "./scenario";
+import { ISymbol } from "./symbol";
 
-export interface Project {
-    readonly id?: string;
+export interface IProject {
+    readonly id?: number;
     name: string;
     description: string;
     scenarios?: Scenario[];
-    symbols?: Symbol[];
+    symbols?: ISymbol[];
 }

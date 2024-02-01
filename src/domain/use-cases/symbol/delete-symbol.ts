@@ -1,5 +1,5 @@
-import { SymbolRepository } from "../../interfaces/repositories/symbol-repository";
-import { DeleteSymbolUseCase } from "../../interfaces/use-cases/symbol/delete-symbol";
+import { SymbolRepository } from "../../../interfaces/repositories/symbol-repository";
+import { DeleteSymbolUseCase } from "../../../interfaces/use-cases/symbol/delete-symbol";
 
 export class DeleteSymbol implements DeleteSymbolUseCase {
   private symbolRepository: SymbolRepository;

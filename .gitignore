@@ -1,5 +1,6 @@
-node_modules
-package-lock.json
-.env
-*.log
-*.gz
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/

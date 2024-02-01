@@ -1,6 +1,7 @@
-import { Symbol } from "../../entities/symbol";
-import { SymbolRepository } from "../../interfaces/repositories/symbol-repository";
-import { CreateSymbolUseCase } from "../../interfaces/use-cases/symbol/create-symbol";
+import { ISymbol } from "../../entities/symbol";
+import { SymbolRepository } from "../../../interfaces/repositories/symbol-repository";
+import { CreateSymbolUseCase } from "../../../interfaces/use-cases/symbol/create-symbol";
+import { SymbolRequestDTO } from "../../dto/symbol-request-dto";
 
 export class CreateSymbol implements CreateSymbolUseCase {
   private symbolRepository: SymbolRepository;
@@ -9,8 +10,7 @@ export class CreateSymbol implements CreateSymbolUseCase {
     this.symbolRepository = symbolRepository;
   }
 
-  async execute(symbol: Symbol): Promise<string | number> {
-    const symbolId = await this.symbolRepository.createSymbol(symbol);
-    return symbolId;
+  async execute(symbol: SymbolRequestDTO): Promise<ISymbol> {
+    return await this.symbolRepository.createSymbol(symbol);
   }
 }

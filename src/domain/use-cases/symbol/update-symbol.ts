@@ -1,6 +1,6 @@
-import { Symbol } from "../../entities/symbol";
-import { SymbolRepository } from "../../interfaces/repositories/symbol-repository";
-import { UpdateSymbolUseCase } from "../../interfaces/use-cases/symbol/update-symbol";
+import { ISymbol } from "../../entities/symbol";
+import { SymbolRepository } from "../../../interfaces/repositories/symbol-repository";
+import { UpdateSymbolUseCase } from "../../../interfaces/use-cases/symbol/update-symbol";
 
 export class UpdateSymbol implements UpdateSymbolUseCase {
   private symbolRepository: SymbolRepository;
@@ -8,7 +8,7 @@ export class UpdateSymbol implements UpdateSymbolUseCase {
   constructor(symbolRepository: SymbolRepository) {
     this.symbolRepository = symbolRepository;
   }
-  async execute(id: string, symbol: Symbol): Promise<void> {
+  async execute(id: string, symbol: ISymbol): Promise<void> {
     await this.symbolRepository.updateSymbol(id, symbol);
   }
 }

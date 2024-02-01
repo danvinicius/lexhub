@@ -1,6 +1,6 @@
-import { Symbol } from "../../entities/symbol";
-import { SymbolRepository } from "../../interfaces/repositories/symbol-repository";
-import { GetAllSymbolsUseCase } from "../../interfaces/use-cases/symbol/get-all-symbols";
+import { ISymbol } from "../../entities/symbol";
+import { SymbolRepository } from "../../../interfaces/repositories/symbol-repository";
+import { GetAllSymbolsUseCase } from "../../../interfaces/use-cases/symbol/get-all-symbols";
 
 export class GetAllSymbols implements GetAllSymbolsUseCase {
   private symbolRepository: SymbolRepository;
@@ -9,7 +9,7 @@ export class GetAllSymbols implements GetAllSymbolsUseCase {
     this.symbolRepository = symbolRepository;
   }
 
-  async execute(): Promise<Symbol[]> {
+  async execute(): Promise<ISymbol[]> {
     const symbols = await this.symbolRepository.getAllSymbols();
     return symbols;
   }

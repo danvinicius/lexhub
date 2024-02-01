@@ -1,8 +1,8 @@
-import { CreateScenarioUseCase } from "../../domain/interfaces/use-cases/scenario/create-scenario";
-import { GetAllScenariosUseCase } from "../../domain/interfaces/use-cases/scenario/get-all-scenarios";
-import { GetScenarioUseCase } from "../../domain/interfaces/use-cases/scenario/get-scenario";
-import { UpdateScenarioUseCase } from "../../domain/interfaces/use-cases/scenario/update-scenario";
-import { DeleteScenarioUseCase } from "../../domain/interfaces/use-cases/scenario/delete-scenario";
+import { CreateScenarioUseCase } from "../../interfaces/use-cases/scenario/create-scenario";
+import { GetAllScenariosUseCase } from "../../interfaces/use-cases/scenario/get-all-scenarios";
+import { GetScenarioUseCase } from "../../interfaces/use-cases/scenario/get-scenario";
+import { UpdateScenarioUseCase } from "../../interfaces/use-cases/scenario/update-scenario";
+import { DeleteScenarioUseCase } from "../../interfaces/use-cases/scenario/delete-scenario";
 import express, { Response, Request, NextFunction } from "express";
 import { NotFoundError } from "../errors/not-found-error";
 import { BadRequestError } from "../errors/bad-request-error";

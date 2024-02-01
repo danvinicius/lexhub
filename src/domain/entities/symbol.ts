@@ -1,16 +1,21 @@
-export interface Symbol {
-    id?: string;
+import { IProject } from "./project";
+
+export interface ISymbol {
+    id?: string | number;
     name: string;
     classification: string;
     notion?: string;
-    synonyms?: Synonym[];
-    impacts?: Impact[];
+    synonyms?: ISynonym[];
+    impacts?: IImpact[];
+    project: IProject;
 }
 
-export interface Synonym {
+export interface ISynonym {
+    id?: string | number;
     name: string;
 }
 
-export interface Impact {
+export interface IImpact {
+    id?: string | number;
     description: string;
 }
