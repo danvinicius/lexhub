@@ -1,6 +1,6 @@
-import { SymbolRequestDTO } from "../../../domain/dto/symbol-request-dto";
+import { CreateSymbolRequestDTO } from "../../../domain/dto/create-symbol-request-dto";
 import { ISymbol } from "../../../domain/entities/symbol";
 
 export interface CreateSymbolUseCase {
-    execute(symbol: SymbolRequestDTO): Promise<ISymbol>;
+    execute(symbol: CreateSymbolRequestDTO): Promise<ISymbol>;
 }

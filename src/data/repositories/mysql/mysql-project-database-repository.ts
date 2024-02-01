@@ -1,4 +1,5 @@
-import { ProjectRequestDTO } from "../../../domain/dto/project-request-dto";
+import { CreateProjectRequestDTO } from "../../../domain/dto/create-project-request-dto";
+import { UpdateProjectRequestDTO } from "../../../domain/dto/update-project-request-dto";
 import { ProjectRepository } from "../../../interfaces/repositories/project-repository";
 import { Project } from "./entity/Project";
 import { DataSource } from "typeorm";
@@ -32,7 +33,7 @@ export class MySQLProjectRepository implements ProjectRepository {
     });
     return projects;
   }
-  async createProject(data: ProjectRequestDTO): Promise<Project> {
+  async createProject(data: CreateProjectRequestDTO): Promise<Project> {
     try {
       const project = new Project()
       project.name = data.name;
@@ -42,9 +43,8 @@ export class MySQLProjectRepository implements ProjectRepository {
     } catch (error) {
       throw new Error("Error on creating project");
     }
-
   }
-  async updateProject(id: string, data: Project): Promise<void> {
+  async updateProject(id: string, data: UpdateProjectRequestDTO): Promise<void> {
     try {
       await this.dataSource.manager.update(Project, { id }, data);
     } catch (error) {

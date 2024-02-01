@@ -6,8 +6,9 @@ import { DeleteProjectUseCase } from "../../interfaces/use-cases/project/delete-
 import express, { Response, Request, NextFunction } from "express";
 import { NotFoundError } from "../errors/not-found-error";
 import { BadRequestError } from "../errors/bad-request-error";
-import { ProjectRequestDTO } from "../../domain/dto/project-request-dto";
-const { validate } = require("class-validator");
+import { CreateProjectRequestDTO } from "../../domain/dto/create-project-request-dto";
+import { UpdateProjectRequestDTO } from "../../domain/dto/update-project-request-dto";
+import { validate } from "../helpers/validate";
 
 export default function ProjectRouter(
   getProjectUseCase: GetProjectUseCase,
@@ -48,13 +49,8 @@ export default function ProjectRouter(
   );
   router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const project = new ProjectRequestDTO(req.body);
-      const errors: any = await validate(project);
-      if (errors.length) {
-        throw new BadRequestError(
-          Object.values(errors[0].constraints)[0] as string
-        );
-      }
+      const project = new CreateProjectRequestDTO(req.body);
+      await validate(project)
       const projectCreated = await createProjectUseCase.execute(project);
       return res.status(201).json(projectCreated);
     } catch (error) {
@@ -66,11 +62,8 @@ export default function ProjectRouter(
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
-        const project = req.body;
-        const projectExists = await getProjectUseCase.execute(id);
-        if (!projectExists) {
-          throw new BadRequestError("This project does not exist");
-        }
+        const project = new UpdateProjectRequestDTO(req.body);
+        await validate(project)
         await updateProjectUseCase.execute(id, project);
         return res.json({ message: "Project updated" });
       } catch (error) {

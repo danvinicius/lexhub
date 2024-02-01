@@ -3,8 +3,9 @@ import { Symbol } from "./entity/Symbol";
 import { DataSource } from "typeorm";
 import { Synonym } from "./entity/Synonym";
 import { Project } from "./entity/Project";
-import { SymbolRequestDTO } from "../../../domain/dto/symbol-request-dto";
+import { CreateSymbolRequestDTO } from "../../../domain/dto/create-symbol-request-dto";
 import { Impact } from "./entity/Impact";
+import { UpdateSymbolRequestDTO } from "../../../domain/dto/update-symbol-request-dto";
 
 export class MySQLSymbolRepository implements SymbolRepository {
   private dataSource: DataSource;
@@ -21,6 +22,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       relations: {
         synonyms: true,
         impacts: true,
+        project: true
       },
     });
     if (!symbol) {
@@ -33,11 +35,12 @@ export class MySQLSymbolRepository implements SymbolRepository {
       relations: {
         synonyms: true,
         impacts: true,
+        project: true
       },
     });
     return symbols;
   }
-  async createSymbol(data: SymbolRequestDTO): Promise<Symbol> {
+  async createSymbol(data: CreateSymbolRequestDTO): Promise<Symbol> {
     try {
       const [project] = await this.dataSource.manager.findBy(Project, {
         id: data.projectId as number,
@@ -45,7 +48,6 @@ export class MySQLSymbolRepository implements SymbolRepository {
       if (!project) {
         throw new Error("Project does not exist");
       }
-
       const symbol = new Symbol();
       symbol.name = data.name;
       symbol.classification = data.classification;
@@ -72,7 +74,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       throw new Error(error.message);
     }
   }
-  async updateSymbol(id: string, data: Symbol): Promise<void> {
+  async updateSymbol(id: string, data: UpdateSymbolRequestDTO): Promise<void> {
     try {
       await this.dataSource.manager.update(Symbol, { id }, data);
     } catch (error) {

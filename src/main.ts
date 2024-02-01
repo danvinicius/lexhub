@@ -1,3 +1,6 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 import server from "./server";
 import ProjectRouter from "./presentation/routers/project-router";
 import SymbolRouter from "./presentation/routers/symbol-router";

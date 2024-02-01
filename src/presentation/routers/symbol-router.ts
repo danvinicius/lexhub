@@ -6,8 +6,9 @@ import { DeleteSymbolUseCase } from "../../interfaces/use-cases/symbol/delete-sy
 import express, { Response, Request, NextFunction } from "express";
 import { NotFoundError } from "../errors/not-found-error";
 import { BadRequestError } from "../errors/bad-request-error";
-import { validate } from "class-validator";
-import { SymbolRequestDTO } from "../../domain/dto/symbol-request-dto";
+import { validate } from "../helpers/validate";
+import { CreateSymbolRequestDTO } from "../../domain/dto/create-symbol-request-dto";
+import { UpdateSymbolRequestDTO } from "../../domain/dto/update-symbol-request-dto";
 
 export default function SymbolRouter(
   getSymbolUseCase: GetSymbolUseCase,
@@ -45,13 +46,8 @@ export default function SymbolRouter(
   );
   router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const symbol = new SymbolRequestDTO(req.body);
-      const errors: any = await validate(symbol);
-      if (errors.length) {
-        throw new BadRequestError(
-          Object.values(errors[0].constraints)[0] as string
-        );
-      }
+      const symbol = new CreateSymbolRequestDTO(req.body);
+      await validate(symbol);
       const symbolCreated = await createSymbolUseCase.execute(symbol);
       return res.status(201).json(symbolCreated);
     } catch (error) {
@@ -61,7 +57,8 @@ export default function SymbolRouter(
   router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
-        const symbol = req.body;
+        const symbol = new UpdateSymbolRequestDTO(req.body);
+        await validate(symbol);
         const symbolExists = await getSymbolUseCase.execute(id);
         if (!symbolExists) {
           throw new BadRequestError("This symbol does not exist");
