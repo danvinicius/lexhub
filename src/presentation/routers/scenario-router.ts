@@ -6,6 +6,9 @@ import { DeleteScenarioUseCase } from "../../interfaces/use-cases/scenario/delet
 import express, { Response, Request, NextFunction } from "express";
 import { NotFoundError } from "../errors/not-found-error";
 import { BadRequestError } from "../errors/bad-request-error";
+import { CreateScenarioRequestDTO } from "../../domain/dto/create-scenario-request-dto";
+import { validate } from "../helpers/validate";
+import { UpdateScenarioRequestDTO } from "../../domain/dto/update-scenario-request-dto";
 
 export default function ScenarioRouter(
   getScenarioUseCase: GetScenarioUseCase,
@@ -43,7 +46,8 @@ export default function ScenarioRouter(
   );
   router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const scenario = req.body;
+      const scenario = new CreateScenarioRequestDTO(req.body);
+      await validate(scenario)
       const scenarioCreated = await createScenarioUseCase.execute(scenario);
       return res.status(201).json(scenarioCreated);
     } catch (error) {
@@ -51,9 +55,10 @@ export default function ScenarioRouter(
     }
   });
   router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { id } = req.params;
-        const scenario = req.body;
+    try {
+      const { id } = req.params;
+      const scenario = new UpdateScenarioRequestDTO(req.body);
+      await validate(scenario)
         const scenarioExists = await getScenarioUseCase.execute(id);
         if (!scenarioExists) {
           throw new BadRequestError("This scenario does not exist");

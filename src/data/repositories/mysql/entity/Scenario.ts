@@ -18,9 +18,6 @@ export class Scenario implements IScenario {
     title: string;
 
     @Column()
-    objective: string;
-
-    @Column()
     goal: string;
 
     @OneToMany(() => Exception, (exception) => exception.scenario)
