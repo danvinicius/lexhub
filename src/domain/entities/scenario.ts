@@ -1,51 +1,62 @@
-export interface Scenario {
-  readonly id?: string;
+import { IProject } from "./project";
+
+export interface IScenario {
+  readonly id?: string | number;
   title: string;
   goal: string;
-  exceptions?: Exception[];
-  resources?: Resource[];
-  actors?: Actor[];
-  context?: Context;
-  episodes?: Episode[];
-  groups?: Group[];
-  project: string | number;
+  exceptions?: IException[];
+  resources?: IResource[];
+  actors?: IActor[];
+  context?: IContext;
+  episodes?: IEpisode[];
+  groups?: IGroup[];
+  project: IProject;
 }
 
-export interface Exception {
+export interface IException {
+  id?: string | number;
   description: string;
 }
 
-export interface Actor {
+export interface IActor {
+  id?: string | number;
   name: string;
 }
 
-export interface Resource {
+export interface IResource {
+  id?: string | number;
   name: string;
-  restrictions?: Restriction[];
+  restrictions?: IRestriction[];
 }
 
-export interface Restriction {
+export interface IRestriction {
+  id?: string | number;
   description: string;
 }
 
-export interface Context {
+export interface IContext {
+  id?: string | number;
   geographicLocation: string;
   temporalLocation: string;
-  precondition: string;
-  restrictions?: Restriction[];
+  preCondition: string;
+  restrictions?: IRestriction[];
 }
 
-export interface Episode {
+export interface IEpisode {
+  id?: string | number;
   position: number;
   description: string;
   type: string;
-  restriction?: Restriction;
+  restriction?: IRestriction;
 }
 
-export interface Group {
+export interface IGroup {
+  id?: string | number;
   position: number;
+  nonSequentialEpisodes: INonSequentialEpisode[];
 }
 
-export interface NonSequentialEpisode extends Episode {
-  group: Group;
+export interface INonSequentialEpisode extends IEpisode {
+  id?: string | number;
+  group: IGroup;
 }

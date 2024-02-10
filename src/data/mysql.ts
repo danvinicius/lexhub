@@ -4,6 +4,15 @@ import { Project } from "./repositories/mysql/entity/Project"
 import { Symbol } from "./repositories/mysql/entity/Symbol"
 import { Synonym } from "./repositories/mysql/entity/Synonym"
 import { Impact } from "./repositories/mysql/entity/Impact"
+import { Exception } from "./repositories/mysql/entity/Exception"
+import { Scenario } from "./repositories/mysql/entity/Scenario"
+import { Context } from "./repositories/mysql/entity/Context"
+import { Actor } from "./repositories/mysql/entity/Actor"
+import { Restriction } from "./repositories/mysql/entity/Restriction"
+import { Resource } from "./repositories/mysql/entity/Resource"
+import { Episode } from "./repositories/mysql/entity/Episode"
+import { Group } from "./repositories/mysql/entity/Group"
+import { NonSequentialEpisode } from "./repositories/mysql/entity/NonSequentialEpisode"
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -14,7 +23,7 @@ export const AppDataSource = new DataSource({
     database: process.env.DB_NAME,
     synchronize: true,
     logging: false,
-    entities: [Project, Symbol, Synonym, Impact],
+    entities: [Project, Symbol, Synonym, Impact, Exception, Scenario, Actor, Context, Restriction, Resource, Episode, Group, NonSequentialEpisode],
     migrations: [],
     subscribers: [],
 })
