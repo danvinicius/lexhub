@@ -9,9 +9,11 @@ import { BadRequestError } from "../errors/bad-request-error";
 import { CreateScenarioRequestDTO } from "../../domain/dto/create-scenario-request-dto";
 import { validate } from "../helpers/validate";
 import { UpdateScenarioRequestDTO } from "../../domain/dto/update-scenario-request-dto";
+import { GetScenarioWithLexiconsUseCase } from "../../interfaces/use-cases/scenario/get-scenario-with-lexicons-use-case";
 
 export default function ScenarioRouter(
   getScenarioUseCase: GetScenarioUseCase,
+  getScenarioWithLexiconsUseCase: GetScenarioWithLexiconsUseCase,
   getAllScenariosUseCase: GetAllScenariosUseCase,
   createScenarioUseCase: CreateScenarioUseCase,
   updateScenarioUseCase: UpdateScenarioUseCase,
@@ -19,14 +21,17 @@ export default function ScenarioRouter(
 ) {
   const router = express.Router();
 
-  router.get("/", async (req: Request, res: Response, next: NextFunction) => {
+  router.get("/project/:projectId", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const scenarios = await getAllScenariosUseCase.execute();
+      const { projectId } = req.params;
+      const scenarios = await getAllScenariosUseCase.execute(projectId);
       if (!scenarios?.length) {
         throw new NotFoundError("There are no scenarios");
       }
       return res.json(scenarios);
     } catch (error) {
+      console.log(error);
+      
       next(error);
     }
   });
@@ -44,6 +49,19 @@ export default function ScenarioRouter(
       }
     }
   );
+  router.get("/:id/with-lexicons", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const scenario = await getScenarioWithLexiconsUseCase.execute(id);
+      if (!scenario) {
+        throw new NotFoundError("Scenario not found");
+      }
+      return res.json(scenario);
+    } catch (error: any) {
+      next(error);
+    }
+  }
+);
   router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const scenario = new CreateScenarioRequestDTO(req.body);
@@ -63,8 +81,8 @@ export default function ScenarioRouter(
         if (!scenarioExists) {
           throw new BadRequestError("This scenario does not exist");
         }
-        const scenarioUpdated = await updateScenarioUseCase.execute(id, scenario);
-        return res.json(scenarioUpdated);
+        await updateScenarioUseCase.execute(id, scenario);
+        return res.json({ message: "Scenario updated" });
       } catch (error) {
         next(error);
       }

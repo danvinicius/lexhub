@@ -1,9 +1,11 @@
-import { Scenario } from "../../domain/entities/scenario";
+import { CreateScenarioRequestDTO } from "../../domain/dto/create-scenario-request-dto";
+import { UpdateScenarioRequestDTO } from "../../domain/dto/update-scenario-request-dto";
+import { IScenario } from "../../domain/entities/scenario";
 
 export interface ScenarioRepository {
-  getScenario(id: string | number): Promise<Scenario>;
-  getAllScenarios(): Promise<Scenario[]>;
-  createScenario(scenario: Scenario): Promise<undefined | Scenario>;
-  updateScenario(id: string | number, scenario: Scenario): Promise<undefined | Scenario>;
+  getScenario(id: string | number): Promise<null | IScenario>;
+  getAllScenarios(projectId: string | number): Promise<IScenario[]>;
+  createScenario(scenario: CreateScenarioRequestDTO): Promise<IScenario>;
+  updateScenario(id: string | number, scenario: UpdateScenarioRequestDTO): Promise<void>;
   deleteScenario(id: string | number): Promise<void>;
 }

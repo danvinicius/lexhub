@@ -18,6 +18,7 @@ export class MySQLProjectRepository implements ProjectRepository {
       },
       relations: {
         symbols: true,
+        scenarios: true,
       },
     });
     if (!project) {
@@ -29,6 +30,7 @@ export class MySQLProjectRepository implements ProjectRepository {
     const projects = await this.dataSource.manager.find(Project, {
       relations: {
         symbols: true,
+        scenarios: true,
       },
     });
     return projects;

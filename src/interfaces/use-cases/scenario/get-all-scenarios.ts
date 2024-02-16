@@ -1,5 +1,5 @@
-import { Scenario } from "../../../domain/entities/scenario";
+import { IScenario } from "../../../domain/entities/scenario";
 
 export interface GetAllScenariosUseCase {
-  execute(): Promise<Scenario[]>;
+  execute(projectId: number | string): Promise<IScenario[]>;
 }

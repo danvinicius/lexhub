@@ -9,8 +9,8 @@ export class GetAllSymbols implements GetAllSymbolsUseCase {
     this.symbolRepository = symbolRepository;
   }
 
-  async execute(): Promise<ISymbol[]> {
-    const symbols = await this.symbolRepository.getAllSymbols();
+  async execute(projectId: number | string): Promise<ISymbol[]> {
+    const symbols = await this.symbolRepository.getAllSymbols(projectId);
     return symbols;
   }
 }

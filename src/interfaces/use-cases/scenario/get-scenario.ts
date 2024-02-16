@@ -1,5 +1,5 @@
-import { Scenario } from "../../../domain/entities/scenario";
+import { IScenario } from "../../../domain/entities/scenario";
 
 export interface GetScenarioUseCase {
-  execute(id: string | number): Promise<null | Scenario>;
+  execute(id: string | number): Promise<null | IScenario>;
 }

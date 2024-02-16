@@ -30,12 +30,16 @@ export class MySQLSymbolRepository implements SymbolRepository {
     }
     return symbol;
   }
-  async getAllSymbols(): Promise<Symbol[]> {
+  async getAllSymbols(projectId: number): Promise<Symbol[]> {
     const symbols = await this.dataSource.manager.find(Symbol, {
+      where: {
+        project: {
+          id: projectId
+        }
+      },
       relations: {
         synonyms: true,
         impacts: true,
-        project: true
       },
     });
     return symbols;

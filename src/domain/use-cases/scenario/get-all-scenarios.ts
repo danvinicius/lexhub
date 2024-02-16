@@ -1,4 +1,4 @@
-import { Scenario } from "../../entities/scenario";
+import { IScenario } from "../../entities/scenario";
 import { ScenarioRepository } from "../../../interfaces/repositories/scenario-repository";
 import { GetAllScenariosUseCase } from "../../../interfaces/use-cases/scenario/get-all-scenarios";
 
@@ -9,8 +9,8 @@ export class GetAllScenarios implements GetAllScenariosUseCase {
     this.scenarioRepository = scenarioRepository;
   }
 
-  async execute(): Promise<Scenario[]> {
-    const scenarios = await this.scenarioRepository.getAllScenarios();
+  async execute(projectId: number | string): Promise<IScenario[]> {
+    const scenarios = await this.scenarioRepository.getAllScenarios(projectId);
     return scenarios;
   }
 }

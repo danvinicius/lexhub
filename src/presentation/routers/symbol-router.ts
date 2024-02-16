@@ -19,9 +19,10 @@ export default function SymbolRouter(
 ) {
   const router = express.Router();
 
-  router.get("/", async (req: Request, res: Response, next: NextFunction) => {
+  router.get("/project/:projectId", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const symbols = await getAllSymbolsUseCase.execute();
+      const { projectId } = req.params;
+      const symbols = await getAllSymbolsUseCase.execute(projectId);
       if (!symbols?.length) {
         throw new NotFoundError("There are no symbols");
       }
