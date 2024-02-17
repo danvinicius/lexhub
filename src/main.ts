@@ -17,6 +17,10 @@ import { GetSymbol } from "./domain/use-cases/symbol/get-symbol";
 import { GetAllSymbols } from "./domain/use-cases/symbol/get-all-symbols";
 import { CreateSymbol } from "./domain/use-cases/symbol/create-symbol";
 import { DeleteSymbol } from "./domain/use-cases/symbol/delete-symbol";
+import { AddImpact } from "./domain/use-cases/symbol/add-impact";
+import { AddSynonym } from "./domain/use-cases/symbol/add-synonym";
+import { RemoveImpact } from "./domain/use-cases/symbol/remove-impact";
+import { RemoveSynonym } from "./domain/use-cases/symbol/remove-synonym";
 import { UpdateSymbol } from "./domain/use-cases/symbol/update-symbol";
 import { errorHandler } from "./presentation/middlewares/error-handler";
 import { AppDataSource } from "./data/mysql";
@@ -47,7 +51,11 @@ import { GetScenarioWithLexicons } from './domain/use-cases/scenario/get-scenari
     new GetAllSymbols(symbolRepository),
     new CreateSymbol(symbolRepository),
     new UpdateSymbol(symbolRepository),
-    new DeleteSymbol(symbolRepository)
+    new DeleteSymbol(symbolRepository),
+    new AddImpact(symbolRepository),
+    new AddSynonym(symbolRepository),
+    new RemoveImpact(symbolRepository),
+    new RemoveSynonym(symbolRepository),
   );
 
   const scenarioRouter = ScenarioRouter(

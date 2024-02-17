@@ -14,14 +14,6 @@ export class CreateSymbolRequestDTO {
     @IsOptional()
     notion: string;
 
-    @IsArray()
-    @IsOptional()
-    synonyms: ISynonym[];
-
-    @IsArray()
-    @IsOptional()
-    impacts: IImpact[];
-
     @IsNumber()
     projectId: number | string;
 
@@ -29,8 +21,6 @@ export class CreateSymbolRequestDTO {
         this.name = data.name;
         this.classification = data.classification;
         this.notion = data.notion;
-        this.synonyms = data.synonyms;
-        this.impacts = data.impacts;
         this.projectId = data.projectId;
     }
 }

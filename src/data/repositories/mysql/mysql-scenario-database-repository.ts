@@ -1,10 +1,8 @@
 import { ScenarioRepository } from "../../../interfaces/repositories/scenario-repository";
 import { Scenario } from "./entity/Scenario";
 import { DataSource } from "typeorm";
-import { Synonym } from "./entity/Synonym";
 import { Project } from "./entity/Project";
 import { CreateScenarioRequestDTO } from "../../../domain/dto/create-scenario-request-dto";
-import { Impact } from "./entity/Impact";
 import { UpdateScenarioRequestDTO } from "../../../domain/dto/update-scenario-request-dto";
 
 export class MySQLScenarioRepository implements ScenarioRepository {
