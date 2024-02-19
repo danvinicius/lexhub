@@ -6,7 +6,7 @@
    "scripts": {
       "build": "tsc",
       "start": "ts-node src/index.ts",
-      "dev": "tsnd --transpile-only --respawn src/main.ts",
+      "dev": "tsnd --transpile-only --respawn src/index.ts",
       "test": "jest --watchAll",
       "typeorm": "typeorm-ts-node-commonjs"
    },
