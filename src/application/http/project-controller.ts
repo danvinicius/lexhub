@@ -9,6 +9,7 @@ import { BadRequestError } from "../errors/bad-request-error";
 import { CreateProjectRequestDTO } from "../dtos/create-project-request-dto"
 import { UpdateProjectRequestDTO } from "../dtos/update-project-request-dto"
 import { validate } from "../helpers/validate";
+import { Logger } from "../../config/logger"
 
 export default function ProjectRouter(
   getProjectUseCase: GetProjectUseCase,
@@ -18,6 +19,7 @@ export default function ProjectRouter(
   deleteProjectUseCase: DeleteProjectUseCase
 ) {
   const router = express.Router();
+  const logger = Logger.getInstance()
 
   router.get("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -26,7 +28,8 @@ export default function ProjectRouter(
         throw new NotFoundError("There are no projects");
       }
       return res.json(projects);
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   });
@@ -43,6 +46,7 @@ export default function ProjectRouter(
         }
         return res.json(project);
       } catch (error: any) {
+        logger.error(error.message)
         next(error);
       }
     }
@@ -53,7 +57,8 @@ export default function ProjectRouter(
       await validate(project)
       const projectCreated = await createProjectUseCase.execute(project);
       return res.status(201).json(projectCreated);
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   });
@@ -66,7 +71,8 @@ export default function ProjectRouter(
         await validate(project)
         await updateProjectUseCase.execute(id, project);
         return res.json({ message: "Project updated" });
-      } catch (error) {
+      } catch (error: any) {
+        logger.error(error.message)
         next(error);
       }
     }
@@ -82,7 +88,8 @@ export default function ProjectRouter(
         }
         await deleteProjectUseCase.execute(id);
         return res.json({ message: "Project deleted" });
-      } catch (error) {
+      } catch (error: any) {
+        logger.error(error.message)
         next(error);
       }
     }

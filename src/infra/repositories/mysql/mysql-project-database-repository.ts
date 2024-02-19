@@ -3,6 +3,9 @@ import { UpdateProjectRequestDTO } from "../../../application/dtos/update-projec
 import { ProjectRepository } from "../../../core/repositories/project-repository";
 import { Project } from "../../database/mysql/typeorm/entity/Project";
 import { DataSource } from "typeorm";
+import { Logger } from "../../../config/logger"
+
+const logger = Logger.getInstance()
 
 export class MySQLProjectRepository implements ProjectRepository {
   private dataSource: DataSource;
@@ -42,21 +45,24 @@ export class MySQLProjectRepository implements ProjectRepository {
       project.description = data.description;
       await this.dataSource.manager.save(Project, project);
       return project;
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       throw new Error("Error on creating project");
     }
   }
   async updateProject(id: string, data: UpdateProjectRequestDTO): Promise<void> {
     try {
       await this.dataSource.manager.update(Project, { id }, data);
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       throw new Error("Error on updating project");
     }
   }
   async deleteProject(id: string): Promise<void> {
     try {
       await this.dataSource.manager.delete(Project, id);
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       throw new Error("Error on deleting project");
     }
   }

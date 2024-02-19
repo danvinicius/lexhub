@@ -2,9 +2,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import server from "./server";
-import ProjectRouter from "../application/controllers/project-controller";
-import SymbolRouter from "../application/controllers/symbol-controller";
-import ScenarioRouter from '../application/controllers/scenario-controller';
+import ProjectRouter from "../application/http/project-controller";
+import SymbolRouter from "../application/http/symbol-controller";
+import ScenarioRouter from '../application/http/scenario-controller';
 import { MySQLProjectRepository } from "../infra/repositories/mysql/mysql-project-database-repository";
 import { MySQLSymbolRepository } from "../infra/repositories/mysql/mysql-symbol-database-repository";
 import { MySQLScenarioRepository } from "../infra/repositories/mysql/mysql-scenario-database-repository";
@@ -30,8 +30,10 @@ import { GetScenario } from '../core/domain/use-cases/scenario/get-scenario';
 import { UpdateScenario } from '../core/domain/use-cases/scenario/update-scenario';
 import { GetScenarioWithLexicons } from '../core/domain/use-cases/scenario/get-scenario-with-lexicons';
 import { AppDataSource } from '../infra/database/connection';
+import { Logger } from './logger';
 
 (async function () {
+  const logger = Logger.getInstance()
   const ds = await AppDataSource.initialize();
 
   const projectRepository = new MySQLProjectRepository(ds)
@@ -72,7 +74,7 @@ import { AppDataSource } from '../infra/database/connection';
   server.use("/api/scenario", scenarioRouter);
 
   server.use(errorHandler);
-  server.listen(3000, () => console.log("Server running on port 3000"));
+  server.listen(3000, () => logger.info("Server running on port 3000"));
 })();
 
 // rosinhie

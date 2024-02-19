@@ -8,6 +8,9 @@ import { Impact } from "../../database/mysql/typeorm/entity/Impact";
 import { UpdateSymbolRequestDTO } from "../../../application/dtos/update-symbol-request-dto";
 import { AddImpactRequestDTO } from "../../../application/dtos/add-impact-request-dto";
 import { AddSynonymRequestDTO } from "../../../application/dtos/add-synonym-request-dto";
+import { Logger } from '../../../config/logger'
+
+const logger = Logger.getInstance()
 
 export class MySQLSymbolRepository implements SymbolRepository {
   private dataSource: DataSource;
@@ -63,6 +66,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       await this.dataSource.manager.save(Symbol, symbol);
       return symbol;
     } catch (error: any) {
+      logger.error(error.message)
       throw new Error(error.message);
     }
   }
@@ -73,7 +77,8 @@ export class MySQLSymbolRepository implements SymbolRepository {
       impact.description = data?.description;
       impact.symbol = symbol;
       await this.dataSource.manager.save(Impact, impact);
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       throw new Error("Error on adding impact");
     }
   }
@@ -84,7 +89,8 @@ export class MySQLSymbolRepository implements SymbolRepository {
       synonym.name = data?.name;
       synonym.symbol = symbol;
       await this.dataSource.manager.save(Synonym, synonym);
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       throw new Error("Error on adding synonym");
     }
   }
@@ -97,7 +103,8 @@ export class MySQLSymbolRepository implements SymbolRepository {
         throw new Error("Impact does not exist");
       }
       await this.dataSource.manager.delete(Impact, id);
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       throw new Error("Error on removing impact");
     }
   }
@@ -110,21 +117,24 @@ export class MySQLSymbolRepository implements SymbolRepository {
         throw new Error("Synonym does not exist");
       }
       await this.dataSource.manager.delete(Synonym, id);
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       throw new Error("Error on removing synonym");
     }
   }
   async updateSymbol(id: number, data: UpdateSymbolRequestDTO): Promise<void> {
     try {
       await this.dataSource.manager.update(Symbol, { id }, data);
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       throw new Error("Error on updating symbol");
     }
   }
   async deleteSymbol(id: number): Promise<void> {
     try {
       await this.dataSource.manager.delete(Symbol, id);
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       throw new Error("Error on deleting symbol");
     }
   }

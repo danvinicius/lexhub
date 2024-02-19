@@ -10,6 +10,7 @@ import { CreateScenarioRequestDTO } from "../dtos/create-scenario-request-dto";
 import { validate } from "../helpers/validate";
 import { UpdateScenarioRequestDTO } from "../dtos/update-scenario-request-dto";
 import { GetScenarioWithLexiconsUseCase } from "../../core/domain/use-cases/scenario/interfaces/get-scenario-with-lexicons-use-case";
+import { Logger } from "../../config/logger"
 
 export default function ScenarioRouter(
   getScenarioUseCase: GetScenarioUseCase,
@@ -20,6 +21,7 @@ export default function ScenarioRouter(
   deleteScenarioUseCase: DeleteScenarioUseCase
 ) {
   const router = express.Router();
+  const logger = Logger.getInstance()
 
   router.get("/project/:projectId", async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -29,9 +31,8 @@ export default function ScenarioRouter(
         throw new NotFoundError("There are no scenarios");
       }
       return res.json(scenarios);
-    } catch (error) {
-      console.log(error);
-      
+    } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   });
@@ -45,6 +46,7 @@ export default function ScenarioRouter(
         }
         return res.json(scenario);
       } catch (error: any) {
+        logger.error(error.message)
         next(error);
       }
     }
@@ -58,6 +60,7 @@ export default function ScenarioRouter(
       }
       return res.json(scenario);
     } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   }
@@ -68,7 +71,8 @@ export default function ScenarioRouter(
       await validate(scenario)
       const scenarioCreated = await createScenarioUseCase.execute(scenario);
       return res.status(201).json(scenarioCreated);
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   });
@@ -83,7 +87,8 @@ export default function ScenarioRouter(
         }
         await updateScenarioUseCase.execute(id, scenario);
         return res.json({ message: "Scenario updated" });
-      } catch (error) {
+      } catch (error: any) {
+        logger.error(error.message)
         next(error);
       }
     }
@@ -97,7 +102,8 @@ export default function ScenarioRouter(
         }
         await deleteScenarioUseCase.execute(id);
         return res.json({ message: "Scenario deleted" });
-      } catch (error) {
+      } catch (error: any) {
+        logger.error(error.message)
         next(error);
       }
     }

@@ -15,6 +15,7 @@ import { AddSynonymUseCase } from "../../core/domain/use-cases/symbol/interfaces
 import { AddSynonymRequestDTO } from "../dtos/add-synonym-request-dto";
 import { RemoveImpactUseCase } from "../../core/domain/use-cases/symbol/interfaces/remove-impact";
 import { RemoveSynonymUseCase } from "../../core/domain/use-cases/symbol/interfaces/remove-synonym";
+import { Logger } from "../../config/logger"
 
 export default function SymbolRouter(
   getSymbolUseCase: GetSymbolUseCase,
@@ -28,6 +29,7 @@ export default function SymbolRouter(
   removeSynonym: RemoveSynonymUseCase,
 ) {
   const router = express.Router();
+  const logger = Logger.getInstance()
 
   router.get("/project/:projectId", async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -37,7 +39,8 @@ export default function SymbolRouter(
         throw new NotFoundError("There are no symbols");
       }
       return res.json(symbols);
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   });
@@ -51,6 +54,7 @@ export default function SymbolRouter(
       }
       return res.json(symbol);
     } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   }
@@ -61,7 +65,8 @@ export default function SymbolRouter(
       await validate(symbol);
       const symbolCreated = await createSymbolUseCase.execute(symbol);
       return res.status(201).json(symbolCreated);
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   });
@@ -71,7 +76,8 @@ export default function SymbolRouter(
       await validate(impact);
       await addImpactUseCase.execute(impact);
       return res.status(201).json({ message: "Impact added" });
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   });
@@ -81,7 +87,8 @@ export default function SymbolRouter(
       await validate(synonym);
       await addSynonymUseCase.execute(synonym);
       return res.status(201).json({ message: "Synonym added" });
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   });
@@ -96,7 +103,8 @@ export default function SymbolRouter(
       }
       await updateSymbolUseCase.execute(id, symbol);
       return res.json({ message: "Symbol updated" });
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   }
@@ -110,7 +118,8 @@ export default function SymbolRouter(
       }
       await deleteSymbolUseCase.execute(id);
       return res.json({ message: "Symbol deleted" });
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   }
@@ -120,7 +129,8 @@ export default function SymbolRouter(
       const { id } = req.params;
       await removeImpact.execute(id);
       return res.json({ message: "Impact deleted" });
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   }
@@ -130,7 +140,8 @@ export default function SymbolRouter(
       const { id } = req.params;
       await removeSynonym.execute(id);
       return res.json({ message: "Synonym deleted" });
-    } catch (error) {
+    } catch (error: any) {
+      logger.error(error.message)
       next(error);
     }
   }
