@@ -1,5 +1,5 @@
-import { CreateProjectRequestDTO } from "../../application/dtos/create-project-request-dto";
-import { UpdateProjectRequestDTO } from "../../application/dtos/update-project-request-dto";
+import { CreateProjectRequestDTO } from "../../application/http/dtos/create-project-request-dto";
+import { UpdateProjectRequestDTO } from "../../application/http/dtos/update-project-request-dto";
 import { IProject } from "../domain/entities/project";
 
 export interface ProjectRepository {

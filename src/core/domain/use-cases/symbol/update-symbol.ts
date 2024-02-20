@@ -1,6 +1,6 @@
 import { SymbolRepository } from "../../../repositories/symbol-repository";
 import { UpdateSymbolUseCase } from "./interfaces/update-symbol";
-import { UpdateSymbolRequestDTO } from "../../../../application/dtos/update-symbol-request-dto";
+import { UpdateSymbolRequestDTO } from "../../../../application/http/dtos/update-symbol-request-dto";
 
 export class UpdateSymbol implements UpdateSymbolUseCase {
   private symbolRepository: SymbolRepository;

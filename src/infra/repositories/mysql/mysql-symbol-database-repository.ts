@@ -3,11 +3,11 @@ import { Symbol } from "../../database/mysql/typeorm/entity/Symbol";
 import { DataSource } from "typeorm";
 import { Synonym } from "../../database/mysql/typeorm/entity/Synonym";
 import { Project } from "../../database/mysql/typeorm/entity/Project";
-import { CreateSymbolRequestDTO } from "../../../application/dtos/create-symbol-request-dto";
+import { CreateSymbolRequestDTO } from "../../../application/http/dtos/create-symbol-request-dto";
 import { Impact } from "../../database/mysql/typeorm/entity/Impact";
-import { UpdateSymbolRequestDTO } from "../../../application/dtos/update-symbol-request-dto";
-import { AddImpactRequestDTO } from "../../../application/dtos/add-impact-request-dto";
-import { AddSynonymRequestDTO } from "../../../application/dtos/add-synonym-request-dto";
+import { UpdateSymbolRequestDTO } from "../../../application/http/dtos/update-symbol-request-dto";
+import { AddImpactRequestDTO } from "../../../application/http/dtos/add-impact-request-dto";
+import { AddSynonymRequestDTO } from "../../../application/http/dtos/add-synonym-request-dto";
 import { Logger } from '../../../config/logger'
 
 const logger = Logger.getInstance()

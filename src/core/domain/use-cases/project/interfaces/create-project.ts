@@ -1,4 +1,4 @@
-import { CreateProjectRequestDTO } from "../../../../../application/dtos/create-project-request-dto";
+import { CreateProjectRequestDTO } from "../../../../../application/http/dtos/create-project-request-dto";
 import { IProject } from "../../../entities/project";
 
 export interface CreateProjectUseCase {

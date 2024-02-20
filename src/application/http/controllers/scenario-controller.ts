@@ -1,18 +1,18 @@
-import { CreateScenarioUseCase } from "../../core/domain/use-cases/scenario/interfaces/create-scenario";
-import { GetAllScenariosUseCase } from "../../core/domain/use-cases/scenario/interfaces/get-all-scenarios";
-import { GetScenarioUseCase } from "../../core/domain/use-cases/scenario/interfaces/get-scenario";
-import { UpdateScenarioUseCase } from "../../core/domain/use-cases/scenario/interfaces/update-scenario";
-import { DeleteScenarioUseCase } from "../../core/domain/use-cases/scenario/interfaces/delete-scenario";
+import { CreateScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-scenario";
+import { GetAllScenariosUseCase } from "../../../core/domain/use-cases/scenario/interfaces/get-all-scenarios";
+import { GetScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces/get-scenario";
+import { UpdateScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces/update-scenario";
+import { DeleteScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-scenario";
 import express, { Response, Request, NextFunction } from "express";
-import { NotFoundError } from "../errors/not-found-error";
-import { BadRequestError } from "../errors/bad-request-error";
+import { NotFoundError } from "../../errors/not-found-error";
+import { BadRequestError } from "../../errors/bad-request-error";
 import { CreateScenarioRequestDTO } from "../dtos/create-scenario-request-dto";
-import { validate } from "../helpers/validate";
+import { validate } from "../../helpers/validate";
 import { UpdateScenarioRequestDTO } from "../dtos/update-scenario-request-dto";
-import { GetScenarioWithLexiconsUseCase } from "../../core/domain/use-cases/scenario/interfaces/get-scenario-with-lexicons-use-case";
-import { Logger } from "../../config/logger"
+import { GetScenarioWithLexiconsUseCase } from "../../../core/domain/use-cases/scenario/interfaces/get-scenario-with-lexicons-use-case";
+import { Logger } from "../../../config/logger"
 
-export default function ScenarioRouter(
+export default function ScenarioController(
   getScenarioUseCase: GetScenarioUseCase,
   getScenarioWithLexiconsUseCase: GetScenarioWithLexiconsUseCase,
   getAllScenariosUseCase: GetAllScenariosUseCase,

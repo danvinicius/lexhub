@@ -1,6 +1,6 @@
 import { ScenarioRepository } from "../../../repositories/scenario-repository";
 import { UpdateScenarioUseCase } from "./interfaces/update-scenario";
-import { UpdateScenarioRequestDTO } from "../../../../application/dtos/update-scenario-request-dto";
+import { UpdateScenarioRequestDTO } from "../../../../application/http/dtos/update-scenario-request-dto";
 
 export class UpdateScenario implements UpdateScenarioUseCase {
   private scenarioRepository: ScenarioRepository;

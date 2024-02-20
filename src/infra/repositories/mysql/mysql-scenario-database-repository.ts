@@ -2,8 +2,8 @@ import { ScenarioRepository } from "../../../core/repositories/scenario-reposito
 import { Scenario } from "../../database/mysql/typeorm/entity/Scenario";
 import { DataSource } from "typeorm";
 import { Project } from "../../database/mysql/typeorm/entity/Project";
-import { CreateScenarioRequestDTO } from "../../../application/dtos/create-scenario-request-dto";
-import { UpdateScenarioRequestDTO } from "../../../application/dtos/update-scenario-request-dto";
+import { CreateScenarioRequestDTO } from "../../../application/http/dtos/create-scenario-request-dto";
+import { UpdateScenarioRequestDTO } from "../../../application/http/dtos/update-scenario-request-dto";
 import { Logger } from '../../../config/logger'
 
 const logger = Logger.getInstance()

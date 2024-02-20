@@ -1,23 +1,23 @@
-import { CreateSymbolUseCase } from "../../core/domain/use-cases/symbol/interfaces/create-symbol";
-import { GetAllSymbolsUseCase } from "../../core/domain/use-cases/symbol/interfaces/get-all-symbols";
-import { GetSymbolUseCase } from "../../core/domain/use-cases/symbol/interfaces/get-symbol";
-import { UpdateSymbolUseCase } from "../../core/domain/use-cases/symbol/interfaces/update-symbol";
-import { DeleteSymbolUseCase } from "../../core/domain/use-cases/symbol/interfaces/delete-symbol";
+import { CreateSymbolUseCase } from "../../../core/domain/use-cases/symbol/interfaces/create-symbol";
+import { GetAllSymbolsUseCase } from "../../../core/domain/use-cases/symbol/interfaces/get-all-symbols";
+import { GetSymbolUseCase } from "../../../core/domain/use-cases/symbol/interfaces/get-symbol";
+import { UpdateSymbolUseCase } from "../../../core/domain/use-cases/symbol/interfaces/update-symbol";
+import { DeleteSymbolUseCase } from "../../../core/domain/use-cases/symbol/interfaces/delete-symbol";
 import express, { Response, Request, NextFunction } from "express";
-import { NotFoundError } from "../errors/not-found-error";
-import { BadRequestError } from "../errors/bad-request-error";
-import { validate } from "../helpers/validate";
+import { NotFoundError } from "../../errors/not-found-error";
+import { BadRequestError } from "../../errors/bad-request-error";
+import { validate } from "../../helpers/validate";
 import { CreateSymbolRequestDTO } from "../dtos/create-symbol-request-dto";
 import { UpdateSymbolRequestDTO } from "../dtos/update-symbol-request-dto";
 import { AddImpactRequestDTO } from "../dtos/add-impact-request-dto";
-import { AddImpactUseCase } from "../../core/domain/use-cases/symbol/interfaces/add-impact";
-import { AddSynonymUseCase } from "../../core/domain/use-cases/symbol/interfaces/add-synonym";
+import { AddImpactUseCase } from "../../../core/domain/use-cases/symbol/interfaces/add-impact";
+import { AddSynonymUseCase } from "../../../core/domain/use-cases/symbol/interfaces/add-synonym";
 import { AddSynonymRequestDTO } from "../dtos/add-synonym-request-dto";
-import { RemoveImpactUseCase } from "../../core/domain/use-cases/symbol/interfaces/remove-impact";
-import { RemoveSynonymUseCase } from "../../core/domain/use-cases/symbol/interfaces/remove-synonym";
-import { Logger } from "../../config/logger"
+import { RemoveImpactUseCase } from "../../../core/domain/use-cases/symbol/interfaces/remove-impact";
+import { RemoveSynonymUseCase } from "../../../core/domain/use-cases/symbol/interfaces/remove-synonym";
+import { Logger } from "../../../config/logger"
 
-export default function SymbolRouter(
+export default function SymbolController(
   getSymbolUseCase: GetSymbolUseCase,
   getAllSymbolsUseCase: GetAllSymbolsUseCase,
   createSymbolUseCase: CreateSymbolUseCase,

@@ -4,7 +4,7 @@ import { Project } from "../../src/domain/entities/project";
 import { CreateProjectUseCase } from "../../src/domain/interfaces/use-cases/project/create-project";
 import { GetProjectUseCase } from "../../src/domain/interfaces/use-cases/project/get-project";
 import server from "../../src/server";
-import ProjectRouter from "../../src/presentation/routers/project-router";
+import ProjectController from "../../src/presentation/routers/project-router";
 import { GetAllProjectsUseCase } from "../../src/domain/interfaces/use-cases/project/get-all-projects";
 import { UpdateProjectUseCase } from "../../src/domain/interfaces/use-cases/project/update-project";
 import { DeleteProjectUseCase } from "../../src/domain/interfaces/use-cases/project/delete-project";
@@ -52,7 +52,7 @@ describe("Project router", () => {
     mockDeleteProjectUseCase = new MockDeleteProjectUseCase();
     server.use(
       "/project",
-      ProjectRouter(
+      ProjectController(
         mockGetProjectUseCase,
         mockGetAllProjectsUseCase,
         mockCreateProjectUseCase,

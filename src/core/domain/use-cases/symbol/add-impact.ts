@@ -1,5 +1,5 @@
 import { AddImpactUseCase } from './interfaces/add-impact';
-import { AddImpactRequestDTO } from '../../../../application/dtos/add-impact-request-dto';
+import { AddImpactRequestDTO } from '../../../../application/http/dtos/add-impact-request-dto';
 import { SymbolRepository } from '../../../repositories/symbol-repository';
 
 export class AddImpact implements AddImpactUseCase {

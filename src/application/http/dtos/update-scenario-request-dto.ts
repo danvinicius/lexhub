@@ -1,5 +1,5 @@
 import { IsOptional, IsString } from "class-validator";
-import { IContext } from "../../core/domain/entities/scenario";
+import { IContext } from "../../../core/domain/entities/scenario";
 
 export class UpdateScenarioRequestDTO {
     @IsString()

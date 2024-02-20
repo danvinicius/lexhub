@@ -1,17 +1,17 @@
-import { CreateProjectUseCase } from "../../core/domain/use-cases/project/interfaces/create-project"
-import { GetAllProjectsUseCase } from "../../core/domain/use-cases/project/interfaces/get-all-projects"
-import { GetProjectUseCase } from "../../core/domain/use-cases/project/interfaces/get-project"
-import { UpdateProjectUseCase } from "../../core/domain/use-cases/project/interfaces/update-project"
-import { DeleteProjectUseCase } from "../../core/domain/use-cases/project/interfaces/delete-project"
+import { CreateProjectUseCase } from "../../../core/domain/use-cases/project/interfaces/create-project"
+import { GetAllProjectsUseCase } from "../../../core/domain/use-cases/project/interfaces/get-all-projects"
+import { GetProjectUseCase } from "../../../core/domain/use-cases/project/interfaces/get-project"
+import { UpdateProjectUseCase } from "../../../core/domain/use-cases/project/interfaces/update-project"
+import { DeleteProjectUseCase } from "../../../core/domain/use-cases/project/interfaces/delete-project"
 import express, { Response, Request, NextFunction } from "express";
-import { NotFoundError } from "../errors/not-found-error";
-import { BadRequestError } from "../errors/bad-request-error";
+import { NotFoundError } from "../../errors/not-found-error";
+import { BadRequestError } from "../../errors/bad-request-error";
 import { CreateProjectRequestDTO } from "../dtos/create-project-request-dto"
 import { UpdateProjectRequestDTO } from "../dtos/update-project-request-dto"
-import { validate } from "../helpers/validate";
-import { Logger } from "../../config/logger"
+import { validate } from "../../helpers/validate";
+import { Logger } from "../../../config/logger"
 
-export default function ProjectRouter(
+export default function ProjectController(
   getProjectUseCase: GetProjectUseCase,
   getAllProjectsUseCase: GetAllProjectsUseCase,
   createProjectUseCase: CreateProjectUseCase,

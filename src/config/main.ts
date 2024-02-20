@@ -2,9 +2,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import server from "./server";
-import ProjectRouter from "../application/http/project-controller";
-import SymbolRouter from "../application/http/symbol-controller";
-import ScenarioRouter from '../application/http/scenario-controller';
+import ProjectController from "../application/http/controllers/project-controller";
+import SymbolController from "../application/http/controllers/symbol-controller";
+import ScenarioController from '../application/http/controllers/scenario-controller';
 import { MySQLProjectRepository } from "../infra/repositories/mysql/mysql-project-database-repository";
 import { MySQLSymbolRepository } from "../infra/repositories/mysql/mysql-symbol-database-repository";
 import { MySQLScenarioRepository } from "../infra/repositories/mysql/mysql-scenario-database-repository";
@@ -40,7 +40,7 @@ import { Logger } from './logger';
   const symbolRepository = new MySQLSymbolRepository(ds)
   const scenarioRepository = new MySQLScenarioRepository(ds)
 
-  const projectRouter = ProjectRouter(
+  const projectController = ProjectController(
     new GetProject(projectRepository),
     new GetAllProjects(projectRepository),
     new CreateProject(projectRepository),
@@ -48,7 +48,7 @@ import { Logger } from './logger';
     new DeleteProject(projectRepository)
   );
 
-  const symbolRouter = SymbolRouter(
+  const symbolController = SymbolController(
     new GetSymbol(symbolRepository),
     new GetAllSymbols(symbolRepository),
     new CreateSymbol(symbolRepository),
@@ -60,7 +60,7 @@ import { Logger } from './logger';
     new RemoveSynonym(symbolRepository),
   );
 
-  const scenarioRouter = ScenarioRouter(
+  const scenarioController = ScenarioController(
     new GetScenario(scenarioRepository),
     new GetScenarioWithLexicons(scenarioRepository, symbolRepository),
     new GetAllScenarios(scenarioRepository),
@@ -69,12 +69,10 @@ import { Logger } from './logger';
     new DeleteScenario(scenarioRepository)
   );
 
-  server.use("/api/project", projectRouter);
-  server.use("/api/symbol", symbolRouter);
-  server.use("/api/scenario", scenarioRouter);
+  server.use("/api/project", projectController);
+  server.use("/api/symbol", symbolController);
+  server.use("/api/scenario", scenarioController);
 
   server.use(errorHandler);
   server.listen(3000, () => logger.info("Server running on port 3000"));
 })();
-
-// rosinhie

@@ -1,5 +1,5 @@
 import { AddSynonymUseCase } from './interfaces/add-synonym';
-import { AddSynonymRequestDTO } from '../../../../application/dtos/add-synonym-request-dto';
+import { AddSynonymRequestDTO } from '../../../../application/http/dtos/add-synonym-request-dto';
 import { SymbolRepository } from '../../../repositories/symbol-repository';
 
 export class AddSynonym implements AddSynonymUseCase {
