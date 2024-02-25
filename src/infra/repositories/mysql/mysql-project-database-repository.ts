@@ -1,7 +1,7 @@
 import { CreateProjectRequestDTO } from "../../../application/http/dtos/create-project-request-dto";
 import { UpdateProjectRequestDTO } from "../../../application/http/dtos/update-project-request-dto";
 import { ProjectRepository } from "../../../core/repositories/project-repository";
-import { Project } from "../../database/mysql/typeorm/entity/Project";
+import { Project } from '../../database/mysql/typeorm/entity/Project'
 import { DataSource } from "typeorm";
 import { Logger } from "../../../config/logger"
 

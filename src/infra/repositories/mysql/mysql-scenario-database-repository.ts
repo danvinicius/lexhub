@@ -5,6 +5,13 @@ import { Project } from "../../database/mysql/typeorm/entity/Project";
 import { CreateScenarioRequestDTO } from "../../../application/http/dtos/create-scenario-request-dto";
 import { UpdateScenarioRequestDTO } from "../../../application/http/dtos/update-scenario-request-dto";
 import { Logger } from '../../../config/logger'
+import { AddExceptionRequestDTO } from "../../../application/http/dtos/add-exception-request-dto";
+import { AddContextRequestDTO } from "../../../application/http/dtos/add-context-request-dto";
+import { Exception } from "../../database/mysql/typeorm/entity/Exception";
+import { Context } from "../../database/mysql/typeorm/entity/Context";
+import { AddRestrictionRequestDTO } from "../../../application/http/dtos/add-restriction-request-dto";
+import { Restriction } from "../../database/mysql/typeorm/entity/Restriction";
+import { IEpisode, IResource } from "../../../core/domain/entities/scenario";
 
 const logger = Logger.getInstance()
 
@@ -23,7 +30,9 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       relations: {
         exceptions: true,
         episodes: true,
-        context: true,
+        context: {
+          restrictions: true,
+        },
         resources: true,
         actors: true,
         groups: true,
@@ -45,7 +54,9 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       relations: {
         exceptions: true,
         episodes: true,
-        context: true,
+        context: {
+          restrictions: true,
+        },
         resources: true,
         actors: true,
         groups: true,
@@ -72,6 +83,101 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     } catch (error: any) {
       logger.error(error.message)
       throw new Error(error.message);
+    }
+  }
+  async addException(data: AddExceptionRequestDTO): Promise<void> {
+    try {
+      const scenario = await this.getScenario(data?.scenarioId as number);
+      const exception = new Exception();
+      exception.description = data?.description;
+      exception.scenario = scenario;
+      await this.dataSource.manager.save(Exception, exception);
+    } catch (error: any) {
+      logger.error(error.message)
+      throw new Error("Error on adding exception");
+    }
+  }
+  async addContext(data: AddContextRequestDTO): Promise<void> {
+    try {
+      const scenario = await this.getScenario(data?.scenarioId as number);
+      const context = new Context();
+      context.geographicLocation = data?.geographicLocation;
+      context.temporalLocation = data?.temporalLocation;
+      context.preCondition = data?.preCondition;
+      context.scenario = scenario;
+      await this.dataSource.manager.save(Context, context);
+    } catch (error: any) {
+      logger.error(error.message)
+      throw new Error("Error on adding context");
+    }
+  }
+  async addRestriction(data: AddRestrictionRequestDTO): Promise<void> {
+    try {
+      const scenario = await this.getScenario(data?.scenarioId as number);
+      const context = scenario.context;
+      const resource = scenario.resources.find((r: IResource) => r.id == data?.resourceId)
+      const episode = scenario.episodes.find((r: IEpisode) => r.id == data?.episodeId)
+      const restriction = new Restriction();
+      restriction.description = data?.description;
+      restriction.context = context;
+      if (data.resourceId) {
+        if (!resource) {
+          throw new Error("Error on adding restriction");
+        }
+        restriction.resource = resource;
+      }
+      if (data.episodeId) {
+        if (!episode) {
+          throw new Error("Error on adding restriction");
+        }
+        restriction.episode = episode;
+      }
+      await this.dataSource.manager.save(Restriction, restriction);
+    } catch (error: any) {
+      logger.error(error.message)
+      throw new Error("Error on adding restriction");
+    }
+  }
+  async removeException(id: number): Promise<void> {
+    try {
+      const [exception] = await this.dataSource.manager.findBy(Exception, {
+        id,
+      });
+      if (!exception) {
+        throw new Error("Exception does not exist");
+      }
+      await this.dataSource.manager.delete(Exception, id);
+    } catch (error: any) {
+      logger.error(error.message)
+      throw new Error("Error on removing exception");
+    }
+  }
+  async removeContext(id: number): Promise<void> {
+    try {
+      const [context] = await this.dataSource.manager.findBy(Context, {
+        id,
+      });
+      if (!context) {
+        throw new Error("Context does not exist");
+      }
+      await this.dataSource.manager.delete(Context, id);
+    } catch (error: any) {
+      logger.error(error.message)
+      throw new Error("Error on removing context");
+    }
+  }
+  async removeRestriction(id: number): Promise<void> {
+    try {
+      const [restriction] = await this.dataSource.manager.findBy(Restriction, {
+        id,
+      });
+      if (!restriction) {
+        throw new Error("Restriction does not exist");
+      }
+      await this.dataSource.manager.delete(Restriction, id);
+    } catch (error: any) {
+      logger.error(error.message)
+      throw new Error("Error on removing restriction");
     }
   }
   async updateScenario(id: string, data: UpdateScenarioRequestDTO): Promise<void> {

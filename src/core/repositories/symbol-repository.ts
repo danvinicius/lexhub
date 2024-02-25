@@ -1,8 +1,8 @@
-import { AddImpactRequestDTO } from "../../domain/dto/add-impact-request-dto";
-import { AddSynonymRequestDTO } from "../../domain/dto/add-synonym-request-dto";
-import { CreateSymbolRequestDTO } from "../../domain/dto/create-symbol-request-dto";
-import { UpdateSymbolRequestDTO } from "../../domain/dto/update-symbol-request-dto";
-import { ISymbol } from "../../domain/entities/symbol";
+import { AddImpactRequestDTO } from "../../application/http/dtos/add-impact-request-dto";
+import { AddSynonymRequestDTO } from "../../application/http/dtos/add-synonym-request-dto";
+import { CreateSymbolRequestDTO } from "../../application/http/dtos/create-symbol-request-dto";
+import { UpdateSymbolRequestDTO } from "../../application/http/dtos/update-symbol-request-dto";
+import { ISymbol } from "../domain/entities/symbol";
 
 export interface SymbolRepository {
   getSymbol(id: string | number): Promise<null | ISymbol>;

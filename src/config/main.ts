@@ -31,6 +31,12 @@ import { UpdateScenario } from '../core/domain/use-cases/scenario/update-scenari
 import { GetScenarioWithLexicons } from '../core/domain/use-cases/scenario/get-scenario-with-lexicons';
 import { AppDataSource } from '../infra/database/connection';
 import { Logger } from './logger';
+import { AddException } from '../core/domain/use-cases/scenario/add-exception';
+import { AddContext } from '../core/domain/use-cases/scenario/add-context';
+import { AddRestriction } from '../core/domain/use-cases/scenario/add-restriction';
+import { RemoveContext } from '../core/domain/use-cases/scenario/remove-context';
+import { RemoveException } from '../core/domain/use-cases/scenario/remove-exception';
+import { RemoveRestriction } from '../core/domain/use-cases/scenario/remove-restriction';
 
 (async function () {
   const logger = Logger.getInstance()
@@ -66,7 +72,13 @@ import { Logger } from './logger';
     new GetAllScenarios(scenarioRepository),
     new CreateScenario(scenarioRepository),
     new UpdateScenario(scenarioRepository),
-    new DeleteScenario(scenarioRepository)
+    new DeleteScenario(scenarioRepository),
+    new AddException(scenarioRepository),
+    new AddContext(scenarioRepository),
+    new AddRestriction(scenarioRepository),
+    new RemoveException(scenarioRepository),
+    new RemoveContext(scenarioRepository),
+    new RemoveRestriction(scenarioRepository),
   );
 
   server.use("/api/project", projectController);

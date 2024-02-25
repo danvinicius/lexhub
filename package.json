@@ -1,11 +1,11 @@
 {
-   "name": "overnight-ts",
+   "name": "cenarios_e_lexicos_api",
    "version": "1.0.0",
    "main": "index.js",
    "license": "MIT",
    "scripts": {
-      "build": "tsc",
-      "start": "ts-node src/index.ts",
+      "build": "rm -rf dist && tsc",
+      "start": "node dist/src/index.js",
       "dev": "tsnd --transpile-only --respawn src/index.ts",
       "test": "jest --watchAll",
       "typeorm": "typeorm-ts-node-commonjs"
@@ -30,7 +30,6 @@
       "jest": "^29.7.0",
       "supertest": "^6.3.3",
       "ts-jest": "^29.1.1",
-      "ts-node": "10.9.1",
       "ts-node-dev": "^2.0.0",
       "typescript": "4.5.2"
    }

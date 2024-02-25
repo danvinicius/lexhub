@@ -1,5 +1,4 @@
-import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
-import { IImpact, ISynonym } from "../entities/symbol";
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateSymbolRequestDTO {
     @IsString()
