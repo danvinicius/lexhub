@@ -1,6 +1,6 @@
 import { IsNumber, IsOptional, IsString } from "class-validator";
 
-export class AddRestrictionRequestDTO {
+export class CreateRestrictionRequestDTO {
     @IsString()
     description: string;
 

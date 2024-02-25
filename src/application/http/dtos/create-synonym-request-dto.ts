@@ -1,6 +1,6 @@
 import { IsNumber, IsString } from "class-validator";
 
-export class AddSynonymRequestDTO {
+export class CreateSynonymRequestDTO {
     @IsString()
     name: string;
 

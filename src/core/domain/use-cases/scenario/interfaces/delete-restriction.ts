@@ -1,3 +1,3 @@
-export interface RemoveImpactUseCase {
+export interface DeleteRestrictionUseCase {
     execute(id: number | string): Promise<void>;
 }

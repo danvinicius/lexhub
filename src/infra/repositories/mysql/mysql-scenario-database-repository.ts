@@ -5,11 +5,11 @@ import { Project } from "../../database/mysql/typeorm/entity/Project";
 import { CreateScenarioRequestDTO } from "../../../application/http/dtos/create-scenario-request-dto";
 import { UpdateScenarioRequestDTO } from "../../../application/http/dtos/update-scenario-request-dto";
 import { Logger } from '../../../config/logger'
-import { AddExceptionRequestDTO } from "../../../application/http/dtos/add-exception-request-dto";
-import { AddContextRequestDTO } from "../../../application/http/dtos/add-context-request-dto";
+import { CreateExceptionRequestDTO } from "../../../application/http/dtos/create-exception-request-dto";
+import { CreateContextRequestDTO } from "../../../application/http/dtos/create-context-request-dto";
 import { Exception } from "../../database/mysql/typeorm/entity/Exception";
 import { Context } from "../../database/mysql/typeorm/entity/Context";
-import { AddRestrictionRequestDTO } from "../../../application/http/dtos/add-restriction-request-dto";
+import { CreateRestrictionRequestDTO } from "../../../application/http/dtos/create-restriction-request-dto";
 import { Restriction } from "../../database/mysql/typeorm/entity/Restriction";
 import { IEpisode, IResource } from "../../../core/domain/entities/scenario";
 
@@ -85,7 +85,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       throw new Error(error.message);
     }
   }
-  async addException(data: AddExceptionRequestDTO): Promise<void> {
+  async createException(data: CreateExceptionRequestDTO): Promise<void> {
     try {
       const scenario = await this.getScenario(data?.scenarioId as number);
       const exception = new Exception();
@@ -97,7 +97,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       throw new Error("Error on adding exception");
     }
   }
-  async addContext(data: AddContextRequestDTO): Promise<void> {
+  async createContext(data: CreateContextRequestDTO): Promise<void> {
     try {
       const scenario = await this.getScenario(data?.scenarioId as number);
       const context = new Context();
@@ -111,7 +111,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       throw new Error("Error on adding context");
     }
   }
-  async addRestriction(data: AddRestrictionRequestDTO): Promise<void> {
+  async createRestriction(data: CreateRestrictionRequestDTO): Promise<void> {
     try {
       const scenario = await this.getScenario(data?.scenarioId as number);
       const context = scenario.context;
@@ -138,7 +138,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       throw new Error("Error on adding restriction");
     }
   }
-  async removeException(id: number): Promise<void> {
+  async deleteException(id: number): Promise<void> {
     try {
       const [exception] = await this.dataSource.manager.findBy(Exception, {
         id,
@@ -152,7 +152,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       throw new Error("Error on removing exception");
     }
   }
-  async removeContext(id: number): Promise<void> {
+  async deleteContext(id: number): Promise<void> {
     try {
       const [context] = await this.dataSource.manager.findBy(Context, {
         id,
@@ -166,7 +166,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       throw new Error("Error on removing context");
     }
   }
-  async removeRestriction(id: number): Promise<void> {
+  async deleteRestriction(id: number): Promise<void> {
     try {
       const [restriction] = await this.dataSource.manager.findBy(Restriction, {
         id,

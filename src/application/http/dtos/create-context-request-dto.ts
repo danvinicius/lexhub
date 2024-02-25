@@ -1,6 +1,6 @@
 import { IsNumber, IsString } from "class-validator";
 
-export class AddContextRequestDTO {
+export class CreateContextRequestDTO {
     @IsString()
     geographicLocation: string;
 

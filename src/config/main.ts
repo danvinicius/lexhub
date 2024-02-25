@@ -17,10 +17,10 @@ import { GetSymbol } from '../core/domain/use-cases/symbol/get-symbol';
 import { GetAllSymbols } from '../core/domain/use-cases/symbol/get-all-symbols';
 import { CreateSymbol } from '../core/domain/use-cases/symbol/create-symbol';
 import { DeleteSymbol } from '../core/domain/use-cases/symbol/delete-symbol';
-import { AddImpact } from '../core/domain/use-cases/symbol/add-impact';
-import { AddSynonym } from '../core/domain/use-cases/symbol/add-synonym';
-import { RemoveImpact } from '../core/domain/use-cases/symbol/remove-impact';
-import { RemoveSynonym } from '../core/domain/use-cases/symbol/remove-synonym';
+import { CreateImpact } from '../core/domain/use-cases/symbol/create-impact';
+import { CreateSynonym } from '../core/domain/use-cases/symbol/create-synonym';
+import { DeleteImpact } from '../core/domain/use-cases/symbol/delete-impact';
+import { DeleteSynonym } from '../core/domain/use-cases/symbol/delete-synonym';
 import { UpdateSymbol } from '../core/domain/use-cases/symbol/update-symbol';
 import { errorHandler } from "../application/middlewares/error-handler";
 import { CreateScenario } from '../core/domain/use-cases/scenario/create-scenario';
@@ -31,12 +31,12 @@ import { UpdateScenario } from '../core/domain/use-cases/scenario/update-scenari
 import { GetScenarioWithLexicons } from '../core/domain/use-cases/scenario/get-scenario-with-lexicons';
 import { AppDataSource } from '../infra/database/connection';
 import { Logger } from './logger';
-import { AddException } from '../core/domain/use-cases/scenario/add-exception';
-import { AddContext } from '../core/domain/use-cases/scenario/add-context';
-import { AddRestriction } from '../core/domain/use-cases/scenario/add-restriction';
-import { RemoveContext } from '../core/domain/use-cases/scenario/remove-context';
-import { RemoveException } from '../core/domain/use-cases/scenario/remove-exception';
-import { RemoveRestriction } from '../core/domain/use-cases/scenario/remove-restriction';
+import { CreateException } from '../core/domain/use-cases/scenario/create-exception';
+import { CreateContext } from '../core/domain/use-cases/scenario/create-context';
+import { CreateRestriction } from '../core/domain/use-cases/scenario/create-restriction';
+import { DeleteContext } from '../core/domain/use-cases/scenario/delete-context';
+import { DeleteException } from '../core/domain/use-cases/scenario/delete-exception';
+import { DeleteRestriction } from '../core/domain/use-cases/scenario/delete-restriction';
 
 (async function () {
   const logger = Logger.getInstance()
@@ -60,10 +60,10 @@ import { RemoveRestriction } from '../core/domain/use-cases/scenario/remove-rest
     new CreateSymbol(symbolRepository),
     new UpdateSymbol(symbolRepository),
     new DeleteSymbol(symbolRepository),
-    new AddImpact(symbolRepository),
-    new AddSynonym(symbolRepository),
-    new RemoveImpact(symbolRepository),
-    new RemoveSynonym(symbolRepository),
+    new CreateImpact(symbolRepository),
+    new CreateSynonym(symbolRepository),
+    new DeleteImpact(symbolRepository),
+    new DeleteSynonym(symbolRepository),
   );
 
   const scenarioController = ScenarioController(
@@ -73,12 +73,12 @@ import { RemoveRestriction } from '../core/domain/use-cases/scenario/remove-rest
     new CreateScenario(scenarioRepository),
     new UpdateScenario(scenarioRepository),
     new DeleteScenario(scenarioRepository),
-    new AddException(scenarioRepository),
-    new AddContext(scenarioRepository),
-    new AddRestriction(scenarioRepository),
-    new RemoveException(scenarioRepository),
-    new RemoveContext(scenarioRepository),
-    new RemoveRestriction(scenarioRepository),
+    new CreateException(scenarioRepository),
+    new CreateContext(scenarioRepository),
+    new CreateRestriction(scenarioRepository),
+    new DeleteException(scenarioRepository),
+    new DeleteContext(scenarioRepository),
+    new DeleteRestriction(scenarioRepository),
   );
 
   server.use("/api/project", projectController);

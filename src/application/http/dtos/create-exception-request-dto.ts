@@ -1,14 +1,14 @@
 import { IsNumber, IsString } from "class-validator";
 
-export class AddImpactRequestDTO {
+export class CreateExceptionRequestDTO {
     @IsString()
     description: string;
 
     @IsNumber()
-    symbolId: number | string;
-    
+    scenarioId: number | string;
+
     constructor(data: any) {
         this.description = data.description;
-        this.symbolId = data.symbolId;
+        this.scenarioId = data.scenarioId;
     }
 }

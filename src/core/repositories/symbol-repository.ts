@@ -1,5 +1,5 @@
-import { AddImpactRequestDTO } from "../../application/http/dtos/add-impact-request-dto";
-import { AddSynonymRequestDTO } from "../../application/http/dtos/add-synonym-request-dto";
+import { CreateImpactRequestDTO } from "../../application/http/dtos/create-impact-request-dto";
+import { CreateSynonymRequestDTO } from "../../application/http/dtos/create-synonym-request-dto";
 import { CreateSymbolRequestDTO } from "../../application/http/dtos/create-symbol-request-dto";
 import { UpdateSymbolRequestDTO } from "../../application/http/dtos/update-symbol-request-dto";
 import { ISymbol } from "../domain/entities/symbol";
@@ -10,8 +10,8 @@ export interface SymbolRepository {
   createSymbol(symbol: CreateSymbolRequestDTO): Promise<ISymbol>;
   updateSymbol(id: string | number, symbol: UpdateSymbolRequestDTO): Promise<void>;
   deleteSymbol(id: string | number): Promise<void>;
-  addImpact(data: AddImpactRequestDTO): Promise<void>
-  addSynonym(data: AddSynonymRequestDTO): Promise<void>
-  removeImpact(id: string | number): Promise<void>
-  removeSynonym(id: string | number): Promise<void>
+  createImpact(data: CreateImpactRequestDTO): Promise<void>
+  createSynonym(data: CreateSynonymRequestDTO): Promise<void>
+  deleteImpact(id: string | number): Promise<void>
+  deleteSynonym(id: string | number): Promise<void>
 }

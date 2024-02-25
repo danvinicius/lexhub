@@ -1,6 +1,6 @@
-import { AddContextRequestDTO } from "../../application/http/dtos/add-context-request-dto";
-import { AddExceptionRequestDTO } from "../../application/http/dtos/add-exception-request-dto";
-import { AddRestrictionRequestDTO } from "../../application/http/dtos/add-restriction-request-dto";
+import { CreateContextRequestDTO } from "../../application/http/dtos/create-context-request-dto";
+import { CreateExceptionRequestDTO } from "../../application/http/dtos/create-exception-request-dto";
+import { CreateRestrictionRequestDTO } from "../../application/http/dtos/create-restriction-request-dto";
 import { CreateScenarioRequestDTO } from "../../application/http/dtos/create-scenario-request-dto";
 import { UpdateScenarioRequestDTO } from "../../application/http/dtos/update-scenario-request-dto";
 import { IScenario } from "../domain/entities/scenario";
@@ -9,12 +9,13 @@ export interface ScenarioRepository {
   getScenario(id: string | number): Promise<null | IScenario>;
   getAllScenarios(projectId: string | number): Promise<IScenario[]>;
   createScenario(scenario: CreateScenarioRequestDTO): Promise<IScenario>;
-  addException(data: AddExceptionRequestDTO): Promise<void>
-  addContext(data: AddContextRequestDTO): Promise<void>
-  addRestriction(data: AddRestrictionRequestDTO): Promise<void>
-  removeException(id: string | number): Promise<void>
-  removeContext(id: string | number): Promise<void>
-  removeRestriction(id: string | number): Promise<void>
+  createScenario(scenario: CreateScenarioRequestDTO): Promise<IScenario>;
+  createException(data: CreateExceptionRequestDTO): Promise<void>
+  createContext(data: CreateContextRequestDTO): Promise<void>
+  createRestriction(data: CreateRestrictionRequestDTO): Promise<void>
+  deleteException(id: string | number): Promise<void>
+  deleteContext(id: string | number): Promise<void>
+  deleteRestriction(id: string | number): Promise<void>
   updateScenario(id: string | number, scenario: UpdateScenarioRequestDTO): Promise<void>;
   deleteScenario(id: string | number): Promise<void>;
 }

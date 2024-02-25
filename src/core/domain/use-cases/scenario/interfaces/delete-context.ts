@@ -1,3 +1,3 @@
-export interface RemoveExceptionUseCase {
+export interface DeleteContextUseCase {
     execute(id: number | string): Promise<void>;
 }

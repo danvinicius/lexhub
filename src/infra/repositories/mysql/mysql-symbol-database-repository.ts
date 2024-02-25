@@ -6,8 +6,8 @@ import { Project } from "../../database/mysql/typeorm/entity/Project";
 import { CreateSymbolRequestDTO } from "../../../application/http/dtos/create-symbol-request-dto";
 import { Impact } from "../../database/mysql/typeorm/entity/Impact";
 import { UpdateSymbolRequestDTO } from "../../../application/http/dtos/update-symbol-request-dto";
-import { AddImpactRequestDTO } from "../../../application/http/dtos/add-impact-request-dto";
-import { AddSynonymRequestDTO } from "../../../application/http/dtos/add-synonym-request-dto";
+import { CreateImpactRequestDTO } from "../../../application/http/dtos/create-impact-request-dto";
+import { CreateSynonymRequestDTO } from "../../../application/http/dtos/create-synonym-request-dto";
 import { Logger } from '../../../config/logger'
 
 const logger = Logger.getInstance()
@@ -70,7 +70,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       throw new Error(error.message);
     }
   }
-  async addImpact(data: AddImpactRequestDTO): Promise<void> {
+  async createImpact(data: CreateImpactRequestDTO): Promise<void> {
     try {
       const symbol = await this.getSymbol(data?.symbolId as number);
       const impact = new Impact();
@@ -82,7 +82,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       throw new Error("Error on adding impact");
     }
   }
-  async addSynonym(data: AddSynonymRequestDTO): Promise<void> {
+  async createSynonym(data: CreateSynonymRequestDTO): Promise<void> {
     try {
       const symbol = await this.getSymbol(data?.symbolId as number);
       const synonym = new Synonym();
@@ -94,7 +94,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       throw new Error("Error on adding synonym");
     }
   }
-  async removeImpact(id: number): Promise<void> {
+  async deleteImpact(id: number): Promise<void> {
     try {
       const [impact] = await this.dataSource.manager.findBy(Impact, {
         id,
@@ -108,7 +108,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       throw new Error("Error on removing impact");
     }
   }
-  async removeSynonym(id: number): Promise<void> {
+  async deleteSynonym(id: number): Promise<void> {
     try {
       const [synonym] = await this.dataSource.manager.findBy(Synonym, {
         id,

@@ -11,15 +11,15 @@ import { validate } from "../../helpers/validate";
 import { UpdateScenarioRequestDTO } from "../dtos/update-scenario-request-dto";
 import { GetScenarioWithLexiconsUseCase } from "../../../core/domain/use-cases/scenario/interfaces/get-scenario-with-lexicons-use-case";
 import { Logger } from "../../../config/logger"
-import { AddExceptionRequestDTO } from "../dtos/add-exception-request-dto";
-import { AddExceptionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/add-exception";
-import { AddContextUseCase } from "../../../core/domain/use-cases/scenario/interfaces/add-context";
-import { RemoveContextUseCase } from "../../../core/domain/use-cases/scenario/interfaces/remove-context";
-import { RemoveExceptionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/remove-exception";
-import { RemoveRestrictionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/remove-restriction";
-import { AddRestrictionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/add-restriction";
-import { AddContextRequestDTO } from "../dtos/add-context-request-dto";
-import { AddRestrictionRequestDTO } from "../dtos/add-restriction-request-dto";
+import { CreateExceptionRequestDTO } from "../dtos/create-exception-request-dto";
+import { CreateExceptionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-exception";
+import { CreateContextUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-context";
+import { DeleteContextUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-context";
+import { DeleteExceptionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-exception";
+import { DeleteRestrictionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-restriction";
+import { CreateRestrictionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-restriction";
+import { CreateContextRequestDTO } from "../dtos/create-context-request-dto";
+import { CreateRestrictionRequestDTO } from "../dtos/create-restriction-request-dto";
 
 export default function ScenarioController(
   getScenarioUseCase: GetScenarioUseCase,
@@ -28,12 +28,12 @@ export default function ScenarioController(
   createScenarioUseCase: CreateScenarioUseCase,
   updateScenarioUseCase: UpdateScenarioUseCase,
   deleteScenarioUseCase: DeleteScenarioUseCase,
-  addExceptionUseCase: AddExceptionUseCase,
-  addContextUseCase: AddContextUseCase,
-  addRestrictionUseCase: AddRestrictionUseCase,
-  removeExceptionUseCase: RemoveExceptionUseCase,
-  removeContextUseCase: RemoveContextUseCase,
-  removeRestrictionUseCase: RemoveRestrictionUseCase
+  createExceptionUseCase: CreateExceptionUseCase,
+  createContextUseCase: CreateContextUseCase,
+  createRestrictionUseCase: CreateRestrictionUseCase,
+  deleteExceptionUseCase: DeleteExceptionUseCase,
+  deleteContextUseCase: DeleteContextUseCase,
+  deleteRestrictionUseCase: DeleteRestrictionUseCase
 ) {
   const router = express.Router();
   const logger = Logger.getInstance()
@@ -93,9 +93,9 @@ export default function ScenarioController(
   });
   router.post("/exception", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const exception = new AddExceptionRequestDTO(req.body);
+      const exception = new CreateExceptionRequestDTO(req.body);
       await validate(exception);
-      await addExceptionUseCase.execute(exception);
+      await createExceptionUseCase.execute(exception);
       return res.status(201).json({ message: "Exception added" });
     } catch (error: any) {
       logger.error(error.message)
@@ -104,9 +104,9 @@ export default function ScenarioController(
   });
   router.post("/context", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const context = new AddContextRequestDTO(req.body);
+      const context = new CreateContextRequestDTO(req.body);
       await validate(context);
-      await addContextUseCase.execute(context);
+      await createContextUseCase.execute(context);
       return res.status(201).json({ message: "Context added" });
     } catch (error: any) {
       logger.error(error.message)
@@ -115,9 +115,9 @@ export default function ScenarioController(
   });
   router.post("/restriction", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const restriction = new AddRestrictionRequestDTO(req.body);
+      const restriction = new CreateRestrictionRequestDTO(req.body);
       await validate(restriction);
-      await addRestrictionUseCase.execute(restriction);
+      await createRestrictionUseCase.execute(restriction);
       return res.status(201).json({ message: "Restriction added" });
     } catch (error: any) {
       logger.error(error.message)
@@ -127,7 +127,7 @@ export default function ScenarioController(
   router.delete("/exception/:id", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      await removeExceptionUseCase.execute(id);
+      await deleteExceptionUseCase.execute(id);
       return res.json({ message: "Exception deleted" });
     } catch (error: any) {
       logger.error(error.message)
@@ -138,7 +138,7 @@ export default function ScenarioController(
   router.delete("/context/:id", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      await removeContextUseCase.execute(id);
+      await deleteContextUseCase.execute(id);
       return res.json({ message: "Context deleted" });
     } catch (error: any) {
       logger.error(error.message)
@@ -149,7 +149,7 @@ export default function ScenarioController(
   router.delete("/restriction/:id", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      await removeRestrictionUseCase.execute(id);
+      await deleteRestrictionUseCase.execute(id);
       return res.json({ message: "Restriction deleted" });
     } catch (error: any) {
       logger.error(error.message)

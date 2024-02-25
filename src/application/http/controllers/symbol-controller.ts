@@ -9,12 +9,12 @@ import { BadRequestError } from "../../errors/bad-request-error";
 import { validate } from "../../helpers/validate";
 import { CreateSymbolRequestDTO } from "../dtos/create-symbol-request-dto";
 import { UpdateSymbolRequestDTO } from "../dtos/update-symbol-request-dto";
-import { AddImpactRequestDTO } from "../dtos/add-impact-request-dto";
-import { AddImpactUseCase } from "../../../core/domain/use-cases/symbol/interfaces/add-impact";
-import { AddSynonymUseCase } from "../../../core/domain/use-cases/symbol/interfaces/add-synonym";
-import { AddSynonymRequestDTO } from "../dtos/add-synonym-request-dto";
-import { RemoveImpactUseCase } from "../../../core/domain/use-cases/symbol/interfaces/remove-impact";
-import { RemoveSynonymUseCase } from "../../../core/domain/use-cases/symbol/interfaces/remove-synonym";
+import { CreateImpactRequestDTO } from "../dtos/create-impact-request-dto";
+import { CreateImpactUseCase } from "../../../core/domain/use-cases/symbol/interfaces/create-impact";
+import { CreateSynonymUseCase } from "../../../core/domain/use-cases/symbol/interfaces/create-synonym";
+import { CreateSynonymRequestDTO } from "../dtos/create-synonym-request-dto";
+import { DeleteImpactUseCase } from "../../../core/domain/use-cases/symbol/interfaces/delete-impact";
+import { DeleteSynonymUseCase } from "../../../core/domain/use-cases/symbol/interfaces/delete-synonym";
 import { Logger } from "../../../config/logger"
 
 export default function SymbolController(
@@ -23,10 +23,10 @@ export default function SymbolController(
   createSymbolUseCase: CreateSymbolUseCase,
   updateSymbolUseCase: UpdateSymbolUseCase,
   deleteSymbolUseCase: DeleteSymbolUseCase,
-  addImpactUseCase: AddImpactUseCase,
-  addSynonymUseCase: AddSynonymUseCase,
-  removeImpact: RemoveImpactUseCase,
-  removeSynonym: RemoveSynonymUseCase,
+  createImpactUseCase: CreateImpactUseCase,
+  createSynonymUseCase: CreateSynonymUseCase,
+  deleteImpact: DeleteImpactUseCase,
+  deleteSynonym: DeleteSynonymUseCase,
 ) {
   const router = express.Router();
   const logger = Logger.getInstance()
@@ -72,9 +72,9 @@ export default function SymbolController(
   });
   router.post("/impact", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const impact = new AddImpactRequestDTO(req.body);
+      const impact = new CreateImpactRequestDTO(req.body);
       await validate(impact);
-      await addImpactUseCase.execute(impact);
+      await createImpactUseCase.execute(impact);
       return res.status(201).json({ message: "Impact added" });
     } catch (error: any) {
       logger.error(error.message)
@@ -83,9 +83,9 @@ export default function SymbolController(
   });
   router.post("/synonym", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const synonym = new AddSynonymRequestDTO(req.body);
+      const synonym = new CreateSynonymRequestDTO(req.body);
       await validate(synonym);
-      await addSynonymUseCase.execute(synonym);
+      await createSynonymUseCase.execute(synonym);
       return res.status(201).json({ message: "Synonym added" });
     } catch (error: any) {
       logger.error(error.message)
@@ -127,7 +127,7 @@ export default function SymbolController(
   router.delete("/impact/:id", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      await removeImpact.execute(id);
+      await deleteImpact.execute(id);
       return res.json({ message: "Impact deleted" });
     } catch (error: any) {
       logger.error(error.message)
@@ -138,7 +138,7 @@ export default function SymbolController(
   router.delete("/synonym/:id", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      await removeSynonym.execute(id);
+      await deleteSynonym.execute(id);
       return res.json({ message: "Synonym deleted" });
     } catch (error: any) {
       logger.error(error.message)
