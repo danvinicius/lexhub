@@ -11,7 +11,10 @@ import { Exception } from "../../database/mysql/typeorm/entity/Exception";
 import { Context } from "../../database/mysql/typeorm/entity/Context";
 import { CreateRestrictionRequestDTO } from "../../../application/http/dtos/create-restriction-request-dto";
 import { Restriction } from "../../database/mysql/typeorm/entity/Restriction";
-import { IEpisode, IResource } from "../../../core/domain/entities/scenario";
+import { IActor, IEpisode, IResource } from "../../../core/domain/entities/scenario";
+import { AddActorRequestDTO } from "../../../application/http/dtos/add-actor-request-dto";
+import { CreateActorRequestDTO } from "../../../application/http/dtos/create-actor-request-dto";
+import { Actor } from "../../database/mysql/typeorm/entity/Actor";
 
 const logger = Logger.getInstance()
 
@@ -94,7 +97,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       await this.dataSource.manager.save(Exception, exception);
     } catch (error: any) {
       logger.error(error.message)
-      throw new Error("Error on adding exception");
+      throw new Error("Error on creating exception");
     }
   }
   async createContext(data: CreateContextRequestDTO): Promise<void> {
@@ -108,7 +111,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       await this.dataSource.manager.save(Context, context);
     } catch (error: any) {
       logger.error(error.message)
-      throw new Error("Error on adding context");
+      throw new Error("Error on creating context");
     }
   }
   async createRestriction(data: CreateRestrictionRequestDTO): Promise<void> {
@@ -122,20 +125,20 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       restriction.context = context;
       if (data.resourceId) {
         if (!resource) {
-          throw new Error("Error on adding restriction");
+          throw new Error("Error on creating restriction");
         }
         restriction.resource = resource;
       }
       if (data.episodeId) {
         if (!episode) {
-          throw new Error("Error on adding restriction");
+          throw new Error("Error on creating restriction");
         }
         restriction.episode = episode;
       }
       await this.dataSource.manager.save(Restriction, restriction);
     } catch (error: any) {
       logger.error(error.message)
-      throw new Error("Error on adding restriction");
+      throw new Error("Error on creating restriction");
     }
   }
   async deleteException(id: number): Promise<void> {
@@ -178,6 +181,60 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     } catch (error: any) {
       logger.error(error.message)
       throw new Error("Error on removing restriction");
+    }
+  }
+
+  // Create and actor
+  async createActor(data: CreateActorRequestDTO): Promise<void> {
+    try {
+      const scenario = await this.getScenario(data?.scenarioId as number);
+      const actor = new Actor();
+      actor.name = data?.name;
+      await this.dataSource.manager.save(Actor, actor);
+      scenario.actors.push(actor);
+      await this.dataSource.manager.save(Scenario, scenario);
+    } catch (error: any) {
+      logger.error(error.message)
+      throw new Error("Error on creating actor");
+    }
+  }
+
+  // Add an existing actor to a scenario
+  async addActor(id: number, data: AddActorRequestDTO): Promise<void> {
+    try {
+      const [actor] = await this.dataSource.manager.findBy(Actor, {
+        id,
+      });
+      const scenario = await this.getScenario(data?.scenarioId as number);
+      scenario.actors.push(actor);
+      await this.dataSource.manager.save(Scenario, scenario);
+    } catch (error: any) {
+      logger.error(error.message)
+      throw new Error("Error on adding actor");
+    }
+  }
+
+  // Delete an actor
+  async deleteActor(id: number): Promise<void> {
+    try {
+      await this.dataSource.manager.delete(Actor, id);
+    } catch (error: any) {
+      logger.error(error.message)
+      throw new Error("Error on deleting actor");
+    }
+  }
+
+  // Remove an actor from a scenario
+  async removeActor(actorId: number, scenarioId: number): Promise<void> {
+    try {
+      const scenario = await this.getScenario(scenarioId);
+      scenario.actors = scenario.actors.filter((a: IActor) => {
+        return a.id !== actorId
+      })
+      await this.dataSource.manager.save(Scenario, scenario);
+    } catch (error: any) {
+      logger.error(error.message)
+      throw new Error("Error on removing actor");
     }
   }
   async updateScenario(id: string, data: UpdateScenarioRequestDTO): Promise<void> {

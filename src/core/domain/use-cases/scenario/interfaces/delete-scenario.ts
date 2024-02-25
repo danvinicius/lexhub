@@ -1,3 +1,3 @@
 export interface DeleteScenarioUseCase {
-  execute(id: string | number): Promise<void>;
+  execute(id: number | string): Promise<void>;
 }

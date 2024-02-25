@@ -75,7 +75,7 @@ export default function SymbolController(
       const impact = new CreateImpactRequestDTO(req.body);
       await validate(impact);
       await createImpactUseCase.execute(impact);
-      return res.status(201).json({ message: "Impact added" });
+      return res.status(201).json({ message: "Impact created" });
     } catch (error: any) {
       logger.error(error.message)
       next(error);
@@ -86,7 +86,7 @@ export default function SymbolController(
       const synonym = new CreateSynonymRequestDTO(req.body);
       await validate(synonym);
       await createSynonymUseCase.execute(synonym);
-      return res.status(201).json({ message: "Synonym added" });
+      return res.status(201).json({ message: "Synonym created" });
     } catch (error: any) {
       logger.error(error.message)
       next(error);

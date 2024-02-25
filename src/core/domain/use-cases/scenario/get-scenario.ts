@@ -8,7 +8,7 @@ export class GetScenario implements GetScenarioUseCase {
   constructor(scenarioRepository: ScenarioRepository) {
     this.scenarioRepository = scenarioRepository;
   }
-  async execute(id: string | number): Promise<null | IScenario> {
+  async execute(id: number | string): Promise<null | IScenario> {
     const scenario = this.scenarioRepository.getScenario(id);
     return scenario;
   }

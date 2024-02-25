@@ -3,19 +3,19 @@ import { ProjectDatabaseWrapper } from "../../../src/data/interfaces/wrapper/pro
 import { ProjectRepositoryImpl } from "../../../src/domain/repositories/project-repository";
 
 class MockProjectDatabaseWrapper implements ProjectDatabaseWrapper {
-  findById(id: string | number): Promise<Project | null> {
+  findById(id: number | string): Promise<Project | null> {
     throw new Error("Method not implemented.");
   }
   findAll(): Promise<Project[]> {
     throw new Error("Method not implemented.");
   }
-  insert(data: any): Promise<string | number> {
+  insert(data: any): Promise<number | string> {
     throw new Error("Method not implemented.");
   }
-  updateById(id: string | number, data: Project): Promise<boolean> {
+  updateById(id: number | string, data: Project): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
-  deleteById(id: string | number): Promise<boolean> {
+  deleteById(id: number | string): Promise<boolean> {
     throw new Error("Method not implemented.");
   }
 

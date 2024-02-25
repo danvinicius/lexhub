@@ -37,6 +37,10 @@ import { CreateRestriction } from '../core/domain/use-cases/scenario/create-rest
 import { DeleteContext } from '../core/domain/use-cases/scenario/delete-context';
 import { DeleteException } from '../core/domain/use-cases/scenario/delete-exception';
 import { DeleteRestriction } from '../core/domain/use-cases/scenario/delete-restriction';
+import { CreateActor } from '../core/domain/use-cases/scenario/create-actor';
+import { AddActor } from '../core/domain/use-cases/scenario/add-actor';
+import { DeleteActor } from '../core/domain/use-cases/scenario/delete-actor';
+import { RemoveActor } from '../core/domain/use-cases/scenario/remove-actor';
 
 (async function () {
   const logger = Logger.getInstance()
@@ -76,9 +80,13 @@ import { DeleteRestriction } from '../core/domain/use-cases/scenario/delete-rest
     new CreateException(scenarioRepository),
     new CreateContext(scenarioRepository),
     new CreateRestriction(scenarioRepository),
+    new CreateActor(scenarioRepository),
+    new AddActor(scenarioRepository),
     new DeleteException(scenarioRepository),
     new DeleteContext(scenarioRepository),
     new DeleteRestriction(scenarioRepository),
+    new DeleteActor(scenarioRepository),
+    new RemoveActor(scenarioRepository),
   );
 
   server.use("/api/project", projectController);

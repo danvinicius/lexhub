@@ -1,7 +1,7 @@
 import { IProject } from "./project";
 
 export interface ISymbol {
-    id?: string | number;
+    id?: number | string;
     name: string;
     classification: string;
     notion?: string;
@@ -11,11 +11,11 @@ export interface ISymbol {
 }
 
 export interface ISynonym {
-    id?: string | number;
+    id?: number | string;
     name: string;
 }
 
 export interface IImpact {
-    id?: string | number;
+    id?: number | string;
     description: string;
 }

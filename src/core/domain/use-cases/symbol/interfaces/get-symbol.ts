@@ -1,5 +1,5 @@
 import { ISymbol } from "../../../entities/symbol";
 
 export interface GetSymbolUseCase {
-    execute(id: string | number): Promise<null | ISymbol>
+    execute(id: number | string): Promise<null | ISymbol>
 }

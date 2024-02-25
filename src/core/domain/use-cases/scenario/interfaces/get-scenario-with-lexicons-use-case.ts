@@ -7,7 +7,7 @@ export interface FoundLexicon {
 };
 
 export interface GetScenarioWithLexiconsUseCase {
-    execute(id: string | number): Promise<{
+    execute(id: number | string): Promise<{
         title: {
             content: string;
             foundLexicons: FoundLexicon[];

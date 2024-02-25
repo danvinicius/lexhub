@@ -79,7 +79,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       await this.dataSource.manager.save(Impact, impact);
     } catch (error: any) {
       logger.error(error.message)
-      throw new Error("Error on adding impact");
+      throw new Error("Error on creating impact");
     }
   }
   async createSynonym(data: CreateSynonymRequestDTO): Promise<void> {
@@ -91,7 +91,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       await this.dataSource.manager.save(Synonym, synonym);
     } catch (error: any) {
       logger.error(error.message)
-      throw new Error("Error on adding synonym");
+      throw new Error("Error on creating synonym");
     }
   }
   async deleteImpact(id: number): Promise<void> {

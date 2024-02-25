@@ -11,6 +11,6 @@ export class Actor implements IActor {
   @Column()
   name: string;
 
-  @ManyToMany(() => Scenario)
+  @ManyToMany(() => Scenario, scenario => scenario.actors)
   scenarios: IScenario[];
 }

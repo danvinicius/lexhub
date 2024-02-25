@@ -10,7 +10,7 @@ describe("Get all projects Use Case", () => {
     getAllProjects(): Promise<Project[]> {
       throw new Error("Method not implemented.");
     }
-    createProject(project: Project): Promise<string | number> {
+    createProject(project: Project): Promise<number | string> {
       throw new Error("Method not implemented.");
     }
     updateProject(id: string, project: Project): Promise<void> {

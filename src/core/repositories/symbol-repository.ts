@@ -5,13 +5,13 @@ import { UpdateSymbolRequestDTO } from "../../application/http/dtos/update-symbo
 import { ISymbol } from "../domain/entities/symbol";
 
 export interface SymbolRepository {
-  getSymbol(id: string | number): Promise<null | ISymbol>;
+  getSymbol(id: number | string): Promise<null | ISymbol>;
   getAllSymbols(projectId: number | string): Promise<ISymbol[]>;
   createSymbol(symbol: CreateSymbolRequestDTO): Promise<ISymbol>;
-  updateSymbol(id: string | number, symbol: UpdateSymbolRequestDTO): Promise<void>;
-  deleteSymbol(id: string | number): Promise<void>;
+  updateSymbol(id: number | string, symbol: UpdateSymbolRequestDTO): Promise<void>;
+  deleteSymbol(id: number | string): Promise<void>;
   createImpact(data: CreateImpactRequestDTO): Promise<void>
   createSynonym(data: CreateSynonymRequestDTO): Promise<void>
-  deleteImpact(id: string | number): Promise<void>
-  deleteSynonym(id: string | number): Promise<void>
+  deleteImpact(id: number | string): Promise<void>
+  deleteSynonym(id: number | string): Promise<void>
 }

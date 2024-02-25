@@ -8,7 +8,7 @@ export class GetSymbol implements GetSymbolUseCase {
   constructor(symbolRepository: SymbolRepository) {
     this.symbolRepository = symbolRepository;
   }
-  async execute(id: string | number): Promise<null | ISymbol> {
+  async execute(id: number | string): Promise<null | ISymbol> {
     const symbol = this.symbolRepository.getSymbol(id);
     return symbol;
   }

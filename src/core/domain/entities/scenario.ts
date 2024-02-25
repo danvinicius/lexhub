@@ -1,7 +1,7 @@
 import { IProject } from "./project";
 
 export interface IScenario {
-  readonly id?: string | number;
+  readonly id?: number | string;
   title: string;
   goal: string;
   exceptions?: IException[];
@@ -14,28 +14,28 @@ export interface IScenario {
 }
 
 export interface IException {
-  id?: string | number;
+  id?: number | string;
   description: string;
 }
 
 export interface IActor {
-  id?: string | number;
+  id?: number | string;
   name: string;
 }
 
 export interface IResource {
-  id?: string | number;
+  id?: number | string;
   name: string;
   restrictions?: IRestriction[];
 }
 
 export interface IRestriction {
-  id?: string | number;
+  id?: number | string;
   description: string;
 }
 
 export interface IContext {
-  id?: string | number;
+  id?: number | string;
   geographicLocation: string;
   temporalLocation: string;
   preCondition: string;
@@ -43,7 +43,7 @@ export interface IContext {
 }
 
 export interface IEpisode {
-  id?: string | number;
+  id?: number | string;
   position: number;
   description: string;
   type: string;
@@ -51,12 +51,12 @@ export interface IEpisode {
 }
 
 export interface IGroup {
-  id?: string | number;
+  id?: number | string;
   position: number;
   nonSequentialEpisodes: INonSequentialEpisode[];
 }
 
 export interface INonSequentialEpisode extends IEpisode {
-  id?: string | number;
+  id?: number | string;
   group: IGroup;
 }

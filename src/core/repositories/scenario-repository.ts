@@ -1,3 +1,5 @@
+import { AddActorRequestDTO } from "../../application/http/dtos/add-actor-request-dto";
+import { CreateActorRequestDTO } from "../../application/http/dtos/create-actor-request-dto";
 import { CreateContextRequestDTO } from "../../application/http/dtos/create-context-request-dto";
 import { CreateExceptionRequestDTO } from "../../application/http/dtos/create-exception-request-dto";
 import { CreateRestrictionRequestDTO } from "../../application/http/dtos/create-restriction-request-dto";
@@ -6,16 +8,20 @@ import { UpdateScenarioRequestDTO } from "../../application/http/dtos/update-sce
 import { IScenario } from "../domain/entities/scenario";
 
 export interface ScenarioRepository {
-  getScenario(id: string | number): Promise<null | IScenario>;
-  getAllScenarios(projectId: string | number): Promise<IScenario[]>;
+  getScenario(id: number | string): Promise<null | IScenario>;
+  getAllScenarios(projectId: number | string): Promise<IScenario[]>;
   createScenario(scenario: CreateScenarioRequestDTO): Promise<IScenario>;
   createScenario(scenario: CreateScenarioRequestDTO): Promise<IScenario>;
   createException(data: CreateExceptionRequestDTO): Promise<void>
   createContext(data: CreateContextRequestDTO): Promise<void>
   createRestriction(data: CreateRestrictionRequestDTO): Promise<void>
-  deleteException(id: string | number): Promise<void>
-  deleteContext(id: string | number): Promise<void>
-  deleteRestriction(id: string | number): Promise<void>
-  updateScenario(id: string | number, scenario: UpdateScenarioRequestDTO): Promise<void>;
-  deleteScenario(id: string | number): Promise<void>;
+  createActor(data: CreateActorRequestDTO): Promise<void>
+  addActor(id: number | string, data: AddActorRequestDTO): Promise<void>
+  deleteException(id: number | string): Promise<void>
+  deleteContext(id: number | string): Promise<void>
+  deleteRestriction(id: number | string): Promise<void>
+  deleteActor(id: number | string): Promise<void>
+  removeActor(actorId: number | string, scenarioId: number | string): Promise<void>
+  updateScenario(id: number | string, scenario: UpdateScenarioRequestDTO): Promise<void>;
+  deleteScenario(id: number | string): Promise<void>;
 }

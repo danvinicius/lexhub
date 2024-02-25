@@ -18,8 +18,14 @@ import { DeleteContextUseCase } from "../../../core/domain/use-cases/scenario/in
 import { DeleteExceptionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-exception";
 import { DeleteRestrictionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-restriction";
 import { CreateRestrictionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-restriction";
+import { CreateActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-actor";
+import { AddActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/add-actor";
+import { DeleteActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-actor";
+import { RemoveActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/remove-actor";
 import { CreateContextRequestDTO } from "../dtos/create-context-request-dto";
 import { CreateRestrictionRequestDTO } from "../dtos/create-restriction-request-dto";
+import { CreateActorRequestDTO } from "../dtos/create-actor-request-dto";
+import { AddActorRequestDTO } from "../dtos/add-actor-request-dto";
 
 export default function ScenarioController(
   getScenarioUseCase: GetScenarioUseCase,
@@ -31,9 +37,13 @@ export default function ScenarioController(
   createExceptionUseCase: CreateExceptionUseCase,
   createContextUseCase: CreateContextUseCase,
   createRestrictionUseCase: CreateRestrictionUseCase,
+  createActorUseCase: CreateActorUseCase,
+  addActorUseCase: AddActorUseCase,
   deleteExceptionUseCase: DeleteExceptionUseCase,
   deleteContextUseCase: DeleteContextUseCase,
-  deleteRestrictionUseCase: DeleteRestrictionUseCase
+  deleteRestrictionUseCase: DeleteRestrictionUseCase,
+  deleteActorUseCase: DeleteActorUseCase,
+  removeActorUseCase: RemoveActorUseCase,
 ) {
   const router = express.Router();
   const logger = Logger.getInstance()
@@ -96,7 +106,7 @@ export default function ScenarioController(
       const exception = new CreateExceptionRequestDTO(req.body);
       await validate(exception);
       await createExceptionUseCase.execute(exception);
-      return res.status(201).json({ message: "Exception added" });
+      return res.status(201).json({ message: "Exception created" });
     } catch (error: any) {
       logger.error(error.message)
       next(error);
@@ -107,7 +117,7 @@ export default function ScenarioController(
       const context = new CreateContextRequestDTO(req.body);
       await validate(context);
       await createContextUseCase.execute(context);
-      return res.status(201).json({ message: "Context added" });
+      return res.status(201).json({ message: "Context created" });
     } catch (error: any) {
       logger.error(error.message)
       next(error);
@@ -118,7 +128,30 @@ export default function ScenarioController(
       const restriction = new CreateRestrictionRequestDTO(req.body);
       await validate(restriction);
       await createRestrictionUseCase.execute(restriction);
-      return res.status(201).json({ message: "Restriction added" });
+      return res.status(201).json({ message: "Restriction created" });
+    } catch (error: any) {
+      logger.error(error.message)
+      next(error);
+    }
+  });
+  router.post("/actor", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const actor = new CreateActorRequestDTO(req.body);
+      await validate(actor);
+      await createActorUseCase.execute(actor);
+      return res.status(201).json({ message: "Actor created" });
+    } catch (error: any) {
+      logger.error(error.message)
+      next(error);
+    }
+  });
+  router.post("/actor/:id", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const actor = new AddActorRequestDTO(req.body);
+      const { id } = req.params;
+      await validate(actor);
+      await addActorUseCase.execute(id, actor);
+      return res.status(201).json({ message: "Actor added" });
     } catch (error: any) {
       logger.error(error.message)
       next(error);
@@ -147,6 +180,39 @@ export default function ScenarioController(
   }
   );
   router.delete("/restriction/:id", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      await deleteRestrictionUseCase.execute(id);
+      return res.json({ message: "Restriction deleted" });
+    } catch (error: any) {
+      logger.error(error.message)
+      next(error);
+    }
+  }
+  );
+  router.delete("/actor/:id", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      await deleteActorUseCase.execute(id);
+      return res.json({ message: "Actor deleted" });
+    } catch (error: any) {
+      logger.error(error.message)
+      next(error);
+    }
+  }
+  );
+  router.delete("/:scenarioId/actor/:actorId", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { scenarioId, actorId} = req.params;
+      await removeActorUseCase.execute(actorId, scenarioId);
+      return res.json({ message: "Actor removed" });
+    } catch (error: any) {
+      logger.error(error.message)
+      next(error);
+    }
+  }
+  );
+  router.delete("/actor/:id", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       await deleteRestrictionUseCase.execute(id);
