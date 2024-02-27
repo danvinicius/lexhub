@@ -1,5 +1,3 @@
-import { AddActorRequestDTO } from '../../../../../application/http/dtos/add-actor-request-dto'
-
 export interface AddActorUseCase {
-    execute(id: number | string, actor: AddActorRequestDTO): Promise<void>;
+    execute(scenarioId: number | string, actorId: number | string): Promise<void>;
 }

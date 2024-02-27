@@ -12,7 +12,6 @@ import { Context } from "../../database/mysql/typeorm/entity/Context";
 import { CreateRestrictionRequestDTO } from "../../../application/http/dtos/create-restriction-request-dto";
 import { Restriction } from "../../database/mysql/typeorm/entity/Restriction";
 import { IActor, IEpisode, IResource } from "../../../core/domain/entities/scenario";
-import { AddActorRequestDTO } from "../../../application/http/dtos/add-actor-request-dto";
 import { CreateActorRequestDTO } from "../../../application/http/dtos/create-actor-request-dto";
 import { Actor } from "../../database/mysql/typeorm/entity/Actor";
 
@@ -200,12 +199,12 @@ export class MySQLScenarioRepository implements ScenarioRepository {
   }
 
   // Add an existing actor to a scenario
-  async addActor(id: number, data: AddActorRequestDTO): Promise<void> {
+  async addActor(scenarioId: number, actorId: number): Promise<void> {
     try {
       const [actor] = await this.dataSource.manager.findBy(Actor, {
-        id,
+        id: actorId,
       });
-      const scenario = await this.getScenario(data?.scenarioId as number);
+      const scenario = await this.getScenario(scenarioId);
       scenario.actors.push(actor);
       await this.dataSource.manager.save(Scenario, scenario);
     } catch (error: any) {

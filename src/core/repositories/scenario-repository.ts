@@ -1,4 +1,3 @@
-import { AddActorRequestDTO } from "../../application/http/dtos/add-actor-request-dto";
 import { CreateActorRequestDTO } from "../../application/http/dtos/create-actor-request-dto";
 import { CreateContextRequestDTO } from "../../application/http/dtos/create-context-request-dto";
 import { CreateExceptionRequestDTO } from "../../application/http/dtos/create-exception-request-dto";
@@ -16,7 +15,7 @@ export interface ScenarioRepository {
   createContext(data: CreateContextRequestDTO): Promise<void>
   createRestriction(data: CreateRestrictionRequestDTO): Promise<void>
   createActor(data: CreateActorRequestDTO): Promise<void>
-  addActor(id: number | string, data: AddActorRequestDTO): Promise<void>
+  addActor(scenarioId: number | string, actorId: number | string): Promise<void>
   deleteException(id: number | string): Promise<void>
   deleteContext(id: number | string): Promise<void>
   deleteRestriction(id: number | string): Promise<void>

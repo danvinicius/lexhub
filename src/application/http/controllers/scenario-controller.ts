@@ -25,7 +25,6 @@ import { RemoveActorUseCase } from "../../../core/domain/use-cases/scenario/inte
 import { CreateContextRequestDTO } from "../dtos/create-context-request-dto";
 import { CreateRestrictionRequestDTO } from "../dtos/create-restriction-request-dto";
 import { CreateActorRequestDTO } from "../dtos/create-actor-request-dto";
-import { AddActorRequestDTO } from "../dtos/add-actor-request-dto";
 
 export default function ScenarioController(
   getScenarioUseCase: GetScenarioUseCase,
@@ -145,12 +144,10 @@ export default function ScenarioController(
       next(error);
     }
   });
-  router.post("/actor/:id", async (req: Request, res: Response, next: NextFunction) => {
+  router.post("/:scenarioId/actor/:actorId", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actor = new AddActorRequestDTO(req.body);
-      const { id } = req.params;
-      await validate(actor);
-      await addActorUseCase.execute(id, actor);
+      const { scenarioId, actorId } = req.params;
+      await addActorUseCase.execute(scenarioId, actorId);
       return res.status(201).json({ message: "Actor added" });
     } catch (error: any) {
       logger.error(error.message)
