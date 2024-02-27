@@ -25,6 +25,8 @@ import { RemoveActorUseCase } from "../../../core/domain/use-cases/scenario/inte
 import { CreateContextRequestDTO } from "../dtos/create-context-request-dto";
 import { CreateRestrictionRequestDTO } from "../dtos/create-restriction-request-dto";
 import { CreateActorRequestDTO } from "../dtos/create-actor-request-dto";
+import { CreateEpisodeRequestDTO } from "../dtos/create-episode.request-dto";
+import { CreateEpisodeUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-episode";
 
 export default function ScenarioController(
   getScenarioUseCase: GetScenarioUseCase,
@@ -38,6 +40,7 @@ export default function ScenarioController(
   createRestrictionUseCase: CreateRestrictionUseCase,
   createActorUseCase: CreateActorUseCase,
   addActorUseCase: AddActorUseCase,
+  createEpisodeUseCase: CreateEpisodeUseCase,
   deleteExceptionUseCase: DeleteExceptionUseCase,
   deleteContextUseCase: DeleteContextUseCase,
   deleteRestrictionUseCase: DeleteRestrictionUseCase,
@@ -149,6 +152,17 @@ export default function ScenarioController(
       const { scenarioId, actorId } = req.params;
       await addActorUseCase.execute(scenarioId, actorId);
       return res.status(201).json({ message: "Actor added" });
+    } catch (error: any) {
+      logger.error(error.message)
+      next(error);
+    }
+  });
+  router.post("/episode", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const episode = new CreateEpisodeRequestDTO(req.body);
+      await validate(episode);
+      await createEpisodeUseCase.execute(episode);
+      return res.status(201).json({ message: "Episode created" });
     } catch (error: any) {
       logger.error(error.message)
       next(error);

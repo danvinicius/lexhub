@@ -9,7 +9,7 @@ export class Episode implements IEpisode {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({unique: true})
   position: number;
 
   @Column()

@@ -11,9 +11,13 @@ import { Exception } from "../../database/mysql/typeorm/entity/Exception";
 import { Context } from "../../database/mysql/typeorm/entity/Context";
 import { CreateRestrictionRequestDTO } from "../../../application/http/dtos/create-restriction-request-dto";
 import { Restriction } from "../../database/mysql/typeorm/entity/Restriction";
-import { IActor, IEpisode, IResource } from "../../../core/domain/entities/scenario";
+import { IActor, IEpisode, INonSequentialEpisode, IResource } from "../../../core/domain/entities/scenario";
 import { CreateActorRequestDTO } from "../../../application/http/dtos/create-actor-request-dto";
 import { Actor } from "../../database/mysql/typeorm/entity/Actor";
+import { CreateEpisodeRequestDTO } from "../../../application/http/dtos/create-episode.request-dto";
+import { Episode } from "../../database/mysql/typeorm/entity/Episode";
+import { Group } from "../../database/mysql/typeorm/entity/Group";
+import { NonSequentialEpisode } from "../../database/mysql/typeorm/entity/NonSequentialEpisode";
 
 const logger = Logger.getInstance()
 
@@ -37,7 +41,9 @@ export class MySQLScenarioRepository implements ScenarioRepository {
         },
         resources: true,
         actors: true,
-        groups: true,
+        groups: {
+          nonSequentialEpisodes: true
+        },
         project: true,
       },
     });
@@ -61,7 +67,9 @@ export class MySQLScenarioRepository implements ScenarioRepository {
         },
         resources: true,
         actors: true,
-        groups: true,
+        groups: {
+          nonSequentialEpisodes: true
+        },
       },
     });
     return scenarios;
@@ -111,6 +119,59 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     } catch (error: any) {
       logger.error(error.message)
       throw new Error("Error on creating context");
+    }
+  }
+  async createEpisode(data: CreateEpisodeRequestDTO): Promise<void> {
+    try {
+      const scenario = await this.getScenario(data?.scenarioId as number);
+      const { description, type, position } = data;
+      if (data?.group) {
+        const [episodeWithSamePositionExists] = await this.dataSource.manager.find(Episode, {
+          where: {
+            position: data.group as number,
+          },
+        })
+        if (episodeWithSamePositionExists) {
+          throw new Error("This position is already occupied by an episode");
+        }
+        const nonSequentialEpisode = new NonSequentialEpisode()
+        nonSequentialEpisode.description = description;
+        nonSequentialEpisode.type = type;
+        nonSequentialEpisode.position = position;
+        await this.dataSource.manager.save(NonSequentialEpisode, nonSequentialEpisode);
+        const [groupExists] = await this.dataSource.manager.find(Group, {
+          where: {
+            position: data.group as number,
+          },
+          relations: {
+            nonSequentialEpisodes: true
+          }
+        })
+        
+        if (groupExists) {
+          if (groupExists.nonSequentialEpisodes.find((nse: INonSequentialEpisode) => nonSequentialEpisode.position == data.position)) {
+            throw new Error("This position is already occupied by another non-sequential episode");
+          }
+          groupExists.nonSequentialEpisodes.push(nonSequentialEpisode)
+          await this.dataSource.manager.save(Group, groupExists);
+          return;
+        }
+        const group = new Group()
+        group.scenario = scenario;
+        group.position = data.group as number;
+        group.nonSequentialEpisodes = [nonSequentialEpisode]
+        await this.dataSource.manager.save(Group, group);
+        return;
+      }
+      const episode = new Episode();
+      episode.position = data?.position;
+      episode.type = data?.type;
+      episode.description = data?.description;
+      episode.scenario = scenario;
+      await this.dataSource.manager.save(Episode, episode);
+    } catch (error: any) {
+      logger.error(error.message)
+      throw new Error("Error on creating episode");
     }
   }
   async createRestriction(data: CreateRestrictionRequestDTO): Promise<void> {

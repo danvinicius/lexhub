@@ -39,6 +39,7 @@ import { DeleteException } from '../core/domain/use-cases/scenario/delete-except
 import { DeleteRestriction } from '../core/domain/use-cases/scenario/delete-restriction';
 import { CreateActor } from '../core/domain/use-cases/scenario/create-actor';
 import { AddActor } from '../core/domain/use-cases/scenario/add-actor';
+import { CreateEpisode } from '../core/domain/use-cases/scenario/create-episode';
 import { DeleteActor } from '../core/domain/use-cases/scenario/delete-actor';
 import { RemoveActor } from '../core/domain/use-cases/scenario/remove-actor';
 
@@ -82,6 +83,7 @@ import { RemoveActor } from '../core/domain/use-cases/scenario/remove-actor';
     new CreateRestriction(scenarioRepository),
     new CreateActor(scenarioRepository),
     new AddActor(scenarioRepository),
+    new CreateEpisode(scenarioRepository),
     new DeleteException(scenarioRepository),
     new DeleteContext(scenarioRepository),
     new DeleteRestriction(scenarioRepository),

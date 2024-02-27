@@ -9,12 +9,12 @@ export class Group implements IGroup {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({unique: true, nullable: false})
     position: number;
 
     @OneToMany(() => NonSequentialEpisode, nonSequentialEpisode => nonSequentialEpisode.group)
     nonSequentialEpisodes: INonSequentialEpisode[]
 
     @ManyToOne(() => Scenario, scenario => scenario.groups)
-    scenario: IScenario[];
+    scenario: IScenario;
 }
