@@ -42,6 +42,8 @@ import { AddActor } from '../core/domain/use-cases/scenario/add-actor';
 import { CreateEpisode } from '../core/domain/use-cases/scenario/create-episode';
 import { DeleteActor } from '../core/domain/use-cases/scenario/delete-actor';
 import { RemoveActor } from '../core/domain/use-cases/scenario/remove-actor';
+import { DeleteEpisode } from '../core/domain/use-cases/scenario/delete-episode';
+import { DeleteGroup } from '../core/domain/use-cases/scenario/delete-group';
 
 (async function () {
   const logger = Logger.getInstance()
@@ -89,6 +91,8 @@ import { RemoveActor } from '../core/domain/use-cases/scenario/remove-actor';
     new DeleteRestriction(scenarioRepository),
     new DeleteActor(scenarioRepository),
     new RemoveActor(scenarioRepository),
+    new DeleteEpisode(scenarioRepository),
+    new DeleteGroup(scenarioRepository),
   );
 
   server.use("/api/project", projectController);

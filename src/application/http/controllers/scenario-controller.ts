@@ -21,6 +21,8 @@ import { CreateRestrictionUseCase } from "../../../core/domain/use-cases/scenari
 import { CreateActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-actor";
 import { AddActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/add-actor";
 import { DeleteActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-actor";
+import { DeleteEpisodeUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-episode";
+import { DeleteGroupUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-group";
 import { RemoveActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/remove-actor";
 import { CreateContextRequestDTO } from "../dtos/create-context-request-dto";
 import { CreateRestrictionRequestDTO } from "../dtos/create-restriction-request-dto";
@@ -46,6 +48,8 @@ export default function ScenarioController(
   deleteRestrictionUseCase: DeleteRestrictionUseCase,
   deleteActorUseCase: DeleteActorUseCase,
   removeActorUseCase: RemoveActorUseCase,
+  deleteEpisodeUseCase: DeleteEpisodeUseCase,
+  deleteGroupUseCase: DeleteGroupUseCase,
 ) {
   const router = express.Router();
   const logger = Logger.getInstance()
@@ -206,6 +210,28 @@ export default function ScenarioController(
       const { id } = req.params;
       await deleteActorUseCase.execute(id);
       return res.json({ message: "Actor deleted" });
+    } catch (error: any) {
+      logger.error(error.message)
+      next(error);
+    }
+  }
+  );
+  router.delete("/episode/:id", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      await deleteEpisodeUseCase.execute(id);
+      return res.json({ message: "Episode deleted" });
+    } catch (error: any) {
+      logger.error(error.message)
+      next(error);
+    }
+  }
+  );
+  router.delete("/group/:id", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      await deleteGroupUseCase.execute(id);
+      return res.json({ message: "group deleted" });
     } catch (error: any) {
       logger.error(error.message)
       next(error);

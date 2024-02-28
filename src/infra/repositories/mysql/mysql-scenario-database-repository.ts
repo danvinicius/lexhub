@@ -274,13 +274,30 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     }
   }
 
-  // Delete an actor
   async deleteActor(id: number): Promise<void> {
     try {
       await this.dataSource.manager.delete(Actor, id);
     } catch (error: any) {
       logger.error(error.message)
       throw new Error("Error on deleting actor");
+    }
+  }
+
+  async deleteEpisode(id: number): Promise<void> {
+    try {
+      await this.dataSource.manager.delete(Episode, id);
+    } catch (error: any) {
+      logger.error(error.message)
+      throw new Error("Error on deleting episode");
+    }
+  }
+
+  async deleteGroup(id: number): Promise<void> {
+    try {
+      await this.dataSource.manager.delete(Group, id);
+    } catch (error: any) {
+      logger.error(error.message)
+      throw new Error("Error on deleting group");
     }
   }
 

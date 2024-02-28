@@ -22,6 +22,8 @@ export interface ScenarioRepository {
   deleteContext(id: number | string): Promise<void>
   deleteRestriction(id: number | string): Promise<void>
   deleteActor(id: number | string): Promise<void>
+  deleteEpisode(id: number | string): Promise<void>
+  deleteGroup(id: number | string): Promise<void>
   removeActor(actorId: number | string, scenarioId: number | string): Promise<void>
   updateScenario(id: number | string, scenario: UpdateScenarioRequestDTO): Promise<void>;
   deleteScenario(id: number | string): Promise<void>;

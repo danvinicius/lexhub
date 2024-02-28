@@ -20,6 +20,8 @@ export class NonSequentialEpisode implements INonSequentialEpisode {
     @OneToOne(() => Restriction, (restriction) => restriction.episode)
     restriction: IRestriction;
 
-    @ManyToOne(() => Group, group => group.nonSequentialEpisodes)
+    @ManyToOne(() => Group, group => group.nonSequentialEpisodes, {
+        onDelete: 'CASCADE'
+    })
     group: IGroup;
 }
