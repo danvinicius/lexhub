@@ -38,6 +38,10 @@ import { DeleteActor } from '../../core/domain/use-cases/scenario/delete-actor';
 import { RemoveActor } from '../../core/domain/use-cases/scenario/remove-actor';
 import { DeleteEpisode } from '../../core/domain/use-cases/scenario/delete-episode';
 import { DeleteGroup } from '../../core/domain/use-cases/scenario/delete-group';
+import { CreateResource } from '../../core/domain/use-cases/scenario/create-resource';
+import { AddResource } from '../../core/domain/use-cases/scenario/add-resource';
+import { DeleteResource } from '../../core/domain/use-cases/scenario/delete-resource';
+import { RemoveResource } from '../../core/domain/use-cases/scenario/remove-resource';
 
 export class ControllerFactory {
     static createProjectController(projectRepository: ProjectRepository) {
@@ -60,13 +64,17 @@ export class ControllerFactory {
             new CreateContext(scenarioRepository),
             new CreateRestriction(scenarioRepository),
             new CreateActor(scenarioRepository),
+            new CreateResource(scenarioRepository),
             new AddActor(scenarioRepository),
+            new AddResource(scenarioRepository),
             new CreateEpisode(scenarioRepository),
             new DeleteException(scenarioRepository),
             new DeleteContext(scenarioRepository),
             new DeleteRestriction(scenarioRepository),
             new DeleteActor(scenarioRepository),
+            new DeleteResource(scenarioRepository),
             new RemoveActor(scenarioRepository),
+            new RemoveResource(scenarioRepository),
             new DeleteEpisode(scenarioRepository),
             new DeleteGroup(scenarioRepository),
         );

@@ -19,16 +19,21 @@ import { DeleteExceptionUseCase } from "../../../core/domain/use-cases/scenario/
 import { DeleteRestrictionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-restriction";
 import { CreateRestrictionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-restriction";
 import { CreateActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-actor";
+import { CreateResourceUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-resource";
 import { AddActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/add-actor";
+import { AddResourceUseCase } from "../../../core/domain/use-cases/scenario/interfaces/add-resource";
 import { DeleteActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-actor";
+import { DeleteResourceUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-resource";
 import { DeleteEpisodeUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-episode";
 import { DeleteGroupUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-group";
 import { RemoveActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/remove-actor";
+import { RemoveResourceUseCase } from "../../../core/domain/use-cases/scenario/interfaces/remove-resource";
 import { CreateContextRequestDTO } from "../dtos/create-context-request-dto";
 import { CreateRestrictionRequestDTO } from "../dtos/create-restriction-request-dto";
 import { CreateActorRequestDTO } from "../dtos/create-actor-request-dto";
 import { CreateEpisodeRequestDTO } from "../dtos/create-episode.request-dto";
 import { CreateEpisodeUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-episode";
+import { CreateResourceRequestDTO } from "../dtos/create-resource-request-dto";
 
 export default function ScenarioController(
   getScenarioUseCase: GetScenarioUseCase,
@@ -41,13 +46,17 @@ export default function ScenarioController(
   createContextUseCase: CreateContextUseCase,
   createRestrictionUseCase: CreateRestrictionUseCase,
   createActorUseCase: CreateActorUseCase,
+  createResourceUseCase: CreateResourceUseCase,
   addActorUseCase: AddActorUseCase,
+  addResourceUseCase: AddResourceUseCase,
   createEpisodeUseCase: CreateEpisodeUseCase,
   deleteExceptionUseCase: DeleteExceptionUseCase,
   deleteContextUseCase: DeleteContextUseCase,
   deleteRestrictionUseCase: DeleteRestrictionUseCase,
   deleteActorUseCase: DeleteActorUseCase,
+  deleteResourceUseCase: DeleteResourceUseCase,
   removeActorUseCase: RemoveActorUseCase,
+  removeResourceUseCase: RemoveResourceUseCase,
   deleteEpisodeUseCase: DeleteEpisodeUseCase,
   deleteGroupUseCase: DeleteGroupUseCase,
 ) {
@@ -151,11 +160,32 @@ export default function ScenarioController(
       next(error);
     }
   });
+  router.post("/resource", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const resource = new CreateResourceRequestDTO(req.body);
+      await validate(resource);
+      await createResourceUseCase.execute(resource);
+      return res.status(201).json({ message: "Resource created" });
+    } catch (error: any) {
+      logger.error(error.message)
+      next(error);
+    }
+  });
   router.post("/:scenarioId/actor/:actorId", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { scenarioId, actorId } = req.params;
       await addActorUseCase.execute(scenarioId, actorId);
       return res.status(201).json({ message: "Actor added" });
+    } catch (error: any) {
+      logger.error(error.message)
+      next(error);
+    }
+  });
+  router.post("/:scenarioId/resource/:resourceId", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { scenarioId, resourceId } = req.params;
+      await addResourceUseCase.execute(scenarioId, resourceId);
+      return res.status(201).json({ message: "Resource added" });
     } catch (error: any) {
       logger.error(error.message)
       next(error);
@@ -216,6 +246,17 @@ export default function ScenarioController(
     }
   }
   );
+  router.delete("/resource/:id", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      await deleteResourceUseCase.execute(id);
+      return res.json({ message: "Resource deleted" });
+    } catch (error: any) {
+      logger.error(error.message)
+      next(error);
+    }
+  }
+  );
   router.delete("/episode/:id", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
@@ -241,8 +282,19 @@ export default function ScenarioController(
   router.delete("/:scenarioId/actor/:actorId", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { scenarioId, actorId} = req.params;
-      await removeActorUseCase.execute(actorId, scenarioId);
+      await removeActorUseCase.execute(+actorId, +scenarioId);
       return res.json({ message: "Actor removed" });
+    } catch (error: any) {
+      logger.error(error.message)
+      next(error);
+    }
+  }
+  );
+  router.delete("/:scenarioId/resource/:resourceId", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { scenarioId, resourceId} = req.params;
+      await removeResourceUseCase.execute(+resourceId, +scenarioId);
+      return res.json({ message: "Resource removed" });
     } catch (error: any) {
       logger.error(error.message)
       next(error);

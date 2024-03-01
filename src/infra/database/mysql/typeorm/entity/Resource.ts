@@ -15,6 +15,6 @@ export class Resource implements IResource {
   @OneToMany(() => Restriction, (restriction) => restriction.context)
   restrictions: IRestriction[];
 
-  @ManyToMany(() => Scenario)
+  @ManyToMany(() => Scenario, scenario => scenario.resources)
   scenario: IScenario[];
 }
