@@ -8,9 +8,6 @@ import { Impact } from "../../database/mysql/typeorm/entity/Impact";
 import { UpdateSymbolRequestDTO } from "../../../application/http/dtos/update-symbol-request-dto";
 import { CreateImpactRequestDTO } from "../../../application/http/dtos/create-impact-request-dto";
 import { CreateSynonymRequestDTO } from "../../../application/http/dtos/create-synonym-request-dto";
-import { Logger } from '../../../config/logger'
-
-const logger = Logger.getInstance()
 
 export class MySQLSymbolRepository implements SymbolRepository {
   private dataSource: DataSource;
@@ -66,7 +63,6 @@ export class MySQLSymbolRepository implements SymbolRepository {
       await this.dataSource.manager.save(Symbol, symbol);
       return symbol;
     } catch (error: any) {
-      logger.error(error.message)
       throw new Error(error.message);
     }
   }
@@ -78,8 +74,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       impact.symbol = symbol;
       await this.dataSource.manager.save(Impact, impact);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on creating impact");
+      throw new Error(error.message);
     }
   }
   async createSynonym(data: CreateSynonymRequestDTO): Promise<void> {
@@ -90,8 +85,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       synonym.symbol = symbol;
       await this.dataSource.manager.save(Synonym, synonym);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on creating synonym");
+      throw new Error(error.message);
     }
   }
   async deleteImpact(id: number): Promise<void> {
@@ -104,8 +98,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       }
       await this.dataSource.manager.delete(Impact, id);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on removing impact");
+      throw new Error(error.message);
     }
   }
   async deleteSynonym(id: number): Promise<void> {
@@ -118,24 +111,21 @@ export class MySQLSymbolRepository implements SymbolRepository {
       }
       await this.dataSource.manager.delete(Synonym, id);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on removing synonym");
+      throw new Error(error.message);
     }
   }
   async updateSymbol(id: number, data: UpdateSymbolRequestDTO): Promise<void> {
     try {
       await this.dataSource.manager.update(Symbol, { id }, data);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on updating symbol");
+      throw new Error(error.message);
     }
   }
   async deleteSymbol(id: number): Promise<void> {
     try {
       await this.dataSource.manager.delete(Symbol, id);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on deleting symbol");
+      throw new Error(error.message);
     }
   }
 }

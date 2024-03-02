@@ -29,7 +29,7 @@ export default function ProjectController(
       }
       return res.json(projects);
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -46,7 +46,7 @@ export default function ProjectController(
         }
         return res.json(project);
       } catch (error: any) {
-        logger.error(error.message)
+        logger.error(error)
         next(error);
       }
     }
@@ -58,7 +58,7 @@ export default function ProjectController(
       const projectCreated = await createProjectUseCase.execute(project);
       return res.status(201).json(projectCreated);
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -72,7 +72,7 @@ export default function ProjectController(
         await updateProjectUseCase.execute(id, project);
         return res.json({ message: "Project updated" });
       } catch (error: any) {
-        logger.error(error.message)
+        logger.error(error)
         next(error);
       }
     }
@@ -89,7 +89,7 @@ export default function ProjectController(
         await deleteProjectUseCase.execute(id);
         return res.json({ message: "Project deleted" });
       } catch (error: any) {
-        logger.error(error.message)
+        logger.error(error)
         next(error);
       }
     }

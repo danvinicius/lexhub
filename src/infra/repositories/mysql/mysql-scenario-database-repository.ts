@@ -4,7 +4,6 @@ import { DataSource } from "typeorm";
 import { Project } from "../../database/mysql/typeorm/entity/Project";
 import { CreateScenarioRequestDTO } from "../../../application/http/dtos/create-scenario-request-dto";
 import { UpdateScenarioRequestDTO } from "../../../application/http/dtos/update-scenario-request-dto";
-import { Logger } from '../../../config/logger'
 import { CreateExceptionRequestDTO } from "../../../application/http/dtos/create-exception-request-dto";
 import { CreateContextRequestDTO } from "../../../application/http/dtos/create-context-request-dto";
 import { Exception } from "../../database/mysql/typeorm/entity/Exception";
@@ -20,8 +19,6 @@ import { Group } from "../../database/mysql/typeorm/entity/Group";
 import { NonSequentialEpisode } from "../../database/mysql/typeorm/entity/NonSequentialEpisode";
 import { Resource } from "../../database/mysql/typeorm/entity/Resource";
 import { CreateResourceRequestDTO } from "../../../application/http/dtos/create-resource-request-dto";
-
-const logger = Logger.getInstance()
 
 export class MySQLScenarioRepository implements ScenarioRepository {
   private dataSource: DataSource;
@@ -88,12 +85,9 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       scenario.title = data.title;
       scenario.goal = data.goal;
       scenario.project = project;
-
       await this.dataSource.manager.save(Scenario, scenario);
-
       return scenario;
     } catch (error: any) {
-      logger.error(error.message)
       throw new Error(error.message);
     }
   }
@@ -105,7 +99,6 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       exception.scenario = scenario;
       await this.dataSource.manager.save(Exception, exception);
     } catch (error: any) {
-      logger.error(error.message)
       throw new Error("Error on creating exception");
     }
   }
@@ -119,7 +112,6 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       context.scenario = scenario;
       await this.dataSource.manager.save(Context, context);
     } catch (error: any) {
-      logger.error(error.message)
       throw new Error("Error on creating context");
     }
   }
@@ -172,8 +164,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       episode.scenario = scenario;
       await this.dataSource.manager.save(Episode, episode);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on creating episode");
+      throw new Error(error.message);
     }
   }
   async createRestriction(data: CreateRestrictionRequestDTO): Promise<void> {
@@ -199,8 +190,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       }
       await this.dataSource.manager.save(Restriction, restriction);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on creating restriction");
+      throw new Error(error.message);
     }
   }
   async deleteException(id: number): Promise<void> {
@@ -213,8 +203,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       }
       await this.dataSource.manager.delete(Exception, id);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on removing exception");
+      throw new Error(error.message);
     }
   }
   async deleteContext(id: number): Promise<void> {
@@ -227,8 +216,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       }
       await this.dataSource.manager.delete(Context, id);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on removing context");
+      throw new Error(error.message);
     }
   }
   async deleteRestriction(id: number): Promise<void> {
@@ -241,8 +229,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       }
       await this.dataSource.manager.delete(Restriction, id);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on removing restriction");
+      throw new Error(error.message);
     }
   }
 
@@ -256,8 +243,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       scenario.actors.push(actor);
       await this.dataSource.manager.save(Scenario, scenario);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on creating actor");
+      throw new Error(error.message);
     }
   }
 
@@ -271,8 +257,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       scenario.resources.push(resource);
       await this.dataSource.manager.save(Scenario, scenario);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on creating resource");
+      throw new Error(error.message);
     }
   }
 
@@ -286,8 +271,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       scenario.actors.push(actor);
       await this.dataSource.manager.save(Scenario, scenario);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on adding actor");
+      throw new Error(error.message);
     }
   }
 
@@ -301,8 +285,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       scenario.resources.push(resource);
       await this.dataSource.manager.save(Scenario, scenario);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on adding resource");
+      throw new Error(error.message);
     }
   }
 
@@ -310,8 +293,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     try {
       await this.dataSource.manager.delete(Actor, id);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on deleting actor");
+      throw new Error(error.message);
     }
   }
 
@@ -319,8 +301,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     try {
       await this.dataSource.manager.delete(Resource, id);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on deleting resource");
+      throw new Error(error.message);
     }
   }
 
@@ -328,8 +309,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     try {
       await this.dataSource.manager.delete(Episode, id);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on deleting episode");
+      throw new Error(error.message);
     }
   }
 
@@ -337,52 +317,63 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     try {
       await this.dataSource.manager.delete(Group, id);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on deleting group");
+      throw new Error(error.message);
     }
   }
 
   // Remove an actor from a scenario
   async removeActor(actorId: number, scenarioId: number): Promise<void> {
     try {
+      const [actor] = await this.dataSource.manager.find(Actor, {
+        where: {
+          id: actorId,
+        },
+      })
+      if (!actor) {
+        throw new Error("Actor not found");
+      }
       const scenario = await this.getScenario(scenarioId);
       scenario.actors = scenario.actors.filter((a: IActor) => {
         return a.id !== actorId
       })
       await this.dataSource.manager.save(Scenario, scenario);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on removing actor");
+      throw new Error(error.message);
     }
   }
 
   // Remove an resource from a scenario
   async removeResource(resourceId: number, scenarioId: number): Promise<void> {
     try {
+      const [resource] = await this.dataSource.manager.find(Resource, {
+        where: {
+          id: resourceId,
+        },
+      })
+      if (!resource) {
+        throw new Error("Resource not found");
+      }
       const scenario = await this.getScenario(scenarioId);
       scenario.resources = scenario.resources.filter((r: IResource) => {
         return r.id !== resourceId
       })
       await this.dataSource.manager.save(Scenario, scenario);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on removing resource");
+      throw new Error(error.message);
     }
   }
   async updateScenario(id: string, data: UpdateScenarioRequestDTO): Promise<void> {
     try {
       await this.dataSource.manager.update(Scenario, { id }, data);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on updating scenario");
+      throw new Error(error.message);
     }
   }
   async deleteScenario(id: string): Promise<void> {
     try {
       await this.dataSource.manager.delete(Scenario, id);
     } catch (error: any) {
-      logger.error(error.message)
-      throw new Error("Error on deleting scenario");
+      throw new Error(error.message);
     }
   }
 }

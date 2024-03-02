@@ -72,7 +72,7 @@ export default function ScenarioController(
       }
       return res.json(scenarios);
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -86,7 +86,7 @@ export default function ScenarioController(
       }
       return res.json(scenario);
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -100,7 +100,7 @@ export default function ScenarioController(
       }
       return res.json(scenario);
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -112,7 +112,7 @@ export default function ScenarioController(
       const scenarioCreated = await createScenarioUseCase.execute(scenario);
       return res.status(201).json(scenarioCreated);
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -123,7 +123,7 @@ export default function ScenarioController(
       await createExceptionUseCase.execute(exception);
       return res.status(201).json({ message: "Exception created" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -134,7 +134,7 @@ export default function ScenarioController(
       await createContextUseCase.execute(context);
       return res.status(201).json({ message: "Context created" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -145,7 +145,7 @@ export default function ScenarioController(
       await createRestrictionUseCase.execute(restriction);
       return res.status(201).json({ message: "Restriction created" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -156,7 +156,7 @@ export default function ScenarioController(
       await createActorUseCase.execute(actor);
       return res.status(201).json({ message: "Actor created" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -167,7 +167,7 @@ export default function ScenarioController(
       await createResourceUseCase.execute(resource);
       return res.status(201).json({ message: "Resource created" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -177,7 +177,7 @@ export default function ScenarioController(
       await addActorUseCase.execute(scenarioId, actorId);
       return res.status(201).json({ message: "Actor added" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -187,7 +187,7 @@ export default function ScenarioController(
       await addResourceUseCase.execute(scenarioId, resourceId);
       return res.status(201).json({ message: "Resource added" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -198,7 +198,7 @@ export default function ScenarioController(
       await createEpisodeUseCase.execute(episode);
       return res.status(201).json({ message: "Episode created" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -208,7 +208,7 @@ export default function ScenarioController(
       await deleteExceptionUseCase.execute(id);
       return res.json({ message: "Exception deleted" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -219,7 +219,7 @@ export default function ScenarioController(
       await deleteContextUseCase.execute(id);
       return res.json({ message: "Context deleted" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -230,7 +230,7 @@ export default function ScenarioController(
       await deleteRestrictionUseCase.execute(id);
       return res.json({ message: "Restriction deleted" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -241,7 +241,7 @@ export default function ScenarioController(
       await deleteActorUseCase.execute(id);
       return res.json({ message: "Actor deleted" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -252,7 +252,7 @@ export default function ScenarioController(
       await deleteResourceUseCase.execute(id);
       return res.json({ message: "Resource deleted" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -263,7 +263,7 @@ export default function ScenarioController(
       await deleteEpisodeUseCase.execute(id);
       return res.json({ message: "Episode deleted" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -274,7 +274,7 @@ export default function ScenarioController(
       await deleteGroupUseCase.execute(id);
       return res.json({ message: "group deleted" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -285,7 +285,7 @@ export default function ScenarioController(
       await removeActorUseCase.execute(+actorId, +scenarioId);
       return res.json({ message: "Actor removed" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -296,7 +296,7 @@ export default function ScenarioController(
       await removeResourceUseCase.execute(+resourceId, +scenarioId);
       return res.json({ message: "Resource removed" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -307,7 +307,7 @@ export default function ScenarioController(
       await deleteRestrictionUseCase.execute(id);
       return res.json({ message: "Restriction deleted" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -324,7 +324,7 @@ export default function ScenarioController(
       await updateScenarioUseCase.execute(id, scenario);
       return res.json({ message: "Scenario updated" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -339,7 +339,7 @@ export default function ScenarioController(
       await deleteScenarioUseCase.execute(id);
       return res.json({ message: "Scenario deleted" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }

@@ -40,7 +40,7 @@ export default function SymbolController(
       }
       return res.json(symbols);
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -54,7 +54,7 @@ export default function SymbolController(
       }
       return res.json(symbol);
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -66,7 +66,7 @@ export default function SymbolController(
       const symbolCreated = await createSymbolUseCase.execute(symbol);
       return res.status(201).json(symbolCreated);
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -77,7 +77,7 @@ export default function SymbolController(
       await createImpactUseCase.execute(impact);
       return res.status(201).json({ message: "Impact created" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -88,7 +88,7 @@ export default function SymbolController(
       await createSynonymUseCase.execute(synonym);
       return res.status(201).json({ message: "Synonym created" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   });
@@ -104,7 +104,7 @@ export default function SymbolController(
       await updateSymbolUseCase.execute(id, symbol);
       return res.json({ message: "Symbol updated" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -119,7 +119,7 @@ export default function SymbolController(
       await deleteSymbolUseCase.execute(id);
       return res.json({ message: "Symbol deleted" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -130,7 +130,7 @@ export default function SymbolController(
       await deleteImpact.execute(id);
       return res.json({ message: "Impact deleted" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
@@ -141,7 +141,7 @@ export default function SymbolController(
       await deleteSynonym.execute(id);
       return res.json({ message: "Synonym deleted" });
     } catch (error: any) {
-      logger.error(error.message)
+      logger.error(error)
       next(error);
     }
   }
