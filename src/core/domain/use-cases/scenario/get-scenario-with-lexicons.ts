@@ -98,7 +98,7 @@ export class GetScenarioWithLexicons implements GetScenarioWithLexiconsUseCase {
                 if (starts == -1) {
                     break;
                 }
-                const ends = starts + lexiconName.length - 1;
+                const ends = starts + lexiconName.length;
                 const { id } = termo;
                 if (id) {
                     possibleLexicons.push({
