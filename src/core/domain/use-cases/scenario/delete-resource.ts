@@ -1,4 +1,4 @@
-import { DeleteResourceUseCase } from "./interfaces/delete-resource";
+import { DeleteResourceUseCase } from "./interfaces";
 import { ScenarioRepository } from '../../../repositories/scenario-repository'
 
 export class DeleteResource implements DeleteResourceUseCase {

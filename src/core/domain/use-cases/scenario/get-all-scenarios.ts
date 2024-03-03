@@ -1,6 +1,6 @@
 import { IScenario } from "../../entities/scenario";
 import { ScenarioRepository } from "../../../repositories/scenario-repository";
-import { GetAllScenariosUseCase } from "./interfaces/get-all-scenarios";
+import { GetAllScenariosUseCase } from "./interfaces";
 
 export class GetAllScenarios implements GetAllScenariosUseCase {
   private scenarioRepository: ScenarioRepository;

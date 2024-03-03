@@ -1,4 +1,4 @@
-import { DeleteActorUseCase } from "./interfaces/delete-actor";
+import { DeleteActorUseCase } from "./interfaces";
 import { ScenarioRepository } from '../../../repositories/scenario-repository'
 
 export class DeleteActor implements DeleteActorUseCase {

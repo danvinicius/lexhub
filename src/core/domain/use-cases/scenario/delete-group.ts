@@ -1,4 +1,4 @@
-import { DeleteGroupUseCase } from "./interfaces/delete-group";
+import { DeleteGroupUseCase } from "./interfaces";
 import { ScenarioRepository } from '../../../repositories/scenario-repository'
 
 export class DeleteGroup implements DeleteGroupUseCase {

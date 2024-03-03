@@ -1,4 +1,4 @@
-import { CreateActorUseCase } from './interfaces/create-actor';
+import { CreateActorUseCase } from './interfaces';
 import { CreateActorRequestDTO } from '../../../../application/http/dtos/create-actor-request-dto';
 import { ScenarioRepository } from '../../../repositories/scenario-repository';
 

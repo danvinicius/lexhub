@@ -1,8 +1,8 @@
-import { CreateSymbolUseCase } from "../../../core/domain/use-cases/symbol/interfaces/create-symbol";
-import { GetAllSymbolsUseCase } from "../../../core/domain/use-cases/symbol/interfaces/get-all-symbols";
-import { GetSymbolUseCase } from "../../../core/domain/use-cases/symbol/interfaces/get-symbol";
-import { UpdateSymbolUseCase } from "../../../core/domain/use-cases/symbol/interfaces/update-symbol";
-import { DeleteSymbolUseCase } from "../../../core/domain/use-cases/symbol/interfaces/delete-symbol";
+import { CreateSymbolUseCase } from "../../../core/domain/use-cases/symbol/interfaces";
+import { GetAllSymbolsUseCase } from "../../../core/domain/use-cases/symbol/interfaces/";
+import { GetSymbolUseCase } from "../../../core/domain/use-cases/symbol/interfaces";
+import { UpdateSymbolUseCase } from "../../../core/domain/use-cases/symbol/interfaces";
+import { DeleteSymbolUseCase } from "../../../core/domain/use-cases/symbol/interfaces/";
 import express, { Response, Request, NextFunction } from "express";
 import { NotFoundError } from "../../errors/not-found-error";
 import { BadRequestError } from "../../errors/bad-request-error";
@@ -10,11 +10,11 @@ import { validate } from "../../helpers/validate";
 import { CreateSymbolRequestDTO } from "../dtos/create-symbol-request-dto";
 import { UpdateSymbolRequestDTO } from "../dtos/update-symbol-request-dto";
 import { CreateImpactRequestDTO } from "../dtos/create-impact-request-dto";
-import { CreateImpactUseCase } from "../../../core/domain/use-cases/symbol/interfaces/create-impact";
-import { CreateSynonymUseCase } from "../../../core/domain/use-cases/symbol/interfaces/create-synonym";
+import { CreateImpactUseCase } from "../../../core/domain/use-cases/symbol/interfaces";
+import { CreateSynonymUseCase } from "../../../core/domain/use-cases/symbol/interfaces";
 import { CreateSynonymRequestDTO } from "../dtos/create-synonym-request-dto";
-import { DeleteImpactUseCase } from "../../../core/domain/use-cases/symbol/interfaces/delete-impact";
-import { DeleteSynonymUseCase } from "../../../core/domain/use-cases/symbol/interfaces/delete-synonym";
+import { DeleteImpactUseCase } from "../../../core/domain/use-cases/symbol/interfaces";
+import { DeleteSynonymUseCase } from "../../../core/domain/use-cases/symbol/interfaces";
 import { Logger } from "../../../config/logger"
 
 export default function SymbolController(
@@ -101,7 +101,7 @@ export default function SymbolController(
       if (!symbolExists) {
         throw new BadRequestError("This symbol does not exist");
       }
-      await updateSymbolUseCase.execute(id, symbol);
+      await updateSymbolUseCase.execute({id, symbol});
       return res.json({ message: "Symbol updated" });
     } catch (error: any) {
       logger.error(error)

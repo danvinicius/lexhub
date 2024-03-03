@@ -1,4 +1,4 @@
-import { CreateRestrictionUseCase } from './interfaces/create-restriction';
+import { CreateRestrictionUseCase } from './interfaces';
 import { CreateRestrictionRequestDTO } from '../../../../application/http/dtos/create-restriction-request-dto';
 import { ScenarioRepository } from '../../../repositories/scenario-repository';
 

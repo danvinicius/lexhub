@@ -1,4 +1,4 @@
-import { CreateResourceUseCase } from './interfaces/create-resource';
+import { CreateResourceUseCase } from './interfaces';
 import { CreateResourceRequestDTO } from '../../../../application/http/dtos/create-resource-request-dto';
 import { ScenarioRepository } from '../../../repositories/scenario-repository';
 

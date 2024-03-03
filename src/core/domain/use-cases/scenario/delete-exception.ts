@@ -1,4 +1,4 @@
-import { DeleteExceptionUseCase } from "./interfaces/delete-exception";
+import { DeleteExceptionUseCase } from "./interfaces";
 import { ScenarioRepository } from '../../../repositories/scenario-repository'
 
 export class DeleteException implements DeleteExceptionUseCase {

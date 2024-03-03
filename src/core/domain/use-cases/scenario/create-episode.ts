@@ -1,4 +1,4 @@
-import { CreateEpisodeUseCase } from './interfaces/create-episode';
+import { CreateEpisodeUseCase } from './interfaces';
 import { CreateEpisodeRequestDTO } from '../../../../application/http/dtos/create-episode.request-dto';
 import { ScenarioRepository } from '../../../repositories/scenario-repository';
 

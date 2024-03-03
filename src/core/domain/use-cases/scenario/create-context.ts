@@ -1,4 +1,4 @@
-import { CreateContextUseCase } from './interfaces/create-context';
+import { CreateContextUseCase } from './interfaces';
 import { CreateContextRequestDTO } from '../../../../application/http/dtos/create-context-request-dto';
 import { ScenarioRepository } from '../../../repositories/scenario-repository';
 

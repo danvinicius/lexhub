@@ -1,6 +1,6 @@
 import { ISymbol } from "../../entities/symbol";
 import { SymbolRepository } from "../../../repositories/symbol-repository";
-import { CreateSymbolUseCase } from "./interfaces/create-symbol";
+import { CreateSymbolUseCase } from "./interfaces";
 import { CreateSymbolRequestDTO } from "../../../../application/http/dtos/create-symbol-request-dto";
 
 export class CreateSymbol implements CreateSymbolUseCase {

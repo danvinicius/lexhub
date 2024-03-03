@@ -1,4 +1,4 @@
-import { DeleteRestrictionUseCase } from "./interfaces/delete-restriction";
+import { DeleteRestrictionUseCase } from "./interfaces";
 import { ScenarioRepository } from '../../../repositories/scenario-repository'
 
 export class DeleteRestriction implements DeleteRestrictionUseCase {

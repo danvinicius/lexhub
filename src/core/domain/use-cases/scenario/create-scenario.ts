@@ -1,6 +1,6 @@
 import { IScenario } from "../../entities/scenario";
 import { ScenarioRepository } from "../../../repositories/scenario-repository";
-import { CreateScenarioUseCase } from "./interfaces/create-scenario";
+import { CreateScenarioUseCase } from "./interfaces";
 import { CreateScenarioRequestDTO } from "../../../../application/http/dtos/create-scenario-request-dto";
 
 export class CreateScenario implements CreateScenarioUseCase {

@@ -28,8 +28,8 @@ export interface ScenarioRepository {
   deleteResource(id: number | string): Promise<void>
   deleteEpisode(id: number | string): Promise<void>
   deleteGroup(id: number | string): Promise<void>
-  removeActor(actorId: number | string, scenarioId: number | string): Promise<void>
-  removeResource(resourceId: number | string, scenarioId: number | string): Promise<void>
+  removeActor(scenarioId: number | string, actorId: number | string): Promise<void>
+  removeResource(scenarioId: number | string, resourceId: number | string): Promise<void>
   updateScenario(id: number | string, scenario: UpdateScenarioRequestDTO): Promise<void>;
   deleteScenario(id: number | string): Promise<void>;
 }

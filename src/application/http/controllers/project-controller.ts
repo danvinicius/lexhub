@@ -1,8 +1,8 @@
-import { CreateProjectUseCase } from "../../../core/domain/use-cases/project/interfaces/create-project"
-import { GetAllProjectsUseCase } from "../../../core/domain/use-cases/project/interfaces/get-all-projects"
-import { GetProjectUseCase } from "../../../core/domain/use-cases/project/interfaces/get-project"
-import { UpdateProjectUseCase } from "../../../core/domain/use-cases/project/interfaces/update-project"
-import { DeleteProjectUseCase } from "../../../core/domain/use-cases/project/interfaces/delete-project"
+import { CreateProjectUseCase } from "../../../core/domain/use-cases/project/interfaces"
+import { GetAllProjectsUseCase } from "../../../core/domain/use-cases/project/interfaces"
+import { GetProjectUseCase } from "../../../core/domain/use-cases/project/interfaces"
+import { UpdateProjectUseCase } from "../../../core/domain/use-cases/project/interfaces"
+import { DeleteProjectUseCase } from "../../../core/domain/use-cases/project/interfaces"
 import express, { Response, Request, NextFunction } from "express";
 import { NotFoundError } from "../../errors/not-found-error";
 import { BadRequestError } from "../../errors/bad-request-error";
@@ -69,7 +69,7 @@ export default function ProjectController(
         const { id } = req.params;
         const project = new UpdateProjectRequestDTO(req.body);
         await validate(project)
-        await updateProjectUseCase.execute(id, project);
+        await updateProjectUseCase.execute({id, project});
         return res.json({ message: "Project updated" });
       } catch (error: any) {
         logger.error(error)

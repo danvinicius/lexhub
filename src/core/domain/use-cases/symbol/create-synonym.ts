@@ -1,4 +1,4 @@
-import { CreateSynonymUseCase } from './interfaces/create-synonym';
+import { CreateSynonymUseCase } from './interfaces';
 import { CreateSynonymRequestDTO } from '../../../../application/http/dtos/create-synonym-request-dto';
 import { SymbolRepository } from '../../../repositories/symbol-repository';
 

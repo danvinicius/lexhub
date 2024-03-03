@@ -1,4 +1,4 @@
-import { DeleteEpisodeUseCase } from "./interfaces/delete-episode";
+import { DeleteEpisodeUseCase } from "./interfaces";
 import { ScenarioRepository } from '../../../repositories/scenario-repository'
 
 export class DeleteEpisode implements DeleteEpisodeUseCase {

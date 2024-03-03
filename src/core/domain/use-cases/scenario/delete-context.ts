@@ -1,4 +1,4 @@
-import { DeleteContextUseCase } from "./interfaces/delete-context";
+import { DeleteContextUseCase } from "./interfaces";
 import { ScenarioRepository } from '../../../repositories/scenario-repository'
 
 export class DeleteContext implements DeleteContextUseCase {

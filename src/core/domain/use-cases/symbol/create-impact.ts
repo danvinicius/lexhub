@@ -1,4 +1,4 @@
-import { CreateImpactUseCase } from './interfaces/create-impact';
+import { CreateImpactUseCase } from './interfaces';
 import { CreateImpactRequestDTO } from '../../../../application/http/dtos/create-impact-request-dto';
 import { SymbolRepository } from '../../../repositories/symbol-repository';
 

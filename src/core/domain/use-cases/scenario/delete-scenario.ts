@@ -1,5 +1,5 @@
 import { ScenarioRepository } from "../../../repositories/scenario-repository";
-import { DeleteScenarioUseCase } from "./interfaces/delete-scenario";
+import { DeleteScenarioUseCase } from "./interfaces";
 
 export class DeleteScenario implements DeleteScenarioUseCase {
   private scenarioRepository: ScenarioRepository;

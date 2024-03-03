@@ -1,4 +1,4 @@
-import { DeleteSynonymUseCase } from "./interfaces/delete-synonym"
+import { DeleteSynonymUseCase } from "./interfaces"
 import { SymbolRepository } from "../../../repositories/symbol-repository"
 
 export class DeleteSynonym implements DeleteSynonymUseCase {

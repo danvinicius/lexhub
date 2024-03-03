@@ -1,6 +1,6 @@
 import { IProject } from "../../entities/project";
 import { ProjectRepository } from "../../../repositories/project-repository";
-import { GetProjectUseCase } from "./interfaces/get-project";
+import { GetProjectUseCase } from "./interfaces";
 
 export class GetProject implements GetProjectUseCase {
   private projectRepository: ProjectRepository;

@@ -1,38 +1,38 @@
-import { CreateScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-scenario";
-import { GetAllScenariosUseCase } from "../../../core/domain/use-cases/scenario/interfaces/get-all-scenarios";
-import { GetScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces/get-scenario";
-import { UpdateScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces/update-scenario";
-import { DeleteScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-scenario";
+import { CreateScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { GetAllScenariosUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { GetScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { UpdateScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { DeleteScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
 import express, { Response, Request, NextFunction } from "express";
 import { NotFoundError } from "../../errors/not-found-error";
 import { BadRequestError } from "../../errors/bad-request-error";
 import { CreateScenarioRequestDTO } from "../dtos/create-scenario-request-dto";
 import { validate } from "../../helpers/validate";
 import { UpdateScenarioRequestDTO } from "../dtos/update-scenario-request-dto";
-import { GetScenarioWithLexiconsUseCase } from "../../../core/domain/use-cases/scenario/interfaces/get-scenario-with-lexicons-use-case";
+import { GetScenarioWithLexiconsUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
 import { Logger } from "../../../config/logger"
 import { CreateExceptionRequestDTO } from "../dtos/create-exception-request-dto";
-import { CreateExceptionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-exception";
-import { CreateContextUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-context";
-import { DeleteContextUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-context";
-import { DeleteExceptionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-exception";
-import { DeleteRestrictionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-restriction";
-import { CreateRestrictionUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-restriction";
-import { CreateActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-actor";
-import { CreateResourceUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-resource";
-import { AddActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/add-actor";
-import { AddResourceUseCase } from "../../../core/domain/use-cases/scenario/interfaces/add-resource";
-import { DeleteActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-actor";
-import { DeleteResourceUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-resource";
-import { DeleteEpisodeUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-episode";
-import { DeleteGroupUseCase } from "../../../core/domain/use-cases/scenario/interfaces/delete-group";
-import { RemoveActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces/remove-actor";
-import { RemoveResourceUseCase } from "../../../core/domain/use-cases/scenario/interfaces/remove-resource";
+import { CreateExceptionUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { CreateContextUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { DeleteContextUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { DeleteExceptionUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { DeleteRestrictionUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { CreateRestrictionUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { CreateActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { CreateResourceUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { AddActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { AddResourceUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { DeleteActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { DeleteResourceUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { DeleteEpisodeUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { DeleteGroupUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { RemoveActorUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { RemoveResourceUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
 import { CreateContextRequestDTO } from "../dtos/create-context-request-dto";
 import { CreateRestrictionRequestDTO } from "../dtos/create-restriction-request-dto";
 import { CreateActorRequestDTO } from "../dtos/create-actor-request-dto";
 import { CreateEpisodeRequestDTO } from "../dtos/create-episode.request-dto";
-import { CreateEpisodeUseCase } from "../../../core/domain/use-cases/scenario/interfaces/create-episode";
+import { CreateEpisodeUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
 import { CreateResourceRequestDTO } from "../dtos/create-resource-request-dto";
 
 export default function ScenarioController(
@@ -174,7 +174,7 @@ export default function ScenarioController(
   router.post("/:scenarioId/actor/:actorId", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { scenarioId, actorId } = req.params;
-      await addActorUseCase.execute(scenarioId, actorId);
+      await addActorUseCase.execute({scenarioId: +scenarioId, actorId: +actorId});
       return res.status(201).json({ message: "Actor added" });
     } catch (error: any) {
       logger.error(error)
@@ -184,7 +184,7 @@ export default function ScenarioController(
   router.post("/:scenarioId/resource/:resourceId", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { scenarioId, resourceId } = req.params;
-      await addResourceUseCase.execute(scenarioId, resourceId);
+      await addResourceUseCase.execute({scenarioId: +scenarioId, resourceId: +resourceId});
       return res.status(201).json({ message: "Resource added" });
     } catch (error: any) {
       logger.error(error)
@@ -282,7 +282,7 @@ export default function ScenarioController(
   router.delete("/:scenarioId/actor/:actorId", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { scenarioId, actorId} = req.params;
-      await removeActorUseCase.execute(+actorId, +scenarioId);
+      await removeActorUseCase.execute({scenarioId: +scenarioId, actorId: +actorId});
       return res.json({ message: "Actor removed" });
     } catch (error: any) {
       logger.error(error)
@@ -293,7 +293,7 @@ export default function ScenarioController(
   router.delete("/:scenarioId/resource/:resourceId", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { scenarioId, resourceId} = req.params;
-      await removeResourceUseCase.execute(+resourceId, +scenarioId);
+      await removeResourceUseCase.execute({scenarioId: +scenarioId, resourceId: +resourceId});
       return res.json({ message: "Resource removed" });
     } catch (error: any) {
       logger.error(error)
@@ -321,7 +321,7 @@ export default function ScenarioController(
       if (!scenarioExists) {
         throw new BadRequestError("This scenario does not exist");
       }
-      await updateScenarioUseCase.execute(id, scenario);
+      await updateScenarioUseCase.execute({id, scenario});
       return res.json({ message: "Scenario updated" });
     } catch (error: any) {
       logger.error(error)

@@ -1,5 +1,5 @@
 import { ProjectRepository } from "../../../repositories/project-repository";
-import { DeleteProjectUseCase } from "./interfaces/delete-project";
+import { DeleteProjectUseCase } from "./interfaces";
 
 export class DeleteProject implements DeleteProjectUseCase {
   private projectRepository: ProjectRepository;

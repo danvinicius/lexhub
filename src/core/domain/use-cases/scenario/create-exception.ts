@@ -1,4 +1,4 @@
-import { CreateExceptionUseCase } from './interfaces/create-exception';
+import { CreateExceptionUseCase } from './interfaces';
 import { CreateExceptionRequestDTO } from '../../../../application/http/dtos/create-exception-request-dto';
 import { ScenarioRepository } from '../../../repositories/scenario-repository';
 

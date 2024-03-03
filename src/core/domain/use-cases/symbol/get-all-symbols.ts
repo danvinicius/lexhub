@@ -1,6 +1,6 @@
 import { ISymbol } from "../../entities/symbol";
 import { SymbolRepository } from "../../../repositories/symbol-repository";
-import { GetAllSymbolsUseCase } from "./interfaces/get-all-symbols";
+import { GetAllSymbolsUseCase } from "./interfaces";
 
 export class GetAllSymbols implements GetAllSymbolsUseCase {
   private symbolRepository: SymbolRepository;

@@ -322,7 +322,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
   }
 
   // Remove an actor from a scenario
-  async removeActor(actorId: number, scenarioId: number): Promise<void> {
+  async removeActor(scenarioId: number, actorId: number): Promise<void> {
     try {
       const [actor] = await this.dataSource.manager.find(Actor, {
         where: {
@@ -343,7 +343,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
   }
 
   // Remove an resource from a scenario
-  async removeResource(resourceId: number, scenarioId: number): Promise<void> {
+  async removeResource(scenarioId: number, resourceId: number): Promise<void> {
     try {
       const [resource] = await this.dataSource.manager.find(Resource, {
         where: {

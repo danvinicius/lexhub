@@ -2,7 +2,7 @@ import { IActor, IException, IResource, IRestriction, IScenario } from "../../en
 import { ScenarioRepository } from "../../../repositories/scenario-repository";
 import { SymbolRepository } from "../../../repositories/symbol-repository";
 import { ISymbol } from "../../entities/symbol";
-import { GetScenarioWithLexiconsUseCase, FoundLexicon } from './interfaces/get-scenario-with-lexicons-use-case'
+import { GetScenarioWithLexiconsUseCase, FoundLexicon } from './interfaces'
 import { NotFoundError } from "../../../../application/errors/not-found-error";
 
 export class GetScenarioWithLexicons implements GetScenarioWithLexiconsUseCase {

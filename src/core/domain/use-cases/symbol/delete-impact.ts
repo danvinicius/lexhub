@@ -1,4 +1,4 @@
-import { DeleteImpactUseCase } from "./interfaces/delete-impact"
+import { DeleteImpactUseCase } from "./interfaces"
 import { SymbolRepository } from "../../../repositories/symbol-repository"
 
 export class DeleteImpact implements DeleteImpactUseCase {
