@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { IActor } from "../../../../../core/domain/entities/scenario";
 import { IScenario } from "../../../../../core/domain/entities/scenario";
 import { Scenario } from "./Scenario";
@@ -13,4 +13,17 @@ export class Actor implements IActor {
 
   @ManyToMany(() => Scenario, scenario => scenario.actors)
   scenarios: IScenario[];
+
+  @CreateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+  })
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+    onUpdate: "CURRENT_TIMESTAMP(6)",
+  })
+  updated_at: Date;
 }

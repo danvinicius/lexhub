@@ -4,6 +4,8 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { ISymbol } from "../../../../../core/domain/entities/symbol";
 import { Synonym } from "./Synonym";
@@ -32,4 +34,17 @@ export class Symbol implements ISymbol {
 
   @ManyToOne(() => Project, (project) => project.symbols)
   project: Project;
+
+  @CreateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+  })
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+    onUpdate: "CURRENT_TIMESTAMP(6)",
+  })
+  updated_at: Date;
 }

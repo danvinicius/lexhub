@@ -1,5 +1,25 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany, JoinTable, OneToOne, ManyToOne } from "typeorm";
-import { IActor, IContext, IEpisode, IException, IGroup, IResource, IScenario } from "../../../../../core/domain/entities/scenario";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+  OneToOne,
+  ManyToOne,
+  DeleteDateColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
+import {
+  IActor,
+  IContext,
+  IEpisode,
+  IException,
+  IGroup,
+  IResource,
+  IScenario,
+} from "../../../../../core/domain/entities/scenario";
 import { Exception } from "./Exception";
 import { Actor } from "./Actor";
 import { Context } from "./Context";
@@ -11,35 +31,51 @@ import { Group } from "./Group";
 
 @Entity()
 export class Scenario implements IScenario {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    title: string;
+  @Column()
+  title: string;
 
-    @Column()
-    goal: string;
+  @Column()
+  goal: string;
 
-    @OneToMany(() => Exception, (exception) => exception.scenario)
-    exceptions: IException[];
+  @OneToMany(() => Exception, (exception) => exception.scenario)
+  exceptions: IException[];
 
-    @ManyToMany(() => Actor)
-    @JoinTable()
-    actors: IActor[];
+  @ManyToMany(() => Actor)
+  @JoinTable()
+  actors: IActor[];
 
-    @ManyToMany(() => Resource)
-    @JoinTable()
-    resources: IResource[];
+  @ManyToMany(() => Resource)
+  @JoinTable()
+  resources: IResource[];
 
-    @OneToOne(() => Context, (context) => context.scenario)
-    context: IContext;
+  @OneToOne(() => Context, (context) => context.scenario)
+  context: IContext;
 
-    @OneToMany(() => Episode, (episode) => episode.scenario)
-    episodes: IEpisode[];
+  @OneToMany(() => Episode, (episode) => episode.scenario)
+  episodes: IEpisode[];
 
-    @OneToMany(() => Group, group => group.scenario)
-    groups: IGroup[];
+  @OneToMany(() => Group, (group) => group.scenario)
+  groups: IGroup[];
 
-    @ManyToOne(() => Project, (project) => project.scenarios)
-    project: IProject;
+  @ManyToOne(() => Project, (project) => project.scenarios)
+  project: IProject;
+
+  @CreateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+  })
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+    onUpdate: "CURRENT_TIMESTAMP(6)",
+  })
+  updated_at: Date;
+
+  @DeleteDateColumn({ name: "deleted_at" })
+  deletedAt: Date;
 }

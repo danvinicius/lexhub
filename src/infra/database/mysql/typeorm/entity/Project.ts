@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from "typeorm";
 import { IProject } from "../../../../../core/domain/entities/project";
 import { Symbol } from "./Symbol";
 import { ISymbol } from "../../../../../core/domain/entities/symbol";
@@ -21,4 +21,20 @@ export class Project implements IProject {
 
   @OneToMany(() => Scenario, (scenario) => scenario.project)
   scenarios: IScenario[];
+
+  @CreateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+  })
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+    onUpdate: "CURRENT_TIMESTAMP(6)",
+  })
+  updated_at: Date;
+
+  @DeleteDateColumn({ name: "deleted_at" })
+  deletedAt: Date;
 }

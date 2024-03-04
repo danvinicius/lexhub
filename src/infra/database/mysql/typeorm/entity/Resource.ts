@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { IResource, IRestriction } from "../../../../../core/domain/entities/scenario";
 import { IScenario } from "../../../../../core/domain/entities/scenario";
 import { Scenario } from "./Scenario";
@@ -17,4 +17,17 @@ export class Resource implements IResource {
 
   @ManyToMany(() => Scenario, scenario => scenario.resources)
   scenario: IScenario[];
+
+  @CreateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+  })
+  created_at: Date;
+
+  @UpdateDateColumn({
+    type: "timestamp",
+    default: () => "CURRENT_TIMESTAMP(6)",
+    onUpdate: "CURRENT_TIMESTAMP(6)",
+  })
+  updated_at: Date;
 }

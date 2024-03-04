@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToOne, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { IGroup, INonSequentialEpisode, IRestriction } from "../../../../../core/domain/entities/scenario";
 import { Group } from "./Group";
 import { Restriction } from "./Restriction";
@@ -24,4 +24,17 @@ export class NonSequentialEpisode implements INonSequentialEpisode {
         onDelete: 'CASCADE'
     })
     group: IGroup;
+
+    @CreateDateColumn({
+        type: "timestamp",
+        default: () => "CURRENT_TIMESTAMP(6)",
+      })
+      created_at: Date;
+    
+      @UpdateDateColumn({
+        type: "timestamp",
+        default: () => "CURRENT_TIMESTAMP(6)",
+        onUpdate: "CURRENT_TIMESTAMP(6)",
+      })
+      updated_at: Date;
 }
