@@ -6,6 +6,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
 } from "typeorm";
 import { ISymbol } from "../../../../../core/domain/entities/symbol";
 import { Synonym } from "./Synonym";
@@ -47,4 +48,7 @@ export class Symbol implements ISymbol {
     onUpdate: "CURRENT_TIMESTAMP(6)",
   })
   updated_at: Date;
+
+  @DeleteDateColumn({ name: "deleted_at" })
+  deletedAt: Date;
 }
