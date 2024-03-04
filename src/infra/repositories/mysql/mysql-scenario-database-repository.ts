@@ -10,7 +10,13 @@ import { Exception } from "../../database/mysql/typeorm/entity/Exception";
 import { Context } from "../../database/mysql/typeorm/entity/Context";
 import { CreateRestrictionRequestDTO } from "../../../application/http/dtos/create-restriction-request-dto";
 import { Restriction } from "../../database/mysql/typeorm/entity/Restriction";
-import { IActor, IEpisode, INonSequentialEpisode, IResource, IScenario } from "../../../core/domain/entities/scenario";
+import {
+  IActor,
+  IEpisode,
+  INonSequentialEpisode,
+  IResource,
+  IScenario,
+} from "../../../core/domain/entities/scenario";
 import { CreateActorRequestDTO } from "../../../application/http/dtos/create-actor-request-dto";
 import { Actor } from "../../database/mysql/typeorm/entity/Actor";
 import { CreateEpisodeRequestDTO } from "../../../application/http/dtos/create-episode.request-dto";
@@ -42,7 +48,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
         resources: true,
         actors: true,
         groups: {
-          nonSequentialEpisodes: true
+          nonSequentialEpisodes: true,
         },
         project: true,
       },
@@ -56,8 +62,8 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     const scenarios = await this.dataSource.manager.find(Scenario, {
       where: {
         project: {
-          id: projectId
-        }
+          id: projectId,
+        },
       },
       relations: {
         exceptions: true,
@@ -68,7 +74,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
         resources: true,
         actors: true,
         groups: {
-          nonSequentialEpisodes: true
+          nonSequentialEpisodes: true,
         },
       },
     });
@@ -93,7 +99,9 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     }
   }
 
-  async createManyScenarios(data: CreateManyScenariosRequestDTO): Promise<IScenario[]> {
+  async createManyScenarios(
+    data: CreateManyScenariosRequestDTO
+  ): Promise<IScenario[]> {
     try {
       const [project] = await this.dataSource.manager.findBy(Project, {
         id: data.projectId as number,
@@ -101,13 +109,15 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       if (!project) {
         throw new Error("Project does not exist");
       }
-      const scenarios = data.scenarios.map((s: IScenario) => {
-        const newScenario = new Scenario()
-        newScenario.title = s.title;
-        newScenario.goal = s.goal;
-        newScenario.project = project;
-        return newScenario;
-      }) 
+      const scenarios = data.scenarios.map(
+        (s: { title: string; goal: string }) => {
+          const newScenario = new Scenario();
+          newScenario.title = s.title;
+          newScenario.goal = s.goal;
+          newScenario.project = project;
+          return newScenario;
+        }
+      );
       await this.dataSource.manager.save(Scenario, scenarios);
       return scenarios;
     } catch (error: any) {
@@ -144,40 +154,51 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       const scenario = await this.getScenario(data?.scenarioId as number);
       const { description, type, position } = data;
       if (data?.group) {
-        const [episodeWithSamePositionExists] = await this.dataSource.manager.find(Episode, {
-          where: {
-            position: data.group as number,
-          },
-        })
+        const [episodeWithSamePositionExists] =
+          await this.dataSource.manager.find(Episode, {
+            where: {
+              position: data.group as number,
+            },
+          });
         if (episodeWithSamePositionExists) {
           throw new Error("This position is already occupied by an episode");
         }
-        const nonSequentialEpisode = new NonSequentialEpisode()
+        const nonSequentialEpisode = new NonSequentialEpisode();
         nonSequentialEpisode.description = description;
         nonSequentialEpisode.type = type;
         nonSequentialEpisode.position = position;
-        await this.dataSource.manager.save(NonSequentialEpisode, nonSequentialEpisode);
+        await this.dataSource.manager.save(
+          NonSequentialEpisode,
+          nonSequentialEpisode
+        );
         const [groupExists] = await this.dataSource.manager.find(Group, {
           where: {
             position: data.group as number,
           },
           relations: {
-            nonSequentialEpisodes: true
-          }
-        })
-        
+            nonSequentialEpisodes: true,
+          },
+        });
+
         if (groupExists) {
-          if (groupExists.nonSequentialEpisodes.find((nse: INonSequentialEpisode) => nonSequentialEpisode.position == data.position)) {
-            throw new Error("This position is already occupied by another non-sequential episode");
+          if (
+            groupExists.nonSequentialEpisodes.find(
+              (nse: INonSequentialEpisode) =>
+                nonSequentialEpisode.position == data.position
+            )
+          ) {
+            throw new Error(
+              "This position is already occupied by another non-sequential episode"
+            );
           }
-          groupExists.nonSequentialEpisodes.push(nonSequentialEpisode)
+          groupExists.nonSequentialEpisodes.push(nonSequentialEpisode);
           await this.dataSource.manager.save(Group, groupExists);
           return;
         }
-        const group = new Group()
+        const group = new Group();
         group.scenario = scenario;
         group.position = data.group as number;
-        group.nonSequentialEpisodes = [nonSequentialEpisode]
+        group.nonSequentialEpisodes = [nonSequentialEpisode];
         await this.dataSource.manager.save(Group, group);
         return;
       }
@@ -195,8 +216,12 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     try {
       const scenario = await this.getScenario(data?.scenarioId as number);
       const context = scenario.context;
-      const resource = scenario.resources.find((r: IResource) => r.id == data?.resourceId)
-      const episode = scenario.episodes.find((r: IEpisode) => r.id == data?.episodeId)
+      const resource = scenario.resources.find(
+        (r: IResource) => r.id == data?.resourceId
+      );
+      const episode = scenario.episodes.find(
+        (r: IEpisode) => r.id == data?.episodeId
+      );
       const restriction = new Restriction();
       restriction.description = data?.description;
       restriction.context = context;
@@ -352,14 +377,14 @@ export class MySQLScenarioRepository implements ScenarioRepository {
         where: {
           id: actorId,
         },
-      })
+      });
       if (!actor) {
         throw new Error("Actor not found");
       }
       const scenario = await this.getScenario(scenarioId);
       scenario.actors = scenario.actors.filter((a: IActor) => {
-        return a.id !== actorId
-      })
+        return a.id !== actorId;
+      });
       await this.dataSource.manager.save(Scenario, scenario);
     } catch (error: any) {
       throw new Error(error.message);
@@ -373,20 +398,23 @@ export class MySQLScenarioRepository implements ScenarioRepository {
         where: {
           id: resourceId,
         },
-      })
+      });
       if (!resource) {
         throw new Error("Resource not found");
       }
       const scenario = await this.getScenario(scenarioId);
       scenario.resources = scenario.resources.filter((r: IResource) => {
-        return r.id !== resourceId
-      })
+        return r.id !== resourceId;
+      });
       await this.dataSource.manager.save(Scenario, scenario);
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
-  async updateScenario(id: string, data: UpdateScenarioRequestDTO): Promise<void> {
+  async updateScenario(
+    id: string,
+    data: UpdateScenarioRequestDTO
+  ): Promise<void> {
     try {
       await this.dataSource.manager.update(Scenario, { id }, data);
     } catch (error: any) {
