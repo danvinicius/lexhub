@@ -55,7 +55,7 @@ export class MySQLProjectRepository implements ProjectRepository {
   }
   async deleteProject(id: string): Promise<void> {
     try {
-      await this.dataSource.manager.delete(Project, id);
+      await this.dataSource.manager.softDelete(Project, id);
     } catch (error: any) {
       throw new Error(error.message);
     }

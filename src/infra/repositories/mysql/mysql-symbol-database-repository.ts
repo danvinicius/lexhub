@@ -123,7 +123,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
   }
   async deleteSymbol(id: number): Promise<void> {
     try {
-      await this.dataSource.manager.delete(Symbol, id);
+      await this.dataSource.manager.softDelete(Symbol, id);
     } catch (error: any) {
       throw new Error(error.message);
     }

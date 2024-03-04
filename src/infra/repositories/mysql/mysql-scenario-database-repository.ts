@@ -423,7 +423,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
   }
   async deleteScenario(id: string): Promise<void> {
     try {
-      await this.dataSource.manager.delete(Scenario, id);
+      await this.dataSource.manager.softDelete(Scenario, id);
     } catch (error: any) {
       throw new Error(error.message);
     }
