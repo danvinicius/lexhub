@@ -62,7 +62,7 @@ export default function ProjectController(
       next(error);
     }
   });
-  router.put(
+  router.patch(
     "/:id",
     async (req: Request, res: Response, next: NextFunction) => {
       try {

@@ -1,4 +1,4 @@
-import { CreateScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
+import { CreateManyScenariosUseCase, CreateScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
 import { GetAllScenariosUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
 import { GetScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
 import { UpdateScenarioUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
@@ -34,12 +34,14 @@ import { CreateActorRequestDTO } from "../dtos/create-actor-request-dto";
 import { CreateEpisodeRequestDTO } from "../dtos/create-episode.request-dto";
 import { CreateEpisodeUseCase } from "../../../core/domain/use-cases/scenario/interfaces";
 import { CreateResourceRequestDTO } from "../dtos/create-resource-request-dto";
+import { CreateManyScenariosRequestDTO } from "../dtos/create-many-scenarios-request-dto";
 
 export default function ScenarioController(
   getScenarioUseCase: GetScenarioUseCase,
   getScenarioWithLexiconsUseCase: GetScenarioWithLexiconsUseCase,
   getAllScenariosUseCase: GetAllScenariosUseCase,
   createScenarioUseCase: CreateScenarioUseCase,
+  createManyScenariosUseCase: CreateManyScenariosUseCase,
   updateScenarioUseCase: UpdateScenarioUseCase,
   deleteScenarioUseCase: DeleteScenarioUseCase,
   createExceptionUseCase: CreateExceptionUseCase,
@@ -116,6 +118,19 @@ export default function ScenarioController(
       next(error);
     }
   });
+
+  router.post("/many", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = new CreateManyScenariosRequestDTO(req.body);
+      await validate(data)
+      const scenariosCreated = await createManyScenariosUseCase.execute(data);
+      return res.status(201).json(scenariosCreated);
+    } catch (error: any) {
+      logger.error(error)
+      next(error);
+    }
+  });
+
   router.post("/exception", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const exception = new CreateExceptionRequestDTO(req.body);
@@ -312,7 +327,7 @@ export default function ScenarioController(
     }
   }
   );
-  router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
+  router.patch("/:id", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const scenario = new UpdateScenarioRequestDTO(req.body);

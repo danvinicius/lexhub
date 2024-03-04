@@ -92,7 +92,7 @@ export default function SymbolController(
       next(error);
     }
   });
-  router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
+  router.patch("/:id", async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const symbol = new UpdateSymbolRequestDTO(req.body);

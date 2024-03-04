@@ -8,6 +8,7 @@ import { CreateEpisodeRequestDTO } from "../../../../../application/http/dtos/cr
 import { CreateExceptionRequestDTO } from "../../../../../application/http/dtos/create-exception-request-dto";
 import { CreateResourceRequestDTO } from "../../../../../application/http/dtos/create-resource-request-dto";
 import { CreateRestrictionRequestDTO } from "../../../../../application/http/dtos/create-restriction-request-dto";
+import { CreateManyScenariosRequestDTO } from "../../../../../application/http/dtos/create-many-scenarios-request-dto";
 
 export interface UpdateScenarioUseCaseParams {
   id: string;
@@ -26,6 +27,9 @@ export interface GetAllScenariosUseCase
 
 export interface CreateScenarioUseCase
   extends UseCase<CreateScenarioRequestDTO, IScenario> {}
+
+export interface CreateManyScenariosUseCase
+  extends UseCase<CreateManyScenariosRequestDTO, IScenario[]> {}
 
 export interface UpdateScenarioUseCase
   extends UseCase<UpdateScenarioUseCaseParams, void> {}

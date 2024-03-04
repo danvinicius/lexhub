@@ -20,6 +20,7 @@ import { DeleteImpact } from '../../core/domain/use-cases/symbol/delete-impact';
 import { DeleteSynonym } from '../../core/domain/use-cases/symbol/delete-synonym';
 import { UpdateSymbol } from '../../core/domain/use-cases/symbol/update-symbol';
 import { CreateScenario } from '../../core/domain/use-cases/scenario/create-scenario';
+import { CreateManyScenarios } from '../../core/domain/use-cases/scenario/create-many-scenarios';
 import { DeleteScenario } from '../../core/domain/use-cases/scenario/delete-scenario';
 import { GetAllScenarios } from '../../core/domain/use-cases/scenario/get-all-scenarios';
 import { GetScenario } from '../../core/domain/use-cases/scenario/get-scenario';
@@ -58,6 +59,7 @@ export class ControllerFactory {
             new GetScenarioWithLexicons(scenarioRepository, symbolRepository),
             new GetAllScenarios(scenarioRepository),
             new CreateScenario(scenarioRepository),
+            new CreateManyScenarios(scenarioRepository),
             new UpdateScenario(scenarioRepository),
             new DeleteScenario(scenarioRepository),
             new CreateException(scenarioRepository),

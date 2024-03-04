@@ -10,7 +10,7 @@ import { Exception } from "../../database/mysql/typeorm/entity/Exception";
 import { Context } from "../../database/mysql/typeorm/entity/Context";
 import { CreateRestrictionRequestDTO } from "../../../application/http/dtos/create-restriction-request-dto";
 import { Restriction } from "../../database/mysql/typeorm/entity/Restriction";
-import { IActor, IEpisode, INonSequentialEpisode, IResource } from "../../../core/domain/entities/scenario";
+import { IActor, IEpisode, INonSequentialEpisode, IResource, IScenario } from "../../../core/domain/entities/scenario";
 import { CreateActorRequestDTO } from "../../../application/http/dtos/create-actor-request-dto";
 import { Actor } from "../../database/mysql/typeorm/entity/Actor";
 import { CreateEpisodeRequestDTO } from "../../../application/http/dtos/create-episode.request-dto";
@@ -19,6 +19,7 @@ import { Group } from "../../database/mysql/typeorm/entity/Group";
 import { NonSequentialEpisode } from "../../database/mysql/typeorm/entity/NonSequentialEpisode";
 import { Resource } from "../../database/mysql/typeorm/entity/Resource";
 import { CreateResourceRequestDTO } from "../../../application/http/dtos/create-resource-request-dto";
+import { CreateManyScenariosRequestDTO } from "../../../application/http/dtos/create-many-scenarios-request-dto";
 
 export class MySQLScenarioRepository implements ScenarioRepository {
   private dataSource: DataSource;
@@ -91,6 +92,29 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       throw new Error(error.message);
     }
   }
+
+  async createManyScenarios(data: CreateManyScenariosRequestDTO): Promise<IScenario[]> {
+    try {
+      const [project] = await this.dataSource.manager.findBy(Project, {
+        id: data.projectId as number,
+      });
+      if (!project) {
+        throw new Error("Project does not exist");
+      }
+      const scenarios = data.scenarios.map((s: IScenario) => {
+        const newScenario = new Scenario()
+        newScenario.title = s.title;
+        newScenario.goal = s.goal;
+        newScenario.project = project;
+        return newScenario;
+      }) 
+      await this.dataSource.manager.save(Scenario, scenarios);
+      return scenarios;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
   async createException(data: CreateExceptionRequestDTO): Promise<void> {
     try {
       const scenario = await this.getScenario(data?.scenarioId as number);
