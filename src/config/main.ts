@@ -9,6 +9,7 @@ import { errorHandler } from "../application/middlewares/error-handler";
 import { AppDataSource } from '../infra/database/connection';
 import { Logger } from './logger';
 import { ControllerFactory } from './factories/controllers-factory'
+import { Request, Response } from 'express';
 
 (async function () {
   const logger = Logger.getInstance()
@@ -21,6 +22,10 @@ import { ControllerFactory } from './factories/controllers-factory'
   const projectController = ControllerFactory.createProjectController(projectRepository)
   const symbolController = ControllerFactory.creatSymbolController(symbolRepository)
   const scenarioController = ControllerFactory.createScenarioController(scenarioRepository, symbolRepository);
+
+  server.use("/api/health", (_req: Request, res: Response) => {
+    return res.json({ok: 'ok'})
+  });
 
   server.use("/api/project", projectController);
   server.use("/api/symbol", symbolController);

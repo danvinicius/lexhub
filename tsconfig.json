@@ -13,6 +13,7 @@
     "forceConsistentCasingInFileNames": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
     "strictPropertyInitialization": false,
     "baseUrl": "/src"
   },
