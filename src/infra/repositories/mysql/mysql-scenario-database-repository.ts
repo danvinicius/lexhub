@@ -56,6 +56,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     if (!scenario) {
       throw new Error("Scenario not found");
     }
+    delete scenario?.deletedAt
     return scenario;
   }
   async getAllScenarios(projectId: number): Promise<Scenario[]> {

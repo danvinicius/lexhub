@@ -77,5 +77,5 @@ export class Scenario implements IScenario {
   updated_at: Date;
 
   @DeleteDateColumn({ name: "deleted_at" })
-  deletedAt: Date;
+  deletedAt?: Date;
 }

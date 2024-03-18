@@ -73,7 +73,7 @@ INSERT INTO exception (description, scenarioId) VALUES
   -- Adicione mais exceções conforme necessário
 
 -- Inserindo Grupos
-INSERT INTO cenarios_e_lexicos.group (id, position, scenarioId) VALUES
+INSERT INTO scenarios_and_lexicons.group (id, position, scenarioId) VALUES
   (1, 3, 1),
   (2, 4, 1);
   -- Adicione mais grupos conforme necessário

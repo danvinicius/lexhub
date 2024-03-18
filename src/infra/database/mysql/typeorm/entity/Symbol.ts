@@ -50,5 +50,5 @@ export class Symbol implements ISymbol {
   updated_at: Date;
 
   @DeleteDateColumn({ name: "deleted_at" })
-  deletedAt: Date;
+  deletedAt?: Date;
 }

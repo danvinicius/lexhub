@@ -30,6 +30,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
     if (!symbol) {
       throw new Error("Symbol not found");
     }
+    delete symbol?.deletedAt
     return symbol;
   }
   async getAllSymbols(projectId: number): Promise<Symbol[]> {

@@ -24,6 +24,7 @@ export class MySQLProjectRepository implements ProjectRepository {
     if (!project) {
       throw new Error("Project not found");
     }
+    delete project?.deletedAt;
     return project;
   }
   async getAllProjects(): Promise<Project[]> {

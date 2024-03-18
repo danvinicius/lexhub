@@ -36,5 +36,5 @@ export class Project implements IProject {
   updated_at: Date;
 
   @DeleteDateColumn({ name: "deleted_at" })
-  deletedAt: Date;
+  deletedAt?: Date;
 }

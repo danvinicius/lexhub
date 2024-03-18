@@ -12,6 +12,223 @@ Welcome to the documentation for the Scenarios and Lexicons API. This API serves
 
 ## Endpoints
 
+### Get Project by ID
+
+- Endpoint: /api/project/:id
+- Method: GET
+- Description: Retrieves a project by its ID.
+- Parameters:
+  - id (required): The ID of the project.
+- Response:
+```http
+Status: 200 OK
+{
+    "id": "number",
+    "name": "string",
+    "description": "string",
+    "created_at": "date",
+    "updated_at": "date",
+    "symbols": [
+        {
+            "id": "number",
+            "name": "string",
+            "classification": "string",
+            "notion": "string",
+            "created_at": "date",
+            "updated_at": "date"
+        },
+      ]
+    "scenarios": [
+      {
+            "id": "number",
+            "title": "teste",
+            "goal": "teste",
+            "created_at": "date",
+            "updated_at": "date"
+        }
+    ]
+}
+```
+- Error Responses:
+  - 404 Not Found: If the project with the provided ID does not exist.
+
+### Get All Projects
+- Endpoint: /api/project/:projectId
+- Method: GET
+- Description: Retrieves all projects for a given project.
+- Parameters:
+  - projectId (required): The ID of the project.
+- Response:
+```http
+Status: 200 OK
+Body: Array of project objects (see ### Get Project by ID)
+```
+- Error Responses:
+  - 404 Not Found: If there are no projects for the project.
+
+### Create Project
+- Endpoint: /api/project
+- Method: POST
+- Description: Creates a new project.
+- Request:
+```http
+{
+  "name": "string",
+  "description": "string"
+}
+```
+- Response:
+```http
+Status: 201 Created
+Body: Created project object (see ### Get Project by ID)
+```
+- Error Responses:
+  - 400 Bad Request: If the request body is invalid.
+
+### Update Project
+- Endpoint: /api/project/:id
+- Method: PATCH
+- Description: Updates a project by its ID.
+- Parameters:
+  - id (required): The ID of the project.
+- Request Body
+```http
+{
+  "name": "string",
+  "description": "string"
+}
+```
+- Response:
+```http
+Status: 200 OK
+Body: Updated project object (see ### Get Project by ID)
+```
+- Error Responses:
+  - 400 Bad Request: If the project with the provided ID does not exist or the request body is invalid.
+
+### Delete Project
+- Endpoint: /api/project/:id
+- Method: DELETE
+- Description: Deletes a project by its ID.
+- Parameters:
+  - id (required): The ID of the project.
+- Response:
+```http
+Status: 200 OK
+Body: Message confirming deletion
+```
+- Error Responses:
+  - 400 Bad Request: If the project with the provided ID does not exist.
+
+### Get Symbol by ID
+
+- Endpoint: /api/symbol/:id
+- Method: GET
+- Description: Retrieves a symbol by its ID.
+- Parameters:
+  - id (required): The ID of the symbol.
+- Response:
+```http
+Status: 200 OK
+{
+  "id": "number",
+  "name": "string",
+  "classification": "string",
+  "notion": "string",
+  "created_at": "date",
+  "updated_at": "date",
+  "synonyms": [
+      {
+          "id": "number",
+          "name": "string",
+          "created_at": "date",
+          "updated_at": "date"
+      },
+  ],
+  "impacts": [
+        {
+            "id": "number",
+            "description": "string",
+            "created_at": "date",
+            "updated_at": "date"
+        },
+  ]
+}
+```
+- Error Responses:
+  - 404 Not Found: If the symbol with the provided ID does not exist.
+
+### Get All Symbols for a Project
+- Endpoint: /api/symbol/project/:projectId
+- Method: GET
+- Description: Retrieves all symbols for a given project.
+- Parameters:
+  - projectId (required): The ID of the project.
+- Response:
+```http
+Status: 200 OK
+Body: Array of symbol objects (see ### Get Symbol by ID)
+```
+- Error Responses:
+  - 404 Not Found: If there are no symbols for the project.
+
+### Create Symbol
+- Endpoint: /api/symbol
+- Method: POST
+- Description: Creates a new symbol.
+- Request:
+```http
+{
+  "name": "string",
+  "classification": "string",
+  "notion": "string",
+  "projectId": "number",
+}
+```
+- Response:
+```http
+Status: 201 Created
+Body: Created symbol object (see ### Get Symbol by ID)
+```
+- Error Responses:
+  - 400 Bad Request: If the request body is invalid.
+
+### Update Symbol
+- Endpoint: /api/symbol/:id
+- Method: PATCH
+- Description: Updates a symbol by its ID.
+- Parameters:
+  - id (required): The ID of the symbol.
+- Request Body
+```http
+{
+  "name": "string",
+  "classification": "string",
+  "notion": "string",
+}
+```
+- Response:
+```http
+Status: 200 OK
+Body: Updated symbol object (see ### Get Symbol by ID)
+```
+- Error Responses:
+  - 400 Bad Request: If the symbol with the provided ID does not exist or the request body is invalid.
+
+### Delete Symbol
+- Endpoint: /api/symbol/:id
+- Method: DELETE
+- Description: Deletes a symbol by its ID.
+- Parameters:
+  - id (required): The ID of the symbol.
+- Response:
+```http
+Status: 200 OK
+Body: Message confirming deletion
+```
+- Error Responses:
+  - 400 Bad Request: If the scenario with the provided ID does not exist.
+
 ### Get Scenario by ID
 
 - Endpoint: /api/scenario/:id
