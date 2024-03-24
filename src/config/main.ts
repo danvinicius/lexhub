@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
-import server from "./server";
+import server from "@/config/server";
 import { MySQLProjectRepository } from "../infra/repositories/mysql/mysql-project-database-repository";
 import { MySQLSymbolRepository } from "../infra/repositories/mysql/mysql-symbol-database-repository";
 import { MySQLScenarioRepository } from "../infra/repositories/mysql/mysql-scenario-database-repository";

@@ -15,8 +15,11 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "strictPropertyInitialization": false,
-    "baseUrl": "/src"
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"]
+    }
   },
-  "include": ["./src"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }
