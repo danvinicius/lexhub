@@ -2,43 +2,42 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  JoinColumn,
 } from "typeorm";
-import { ISymbol } from "@/domain/entities";
-import { Synonym } from "./Synonym";
-import { Impact } from "./Impact";
-import { Project } from "./Project";
+import { IProject, IUser, IUserProject, UserRole } from "@/domain/entities";
+import { Project, User } from "@/infra/db/mysql/typeorm/entity";
 
 @Entity()
-export class Symbol implements ISymbol {
+export class UserProject implements IUserProject {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  name: string;
+  invitedBy: number;
 
   @Column()
-  classification: string;
+  removedBy: number;
 
-  @Column({nullable: true})
-  notion: string;
-  
-  @OneToMany(() => Synonym, (synonym) => synonym.symbol)
-  synonyms: Synonym[];
-
-  @OneToMany(() => Impact, (Impact) => Impact.symbol)
-  impacts: Impact[];
-
-  @ManyToOne(() => Project, (project) => project.symbols)
-  @JoinColumn({
-    name: 'project_id'
+  @Column({
+    type: 'enum',
+    enum: UserRole
   })
-  project: Project;
+  role: UserRole;
+
+  @ManyToOne(() => User, (user) => user.projects)
+  user: IUser;
+
+  @ManyToOne(() => Project, (project) => project.users)
+  project: IProject;
+
+  @CreateDateColumn({
+    name: "accepted_at",
+    type: "timestamp",
+  })
+  acceptedAt: Date;
 
   @CreateDateColumn({
     name: "created_at",

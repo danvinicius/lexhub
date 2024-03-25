@@ -13,10 +13,12 @@ import {
   Resource,
   Episode,
   Group,
+  User,
   NonSequentialEpisode,
 } from "./mysql/typeorm/entity";
 
 import { databaseConfig } from "../../config/database";
+import { UserProject } from "./mysql/typeorm/entity/UserProject";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
@@ -41,6 +43,8 @@ export const AppDataSource = new DataSource({
     Episode,
     Group,
     NonSequentialEpisode,
+    User,
+    UserProject,
   ],
   migrations: databaseConfig.migrations,
   subscribers: databaseConfig.subscribers,

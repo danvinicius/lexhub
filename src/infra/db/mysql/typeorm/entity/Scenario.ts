@@ -10,6 +10,7 @@ import {
   DeleteDateColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from "typeorm";
 import {
   IActor,
@@ -61,20 +62,25 @@ export class Scenario implements IScenario {
   groups: IGroup[];
 
   @ManyToOne(() => Project, (project) => project.scenarios)
+  @JoinColumn({
+    name: 'project_id'
+  })
   project: IProject;
 
   @CreateDateColumn({
+    name: "created_at",
     type: "timestamp",
     default: () => "CURRENT_TIMESTAMP(6)",
   })
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({
+    name: "updated_at",
     type: "timestamp",
     default: () => "CURRENT_TIMESTAMP(6)",
     onUpdate: "CURRENT_TIMESTAMP(6)",
   })
-  updated_at: Date;
+  updatedAt: Date;
 
   @DeleteDateColumn({ name: "deleted_at" })
   deletedAt?: Date;

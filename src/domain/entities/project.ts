@@ -1,5 +1,6 @@
 import { IScenario } from "./scenario";
 import { ISymbol } from "./symbol";
+import { IUser, IUserProject } from "./user";
 
 export interface IProject {
     readonly id?: number;
@@ -7,4 +8,5 @@ export interface IProject {
     description: string;
     scenarios?: IScenario[];
     symbols?: ISymbol[];
+    users: IUserProject[]
 }

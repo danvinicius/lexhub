@@ -1,9 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from "typeorm";
-import { IProject } from "@/domain/entities";
+import { IProject, IUser, IUserProject } from "@/domain/entities";
 import { Symbol } from "./Symbol";
 import { ISymbol } from "@/domain/entities";
 import { IScenario } from "@/domain/entities";
 import { Scenario } from "./Scenario";
+import { UserProject } from "./UserProject";
 
 @Entity()
 export class Project implements IProject {
@@ -22,18 +23,23 @@ export class Project implements IProject {
   @OneToMany(() => Scenario, (scenario) => scenario.project)
   scenarios: IScenario[];
 
+  @OneToMany(() => UserProject, (user) => user.project)
+  users: IUserProject[];
+
   @CreateDateColumn({
+    name: "created_at",
     type: "timestamp",
     default: () => "CURRENT_TIMESTAMP(6)",
   })
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({
+    name: "updated_at",
     type: "timestamp",
     default: () => "CURRENT_TIMESTAMP(6)",
     onUpdate: "CURRENT_TIMESTAMP(6)",
   })
-  updated_at: Date;
+  updatedAt: Date;
 
   @DeleteDateColumn({ name: "deleted_at" })
   deletedAt?: Date;
