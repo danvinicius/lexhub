@@ -1,98 +1,110 @@
-import ProjectController from '../../application/http/controllers/project-controller';
-import SymbolController from '../../application/http/controllers/symbol-controller';
-import ScenarioController from '../../application/http/controllers/scenario-controller';
-import { SymbolRepository } from '../../core/repositories/symbol-repository';
-import { ScenarioRepository } from '../../core/repositories/scenario-repository';
-import { ProjectRepository } from '../../core/repositories/project-repository';
-
-import { GetProject } from '../../core/domain/use-cases/project/get-project';
-import { GetAllProjects } from '../../core/domain/use-cases/project/get-all-projects';
-import { CreateProject } from '../../core/domain/use-cases/project/create-project';
-import { UpdateProject } from '../../core/domain/use-cases/project/update-project';
-import { DeleteProject } from '../../core/domain/use-cases/project/delete-project';
-import { GetSymbol } from '../../core/domain/use-cases/symbol/get-symbol';
-import { GetAllSymbols } from '../../core/domain/use-cases/symbol/get-all-symbols';
-import { CreateSymbol } from '../../core/domain/use-cases/symbol/create-symbol';
-import { DeleteSymbol } from '../../core/domain/use-cases/symbol/delete-symbol';
-import { CreateImpact } from '../../core/domain/use-cases/symbol/create-impact';
-import { CreateSynonym } from '../../core/domain/use-cases/symbol/create-synonym';
-import { DeleteImpact } from '../../core/domain/use-cases/symbol/delete-impact';
-import { DeleteSynonym } from '../../core/domain/use-cases/symbol/delete-synonym';
-import { UpdateSymbol } from '../../core/domain/use-cases/symbol/update-symbol';
-import { CreateScenario } from '../../core/domain/use-cases/scenario/create-scenario';
-import { CreateManyScenarios } from '../../core/domain/use-cases/scenario/create-many-scenarios';
-import { DeleteScenario } from '../../core/domain/use-cases/scenario/delete-scenario';
-import { GetAllScenarios } from '../../core/domain/use-cases/scenario/get-all-scenarios';
-import { GetScenario } from '../../core/domain/use-cases/scenario/get-scenario';
-import { UpdateScenario } from '../../core/domain/use-cases/scenario/update-scenario';
-import { GetScenarioWithLexicons } from '../../core/domain/use-cases/scenario/get-scenario-with-lexicons';
-import { CreateException } from '../../core/domain/use-cases/scenario/create-exception';
-import { CreateContext } from '../../core/domain/use-cases/scenario/create-context';
-import { CreateRestriction } from '../../core/domain/use-cases/scenario/create-restriction';
-import { DeleteContext } from '../../core/domain/use-cases/scenario/delete-context';
-import { DeleteException } from '../../core/domain/use-cases/scenario/delete-exception';
-import { DeleteRestriction } from '../../core/domain/use-cases/scenario/delete-restriction';
-import { CreateActor } from '../../core/domain/use-cases/scenario/create-actor';
-import { AddActor } from '../../core/domain/use-cases/scenario/add-actor';
-import { CreateEpisode } from '../../core/domain/use-cases/scenario/create-episode';
-import { DeleteActor } from '../../core/domain/use-cases/scenario/delete-actor';
-import { RemoveActor } from '../../core/domain/use-cases/scenario/remove-actor';
-import { DeleteEpisode } from '../../core/domain/use-cases/scenario/delete-episode';
-import { DeleteGroup } from '../../core/domain/use-cases/scenario/delete-group';
-import { CreateResource } from '../../core/domain/use-cases/scenario/create-resource';
-import { AddResource } from '../../core/domain/use-cases/scenario/add-resource';
-import { DeleteResource } from '../../core/domain/use-cases/scenario/delete-resource';
-import { RemoveResource } from '../../core/domain/use-cases/scenario/remove-resource';
+import {
+  ProjectRepository,
+  ScenarioRepository,
+  SymbolRepository,
+} from "@/data/protocols";
+import {
+  DbCreateProject,
+  DbDeleteProject,
+  DbGetAllProjects,
+  DbGetProject,
+  DbUpdateProject,
+} from "@/data/usecases/project";
+import {
+  DbAddActor,
+  DbAddResource,
+  DbCreateActor,
+  DbCreateContext,
+  DbCreateEpisode,
+  DbCreateException,
+  DbCreateManyScenarios,
+  DbCreateResource,
+  DbCreateRestriction,
+  DbCreateScenario,
+  DbDeleteActor,
+  DbDeleteContext,
+  DbDeleteEpisode,
+  DbDeleteException,
+  DbDeleteGroup,
+  DbDeleteResource,
+  DbDeleteRestriction,
+  DbDeleteScenario,
+  DbGetAllScenarios,
+  DbGetScenario,
+  DbGetScenarioWithLexicons,
+  DbRemoveActor,
+  DbRemoveResource,
+  DbUpdateScenario,
+} from "@/data/usecases/scenario";
+import {
+  DbCreateImpact,
+  DbCreateSymbol,
+  DbCreateSynonym,
+  DbDeleteImpact,
+  DbDeleteSymbol,
+  DbDeleteSynonym,
+  DbGetAllSymbols,
+  DbGetSymbol,
+  DbUpdateSymbol,
+} from "@/data/usecases/symbol";
+import ProjectController from "@/presentation/http/controllers/project-controller";
+import ScenarioController from "@/presentation/http/controllers/scenario-controller";
+import SymbolController from "@/presentation/http/controllers/symbol-controller";
 
 export class ControllerFactory {
-    static createProjectController(projectRepository: ProjectRepository) {
-        return ProjectController(new GetProject(projectRepository),
-            new GetAllProjects(projectRepository),
-            new CreateProject(projectRepository),
-            new UpdateProject(projectRepository),
-            new DeleteProject(projectRepository));
-    }
+  static createProjectController(projectRepository: ProjectRepository) {
+    return ProjectController(
+      new DbGetProject(projectRepository),
+      new DbGetAllProjects(projectRepository),
+      new DbCreateProject(projectRepository),
+      new DbUpdateProject(projectRepository),
+      new DbDeleteProject(projectRepository)
+    );
+  }
 
-    static createScenarioController(scenarioRepository: ScenarioRepository, symbolRepository: SymbolRepository) {
-        return ScenarioController(
-            new GetScenario(scenarioRepository),
-            new GetScenarioWithLexicons(scenarioRepository, symbolRepository),
-            new GetAllScenarios(scenarioRepository),
-            new CreateScenario(scenarioRepository),
-            new CreateManyScenarios(scenarioRepository),
-            new UpdateScenario(scenarioRepository),
-            new DeleteScenario(scenarioRepository),
-            new CreateException(scenarioRepository),
-            new CreateContext(scenarioRepository),
-            new CreateRestriction(scenarioRepository),
-            new CreateActor(scenarioRepository),
-            new CreateResource(scenarioRepository),
-            new AddActor(scenarioRepository),
-            new AddResource(scenarioRepository),
-            new CreateEpisode(scenarioRepository),
-            new DeleteException(scenarioRepository),
-            new DeleteContext(scenarioRepository),
-            new DeleteRestriction(scenarioRepository),
-            new DeleteActor(scenarioRepository),
-            new DeleteResource(scenarioRepository),
-            new RemoveActor(scenarioRepository),
-            new RemoveResource(scenarioRepository),
-            new DeleteEpisode(scenarioRepository),
-            new DeleteGroup(scenarioRepository),
-        );
-    }
+  static createScenarioController(
+    scenarioRepository: ScenarioRepository,
+    symbolRepository: SymbolRepository
+  ) {
+    return ScenarioController(
+      new DbGetScenario(scenarioRepository),
+      new DbGetScenarioWithLexicons(scenarioRepository, symbolRepository),
+      new DbGetAllScenarios(scenarioRepository),
+      new DbCreateScenario(scenarioRepository),
+      new DbCreateManyScenarios(scenarioRepository),
+      new DbUpdateScenario(scenarioRepository),
+      new DbDeleteScenario(scenarioRepository),
+      new DbCreateException(scenarioRepository),
+      new DbCreateContext(scenarioRepository),
+      new DbCreateRestriction(scenarioRepository),
+      new DbCreateActor(scenarioRepository),
+      new DbCreateResource(scenarioRepository),
+      new DbAddActor(scenarioRepository),
+      new DbAddResource(scenarioRepository),
+      new DbCreateEpisode(scenarioRepository),
+      new DbDeleteException(scenarioRepository),
+      new DbDeleteContext(scenarioRepository),
+      new DbDeleteRestriction(scenarioRepository),
+      new DbDeleteActor(scenarioRepository),
+      new DbDeleteResource(scenarioRepository),
+      new DbRemoveActor(scenarioRepository),
+      new DbRemoveResource(scenarioRepository),
+      new DbDeleteEpisode(scenarioRepository),
+      new DbDeleteGroup(scenarioRepository)
+    );
+  }
 
-    static creatSymbolController(symbolRepository: SymbolRepository) {
-        return SymbolController(
-            new GetSymbol(symbolRepository),
-            new GetAllSymbols(symbolRepository),
-            new CreateSymbol(symbolRepository),
-            new UpdateSymbol(symbolRepository),
-            new DeleteSymbol(symbolRepository),
-            new CreateImpact(symbolRepository),
-            new CreateSynonym(symbolRepository),
-            new DeleteImpact(symbolRepository),
-            new DeleteSynonym(symbolRepository),
-        );
-    }
+  static creatSymbolController(symbolRepository: SymbolRepository) {
+    return SymbolController(
+      new DbGetSymbol(symbolRepository),
+      new DbGetAllSymbols(symbolRepository),
+      new DbCreateSymbol(symbolRepository),
+      new DbUpdateSymbol(symbolRepository),
+      new DbDeleteSymbol(symbolRepository),
+      new DbCreateImpact(symbolRepository),
+      new DbCreateSynonym(symbolRepository),
+      new DbDeleteImpact(symbolRepository),
+      new DbDeleteSynonym(symbolRepository)
+    );
+  }
 }

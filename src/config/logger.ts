@@ -1,4 +1,4 @@
-import { ILogger } from "../application/logger/logger";
+import { ILogger } from "@/presentation/logger/logger";
 import jetLoger from "jet-logger";
 
 export class Logger implements ILogger {
