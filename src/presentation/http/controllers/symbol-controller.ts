@@ -2,30 +2,20 @@ import express, { Response, Request, NextFunction } from "express";
 import { NotFoundError } from "../../errors/not-found-error";
 import { BadRequestError } from "../../errors/bad-request-error";
 import { validate } from "../../helpers/validate";
-import { CreateSymbolRequestDTO, UpdateSymbolRequestDTO, CreateImpactRequestDTO, CreateSynonymRequestDTO } from "../dtos";
-import {
-  CreateSymbol,
-  GetAllSymbols,
-  GetSymbol,
-  UpdateSymbol,
-  DeleteSymbol,
-  CreateImpact,
-  CreateSynonym,
-  DeleteImpact,
-  DeleteSynonym,
-} from "@/domain/use-cases/symbol";
+import * as DTO from "../dtos";
+import * as UseCases from "@/domain/use-cases";
 import { Logger } from "../../../config/logger";
 
 export default function SymbolController(
-  getSymbol: GetSymbol,
-  getAllSymbols: GetAllSymbols,
-  createSymbol: CreateSymbol,
-  updateSymbol: UpdateSymbol,
-  deleteSymbol: DeleteSymbol,
-  createImpact: CreateImpact,
-  createSynonym: CreateSynonym,
-  deleteImpact: DeleteImpact,
-  deleteSynonym: DeleteSynonym
+  getSymbol: UseCases.GetSymbol,
+  getAllSymbols: UseCases.GetAllSymbols,
+  createSymbol: UseCases.CreateSymbol,
+  updateSymbol: UseCases.UpdateSymbol,
+  deleteSymbol: UseCases.DeleteSymbol,
+  createImpact: UseCases.CreateImpact,
+  createSynonym: UseCases.CreateSynonym,
+  deleteImpact: UseCases.DeleteImpact,
+  deleteSynonym: UseCases.DeleteSynonym
 ) {
   const router = express.Router();
   const logger = Logger.getInstance();
@@ -65,7 +55,7 @@ export default function SymbolController(
   );
   router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const symbol = new CreateSymbolRequestDTO(req.body);
+      const symbol = new DTO.CreateSymbolRequestDTO(req.body);
       await validate(symbol);
       const symbolCreated = await createSymbol.execute(symbol);
       return res.status(201).json(symbolCreated);
@@ -78,7 +68,7 @@ export default function SymbolController(
     "/impact",
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const impact = new CreateImpactRequestDTO(req.body);
+        const impact = new DTO.CreateImpactRequestDTO(req.body);
         await validate(impact);
         await createImpact.execute(impact);
         return res.status(201).json({ message: "Impact created" });
@@ -92,7 +82,7 @@ export default function SymbolController(
     "/synonym",
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const synonym = new CreateSynonymRequestDTO(req.body);
+        const synonym = new DTO.CreateSynonymRequestDTO(req.body);
         await validate(synonym);
         await createSynonym.execute(synonym);
         return res.status(201).json({ message: "Synonym created" });
@@ -107,7 +97,7 @@ export default function SymbolController(
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
-        const symbol = new UpdateSymbolRequestDTO(req.body);
+        const symbol = new DTO.UpdateSymbolRequestDTO(req.body);
         await validate(symbol);
         const symbolExists = await getSymbol.execute(id);
         if (!symbolExists) {

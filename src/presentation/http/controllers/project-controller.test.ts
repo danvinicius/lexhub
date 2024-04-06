@@ -75,6 +75,7 @@ describe("Project controller", () => {
         description: "The alpha project",
         symbols: [],
         scenarios: [],
+        users: []
       };
       jest
         .spyOn(mockGetProject, "execute")

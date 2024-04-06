@@ -2,63 +2,27 @@ import {
   ProjectRepository,
   ScenarioRepository,
   SymbolRepository,
+  UserRepository,
 } from "@/data/protocols";
-import {
-  DbCreateProject,
-  DbDeleteProject,
-  DbGetAllProjects,
-  DbGetProject,
-  DbUpdateProject,
-} from "@/data/usecases/project";
-import {
-  DbAddActor,
-  DbAddResource,
-  DbCreateActor,
-  DbCreateContext,
-  DbCreateEpisode,
-  DbCreateException,
-  DbCreateManyScenarios,
-  DbCreateResource,
-  DbCreateRestriction,
-  DbCreateScenario,
-  DbDeleteActor,
-  DbDeleteContext,
-  DbDeleteEpisode,
-  DbDeleteException,
-  DbDeleteGroup,
-  DbDeleteResource,
-  DbDeleteRestriction,
-  DbDeleteScenario,
-  DbGetAllScenarios,
-  DbGetScenario,
-  DbGetScenarioWithLexicons,
-  DbRemoveActor,
-  DbRemoveResource,
-  DbUpdateScenario,
-} from "@/data/usecases/scenario";
-import {
-  DbCreateImpact,
-  DbCreateSymbol,
-  DbCreateSynonym,
-  DbDeleteImpact,
-  DbDeleteSymbol,
-  DbDeleteSynonym,
-  DbGetAllSymbols,
-  DbGetSymbol,
-  DbUpdateSymbol,
-} from "@/data/usecases/symbol";
+import * as ProjectUseCase from "@/data/use-cases/project";
+import * as ScenarioUseCase from "@/data/use-cases/scenario";
+import * as SymbolUseCase from "@/data/use-cases/symbol";
+import * as UserUseCase from "@/data/use-cases/user";
+import { BcryptAdapter } from "@/infra/security/bcrypt-adapter";
+import { JwtAdapter } from "@/infra/security/jwt-adapter";
 import ProjectController from "@/presentation/http/controllers/project-controller";
 import ScenarioController from "@/presentation/http/controllers/scenario-controller";
 import SymbolController from "@/presentation/http/controllers/symbol-controller";
+import UserController from "@/presentation/http/controllers/user-controller";
 
 export class ControllerFactory {
   static createProjectController(projectRepository: ProjectRepository) {
     return ProjectController(
-      new DbGetProject(projectRepository),
-      new DbGetAllProjects(projectRepository),
-      new DbCreateProject(projectRepository),
-      new DbUpdateProject(projectRepository),
-      new DbDeleteProject(projectRepository)
+      new ProjectUseCase.DbGetProject(projectRepository),
+      new ProjectUseCase.DbGetAllProjects(projectRepository),
+      new ProjectUseCase.DbCreateProject(projectRepository),
+      new ProjectUseCase.DbUpdateProject(projectRepository),
+      new ProjectUseCase.DbDeleteProject(projectRepository)
     );
   }
 
@@ -67,44 +31,60 @@ export class ControllerFactory {
     symbolRepository: SymbolRepository
   ) {
     return ScenarioController(
-      new DbGetScenario(scenarioRepository),
-      new DbGetScenarioWithLexicons(scenarioRepository, symbolRepository),
-      new DbGetAllScenarios(scenarioRepository),
-      new DbCreateScenario(scenarioRepository),
-      new DbCreateManyScenarios(scenarioRepository),
-      new DbUpdateScenario(scenarioRepository),
-      new DbDeleteScenario(scenarioRepository),
-      new DbCreateException(scenarioRepository),
-      new DbCreateContext(scenarioRepository),
-      new DbCreateRestriction(scenarioRepository),
-      new DbCreateActor(scenarioRepository),
-      new DbCreateResource(scenarioRepository),
-      new DbAddActor(scenarioRepository),
-      new DbAddResource(scenarioRepository),
-      new DbCreateEpisode(scenarioRepository),
-      new DbDeleteException(scenarioRepository),
-      new DbDeleteContext(scenarioRepository),
-      new DbDeleteRestriction(scenarioRepository),
-      new DbDeleteActor(scenarioRepository),
-      new DbDeleteResource(scenarioRepository),
-      new DbRemoveActor(scenarioRepository),
-      new DbRemoveResource(scenarioRepository),
-      new DbDeleteEpisode(scenarioRepository),
-      new DbDeleteGroup(scenarioRepository)
+      new ScenarioUseCase.DbGetScenario(scenarioRepository),
+      new ScenarioUseCase.DbGetScenarioWithLexicons(
+        scenarioRepository,
+        symbolRepository
+      ),
+      new ScenarioUseCase.DbGetAllScenarios(scenarioRepository),
+      new ScenarioUseCase.DbCreateScenario(scenarioRepository),
+      new ScenarioUseCase.DbCreateManyScenarios(scenarioRepository),
+      new ScenarioUseCase.DbUpdateScenario(scenarioRepository),
+      new ScenarioUseCase.DbDeleteScenario(scenarioRepository),
+      new ScenarioUseCase.DbCreateException(scenarioRepository),
+      new ScenarioUseCase.DbCreateContext(scenarioRepository),
+      new ScenarioUseCase.DbCreateRestriction(scenarioRepository),
+      new ScenarioUseCase.DbCreateActor(scenarioRepository),
+      new ScenarioUseCase.DbCreateResource(scenarioRepository),
+      new ScenarioUseCase.DbAddActor(scenarioRepository),
+      new ScenarioUseCase.DbAddResource(scenarioRepository),
+      new ScenarioUseCase.DbCreateEpisode(scenarioRepository),
+      new ScenarioUseCase.DbDeleteException(scenarioRepository),
+      new ScenarioUseCase.DbDeleteContext(scenarioRepository),
+      new ScenarioUseCase.DbDeleteRestriction(scenarioRepository),
+      new ScenarioUseCase.DbDeleteActor(scenarioRepository),
+      new ScenarioUseCase.DbDeleteResource(scenarioRepository),
+      new ScenarioUseCase.DbRemoveActor(scenarioRepository),
+      new ScenarioUseCase.DbRemoveResource(scenarioRepository),
+      new ScenarioUseCase.DbDeleteEpisode(scenarioRepository),
+      new ScenarioUseCase.DbDeleteGroup(scenarioRepository)
     );
   }
 
   static creatSymbolController(symbolRepository: SymbolRepository) {
     return SymbolController(
-      new DbGetSymbol(symbolRepository),
-      new DbGetAllSymbols(symbolRepository),
-      new DbCreateSymbol(symbolRepository),
-      new DbUpdateSymbol(symbolRepository),
-      new DbDeleteSymbol(symbolRepository),
-      new DbCreateImpact(symbolRepository),
-      new DbCreateSynonym(symbolRepository),
-      new DbDeleteImpact(symbolRepository),
-      new DbDeleteSynonym(symbolRepository)
+      new SymbolUseCase.DbGetSymbol(symbolRepository),
+      new SymbolUseCase.DbGetAllSymbols(symbolRepository),
+      new SymbolUseCase.DbCreateSymbol(symbolRepository),
+      new SymbolUseCase.DbUpdateSymbol(symbolRepository),
+      new SymbolUseCase.DbDeleteSymbol(symbolRepository),
+      new SymbolUseCase.DbCreateImpact(symbolRepository),
+      new SymbolUseCase.DbCreateSynonym(symbolRepository),
+      new SymbolUseCase.DbDeleteImpact(symbolRepository),
+      new SymbolUseCase.DbDeleteSynonym(symbolRepository)
+    );
+  }
+
+  static creatUserController(userRepository: UserRepository) {
+    const bcryptAdapter = new BcryptAdapter(10);
+    const jwtAdapter = new JwtAdapter("secret");
+    return UserController(
+      new UserUseCase.DbAuthenticateUser(
+        userRepository,
+        jwtAdapter,
+        bcryptAdapter
+      ),
+      new UserUseCase.DbCreateUser(userRepository, jwtAdapter, bcryptAdapter),
     );
   }
 }

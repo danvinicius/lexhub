@@ -3,69 +3,34 @@ import { NotFoundError } from "../../errors/not-found-error";
 import { BadRequestError } from "../../errors/bad-request-error";
 import { validate } from "../../helpers/validate";
 import { Logger } from "../../../config/logger";
-import {
-  CreateScenarioRequestDTO,
-  UpdateScenarioRequestDTO,
-  CreateExceptionRequestDTO,
-  CreateContextRequestDTO,
-  CreateRestrictionRequestDTO,
-  CreateActorRequestDTO,
-  CreateEpisodeRequestDTO,
-  CreateResourceRequestDTO,
-  CreateManyScenariosRequestDTO,
-} from "../dtos";
-import {
-  GetScenarioWithLexicons,
-  CreateManyScenarios,
-  CreateScenario,
-  GetAllScenarios,
-  GetScenario,
-  UpdateScenario,
-  DeleteScenario,
-  CreateException,
-  CreateContext,
-  DeleteContext,
-  DeleteException,
-  DeleteRestriction,
-  CreateRestriction,
-  CreateActor,
-  CreateResource,
-  AddActor,
-  AddResource,
-  DeleteActor,
-  DeleteResource,
-  DeleteEpisode,
-  DeleteGroup,
-  RemoveActor,
-  RemoveResource,
-  CreateEpisode,
-} from "@/domain/use-cases/scenario";
+import * as DTO from "../dtos";
+import * as UseCases from "@/domain/use-cases";
 
 export default function ScenarioController(
-  getScenario: GetScenario,
-  getScenarioWithLexicons: GetScenarioWithLexicons,
-  getAllScenarios: GetAllScenarios,
-  createScenario: CreateScenario,
-  createManyScenarios: CreateManyScenarios,
-  updateScenario: UpdateScenario,
-  deleteScenario: DeleteScenario,
-  createException: CreateException,
-  createContext: CreateContext,
-  createRestriction: CreateRestriction,
-  createActor: CreateActor,
-  createResource: CreateResource,
-  addActor: AddActor,
-  addResource: AddResource,
-  createEpisode: CreateEpisode,
-  deleteException: DeleteException,
-  deleteContext: DeleteContext,
-  deleteRestriction: DeleteRestriction,
-  deleteActor: DeleteActor,
-  deleteResource: DeleteResource,
-  removeActor: RemoveActor,
-  removeResource: RemoveResource,
-  deleteEpisode: DeleteEpisode,
-  deleteGroup: DeleteGroup
+  getScenario: UseCases.GetScenario,
+  getScenarioWithLexicons: UseCases.GetScenarioWithLexicons,
+  getAllScenarios: UseCases.GetAllScenarios,
+  createScenario: UseCases.CreateScenario,
+  createManyScenarios: UseCases.CreateManyScenarios,
+  updateScenario: UseCases.UpdateScenario,
+  deleteScenario: UseCases.DeleteScenario,
+  createException: UseCases.CreateException,
+  createContext: UseCases.CreateContext,
+  createRestriction: UseCases.CreateRestriction,
+  createActor: UseCases.CreateActor,
+  createResource: UseCases.CreateResource,
+  addActor: UseCases.AddActor,
+  addResource: UseCases.AddResource,
+  createEpisode: UseCases.CreateEpisode,
+  deleteException: UseCases.DeleteException,
+  deleteContext: UseCases.DeleteContext,
+  deleteRestriction: UseCases.DeleteRestriction,
+  deleteActor: UseCases.DeleteActor,
+  deleteResource: UseCases.DeleteResource,
+  removeActor: UseCases.RemoveActor,
+  removeResource: UseCases.RemoveResource,
+  deleteEpisode: UseCases.DeleteEpisode,
+  deleteGroup: UseCases.DeleteGroup
 ) {
   const router = express.Router();
   const logger = Logger.getInstance();
@@ -121,7 +86,7 @@ export default function ScenarioController(
   );
   router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const scenario = new CreateScenarioRequestDTO(req.body);
+      const scenario = new DTO.CreateScenarioRequestDTO(req.body);
       await validate(scenario);
       const scenarioCreated = await createScenario.execute(scenario);
       return res.status(201).json(scenarioCreated);
@@ -135,7 +100,7 @@ export default function ScenarioController(
     "/many",
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const data = new CreateManyScenariosRequestDTO(req.body);
+        const data = new DTO.CreateManyScenariosRequestDTO(req.body);
         await validate(data);
         const scenariosCreated = await createManyScenarios.execute(data);
         return res.status(201).json(scenariosCreated);
@@ -150,7 +115,7 @@ export default function ScenarioController(
     "/exception",
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const exception = new CreateExceptionRequestDTO(req.body);
+        const exception = new DTO.CreateExceptionRequestDTO(req.body);
         await validate(exception);
         await createException.execute(exception);
         return res.status(201).json({ message: "Exception created" });
@@ -164,7 +129,7 @@ export default function ScenarioController(
     "/context",
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const context = new CreateContextRequestDTO(req.body);
+        const context = new DTO.CreateContextRequestDTO(req.body);
         await validate(context);
         await createContext.execute(context);
         return res.status(201).json({ message: "Context created" });
@@ -178,7 +143,7 @@ export default function ScenarioController(
     "/restriction",
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const restriction = new CreateRestrictionRequestDTO(req.body);
+        const restriction = new DTO.CreateRestrictionRequestDTO(req.body);
         await validate(restriction);
         await createRestriction.execute(restriction);
         return res.status(201).json({ message: "Restriction created" });
@@ -192,7 +157,7 @@ export default function ScenarioController(
     "/actor",
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const actor = new CreateActorRequestDTO(req.body);
+        const actor = new DTO.CreateActorRequestDTO(req.body);
         await validate(actor);
         await createActor.execute(actor);
         return res.status(201).json({ message: "Actor created" });
@@ -206,7 +171,7 @@ export default function ScenarioController(
     "/resource",
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const resource = new CreateResourceRequestDTO(req.body);
+        const resource = new DTO.CreateResourceRequestDTO(req.body);
         await validate(resource);
         await createResource.execute(resource);
         return res.status(201).json({ message: "Resource created" });
@@ -252,7 +217,7 @@ export default function ScenarioController(
     "/episode",
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const episode = new CreateEpisodeRequestDTO(req.body);
+        const episode = new DTO.CreateEpisodeRequestDTO(req.body);
         await validate(episode);
         await createEpisode.execute(episode);
         return res.status(201).json({ message: "Episode created" });
@@ -403,7 +368,7 @@ export default function ScenarioController(
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
-        const scenario = new UpdateScenarioRequestDTO(req.body);
+        const scenario = new DTO.UpdateScenarioRequestDTO(req.body);
         await validate(scenario);
         const scenarioExists = await getScenario.execute(id);
         if (!scenarioExists) {

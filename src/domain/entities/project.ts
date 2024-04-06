@@ -1,6 +1,6 @@
 import { IScenario } from "./scenario";
 import { ISymbol } from "./symbol";
-import { IUser, IUserProject } from "./user";
+import { IUserProject } from "./user";
 
 export interface IProject {
     readonly id?: number;

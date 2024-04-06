@@ -1,24 +1,17 @@
-import {
-  CreateProject,
-  GetAllProjects,
-  GetProject,
-  UpdateProject,
-  DeleteProject,
-} from "@/domain/use-cases/project";
+import * as UseCases from "@/domain/use-cases";
 import express, { Response, Request, NextFunction } from "express";
 import { NotFoundError } from "../../errors/not-found-error";
 import { BadRequestError } from "../../errors/bad-request-error";
-import { CreateProjectRequestDTO } from "../dtos";
-import { UpdateProjectRequestDTO } from "../dtos";
+import * as DTO from "../dtos";
 import { validate } from "../../helpers/validate";
 import { Logger } from "@/config/logger";
 
 export default function ProjectController(
-  getProject: GetProject,
-  getAllProjects: GetAllProjects,
-  createProject: CreateProject,
-  updateProject: UpdateProject,
-  deleteProject: DeleteProject
+  getProject: UseCases.GetProject,
+  getAllProjects: UseCases.GetAllProjects,
+  createProject: UseCases.CreateProject,
+  updateProject: UseCases.UpdateProject,
+  deleteProject: UseCases.DeleteProject
 ) {
   const router = express.Router();
   const logger = Logger.getInstance();
@@ -56,7 +49,7 @@ export default function ProjectController(
   );
   router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const project = new CreateProjectRequestDTO(req.body);
+      const project = new DTO.CreateProjectRequestDTO(req.body);
       await validate(project);
       const projectCreated = await createProject.execute(project);
       return res.status(201).json(projectCreated);
@@ -70,7 +63,7 @@ export default function ProjectController(
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const { id } = req.params;
-        const project = new UpdateProjectRequestDTO(req.body);
+        const project = new DTO.UpdateProjectRequestDTO(req.body);
         await validate(project);
         await updateProject.execute({ id, project });
         return res.json({ message: "Project updated" });
