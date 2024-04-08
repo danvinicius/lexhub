@@ -1,4 +1,4 @@
-import { IProject } from "./project";
+import { IProject } from './project';
 
 export interface IScenario {
   readonly id?: number | string;

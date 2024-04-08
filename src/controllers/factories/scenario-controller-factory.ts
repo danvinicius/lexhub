@@ -2,7 +2,7 @@ import {
   ProjectRepository,
   ScenarioRepository,
   SymbolRepository,
-} from "@/protocols";
+} from '@/protocols';
 
 import {
   GetScenarioUseCase,
@@ -29,9 +29,9 @@ import {
   DeleteEpisodeUseCase,
   DeleteGroupUseCase,
   GetScenarioWithLexiconsUseCase,
-} from "@/use-cases/scenario";
+} from '@/use-cases/scenario';
 
-import { ScenarioController } from "@/controllers";
+import { ScenarioController } from '@/controllers';
 
 export class ScenarioControllerFactory {
   static makeScenarioController(

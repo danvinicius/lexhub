@@ -8,11 +8,11 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   JoinColumn,
-} from "typeorm";
-import { ISymbol } from "@/entities";
-import { Synonym } from "./Synonym";
-import { Impact } from "./Impact";
-import { Project } from "./Project";
+} from 'typeorm';
+import { ISymbol } from '@/entities';
+import { Synonym } from './Synonym';
+import { Impact } from './Impact';
+import { Project } from './Project';
 
 @Entity()
 export class Symbol implements ISymbol {
@@ -25,9 +25,9 @@ export class Symbol implements ISymbol {
   @Column()
   classification: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   notion: string;
-  
+
   @OneToMany(() => Synonym, (synonym) => synonym.symbol)
   synonyms: Synonym[];
 
@@ -36,25 +36,25 @@ export class Symbol implements ISymbol {
 
   @ManyToOne(() => Project, (project) => project.symbols)
   @JoinColumn({
-    name: 'project_id'
+    name: 'project_id',
   })
   project: Project;
 
   @CreateDateColumn({
-    name: "created_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP(6)",
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
-    name: "updated_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP(6)",
-    onUpdate: "CURRENT_TIMESTAMP(6)",
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: "deleted_at" })
+  @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt?: Date;
 }

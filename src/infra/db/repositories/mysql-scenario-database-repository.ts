@@ -1,5 +1,5 @@
-import { ScenarioRepository } from "@/protocols/db";
-import { DataSource } from "typeorm";
+import { ScenarioRepository } from '@/protocols/db';
+import { DataSource } from 'typeorm';
 import {
   CreateScenarioRequestDTO,
   UpdateScenarioRequestDTO,
@@ -10,7 +10,7 @@ import {
   CreateEpisodeRequestDTO,
   CreateResourceRequestDTO,
   CreateManyScenariosRequestDTO,
-} from "@/infra/http/dtos";
+} from '@/infra/http/dtos';
 import {
   Project,
   Scenario,
@@ -22,15 +22,15 @@ import {
   Actor,
   Episode,
   Group,
-} from "@/infra/db/typeorm/entity";
+} from '@/infra/db/typeorm/entity';
 import {
   IActor,
   IEpisode,
   INonSequentialEpisode,
   IResource,
   IScenario,
-} from "@/entities";
-import { BadRequestError, InvalidParamError, ServerError } from "@/util/errors";
+} from '@/entities';
+import { BadRequestError, ServerError } from '@/util/errors';
 
 export class MySQLScenarioRepository implements ScenarioRepository {
   private dataSource: DataSource;
@@ -130,7 +130,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       exception.scenario = scenario;
       await this.dataSource.manager.save(Exception, exception);
     } catch (error: any) {
-      throw new ServerError("Error on creating exception");
+      throw new ServerError('Error on creating exception');
     }
   }
   async createContext(data: CreateContextRequestDTO): Promise<void> {
@@ -143,7 +143,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       context.scenario = scenario;
       await this.dataSource.manager.save(Context, context);
     } catch (error: any) {
-      throw new ServerError("Error on creating context");
+      throw new ServerError('Error on creating context');
     }
   }
   async createEpisode(data: CreateEpisodeRequestDTO): Promise<void> {
@@ -159,7 +159,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
           });
         if (episodeWithSamePositionExists) {
           throw new BadRequestError(
-            "This position is already occupied by an episode"
+            'This position is already occupied by an episode'
           );
         }
         const nonSequentialEpisode = new NonSequentialEpisode();
@@ -187,7 +187,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
             )
           ) {
             throw new BadRequestError(
-              "This position is already occupied by another non-sequential episode"
+              'This position is already occupied by an non-sequential episode'
             );
           }
           groupExists.nonSequentialEpisodes.push(nonSequentialEpisode);

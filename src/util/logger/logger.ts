@@ -1,4 +1,4 @@
-import jetLoger from "jet-logger";
+import jetLoger from 'jet-logger';
 
 export class Logger {
   private static _instance: Logger;
@@ -21,6 +21,6 @@ export class Logger {
     jetLoger.warn(text);
   }
   debug(text: string): void {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 }

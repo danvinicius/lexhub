@@ -1,6 +1,6 @@
-import { CreateContextRequestDTO } from "@/infra/http/dtos";
-import { ScenarioRepository } from "@/protocols/db";
-import { InvalidParamError } from "@/util/errors";
+import { CreateContextRequestDTO } from '@/infra/http/dtos';
+import { ScenarioRepository } from '@/protocols/db';
+import { InvalidParamError } from '@/util/errors';
 
 export class CreateContextUseCase {
   private scenarioRepository: ScenarioRepository;
@@ -12,7 +12,7 @@ export class CreateContextUseCase {
       context.scenarioId
     );
     if (!scenarioExists) {
-      throw new InvalidParamError("scenarioId");
+      throw new InvalidParamError('scenarioId');
     }
     return await this.scenarioRepository.createContext(context);
   }

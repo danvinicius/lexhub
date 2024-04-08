@@ -1,14 +1,20 @@
-import { Request } from "express";
-import * as DTO from "@/infra/http/dtos";
-import { validate } from "@/util/validation/validate";
-import { badRequest, created, ok, serverError, unauthorized } from "@/infra/http/response";
+import { Request } from 'express';
+import * as DTO from '@/infra/http/dtos';
+import { validate } from '@/util/validation/validate';
+import {
+  badRequest,
+  created,
+  ok,
+  serverError,
+  unauthorized,
+} from '@/infra/http/response';
 import {
   EmailInUseError,
   InvalidParamError,
   MissingParamError,
   UnauthorizedError,
-} from "@/util/errors";
-import { AuthenticateUserUseCase, CreateUserUseCase } from "@/use-cases/user";
+} from '@/util/errors';
+import { AuthenticateUserUseCase, CreateUserUseCase } from '@/use-cases/user';
 
 export class UserController {
   constructor(
@@ -44,13 +50,11 @@ export class UserController {
     } catch (error: any) {
       if (
         error instanceof InvalidParamError ||
-        error instanceof MissingParamError 
+        error instanceof MissingParamError
       ) {
         return badRequest(error);
       }
-      if (
-        error instanceof UnauthorizedError
-      ) {
+      if (error instanceof UnauthorizedError) {
         return unauthorized(error);
       }
       return serverError(error);

@@ -1,6 +1,6 @@
-import { ScenarioRepository } from "@/protocols/db";
-import { AddOrRemoveEntity } from "@/use-cases/scenario/add-remove-entity";
-import { InvalidParamError } from "@/util/errors";
+import { ScenarioRepository } from '@/protocols/db';
+import { AddOrRemoveEntity } from '@/use-cases/scenario/add-remove-entity';
+import { InvalidParamError } from '@/util/errors';
 
 export class AddResourceUseCase {
   private scenarioRepository: ScenarioRepository;
@@ -8,11 +8,10 @@ export class AddResourceUseCase {
     this.scenarioRepository = scenarioRepository;
   }
   async execute({ scenarioId, resourceId }: AddOrRemoveEntity): Promise<void> {
-    const scenarioExists = await this.scenarioRepository.getScenario(
-      scenarioId
-    );
+    const scenarioExists =
+      await this.scenarioRepository.getScenario(scenarioId);
     if (!scenarioExists) {
-      throw new InvalidParamError("scenarioId");
+      throw new InvalidParamError('scenarioId');
     }
     return await this.scenarioRepository.addResource(scenarioId, resourceId);
   }

@@ -1,7 +1,7 @@
-import { ISymbol } from "@/entities";
-import { ProjectRepository, SymbolRepository } from "@/protocols/db";
-import { CreateSymbolRequestDTO } from "@/infra/http/dtos";
-import { InvalidParamError } from "@/util/errors";
+import { ISymbol } from '@/entities';
+import { ProjectRepository, SymbolRepository } from '@/protocols/db';
+import { CreateSymbolRequestDTO } from '@/infra/http/dtos';
+import { InvalidParamError } from '@/util/errors';
 
 export class CreateSymbolUseCase {
   constructor(
@@ -14,7 +14,7 @@ export class CreateSymbolUseCase {
       symbol.projectId
     );
     if (!projectExists) {
-      throw new InvalidParamError("projectId");
+      throw new InvalidParamError('projectId');
     }
     return await this.symbolRepository.createSymbol(symbol);
   }

@@ -1,7 +1,7 @@
-import { IScenario } from "@/entities";
-import { ProjectRepository, ScenarioRepository } from "@/protocols/db";
-import { CreateManyScenariosRequestDTO } from "@/infra/http/dtos";
-import { InvalidParamError } from "@/util/errors";
+import { IScenario } from '@/entities';
+import { ProjectRepository, ScenarioRepository } from '@/protocols/db';
+import { CreateManyScenariosRequestDTO } from '@/infra/http/dtos';
+import { InvalidParamError } from '@/util/errors';
 
 export class CreateManyScenariosUseCase {
   constructor(
@@ -10,9 +10,11 @@ export class CreateManyScenariosUseCase {
   ) {}
 
   async execute(data: CreateManyScenariosRequestDTO): Promise<IScenario[]> {
-    const projectExists = await this.projectRepository.getProject(data.projectId)
+    const projectExists = await this.projectRepository.getProject(
+      data.projectId
+    );
     if (!projectExists) {
-      throw new InvalidParamError('projectId')
+      throw new InvalidParamError('projectId');
     }
     return await this.scenarioRepository.createManyScenarios(data);
   }

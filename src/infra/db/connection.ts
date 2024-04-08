@@ -1,5 +1,5 @@
-import "reflect-metadata";
-import { DataSource } from "typeorm";
+import 'reflect-metadata';
+import { DataSource } from 'typeorm';
 import {
   Project,
   Symbol,
@@ -15,13 +15,13 @@ import {
   Group,
   User,
   NonSequentialEpisode,
-} from "./typeorm/entity";
+} from './typeorm/entity';
 
-import { databaseConfig } from "../../config/database";
-import { UserProject } from "./typeorm/entity/UserProject";
+import { databaseConfig } from '../../config/database';
+import { UserProject } from './typeorm/entity/UserProject';
 
 export const AppDataSource = new DataSource({
-  type: "mysql",
+  type: 'mysql',
   host: databaseConfig.host,
   port: databaseConfig.port,
   username: databaseConfig.username,

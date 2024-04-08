@@ -1,7 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { IContext, IRestriction } from "@/entities";
-import { Scenario } from "./Scenario";
-import { Restriction } from "./Restriction";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { IContext, IRestriction } from '@/entities';
+import { Scenario } from './Scenario';
+import { Restriction } from './Restriction';
 
 @Entity()
 export class Context implements IContext {
@@ -10,7 +19,7 @@ export class Context implements IContext {
 
   @Column()
   preCondition: string;
-  
+
   @Column()
   temporalLocation: string;
 
@@ -25,17 +34,17 @@ export class Context implements IContext {
   scenario: Scenario;
 
   @CreateDateColumn({
-    name: "created_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP(6)",
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
-    name: "updated_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP(6)",
-    onUpdate: "CURRENT_TIMESTAMP(6)",
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
 }

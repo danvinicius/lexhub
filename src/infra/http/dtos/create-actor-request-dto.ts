@@ -1,14 +1,14 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsString } from 'class-validator';
 
 export class CreateActorRequestDTO {
-    @IsString()
-    name: string;
+  @IsString()
+  name: string;
 
-    @IsNumber()
-    scenarioId: number | string;
+  @IsNumber()
+  scenarioId: number | string;
 
-    constructor(data: any) {
-        this.name = data.name;
-        this.scenarioId = data.scenarioId;
-    }
+  constructor(data: any) {
+    this.name = data.name;
+    this.scenarioId = data.scenarioId;
+  }
 }

@@ -6,9 +6,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-} from "typeorm";
-import { IProject, IUser, IUserProject, UserRole } from "@/entities";
-import { Project, User } from "@/infra/db/typeorm/entity";
+} from 'typeorm';
+import { IProject, IUser, IUserProject, UserRole } from '@/entities';
+import { Project, User } from '@/infra/db/typeorm/entity';
 
 @Entity()
 export class UserProject implements IUserProject {
@@ -23,7 +23,7 @@ export class UserProject implements IUserProject {
 
   @Column({
     type: 'enum',
-    enum: UserRole
+    enum: UserRole,
   })
   role: UserRole;
 
@@ -34,26 +34,26 @@ export class UserProject implements IUserProject {
   project: IProject;
 
   @CreateDateColumn({
-    name: "accepted_at",
-    type: "timestamp",
+    name: 'accepted_at',
+    type: 'timestamp',
   })
   acceptedAt: Date;
 
   @CreateDateColumn({
-    name: "created_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP(6)",
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
-    name: "updated_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP(6)",
-    onUpdate: "CURRENT_TIMESTAMP(6)",
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: "deleted_at" })
+  @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt?: Date;
 }

@@ -8,10 +8,10 @@ import {
   OneToOne,
   CreateDateColumn,
   UpdateDateColumn,
-} from "typeorm";
-import { IGroup, INonSequentialEpisode, IRestriction } from "@/entities";
-import { Group } from "./Group";
-import { Restriction } from "./Restriction";
+} from 'typeorm';
+import { IGroup, INonSequentialEpisode, IRestriction } from '@/entities';
+import { Group } from './Group';
+import { Restriction } from './Restriction';
 
 @Entity()
 export class NonSequentialEpisode implements INonSequentialEpisode {
@@ -31,22 +31,22 @@ export class NonSequentialEpisode implements INonSequentialEpisode {
   restriction: IRestriction;
 
   @ManyToOne(() => Group, (group) => group.nonSequentialEpisodes, {
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE',
   })
   group: IGroup;
 
   @CreateDateColumn({
-    name: "created_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP(6)",
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
-    name: "updated_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP(6)",
-    onUpdate: "CURRENT_TIMESTAMP(6)",
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
 }

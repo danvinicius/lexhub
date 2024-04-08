@@ -1,6 +1,6 @@
-import { CreateImpactRequestDTO } from "@/infra/http/dtos";
-import { SymbolRepository } from "@/protocols/db";
-import { InvalidParamError } from "@/util/errors";
+import { CreateImpactRequestDTO } from '@/infra/http/dtos';
+import { SymbolRepository } from '@/protocols/db';
+import { InvalidParamError } from '@/util/errors';
 
 export class CreateImpactUseCase {
   private symbolRepository: SymbolRepository;
@@ -10,7 +10,7 @@ export class CreateImpactUseCase {
   async execute(impact: CreateImpactRequestDTO): Promise<void> {
     const symbolExists = await this.symbolRepository.getSymbol(impact.symbolId);
     if (!symbolExists) {
-      throw new InvalidParamError("scenarioId");
+      throw new InvalidParamError('scenarioId');
     }
     return await this.symbolRepository.createImpact(impact);
   }

@@ -6,14 +6,11 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
-} from "typeorm";
-import {
-  IGroup,
-  INonSequentialEpisode,
-} from "@/entities";
-import { IScenario } from "@/entities";
-import { Scenario } from "./Scenario";
-import { NonSequentialEpisode } from "./NonSequentialEpisode";
+} from 'typeorm';
+import { IGroup, INonSequentialEpisode } from '@/entities';
+import { IScenario } from '@/entities';
+import { Scenario } from './Scenario';
+import { NonSequentialEpisode } from './NonSequentialEpisode';
 
 @Entity()
 export class Group implements IGroup {
@@ -33,17 +30,17 @@ export class Group implements IGroup {
   scenario: IScenario;
 
   @CreateDateColumn({
-    name: "created_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP(6)",
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
-    name: "updated_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP(6)",
-    onUpdate: "CURRENT_TIMESTAMP(6)",
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
 }

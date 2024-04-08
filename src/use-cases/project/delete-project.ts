@@ -1,4 +1,4 @@
-import { ProjectRepository } from "@/protocols/db";
+import { ProjectRepository } from '@/protocols/db';
 
 export class DeleteProjectUseCase {
   private projectRepository: ProjectRepository;

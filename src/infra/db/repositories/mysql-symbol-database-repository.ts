@@ -1,18 +1,13 @@
-import { SymbolRepository } from "@/protocols/db";
-import { DataSource } from "typeorm";
-import {
-  Symbol,
-  Synonym,
-  Project,
-  Impact,
-} from "@/infra/db/typeorm/entity";
+import { SymbolRepository } from '@/protocols/db';
+import { DataSource } from 'typeorm';
+import { Symbol, Synonym, Project, Impact } from '@/infra/db/typeorm/entity';
 import {
   CreateSymbolRequestDTO,
   UpdateSymbolRequestDTO,
   CreateImpactRequestDTO,
   CreateSynonymRequestDTO,
-} from "@/infra/http/dtos";
-import { ServerError } from "@/util/errors";
+} from '@/infra/http/dtos';
+import { ServerError } from '@/util/errors';
 
 export class MySQLSymbolRepository implements SymbolRepository {
   private dataSource: DataSource;
@@ -57,7 +52,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       const symbol = new Symbol();
       symbol.name = data.name;
       symbol.classification = data.classification;
-      symbol.notion = data.notion || "";
+      symbol.notion = data.notion || '';
       symbol.project = project;
 
       await this.dataSource.manager.save(Symbol, symbol);

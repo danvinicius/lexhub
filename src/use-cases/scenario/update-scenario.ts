@@ -1,6 +1,6 @@
-import { UpdateScenarioRequestDTO } from "@/infra/http/dtos";
-import { ScenarioRepository } from "@/protocols/db";
-import { InvalidParamError } from "@/util/errors";
+import { UpdateScenarioRequestDTO } from '@/infra/http/dtos';
+import { ScenarioRepository } from '@/protocols/db';
+import { InvalidParamError } from '@/util/errors';
 
 export namespace UpdateScenarioUseCase {
   export interface Params {
@@ -18,7 +18,7 @@ export class UpdateScenarioUseCase {
   async execute({ id, scenario }: UpdateScenarioUseCase.Params): Promise<void> {
     const scenarioExists = await this.scenarioRepository.getScenario(id);
     if (!scenarioExists) {
-      throw new InvalidParamError("scenarioId");
+      throw new InvalidParamError('scenarioId');
     }
     return await this.scenarioRepository.updateScenario(id, scenario);
   }

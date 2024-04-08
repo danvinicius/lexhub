@@ -5,9 +5,9 @@ import {
   IRestriction,
   IScenario,
   ISymbol,
-} from "@/entities";
-import { ScenarioRepository, SymbolRepository } from "@/protocols/db";
-import { NotFoundError } from "@/util/errors/not-found-error";
+} from '@/entities';
+import { ScenarioRepository, SymbolRepository } from '@/protocols/db';
+import { NotFoundError } from '@/util/errors/not-found-error';
 
 export interface FoundLexicon {
   resource: string;
@@ -33,7 +33,7 @@ export class GetScenarioWithLexiconsUseCase {
     const scenario = await this.scenarioRepository.getScenario(id);
 
     if (!scenario || !scenario.project.id) {
-      throw new NotFoundError("Scenario not found");
+      throw new NotFoundError('Scenario not found');
     }
 
     const [symbols, scenarios] = await Promise.all([
@@ -51,19 +51,19 @@ export class GetScenarioWithLexiconsUseCase {
     scenario.context = scenario.context
       ? scenario.context
       : {
-          geographicLocation: "",
-          temporalLocation: "",
-          preCondition: "",
+          geographicLocation: '',
+          temporalLocation: '',
+          preCondition: '',
           restrictions: [],
         };
 
     const {
-      title = "",
-      goal = "",
+      title = '',
+      goal = '',
       context: {
-        geographicLocation = "",
-        temporalLocation = "",
-        preCondition = "",
+        geographicLocation = '',
+        temporalLocation = '',
+        preCondition = '',
         restrictions = [],
       } = {},
       exceptions = [],
@@ -96,7 +96,7 @@ export class GetScenarioWithLexiconsUseCase {
   }
 
   private findPossibleLexicons = <
-    T extends { name?: string; title?: string; id?: number | string }
+    T extends { name?: string; title?: string; id?: number | string },
   >(
     text: string,
     termos: T[]
@@ -104,7 +104,7 @@ export class GetScenarioWithLexiconsUseCase {
     const possibleLexicons: FoundLexicon[] = [];
 
     for (const termo of termos) {
-      const lexiconName = termo.name || termo.title || "";
+      const lexiconName = termo.name || termo.title || '';
       let starts = -1;
       while (true) {
         starts = this.normalize(text).indexOf(
@@ -122,7 +122,7 @@ export class GetScenarioWithLexiconsUseCase {
             name: lexiconName,
             starts,
             ends,
-            type: termo.title ? "cenário" : "símbolo",
+            type: termo.title ? 'cenário' : 'símbolo',
           });
         }
       }
@@ -197,8 +197,8 @@ export class GetScenarioWithLexiconsUseCase {
   private normalize = (str: string) => {
     return str
       .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
   };
 
   private orderByPosition = (a: FoundLexicon, b: FoundLexicon) => {

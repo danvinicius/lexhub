@@ -1,5 +1,5 @@
-import { IProject } from "@/entities";
-import { ProjectRepository } from "@/protocols/db";
+import { IProject } from '@/entities';
+import { ProjectRepository } from '@/protocols/db';
 
 export class GetAllProjectsUseCase {
   private projectRepository: ProjectRepository;

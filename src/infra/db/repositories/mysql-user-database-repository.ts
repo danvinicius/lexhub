@@ -1,8 +1,8 @@
-import { CreateUserRequestDTO } from "@/infra/http/dtos";
-import { UserRepository } from "@/protocols/db";
-import { User } from "@/infra/db/typeorm/entity/User";
-import { DataSource } from "typeorm";
-import { ServerError } from "@/util/errors";
+import { CreateUserRequestDTO } from '@/infra/http/dtos';
+import { UserRepository } from '@/protocols/db';
+import { User } from '@/infra/db/typeorm/entity/User';
+import { DataSource } from 'typeorm';
+import { ServerError } from '@/util/errors';
 
 export class MySQLUserRepository implements UserRepository {
   private dataSource: DataSource;

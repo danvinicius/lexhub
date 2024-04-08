@@ -1,7 +1,7 @@
-import express, { Response, Request, NextFunction } from "express";
-import { NotFoundError } from "@/util/errors/not-found-error";
-import { validate } from "@/util/validation/validate";
-import * as DTO from "@/infra/http/dtos";
+import { Request } from 'express';
+import { NotFoundError } from '@/util/errors/not-found-error';
+import { validate } from '@/util/validation/validate';
+import * as DTO from '@/infra/http/dtos';
 import {
   CreateImpactUseCase,
   CreateSymbolUseCase,
@@ -12,15 +12,15 @@ import {
   GetAllSymbolsUseCase,
   GetSymbolUseCase,
   UpdateSymbolUseCase,
-} from "@/use-cases/symbol";
+} from '@/use-cases/symbol';
 import {
   badRequest,
   created,
   notFound,
   ok,
   serverError,
-} from "@/infra/http/response";
-import { InvalidParamError, MissingParamError } from "@/util/errors";
+} from '@/infra/http/response';
+import { InvalidParamError, MissingParamError } from '@/util/errors';
 
 export class SymbolController {
   constructor(
@@ -78,7 +78,7 @@ export class SymbolController {
       const impact = new DTO.CreateImpactRequestDTO(req.body);
       await validate(impact);
       await this.createImpactUseCase.execute(impact);
-      return created({ message: "Impact created" });
+      return created({ message: 'Impact created' });
     } catch (error: any) {
       if (
         error instanceof InvalidParamError ||
@@ -94,7 +94,7 @@ export class SymbolController {
       const synonym = new DTO.CreateSynonymRequestDTO(req.body);
       await validate(synonym);
       await this.createSynonymUseCase.execute(synonym);
-      return created({ message: "Synonym created" });
+      return created({ message: 'Synonym created' });
     } catch (error: any) {
       if (
         error instanceof InvalidParamError ||
@@ -111,7 +111,7 @@ export class SymbolController {
       const symbol = new DTO.UpdateSymbolRequestDTO(req.body);
       await validate(symbol);
       await this.updateSymbolUseCase.execute({ id, symbol });
-      return ok({ message: "Symbol updated" });
+      return ok({ message: 'Symbol updated' });
     } catch (error: any) {
       if (
         error instanceof InvalidParamError ||
@@ -126,7 +126,7 @@ export class SymbolController {
     try {
       const { id } = req.params;
       await this.deleteSymbolUseCase.execute(id);
-      return ok({ message: "Symbol deleted" });
+      return ok({ message: 'Symbol deleted' });
     } catch (error: any) {
       if (error instanceof InvalidParamError) {
         return badRequest(error);
@@ -138,7 +138,7 @@ export class SymbolController {
     try {
       const { id } = req.params;
       await this.deleteImpactUseCase.execute(id);
-      return ok({ message: "Impact deleted" });
+      return ok({ message: 'Impact deleted' });
     } catch (error: any) {
       return serverError(error);
     }
@@ -148,7 +148,7 @@ export class SymbolController {
     try {
       const { id } = req.params;
       await this.deleteSynonymUseCase.execute(id);
-      return ok({ message: "Synonym deleted" });
+      return ok({ message: 'Synonym deleted' });
     } catch (error: any) {
       return serverError(error);
     }

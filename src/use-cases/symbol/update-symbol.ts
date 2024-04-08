@@ -1,6 +1,6 @@
-import { UpdateSymbolRequestDTO } from "@/infra/http/dtos";
-import { SymbolRepository } from "@/protocols/db";
-import { InvalidParamError } from "@/util/errors";
+import { UpdateSymbolRequestDTO } from '@/infra/http/dtos';
+import { SymbolRepository } from '@/protocols/db';
+import { InvalidParamError } from '@/util/errors';
 
 export namespace UpdateSymbolUseCase {
   export interface Params {
@@ -18,7 +18,7 @@ export class UpdateSymbolUseCase {
   async execute({ id, symbol }: UpdateSymbolUseCase.Params): Promise<void> {
     const symbolExists = await this.symbolRepository.getSymbol(id);
     if (!symbolExists) {
-      throw new InvalidParamError("scenarioId");
+      throw new InvalidParamError('scenarioId');
     }
     await this.symbolRepository.updateSymbol(id, symbol);
   }

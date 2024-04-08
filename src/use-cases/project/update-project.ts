@@ -1,10 +1,10 @@
-import { ProjectRepository } from "@/protocols/db";
-import { UpdateProjectRequestDTO } from "@/infra/http/dtos";
+import { ProjectRepository } from '@/protocols/db';
+import { UpdateProjectRequestDTO } from '@/infra/http/dtos';
 
 export namespace UpdateProjectUseCase {
   export interface Params {
     id: number | string;
-    project: UpdateProjectRequestDTO
+    project: UpdateProjectRequestDTO;
   }
 }
 

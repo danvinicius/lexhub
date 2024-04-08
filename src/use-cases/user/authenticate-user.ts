@@ -1,10 +1,14 @@
-import { UserRepository } from "@/protocols/db";
-import { Decrypter, Encrypter, HashComparer, Hasher } from "@/protocols";
+import { UserRepository } from '@/protocols/db';
+import { Decrypter, Encrypter, HashComparer, Hasher } from '@/protocols';
 import {
   AuthenticateUserRequestDTO,
   AuthenticateUserResponseDTO,
-} from "@/infra/http/dtos";
-import { AccessDeniedError, InvalidParamError, UnauthorizedError } from "@/util/errors";
+} from '@/infra/http/dtos';
+import {
+  AccessDeniedError,
+  InvalidParamError,
+  UnauthorizedError,
+} from '@/util/errors';
 
 export class AuthenticateUserUseCase {
   private userRepository: UserRepository;
@@ -27,7 +31,7 @@ export class AuthenticateUserUseCase {
     const { email, password } = data;
     const user = await this.userRepository.getUser({ email });
     if (!user) {
-      throw new InvalidParamError("email");
+      throw new InvalidParamError('email');
     }
     const isPasswordCorrect = await this.hasher.compare(
       password,

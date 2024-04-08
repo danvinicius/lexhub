@@ -1,15 +1,26 @@
-import { Request } from "express";
-import * as DTO from "@/infra/http/dtos";
-import { validate } from "@/util/validation/validate";
-import { badRequest, created, notFound, ok, serverError } from "@/infra/http/response";
-import { BadRequestError, InvalidParamError, MissingParamError, NotFoundError } from "@/util/errors";
+import { Request } from 'express';
+import * as DTO from '@/infra/http/dtos';
+import { validate } from '@/util/validation/validate';
+import {
+  badRequest,
+  created,
+  notFound,
+  ok,
+  serverError,
+} from '@/infra/http/response';
+import {
+  BadRequestError,
+  InvalidParamError,
+  MissingParamError,
+  NotFoundError,
+} from '@/util/errors';
 import {
   CreateProjectUseCase,
   DeleteProjectUseCase,
   GetAllProjectsUseCase,
   GetProjectUseCase,
   UpdateProjectUseCase,
-} from "@/use-cases/project";
+} from '@/use-cases/project';
 
 export class ProjectController {
   constructor(
@@ -48,7 +59,10 @@ export class ProjectController {
       const projectCreated = await this.createProjectUseCase.execute(project);
       return created(projectCreated);
     } catch (error: any) {
-      if (error instanceof InvalidParamError || error instanceof MissingParamError) {
+      if (
+        error instanceof InvalidParamError ||
+        error instanceof MissingParamError
+      ) {
         return badRequest(error);
       }
       return serverError(error);
@@ -60,9 +74,12 @@ export class ProjectController {
       const project = new DTO.UpdateProjectRequestDTO(req.body);
       await validate(project);
       await this.updateProjectUseCase.execute({ id, project });
-      return ok({ message: "Project updated" });
+      return ok({ message: 'Project updated' });
     } catch (error: any) {
-      if (error instanceof BadRequestError || error instanceof MissingParamError) {
+      if (
+        error instanceof BadRequestError ||
+        error instanceof MissingParamError
+      ) {
         return badRequest(error);
       }
       return serverError(error);
@@ -73,10 +90,10 @@ export class ProjectController {
       const { id } = req.params;
       const projectExists = await this.getProjectUseCase.execute(id);
       if (!projectExists) {
-        return notFound(new NotFoundError("This project does not exist"));
+        return notFound(new NotFoundError('This project does not exist'));
       }
       await this.deleteProjectUseCase.execute(id);
-      return ok({ message: "Project deleted" });
+      return ok({ message: 'Project deleted' });
     } catch (error: any) {
       return serverError(error);
     }

@@ -3,8 +3,8 @@ import {
   CreateSynonymRequestDTO,
   CreateSymbolRequestDTO,
   UpdateSymbolRequestDTO,
-} from "@/infra/http/dtos";
-import { ISymbol } from "@/entities/symbol";
+} from '@/infra/http/dtos';
+import { ISymbol } from '@/entities/symbol';
 
 export interface SymbolRepository {
   getSymbol(id: number | string): Promise<null | ISymbol>;

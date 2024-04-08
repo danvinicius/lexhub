@@ -8,8 +8,8 @@ import {
   CreateRestrictionRequestDTO,
   CreateScenarioRequestDTO,
   UpdateScenarioRequestDTO,
-} from "@/infra/http/dtos";
-import { IScenario } from "@/entities";
+} from '@/infra/http/dtos';
+import { IScenario } from '@/entities';
 
 export interface ScenarioRepository {
   getScenario(id: number | string): Promise<null | IScenario>;

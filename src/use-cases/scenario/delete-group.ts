@@ -1,11 +1,11 @@
-import { ScenarioRepository } from '@/protocols/db'
+import { ScenarioRepository } from '@/protocols/db';
 
 export class DeleteGroupUseCase {
-    private scenarioRepository: ScenarioRepository;
-    constructor(scenarioRepository: ScenarioRepository) {
-        this.scenarioRepository = scenarioRepository
-    }
-    async execute(id: number | string): Promise<void> {
-        return await this.scenarioRepository.deleteGroup(id)
-    };
+  private scenarioRepository: ScenarioRepository;
+  constructor(scenarioRepository: ScenarioRepository) {
+    this.scenarioRepository = scenarioRepository;
+  }
+  async execute(id: number | string): Promise<void> {
+    return await this.scenarioRepository.deleteGroup(id);
+  }
 }

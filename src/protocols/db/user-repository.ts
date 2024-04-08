@@ -1,5 +1,9 @@
-import { AuthenticateUserRequestDTO, AuthenticateUserResponseDTO, CreateUserRequestDTO } from "@/infra/http/dtos";
-import { IUser } from "@/entities";
+import {
+  AuthenticateUserRequestDTO,
+  AuthenticateUserResponseDTO,
+  CreateUserRequestDTO,
+} from '@/infra/http/dtos';
+import { IUser } from '@/entities';
 
 export interface UserRepository {
   getUser(query: any): Promise<null | IUser>;

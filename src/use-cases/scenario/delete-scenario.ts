@@ -1,5 +1,5 @@
-import { ScenarioRepository } from "@/protocols/db";
-import { InvalidParamError } from "@/util/errors";
+import { ScenarioRepository } from '@/protocols/db';
+import { InvalidParamError } from '@/util/errors';
 
 export class DeleteScenarioUseCase {
   private scenarioRepository: ScenarioRepository;
@@ -11,7 +11,7 @@ export class DeleteScenarioUseCase {
   async execute(id: string): Promise<void> {
     const scenarioExists = await this.scenarioRepository.getScenario(id);
     if (!scenarioExists) {
-      throw new InvalidParamError("scenarioId");
+      throw new InvalidParamError('scenarioId');
     }
     await this.scenarioRepository.deleteScenario(id);
   }

@@ -11,7 +11,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   JoinColumn,
-} from "typeorm";
+} from 'typeorm';
 import {
   IActor,
   IContext,
@@ -20,15 +20,15 @@ import {
   IGroup,
   IResource,
   IScenario,
-} from "@/entities";
-import { Exception } from "./Exception";
-import { Actor } from "./Actor";
-import { Context } from "./Context";
-import { Project } from "./Project";
-import { Resource } from "./Resource";
-import { Episode } from "./Episode";
-import { IProject } from "@/entities";
-import { Group } from "./Group";
+} from '@/entities';
+import { Exception } from './Exception';
+import { Actor } from './Actor';
+import { Context } from './Context';
+import { Project } from './Project';
+import { Resource } from './Resource';
+import { Episode } from './Episode';
+import { IProject } from '@/entities';
+import { Group } from './Group';
 
 @Entity()
 export class Scenario implements IScenario {
@@ -63,25 +63,25 @@ export class Scenario implements IScenario {
 
   @ManyToOne(() => Project, (project) => project.scenarios)
   @JoinColumn({
-    name: 'project_id'
+    name: 'project_id',
   })
   project: IProject;
 
   @CreateDateColumn({
-    name: "created_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP(6)",
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
-    name: "updated_at",
-    type: "timestamp",
-    default: () => "CURRENT_TIMESTAMP(6)",
-    onUpdate: "CURRENT_TIMESTAMP(6)",
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: "deleted_at" })
+  @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt?: Date;
 }

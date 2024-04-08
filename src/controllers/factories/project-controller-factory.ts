@@ -1,4 +1,4 @@
-import { ProjectRepository } from "@/protocols";
+import { ProjectRepository } from '@/protocols';
 
 import {
   GetProjectUseCase,
@@ -6,8 +6,8 @@ import {
   CreateProjectUseCase,
   UpdateProjectUseCase,
   DeleteProjectUseCase,
-} from "@/use-cases/project";
-import { ProjectController } from "@/controllers";
+} from '@/use-cases/project';
+import { ProjectController } from '@/controllers';
 
 export class ProjectControllerFactory {
   static makeProjectController(projectRepository: ProjectRepository) {

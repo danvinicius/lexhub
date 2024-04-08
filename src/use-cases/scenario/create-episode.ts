@@ -1,6 +1,6 @@
-import { CreateEpisodeRequestDTO } from "@/infra/http/dtos";
-import { ScenarioRepository } from "@/protocols/db";
-import { InvalidParamError } from "@/util/errors";
+import { CreateEpisodeRequestDTO } from '@/infra/http/dtos';
+import { ScenarioRepository } from '@/protocols/db';
+import { InvalidParamError } from '@/util/errors';
 
 export class CreateEpisodeUseCase {
   private scenarioRepository: ScenarioRepository;
@@ -12,7 +12,7 @@ export class CreateEpisodeUseCase {
       episode.scenarioId
     );
     if (!scenarioExists) {
-      throw new InvalidParamError("scenarioId");
+      throw new InvalidParamError('scenarioId');
     }
     return await this.scenarioRepository.createEpisode(episode);
   }

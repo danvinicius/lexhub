@@ -1,6 +1,6 @@
-import { CreateExceptionRequestDTO } from "@/infra/http/dtos";
-import { ScenarioRepository } from "@/protocols/db";
-import { InvalidParamError } from "@/util/errors";
+import { CreateExceptionRequestDTO } from '@/infra/http/dtos';
+import { ScenarioRepository } from '@/protocols/db';
+import { InvalidParamError } from '@/util/errors';
 
 export class CreateExceptionUseCase {
   private scenarioRepository: ScenarioRepository;
@@ -12,7 +12,7 @@ export class CreateExceptionUseCase {
       exception.scenarioId
     );
     if (!scenarioExists) {
-      throw new InvalidParamError("scenarioId");
+      throw new InvalidParamError('scenarioId');
     }
     return await this.scenarioRepository.createException(exception);
   }

@@ -1,19 +1,19 @@
-import { Request } from "express";
+import { Request } from 'express';
 import {
   NotFoundError,
   BadRequestError,
   InvalidParamError,
   MissingParamError,
-} from "@/util/errors";
-import { validate } from "../util/validation/validate";
-import * as DTO from "@/infra/http/dtos";
+} from '@/util/errors';
+import { validate } from '../util/validation/validate';
+import * as DTO from '@/infra/http/dtos';
 import {
   badRequest,
   created,
   notFound,
   ok,
   serverError,
-} from "@/infra/http/response";
+} from '@/infra/http/response';
 import {
   GetScenarioUseCase,
   GetScenarioWithLexiconsUseCase,
@@ -39,8 +39,7 @@ import {
   DeleteEpisodeUseCase,
   DeleteGroupUseCase,
   DeleteContextUseCase,
-} from "@/use-cases/scenario";
-import { GetProjectUseCase } from "@/use-cases/project";
+} from '@/use-cases/scenario';
 
 export class ScenarioController {
   constructor(
@@ -110,9 +109,8 @@ export class ScenarioController {
     try {
       const scenario = new DTO.CreateScenarioRequestDTO(req.body);
       await validate(scenario);
-      const scenarioCreated = await this.createScenarioUseCase.execute(
-        scenario
-      );
+      const scenarioCreated =
+        await this.createScenarioUseCase.execute(scenario);
       return created(scenarioCreated);
     } catch (error: any) {
       if (
@@ -129,9 +127,8 @@ export class ScenarioController {
     try {
       const data = new DTO.CreateManyScenariosRequestDTO(req.body);
       await validate(data);
-      const scenariosCreated = await this.createManyScenariosUseCase.execute(
-        data
-      );
+      const scenariosCreated =
+        await this.createManyScenariosUseCase.execute(data);
       return created(scenariosCreated);
     } catch (error: any) {
       if (
@@ -149,7 +146,7 @@ export class ScenarioController {
       const exception = new DTO.CreateExceptionRequestDTO(req.body);
       await validate(exception);
       await this.createExceptionUseCase.execute(exception);
-      return created({ message: "Exception created" });
+      return created({ message: 'Exception created' });
     } catch (error: any) {
       if (
         error instanceof InvalidParamError ||
@@ -165,7 +162,7 @@ export class ScenarioController {
       const context = new DTO.CreateContextRequestDTO(req.body);
       await validate(context);
       await this.createContextUseCase.execute(context);
-      return created({ message: "Context created" });
+      return created({ message: 'Context created' });
     } catch (error: any) {
       if (
         error instanceof InvalidParamError ||
@@ -181,7 +178,7 @@ export class ScenarioController {
       const restriction = new DTO.CreateRestrictionRequestDTO(req.body);
       await validate(restriction);
       await this.createRestrictionUseCase.execute(restriction);
-      return created({ message: "Restriction created" });
+      return created({ message: 'Restriction created' });
     } catch (error: any) {
       if (
         error instanceof InvalidParamError ||
@@ -197,7 +194,7 @@ export class ScenarioController {
       const actor = new DTO.CreateActorRequestDTO(req.body);
       await validate(actor);
       await this.createActorUseCase.execute(actor);
-      return created({ message: "Actor created" });
+      return created({ message: 'Actor created' });
     } catch (error: any) {
       if (
         error instanceof InvalidParamError ||
@@ -213,7 +210,7 @@ export class ScenarioController {
       const resource = new DTO.CreateResourceRequestDTO(req.body);
       await validate(resource);
       await this.createResourceUseCase.execute(resource);
-      return created({ message: "Resource created" });
+      return created({ message: 'Resource created' });
     } catch (error: any) {
       if (
         error instanceof InvalidParamError ||
@@ -231,7 +228,7 @@ export class ScenarioController {
         scenarioId: +scenarioId,
         actorId: +actorId,
       });
-      return created({ message: "Actor added" });
+      return created({ message: 'Actor added' });
     } catch (error: any) {
       if (error instanceof InvalidParamError) {
         return badRequest(error);
@@ -246,7 +243,7 @@ export class ScenarioController {
         scenarioId: +scenarioId,
         resourceId: +resourceId,
       });
-      return created({ message: "Resource added" });
+      return created({ message: 'Resource added' });
     } catch (error: any) {
       if (error instanceof InvalidParamError) {
         return badRequest(error);
@@ -259,7 +256,7 @@ export class ScenarioController {
       const episode = new DTO.CreateEpisodeRequestDTO(req.body);
       await validate(episode);
       await this.createEpisodeUseCase.execute(episode);
-      return created({ message: "Episode created" });
+      return created({ message: 'Episode created' });
     } catch (error: any) {
       if (
         error instanceof InvalidParamError ||
@@ -275,7 +272,7 @@ export class ScenarioController {
     try {
       const { id } = req.params;
       await this.deleteExceptionUseCase.execute(id);
-      return ok({ message: "Exception deleted" });
+      return ok({ message: 'Exception deleted' });
     } catch (error: any) {
       return serverError(error);
     }
@@ -284,7 +281,7 @@ export class ScenarioController {
     try {
       const { id } = req.params;
       await this.deleteContextUseCase.execute(id);
-      return ok({ message: "Context deleted" });
+      return ok({ message: 'Context deleted' });
     } catch (error: any) {
       return serverError(error);
     }
@@ -293,7 +290,7 @@ export class ScenarioController {
     try {
       const { id } = req.params;
       await this.deleteRestrictionUseCase.execute(id);
-      return ok({ message: "Restriction deleted" });
+      return ok({ message: 'Restriction deleted' });
     } catch (error: any) {
       return serverError(error);
     }
@@ -302,7 +299,7 @@ export class ScenarioController {
     try {
       const { id } = req.params;
       await this.deleteActorUseCase.execute(id);
-      return ok({ message: "Actor deleted" });
+      return ok({ message: 'Actor deleted' });
     } catch (error: any) {
       return serverError(error);
     }
@@ -311,7 +308,7 @@ export class ScenarioController {
     try {
       const { id } = req.params;
       await this.deleteResourceUseCase.execute(id);
-      return ok({ message: "Resource deleted" });
+      return ok({ message: 'Resource deleted' });
     } catch (error: any) {
       return serverError(error);
     }
@@ -320,7 +317,7 @@ export class ScenarioController {
     try {
       const { id } = req.params;
       await this.deleteEpisodeUseCase.execute(id);
-      return ok({ message: "Episode deleted" });
+      return ok({ message: 'Episode deleted' });
     } catch (error: any) {
       return serverError(error);
     }
@@ -329,7 +326,7 @@ export class ScenarioController {
     try {
       const { id } = req.params;
       await this.deleteGroupUseCase.execute(id);
-      return ok({ message: "group deleted" });
+      return ok({ message: 'group deleted' });
     } catch (error: any) {
       return serverError(error);
     }
@@ -341,7 +338,7 @@ export class ScenarioController {
         scenarioId: +scenarioId,
         actorId: +actorId,
       });
-      return ok({ message: "Actor removed" });
+      return ok({ message: 'Actor removed' });
     } catch (error: any) {
       if (error instanceof InvalidParamError) {
         return badRequest(error);
@@ -356,7 +353,7 @@ export class ScenarioController {
         scenarioId: +scenarioId,
         resourceId: +resourceId,
       });
-      return ok({ message: "Resource removed" });
+      return ok({ message: 'Resource removed' });
     } catch (error: any) {
       if (error instanceof InvalidParamError) {
         return badRequest(error);
@@ -370,7 +367,7 @@ export class ScenarioController {
       const scenario = new DTO.UpdateScenarioRequestDTO(req.body);
       await validate(scenario);
       await this.updateScenarioUseCase.execute({ id, scenario });
-      return ok({ message: "Scenario updated" });
+      return ok({ message: 'Scenario updated' });
     } catch (error: any) {
       if (
         error instanceof InvalidParamError ||
@@ -385,7 +382,7 @@ export class ScenarioController {
     try {
       const { id } = req.params;
       await this.deleteScenarioUseCase.execute(id);
-      return ok({ message: "Scenario deleted" });
+      return ok({ message: 'Scenario deleted' });
     } catch (error: any) {
       if (error instanceof InvalidParamError) {
         return badRequest(error);

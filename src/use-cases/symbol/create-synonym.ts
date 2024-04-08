@@ -1,6 +1,6 @@
-import { CreateSynonymRequestDTO } from "@/infra/http/dtos";
-import { SymbolRepository } from "@/protocols/db";
-import { InvalidParamError } from "@/util/errors";
+import { CreateSynonymRequestDTO } from '@/infra/http/dtos';
+import { SymbolRepository } from '@/protocols/db';
+import { InvalidParamError } from '@/util/errors';
 
 export class CreateSynonymUseCase {
   private symbolRepository: SymbolRepository;
@@ -12,7 +12,7 @@ export class CreateSynonymUseCase {
       synonym.symbolId
     );
     if (!symbolExists) {
-      throw new InvalidParamError("scenarioId");
+      throw new InvalidParamError('scenarioId');
     }
     return await this.symbolRepository.createSynonym(synonym);
   }

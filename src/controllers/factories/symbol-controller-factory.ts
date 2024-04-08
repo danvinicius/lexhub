@@ -1,4 +1,4 @@
-import { ProjectRepository, SymbolRepository } from "@/protocols";
+import { ProjectRepository, SymbolRepository } from '@/protocols';
 
 import {
   GetSymbolUseCase,
@@ -10,9 +10,9 @@ import {
   CreateSynonymUseCase,
   DeleteImpactUseCase,
   DeleteSynonymUseCase,
-} from "@/use-cases/symbol";
+} from '@/use-cases/symbol';
 
-import { SymbolController } from "@/controllers";
+import { SymbolController } from '@/controllers';
 
 export class SymbolControllerFactory {
   static makeSymbolController(
