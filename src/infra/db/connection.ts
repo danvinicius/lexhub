@@ -15,10 +15,10 @@ import {
   Group,
   User,
   NonSequentialEpisode,
-} from "./mysql/typeorm/entity";
+} from "./typeorm/entity";
 
 import { databaseConfig } from "../../config/database";
-import { UserProject } from "./mysql/typeorm/entity/UserProject";
+import { UserProject } from "./typeorm/entity/UserProject";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
