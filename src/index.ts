@@ -1,1 +1,1 @@
-import './config/main';
+import './infra/main';

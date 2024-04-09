@@ -1,5 +1,5 @@
 import { CreateProjectRequestDTO } from '@/infra/http/dtos';
-import { ProjectRepository } from '@/protocols/db';
+import { ProjectRepository } from '@/infra/db/protocols';
 import { IProject } from '@/entities';
 
 export class CreateProjectUseCase {

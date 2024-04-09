@@ -1,5 +1,5 @@
 import { ISymbol } from '@/entities';
-import { SymbolRepository } from '@/protocols/db';
+import { SymbolRepository } from '@/infra/db/protocols';
 import { NotFoundError } from '@/util/errors';
 
 export class GetSymbolUseCase {

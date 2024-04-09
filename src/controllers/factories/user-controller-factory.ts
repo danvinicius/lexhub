@@ -1,4 +1,4 @@
-import { UserRepository } from '@/protocols';
+import { UserRepository } from '@/infra/db/protocols';
 import { UserController } from '@/controllers';
 import { AuthenticateUserUseCase, CreateUserUseCase } from '@/use-cases/user';
 import { BcryptAdapter, JwtAdapter } from '@/infra/security';

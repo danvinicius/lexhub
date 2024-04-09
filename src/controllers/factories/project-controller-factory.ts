@@ -1,4 +1,4 @@
-import { ProjectRepository } from '@/protocols';
+import { ProjectRepository } from '@/infra/db/protocols';
 
 import {
   GetProjectUseCase,

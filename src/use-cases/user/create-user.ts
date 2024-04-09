@@ -2,8 +2,8 @@ import {
   AuthenticateUserResponseDTO,
   CreateUserRequestDTO,
 } from '@/infra/http/dtos';
-import { UserRepository } from '@/protocols/db';
-import { Encrypter, Decrypter, Hasher, HashComparer } from '@/protocols';
+import { UserRepository } from '@/infra/db/protocols';
+import { Encrypter, Decrypter, Hasher, HashComparer } from '@/infra/security/protocols';
 import { EmailInUseError } from '@/util/errors';
 
 export class CreateUserUseCase {

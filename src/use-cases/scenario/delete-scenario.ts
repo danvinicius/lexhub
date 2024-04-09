@@ -1,4 +1,4 @@
-import { ScenarioRepository } from '@/protocols/db';
+import { ScenarioRepository } from '@/infra/db/protocols';
 import { InvalidParamError } from '@/util/errors';
 
 export class DeleteScenarioUseCase {

@@ -1,4 +1,4 @@
-import { ProjectRepository, SymbolRepository } from '@/protocols';
+import { ProjectRepository, SymbolRepository } from '@/infra/db/protocols';
 
 import {
   GetSymbolUseCase,

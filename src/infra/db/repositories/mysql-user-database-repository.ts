@@ -1,6 +1,5 @@
-import { CreateUserRequestDTO } from '@/infra/http/dtos';
-import { UserRepository } from '@/protocols/db';
-import { User } from '@/infra/db/typeorm/entity/User';
+import { UserRepository } from '@/infra/db/protocols';
+import { User } from '@/infra/db/models/User'
 import { DataSource } from 'typeorm';
 import { ServerError } from '@/util/errors';
 
@@ -32,7 +31,7 @@ export class MySQLUserRepository implements UserRepository {
       throw new ServerError(error?.message);
     }
   }
-  async createUser(data: CreateUserRequestDTO): Promise<User> {
+  async createUser(data: UserRepository.CreateUserParams): Promise<User> {
     try {
       const user = new User();
       user.name = data.name;

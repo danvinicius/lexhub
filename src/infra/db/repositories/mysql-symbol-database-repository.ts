@@ -1,12 +1,6 @@
-import { SymbolRepository } from '@/protocols/db';
+import { SymbolRepository } from '@/infra/db/protocols';
 import { DataSource } from 'typeorm';
-import { Symbol, Synonym, Project, Impact } from '@/infra/db/typeorm/entity';
-import {
-  CreateSymbolRequestDTO,
-  UpdateSymbolRequestDTO,
-  CreateImpactRequestDTO,
-  CreateSynonymRequestDTO,
-} from '@/infra/http/dtos';
+import { Symbol, Synonym, Project, Impact } from '@/infra/db/models'
 import { ServerError } from '@/util/errors';
 
 export class MySQLSymbolRepository implements SymbolRepository {
@@ -44,7 +38,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
     });
     return symbols;
   }
-  async createSymbol(data: CreateSymbolRequestDTO): Promise<Symbol> {
+  async createSymbol(data: SymbolRepository.CreateSymbolParams): Promise<Symbol> {
     try {
       const [project] = await this.dataSource.manager.findBy(Project, {
         id: data.projectId as number,
@@ -61,7 +55,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       throw new ServerError(error.message);
     }
   }
-  async createImpact(data: CreateImpactRequestDTO): Promise<void> {
+  async createImpact(data: SymbolRepository.CreateImpactParams): Promise<void> {
     try {
       const symbol = await this.getSymbol(data?.symbolId as number);
       const impact = new Impact();
@@ -72,7 +66,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       throw new ServerError(error.message);
     }
   }
-  async createSynonym(data: CreateSynonymRequestDTO): Promise<void> {
+  async createSynonym(data: SymbolRepository.CreateSynonymParams): Promise<void> {
     try {
       const symbol = await this.getSymbol(data?.symbolId as number);
       const synonym = new Synonym();
@@ -107,7 +101,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       throw new ServerError(error.message);
     }
   }
-  async updateSymbol(id: number, data: UpdateSymbolRequestDTO): Promise<void> {
+  async updateSymbol(id: number, data: SymbolRepository.UpdateSymbolParams): Promise<void> {
     try {
       await this.dataSource.manager.update(Symbol, { id }, data);
     } catch (error: any) {

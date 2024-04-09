@@ -8,7 +8,7 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 import { IProject, IUser, IUserProject, UserRole } from '@/entities';
-import { Project, User } from '@/infra/db/typeorm/entity';
+import { Project, User } from '@/infra/db/models';
 
 @Entity()
 export class UserProject implements IUserProject {

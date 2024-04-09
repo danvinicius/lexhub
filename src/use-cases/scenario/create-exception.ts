@@ -1,5 +1,5 @@
 import { CreateExceptionRequestDTO } from '@/infra/http/dtos';
-import { ScenarioRepository } from '@/protocols/db';
+import { ScenarioRepository } from '@/infra/db/protocols';
 import { InvalidParamError } from '@/util/errors';
 
 export class CreateExceptionUseCase {

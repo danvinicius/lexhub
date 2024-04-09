@@ -6,7 +6,7 @@ import {
   IScenario,
   ISymbol,
 } from '@/entities';
-import { ScenarioRepository, SymbolRepository } from '@/protocols/db';
+import { ScenarioRepository, SymbolRepository } from '@/infra/db/protocols';
 import { NotFoundError } from '@/util/errors/not-found-error';
 
 export interface FoundLexicon {

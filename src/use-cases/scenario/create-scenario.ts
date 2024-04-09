@@ -1,5 +1,5 @@
 import { IScenario } from '@/entities';
-import { ProjectRepository, ScenarioRepository } from '@/protocols/db';
+import { ProjectRepository, ScenarioRepository } from '@/infra/db/protocols';
 import { CreateScenarioRequestDTO } from '@/infra/http/dtos';
 import { InvalidParamError } from '@/util/errors';
 

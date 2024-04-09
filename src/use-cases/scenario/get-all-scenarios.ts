@@ -1,5 +1,5 @@
 import { IScenario } from '@/entities';
-import { ScenarioRepository } from '@/protocols/db';
+import { ScenarioRepository } from '@/infra/db/protocols';
 
 export class GetAllScenariosUseCase {
   private scenarioRepository: ScenarioRepository;

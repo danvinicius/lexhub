@@ -1,16 +1,5 @@
-import { ScenarioRepository } from '@/protocols/db';
+import { ScenarioRepository } from '@/infra/db/protocols';
 import { DataSource } from 'typeorm';
-import {
-  CreateScenarioRequestDTO,
-  UpdateScenarioRequestDTO,
-  CreateExceptionRequestDTO,
-  CreateContextRequestDTO,
-  CreateRestrictionRequestDTO,
-  CreateActorRequestDTO,
-  CreateEpisodeRequestDTO,
-  CreateResourceRequestDTO,
-  CreateManyScenariosRequestDTO,
-} from '@/infra/http/dtos';
 import {
   Project,
   Scenario,
@@ -22,7 +11,7 @@ import {
   Actor,
   Episode,
   Group,
-} from '@/infra/db/typeorm/entity';
+} from '@/infra/db/models';
 import {
   IActor,
   IEpisode,
@@ -83,7 +72,9 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     });
     return scenarios;
   }
-  async createScenario(data: CreateScenarioRequestDTO): Promise<Scenario> {
+  async createScenario(
+    data: ScenarioRepository.CreateScenarioParams
+  ): Promise<Scenario> {
     try {
       const [project] = await this.dataSource.manager.findBy(Project, {
         id: data.projectId as number,
@@ -100,7 +91,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
   }
 
   async createManyScenarios(
-    data: CreateManyScenariosRequestDTO
+    data: ScenarioRepository.CreateManyScenariosParams
   ): Promise<IScenario[]> {
     try {
       const [project] = await this.dataSource.manager.findBy(Project, {
@@ -122,7 +113,9 @@ export class MySQLScenarioRepository implements ScenarioRepository {
     }
   }
 
-  async createException(data: CreateExceptionRequestDTO): Promise<void> {
+  async createException(
+    data: ScenarioRepository.CreateExceptionParams
+  ): Promise<void> {
     try {
       const scenario = await this.getScenario(data?.scenarioId as number);
       const exception = new Exception();
@@ -133,7 +126,9 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       throw new ServerError('Error on creating exception');
     }
   }
-  async createContext(data: CreateContextRequestDTO): Promise<void> {
+  async createContext(
+    data: ScenarioRepository.CreateContextParams
+  ): Promise<void> {
     try {
       const scenario = await this.getScenario(data?.scenarioId as number);
       const context = new Context();
@@ -146,7 +141,9 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       throw new ServerError('Error on creating context');
     }
   }
-  async createEpisode(data: CreateEpisodeRequestDTO): Promise<void> {
+  async createEpisode(
+    data: ScenarioRepository.CreateEpisodeParams
+  ): Promise<void> {
     try {
       const scenario = await this.getScenario(data?.scenarioId as number);
       const { description, type, position } = data;
@@ -211,7 +208,9 @@ export class MySQLScenarioRepository implements ScenarioRepository {
       throw new ServerError(error.message);
     }
   }
-  async createRestriction(data: CreateRestrictionRequestDTO): Promise<void> {
+  async createRestriction(
+    data: ScenarioRepository.CreateRestrictionParams
+  ): Promise<void> {
     try {
       const scenario = await this.getScenario(data?.scenarioId as number);
       const context = scenario.context;
@@ -273,7 +272,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
   }
 
   // Create and actor
-  async createActor(data: CreateActorRequestDTO): Promise<void> {
+  async createActor(data: ScenarioRepository.CreateActorParams): Promise<void> {
     try {
       const scenario = await this.getScenario(data?.scenarioId as number);
       const actor = new Actor();
@@ -287,7 +286,9 @@ export class MySQLScenarioRepository implements ScenarioRepository {
   }
 
   // Create and resource
-  async createResource(data: CreateResourceRequestDTO): Promise<void> {
+  async createResource(
+    data: ScenarioRepository.CreateResourceParams
+  ): Promise<void> {
     try {
       const scenario = await this.getScenario(data?.scenarioId as number);
       const resource = new Resource();
@@ -425,7 +426,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
   }
   async updateScenario(
     id: string,
-    data: UpdateScenarioRequestDTO
+    data: ScenarioRepository.UpdateScenarioParams
   ): Promise<void> {
     try {
       await this.dataSource.manager.update(Scenario, { id }, data);

@@ -1,4 +1,4 @@
-import { SymbolRepository } from '@/protocols/db';
+import { SymbolRepository } from '@/infra/db/protocols';
 
 export class DeleteImpactUseCase {
   private symbolRepository: SymbolRepository;

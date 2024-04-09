@@ -8,7 +8,8 @@
     "build": "rm -rf dist && tsc --project tsconfig.json && tscpaths -p tsconfig.json -s . -o ./dist",
     "start": "node -r tsconfig-paths/register dist/src/index.js",
     "dev": "tsnd --transpile-only --respawn -r tsconfig-paths/register src/index.ts",
-    "test": "jest --watchAll",
+    "test:unit": "jest",
+    "test:functional": "jest --projects ./test --runInBand",
     "style:check": "prettier --check 'src/**/*.ts' 'test/**/*.ts'",
     "style:fix": "prettier --write 'src/**/*.ts' 'test/**/*.ts'",
     "typeorm": "typeorm-ts-node-commonjs"

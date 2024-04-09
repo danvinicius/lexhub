@@ -1,4 +1,4 @@
-import { SymbolRepository } from '@/protocols/db';
+import { SymbolRepository } from '@/infra/db/protocols';
 import { InvalidParamError } from '@/util/errors';
 
 export class DeleteSymbolUseCase {

@@ -2,7 +2,7 @@ import {
   ProjectRepository,
   ScenarioRepository,
   SymbolRepository,
-} from '@/protocols';
+} from '@/infra/db/protocols';
 
 import {
   GetScenarioUseCase,

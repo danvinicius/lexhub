@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import server from '@/config/server';
+import server from '@/infra/server';
 import {
   MySQLProjectRepository,
   MySQLSymbolRepository,
@@ -14,7 +14,6 @@ import { userRouter, projectRouter, symbolRouter } from '@/infra/http/routers';
 import { scenarioRouter } from '@/infra/http/routers/scenario-router';
 import { ProjectControllerFactory } from '@/controllers/factories/project-controller-factory';
 import { SymbolControllerFactory } from '@/controllers/factories/symbol-controller-factory';
-import { UserController } from '@/controllers';
 import { ScenarioControllerFactory } from '../controllers/factories/scenario-controller-factory';
 import { UserControllerFactory } from '@/controllers/factories/user-controller-factory';
 

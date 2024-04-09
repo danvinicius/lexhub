@@ -1,4 +1,4 @@
-import { Encrypter, Decrypter } from '@/protocols';
+import { Encrypter, Decrypter } from '@/infra/security/protocols';
 
 import jwt from 'jsonwebtoken';
 

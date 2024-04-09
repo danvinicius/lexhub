@@ -1,4 +1,4 @@
-import { Hasher, HashComparer } from '@/protocols';
+import { Hasher, HashComparer } from '@/infra/security/protocols';
 
 import bcrypt from 'bcryptjs';
 

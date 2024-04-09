@@ -1,5 +1,5 @@
 import { ISymbol } from '@/entities';
-import { SymbolRepository } from '@/protocols/db';
+import { SymbolRepository } from '@/infra/db/protocols';
 
 export class GetAllSymbolsUseCase {
   private symbolRepository: SymbolRepository;

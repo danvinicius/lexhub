@@ -1,11 +1,10 @@
-import { UserRepository } from '@/protocols/db';
-import { Decrypter, Encrypter, HashComparer, Hasher } from '@/protocols';
+import { UserRepository } from '@/infra/db/protocols';
+import { Decrypter, Encrypter, HashComparer, Hasher } from '@/infra/security/protocols';
 import {
   AuthenticateUserRequestDTO,
   AuthenticateUserResponseDTO,
 } from '@/infra/http/dtos';
 import {
-  AccessDeniedError,
   InvalidParamError,
   UnauthorizedError,
 } from '@/util/errors';

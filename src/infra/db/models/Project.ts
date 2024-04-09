@@ -7,7 +7,7 @@ import {
   DeleteDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { IProject, IUser, IUserProject } from '@/entities';
+import { IProject, IUserProject } from '@/entities';
 import { Symbol } from './Symbol';
 import { ISymbol } from '@/entities';
 import { IScenario } from '@/entities';

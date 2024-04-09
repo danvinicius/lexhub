@@ -1,4 +1,4 @@
-import { ScenarioRepository } from '@/protocols/db';
+import { ScenarioRepository } from '@/infra/db/protocols';
 
 export class DeleteGroupUseCase {
   private scenarioRepository: ScenarioRepository;

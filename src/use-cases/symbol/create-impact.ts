@@ -1,5 +1,5 @@
 import { CreateImpactRequestDTO } from '@/infra/http/dtos';
-import { SymbolRepository } from '@/protocols/db';
+import { SymbolRepository } from '@/infra/db/protocols';
 import { InvalidParamError } from '@/util/errors';
 
 export class CreateImpactUseCase {

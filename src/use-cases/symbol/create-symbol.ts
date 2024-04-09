@@ -1,5 +1,5 @@
 import { ISymbol } from '@/entities';
-import { ProjectRepository, SymbolRepository } from '@/protocols/db';
+import { ProjectRepository, SymbolRepository } from '@/infra/db/protocols';
 import { CreateSymbolRequestDTO } from '@/infra/http/dtos';
 import { InvalidParamError } from '@/util/errors';
 

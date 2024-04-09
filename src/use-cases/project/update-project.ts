@@ -1,4 +1,4 @@
-import { ProjectRepository } from '@/protocols/db';
+import { ProjectRepository } from '@/infra/db/protocols';
 import { UpdateProjectRequestDTO } from '@/infra/http/dtos';
 
 export namespace UpdateProjectUseCase {

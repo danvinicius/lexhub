@@ -15,10 +15,22 @@ import {
   Group,
   User,
   NonSequentialEpisode,
-} from './typeorm/entity';
+} from './models'
 
-import { databaseConfig } from '../../config/database';
-import { UserProject } from './typeorm/entity/UserProject';
+import { UserProject } from './models/UserProject'
+
+const databaseConfig = {
+  type: process.env.DB_TYPE || 'mysql',
+  host: process.env.MYSQL_HOST || 'localhost',
+  port: Number(process.env.MYSQL_PORT) || 3306,
+  username: process.env.MYSQL_USER || 'root',
+  password: process.env.MYSQL_PASS || '123456',
+  database: process.env.MYSQL_NAME || 'scenarios_and_lexicons',
+  synchronize: true,
+  logging: false,
+  migrations: [],
+  subscribers: [],
+};
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
