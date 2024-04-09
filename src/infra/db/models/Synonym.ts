@@ -5,6 +5,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { ISynonym } from '@/entities';
 import { Symbol } from './Symbol';
@@ -18,6 +19,9 @@ export class Synonym implements ISynonym {
   name: string;
 
   @ManyToOne(() => Symbol, (symbol) => symbol.impacts)
+  @JoinColumn({
+    name: 'symbol_id'
+  })
   symbol: Symbol;
 
   @CreateDateColumn({

@@ -5,6 +5,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { IException } from '@/entities';
 import { IScenario } from '@/entities';
@@ -19,6 +20,9 @@ export class Exception implements IException {
   description: string;
 
   @ManyToOne(() => Scenario, (scenario) => scenario.exceptions)
+  @JoinColumn({
+    name: 'scenario_id'
+  })
   scenario: IScenario;
 
   @CreateDateColumn({

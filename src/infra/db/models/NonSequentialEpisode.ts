@@ -6,6 +6,7 @@ import {
   OneToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { IGroup, INonSequentialEpisode, IRestriction } from '@/entities';
 import { Group } from './Group';
@@ -26,10 +27,16 @@ export class NonSequentialEpisode implements INonSequentialEpisode {
   type: string;
 
   @OneToOne(() => Restriction, (restriction) => restriction.episode)
+  @JoinColumn({
+    name: 'restriction_id'
+  })
   restriction: IRestriction;
 
   @ManyToOne(() => Group, (group) => group.nonSequentialEpisodes, {
     onDelete: 'CASCADE',
+  })
+  @JoinColumn({
+    name: 'group_id'
   })
   group: IGroup;
 

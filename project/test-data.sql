@@ -3,7 +3,7 @@ INSERT INTO project (id, name, description) VALUES
   (1, 'Projeto Plataforma de Petróleo', 'Um projeto focado no desenvolvimento de uma plataforma de petróleo sustentável.');
 
 -- Inserindo Símbolos
-INSERT INTO symbol (id, name, classification, notion, projectId) VALUES
+INSERT INTO symbol (id, name, classification, notion, project_id) VALUES
   (1, 'Operador da Plataforma', 'Ator', NULL, 1),
   (2, 'Oficial de Conformidade Ambiental', 'Ator', NULL, 1),
   (3, 'Reservas de Petróleo', 'Recurso', NULL, 1),
@@ -17,19 +17,19 @@ INSERT INTO symbol (id, name, classification, notion, projectId) VALUES
   -- Adicione mais símbolos conforme necessário
 
 -- Inserindo Impactos
-INSERT INTO impact (description, symbolId) VALUES
+INSERT INTO impact (description, symbol_id) VALUES
   ('Impacto na Qualidade do Ar', 1),
   ('Impacto nos Recursos Hídricos', 1);
   -- Adicione mais impactos conforme necessário
 
 -- Inserindo Sinônimos
-INSERT INTO synonym (name, symbolId) VALUES
+INSERT INTO synonym (name, symbol_id) VALUES
   ('Emissões', 1),
   ('Contaminação da Água', 1);
   -- Adicione mais sinônimos conforme necessário
 
 -- Inserindo Cenários
-INSERT INTO scenario (id, title, goal, projectId) VALUES
+INSERT INTO scenario (id, title, goal, project_id) VALUES
   (1, 'Implantação da Plataforma', 'Implantar a plataforma de petróleo em conformidade com as regulamentações ambientais.', 1),
   (2, 'Resposta a Emergências', 'Lidar e mitigar incidentes ambientais durante as operações e implantação da plataforma.', 1);
   -- Adicione mais cenários conforme necessário
@@ -55,37 +55,37 @@ INSERT INTO scenario_resources_resource (scenarioId, resourceId) VALUES
     (1, 2);
 
 -- Inserindo Contextos
-INSERT INTO context (id, preCondition, temporalLocation, geographicLocation, scenarioId) VALUES
+INSERT INTO context (id, preCondition, temporalLocation, geographicLocation, scenario_id) VALUES
   (1, 'Avaliação de Impacto Ambiental Concluída', 'Dia Atual', 'Local Offshore', 1),
   (2, 'Plano de Resposta a Emergências Ativado', 'Durante Incidente', 'Local Costeiro', 2);
   -- Adicione mais contextos conforme necessário
 
 -- Inserindo Episódios
-INSERT INTO episode (id, position, description, type, scenarioId) VALUES
+INSERT INTO episode (id, position, description, type, scenario_id) VALUES
   (1, 1, 'Inicialização da Plataforma', 'Configuração', 1),
   (2, 2, 'Resposta a Derramamento de Óleo', 'Emergência', 1);
   -- Adicione mais episódios conforme necessário
 
 -- Inserindo Exceções
-INSERT INTO exception (description, scenarioId) VALUES
+INSERT INTO exception (description, scenario_id) VALUES
   ('Atraso na Implantação da Plataforma', 1),
   ('Resposta a Emergência Ineficaz', 1);
   -- Adicione mais exceções conforme necessário
 
 -- Inserindo Grupos
-INSERT INTO scenarios_and_lexicons.group (id, position, scenarioId) VALUES
+INSERT INTO scenarios_and_lexicons.group (id, position, scenario_id) VALUES
   (1, 3, 1),
   (2, 4, 1);
   -- Adicione mais grupos conforme necessário
 
 -- Inserindo Episódios Não Sequenciais
-INSERT INTO non_sequential_episode (id, position, description, type, groupId) VALUES
+INSERT INTO non_sequential_episode (id, position, description, type, group_id) VALUES
   (1, 1, 'Revisão da Avaliação de Impacto Ambiental', 'Avaliação', 1),
   (2, 2, 'Medidas de Proteção à Fauna', 'Precaução', 1);
   -- Adicione mais episódios não sequenciais conforme necessário
 
 -- Inserindo Restrições
-INSERT INTO restriction (description, contextId, resourceId, episodeId) VALUES
+INSERT INTO restriction (description, context_id, resource_id, episode_id) VALUES
   ("Ativar Plano de Resposta a Emergências", 1, 1, 1),
   ("Ativar Plano de Resposta a Derramamento de Óleo", 1, 1, 2);
   -- Adicione mais restrições conforme necessário

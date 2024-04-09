@@ -15,22 +15,10 @@ import {
   Group,
   User,
   NonSequentialEpisode,
-} from './models'
+} from './models';
 
-import { UserProject } from './models/UserProject'
-
-const databaseConfig = {
-  type: process.env.DB_TYPE || 'mysql',
-  host: process.env.MYSQL_HOST || 'localhost',
-  port: Number(process.env.MYSQL_PORT) || 3306,
-  username: process.env.MYSQL_USER || 'root',
-  password: process.env.MYSQL_PASS || '123456',
-  database: process.env.MYSQL_NAME || 'scenarios_and_lexicons',
-  synchronize: true,
-  logging: false,
-  migrations: [],
-  subscribers: [],
-};
+import { UserProject } from './models/UserProject';
+import { databaseConfig } from './config';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',

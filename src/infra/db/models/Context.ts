@@ -18,19 +18,30 @@ export class Context implements IContext {
   id: number;
 
   @Column()
+  @JoinColumn({
+    name: 'pre_condition'
+  })
   preCondition: string;
 
   @Column()
+  @JoinColumn({
+    name: 'temporal_location'
+  })
   temporalLocation: string;
 
   @Column()
+  @JoinColumn({
+    name: 'geographic_location'
+  })
   geographicLocation: string;
 
   @OneToMany(() => Restriction, (restriction) => restriction.context)
   restrictions: IRestriction[];
 
   @OneToOne(() => Scenario, (scenario) => scenario.context)
-  @JoinColumn()
+  @JoinColumn({
+    name: 'scenario_id'
+  })
   scenario: Scenario;
 
   @CreateDateColumn({

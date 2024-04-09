@@ -6,6 +6,7 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { IGroup, INonSequentialEpisode } from '@/entities';
 import { IScenario } from '@/entities';
@@ -27,6 +28,9 @@ export class Group implements IGroup {
   nonSequentialEpisodes: INonSequentialEpisode[];
 
   @ManyToOne(() => Scenario, (scenario) => scenario.groups)
+  @JoinColumn({
+    name: 'scenario_id'
+  })
   scenario: IScenario;
 
   @CreateDateColumn({

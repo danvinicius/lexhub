@@ -6,6 +6,7 @@ import {
   OneToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { IEpisode, IRestriction } from '@/entities';
 import { IScenario } from '@/entities';
@@ -27,9 +28,15 @@ export class Episode implements IEpisode {
   type: string;
 
   @OneToOne(() => Restriction, (restriction) => restriction.episode)
+  @JoinColumn({
+    name: 'restriction_id'
+  })
   restriction: IRestriction;
 
   @ManyToOne(() => Scenario, (scenario) => scenario.episodes)
+  @JoinColumn({
+    name: 'scenario_id'
+  })
   scenario: IScenario;
 
   @CreateDateColumn({

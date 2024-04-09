@@ -5,6 +5,7 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { IImpact } from '@/entities';
 import { Symbol } from './Symbol';
@@ -18,6 +19,9 @@ export class Impact implements IImpact {
   description: string;
 
   @ManyToOne(() => Symbol, (symbol) => symbol.impacts)
+  @JoinColumn({
+    name: 'symbol_id'
+  })
   symbol: Symbol;
 
   @CreateDateColumn({

@@ -22,13 +22,21 @@ export class Restriction implements IRestriction {
   description: string;
 
   @ManyToOne(() => Context, (context) => context.restrictions)
+  @JoinColumn({
+    name: 'context_id'
+  })
   context: IContext;
 
   @ManyToOne(() => Resource, (resource) => resource.restrictions)
+  @JoinColumn({
+    name: 'resource_id'
+  })
   resource: IResource;
 
   @OneToOne(() => Episode, (episode) => episode.restriction)
-  @JoinColumn()
+  @JoinColumn({
+    name: 'episode_id'
+  })
   episode: IEpisode;
 
   @CreateDateColumn({
