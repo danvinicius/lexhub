@@ -5,6 +5,7 @@ import {
   ManyToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinTable,
 } from 'typeorm';
 import { IActor } from '@/entities';
 import { IScenario } from '@/entities';
@@ -19,6 +20,17 @@ export class Actor implements IActor {
   name: string;
 
   @ManyToMany(() => Scenario, (scenario) => scenario.actors)
+  @JoinTable({
+    name: 'scenario_actor',
+    joinColumn: {
+      name: 'actor_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'scenario_id',
+      referencedColumnName: 'id',
+    },
+  })
   scenarios: IScenario[];
 
   @CreateDateColumn({

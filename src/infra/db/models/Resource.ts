@@ -6,6 +6,7 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinTable,
 } from 'typeorm';
 import { IResource, IRestriction } from '@/entities';
 import { IScenario } from '@/entities';
@@ -24,6 +25,17 @@ export class Resource implements IResource {
   restrictions: IRestriction[];
 
   @ManyToMany(() => Scenario, (scenario) => scenario.resources)
+  @JoinTable({
+    name: 'scenario_resource',
+    joinColumn: {
+      name: 'resource_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'scenario_id',
+      referencedColumnName: 'id',
+    },
+  })
   scenario: IScenario[];
 
   @CreateDateColumn({

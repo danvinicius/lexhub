@@ -45,11 +45,31 @@ export class Scenario implements IScenario {
   exceptions: IException[];
 
   @ManyToMany(() => Actor)
-  @JoinTable()
+  @JoinTable({
+    name: 'scenario_actor',
+    joinColumn: {
+      name: 'scenario_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'actor_id',
+      referencedColumnName: 'id',
+    },
+  })
   actors: IActor[];
 
   @ManyToMany(() => Resource)
-  @JoinTable()
+  @JoinTable({
+    name: 'scenario_resource',
+    joinColumn: {
+      name: 'scenario_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'resource_id',
+      referencedColumnName: 'id',
+    },
+  })
   resources: IResource[];
 
   @OneToOne(() => Context, (context) => context.scenario)

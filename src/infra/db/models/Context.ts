@@ -17,20 +17,17 @@ export class Context implements IContext {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  @JoinColumn({
+  @Column({
     name: 'pre_condition'
   })
   preCondition: string;
 
-  @Column()
-  @JoinColumn({
+  @Column({
     name: 'temporal_location'
   })
   temporalLocation: string;
 
-  @Column()
-  @JoinColumn({
+  @Column({
     name: 'geographic_location'
   })
   geographicLocation: string;

@@ -1,3 +1,5 @@
+ALTER DATABASE scenarios_and_lexicons CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- Inserindo Projetos
 INSERT INTO project (id, name, description) VALUES
   (1, 'Projeto Plataforma de Petróleo', 'Um projeto focado no desenvolvimento de uma plataforma de petróleo sustentável.');
@@ -40,7 +42,7 @@ INSERT INTO actor (id, name) VALUES
   (2, 'Oficial de Conformidade Ambiental');
   -- Adicione mais atores conforme necessário
 
-INSERT INTO scenario_actors_actor (scenarioId, actorId) VALUES
+INSERT INTO scenario_actor (scenario_id, actor_id) VALUES
     (1, 1),
     (1, 2);
 
@@ -50,12 +52,12 @@ INSERT INTO resource (id, name) VALUES
   (2, 'Equipamento de Monitoramento Ambiental');
   -- Adicione mais recursos conforme necessário
 
-INSERT INTO scenario_resources_resource (scenarioId, resourceId) VALUES
+INSERT INTO scenario_resource (scenario_id, resource_id) VALUES
     (1, 1),
     (1, 2);
 
 -- Inserindo Contextos
-INSERT INTO context (id, preCondition, temporalLocation, geographicLocation, scenario_id) VALUES
+INSERT INTO context (id, pre_condition, temporal_location, geographic_location, scenario_id) VALUES
   (1, 'Avaliação de Impacto Ambiental Concluída', 'Dia Atual', 'Local Offshore', 1),
   (2, 'Plano de Resposta a Emergências Ativado', 'Durante Incidente', 'Local Costeiro', 2);
   -- Adicione mais contextos conforme necessário
