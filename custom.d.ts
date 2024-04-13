@@ -1,5 +1,5 @@
 declare namespace Express {
-    export interface Request {
-       payload?: any
-    }
- }
+  export interface Request {
+    payload?: any;
+  }
+}

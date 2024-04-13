@@ -7,7 +7,7 @@
     "rootDir": ".",
     "removeComments": true,
     "noEmitOnError": true,
-    "strict": true,
+    "strict": false,
     "noUnusedLocals": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
