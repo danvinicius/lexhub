@@ -1,4 +1,4 @@
-import { IContext, IScenario } from '@/entities';
+import { IScenario } from '@/entities';
 
 export interface ScenarioRepository {
   getScenario(id: number | string): Promise<null | IScenario>;
@@ -53,7 +53,6 @@ export namespace ScenarioRepository {
   export interface CreateScenarioParams {
     title: string;
     goal: string;
-    context: IContext;
     projectId: number | string;
   }
   export interface CreateManyScenariosParams {
@@ -98,6 +97,5 @@ export namespace ScenarioRepository {
   export interface UpdateScenarioParams {
     title: string;
     goal: string;
-    context: IContext;
   }
 }
