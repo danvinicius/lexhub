@@ -18,7 +18,7 @@ export class UpdateSymbolUseCase {
   async execute({ id, symbol }: UpdateSymbolUseCase.Params): Promise<void> {
     const symbolExists = await this.symbolRepository.getSymbol(id);
     if (!symbolExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new InvalidParamError('symbolId');
     }
     await this.symbolRepository.updateSymbol(id, symbol);
   }

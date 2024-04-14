@@ -1,0 +1,1021 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Scenarios and Lexicons API"
+  description: "API for managing scenarios and lexicons inside a project"
+basePath: "/api"
+schemes:
+  - "https"
+tags:
+  - name: project
+    description: "Any domain project, private or public, whose terms and jargon require good collective understanding."
+  - name: symbol
+    description: "Term or jargon within a project. It's a type of lexicon."
+  - name: scenario
+    description: "Specific description of a use case or an interaction between the system and its users. It's a type of lexicon."
+
+paths:
+  name: project
+  /project:
+    get:
+      tags:
+        - project 
+      summary: "Get All Projects"
+      description: "Retrieves all projects."
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Project"
+    post:
+      tags:
+        - project 
+      summary: "Create Project"
+      description: "Creates a new project."
+      parameters:
+        - in: body
+          name: body
+          description: "Project object"
+          required: true
+          schema:
+            $ref: "#/definitions/ProjectInput"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: "#/definitions/Project"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /project/{id}:
+    get:
+      tags:
+        - project 
+      summary: "Get Project by ID"
+      description: "Retrieves a project by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the project."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Project"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    patch:
+      tags:
+        - project 
+      summary: "Update Project"
+      description: "Updates an existing project."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the project."
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: "Project object"
+          required: true
+          schema:
+            $ref: "#/definitions/ProjectInput"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Project"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      tags:
+        - project 
+      summary: "Delete Project"
+      description: "Deletes a project by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the project."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request: Invalid params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /symbol/project/{projectId}:
+    get:
+      tags:
+        - symbol
+      summary: "Get All Symbols of a Project"
+      description: "Retrieves all symbols of a given project."
+      parameters:
+        - name: projectId
+          in: path
+          description: "The ID of the project."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Symbol"
+  /symbol:
+    post:
+      tags:
+        - symbol
+      summary: "Create Symbol within a Project"
+      description: "Creates a new symbol within a Project."
+      parameters:
+        - in: body
+          name: body
+          description: "Symbol object"
+          required: true
+          schema:
+            $ref: "#/definitions/SymbolInput"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: "#/definitions/Symbol"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /symbol/{id}:
+    get:
+      tags:
+        - symbol
+      summary: "Get Symbol by ID"
+      description: "Retrieves a symbol by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the symbol."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Symbol"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    patch:
+      tags:
+        - symbol
+      summary: "Update Symbol"
+      description: "Updates a symbol by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the symbol."
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: "Symbol object"
+          required: true
+          schema:
+            $ref: "#/definitions/SymbolInput"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Symbol"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      tags:
+        - symbol
+      summary: "Delete Symbol"
+      description: "Deletes a symbol by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the symbol."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request: Invalid params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/project/{projectId}:
+    get:
+      tags:
+        - scenario
+      summary: "Get All Scenarios of a Project"
+      description: "Retrieves all scenarios of a given project."
+      parameters:
+        - name: projectId
+          in: path
+          description: "The ID of the project."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Scenario"
+  /scenario:
+    post:
+      tags:
+        - scenario
+      summary: "Create Scenario within a Project"
+      description: "Creates a new scenario within a Project."
+      parameters:
+        - in: body
+          name: body
+          description: "Scenario object"
+          required: true
+          schema:
+            $ref: "#/definitions/ScenarioInput"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: "#/definitions/Scenario"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/{id}/with-lexicons:
+    get:
+      tags:
+        - scenario
+      summary: "Get Scenario with Lexicons"
+      description: "Retrieves a scenario with lexicons by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the scenario."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/ScenarioWithLexicons"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/many:
+    post:
+      tags:
+        - scenario
+      summary: "Create Many Scenarios within a Project"
+      description: "Creates multiple scenarios within a Project."
+      parameters:
+        - in: body
+          name: body
+          description: "Array of scenario data"
+          required: true
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ScenarioInput"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Scenario"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/{id}:
+    get:
+      tags:
+        - scenario
+      summary: "Get Scenario by ID"
+      description: "Retrieves a scenario by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the scenario."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Scenario"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    patch:
+      tags:
+        - scenario
+      summary: "Update Scenario"
+      description: "Updates a scenario by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the scenario."
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: "Scenario object"
+          required: true
+          schema:
+            $ref: "#/definitions/ScenarioInput"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Scenario"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      tags:
+        - scenario
+      summary: "Delete Scenario"
+      description: "Deletes a scenario by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the scenario."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request: Invalid params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/actor:
+    post:
+      tags:
+        - scenario
+      summary: "Create Actor within a Scenario"
+      description: "Creates a new actor within a Scenario."
+      parameters:
+        - in: body
+          name: body
+          description: "Actor object"
+          required: true
+          schema:
+            $ref: "#/definitions/ActorInput"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/resource:
+    post:
+      tags:
+        - scenario
+      summary: "Create Resource within a Scenario"
+      description: "Creates a new resource within a Scenario."
+      parameters:
+        - in: body
+          name: body
+          description: "Resource object"
+          required: true
+          schema:
+            $ref: "#/definitions/ResourceInput"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/episode:
+    post:
+      tags:
+        - scenario
+      summary: "Create Episode within a Scenario"
+      description: "Creates a new episode within a Scenario."
+      parameters:
+        - in: body
+          name: body
+          description: "Episode object"
+          required: true
+          schema:
+            $ref: "#/definitions/EpisodeInput"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/exception:
+    post:
+      tags:
+        - scenario
+      summary: "Create Exception within a Scenario"
+      description: "Creates a new exception within a Scenario."
+      parameters:
+        - in: body
+          name: body
+          description: "Exception object"
+          required: true
+          schema:
+            $ref: "#/definitions/ExceptionInput"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/context:
+    post:
+      tags:
+        - scenario
+      summary: "Create Context within a Scenario"
+      description: "Creates a new context within a Scenario."
+      parameters:
+        - in: body
+          name: body
+          description: "Context object"
+          required: true
+          schema:
+            $ref: "#/definitions/ContextInput"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/restriction:
+    post:
+      tags:
+        - scenario
+      summary: "Create Restriction within a Scenario"
+      description: "Creates a new restriction within a Scenario."
+      parameters:
+        - in: body
+          name: body
+          description: "Restriction object"
+          required: true
+          schema:
+            $ref: "#/definitions/RestrictionInput"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/{scenarioId}/actor/{actorId}:
+    post:
+      tags:
+        - scenario
+      summary: "Add Actor to Scenario"
+      description: "Adds an actor to a scenario."
+      parameters:
+        - name: scenarioId
+          in: path
+          description: "The ID of the scenario."
+          required: true
+          type: integer
+        - name: actorId
+          in: path
+          description: "The ID of the actor."
+          required: true
+          type: integer
+      responses:
+        201:
+          description: "Created"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request: Invalid params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      tags:
+        - scenario
+      summary: "Remove Actor from Scenario"
+      description: "Removes an actor from a scenario."
+      parameters:
+        - name: scenarioId
+          in: path
+          description: "The ID of the scenario."
+          required: true
+          type: integer
+        - name: actorId
+          in: path
+          description: "The ID of the actor."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request: Invalid params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/{scenarioId}/resource/{resourceId}:
+    post:
+      tags:
+        - scenario
+      summary: "Add Resource to Scenario"
+      description: "Adds a resource to a scenario."
+      parameters:
+        - name: scenarioId
+          in: path
+          description: "The ID of the scenario."
+          required: true
+          type: integer
+        - name: resourceId
+          in: path
+          description: "The ID of the resource."
+          required: true
+          type: integer
+      responses:
+        201:
+          description: "Created"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      tags:
+        - scenario
+      summary: "Remove Resource from Scenario"
+      description: "Removes a resource from a scenario."
+      parameters:
+        - name: scenarioId
+          in: path
+          description: "The ID of the scenario."
+          required: true
+          type: integer
+        - name: resourceId
+          in: path
+          description: "The ID of the resource."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+        400:
+          description: "Bad Request: Invalid params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /scenario/actor/{id}:
+    delete:
+      tags:
+        - scenario
+      summary: "Delete Actor"
+      description: "Deletes an actor by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the actor."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+  /scenario/resource/{id}:
+    delete:
+      tags:
+        - scenario
+      summary: "Delete Resource"
+      description: "Deletes a resource by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the resource."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+  /scenario/exception/{id}:
+    delete:
+      tags:
+        - scenario
+      summary: "Delete Exception"
+      description: "Deletes an exception by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the exception."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+  /scenario/context/{id}:
+    delete:
+      tags:
+        - scenario
+      summary: "Delete Context"
+      description: "Deletes a context by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the context."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+  /scenario/restriction/{id}:
+    delete:
+      tags:
+        - scenario
+      summary: "Delete Restriction"
+      description: "Deletes a restriction by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the restriction."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+  /scenario/episode/{id}:
+    delete:
+      tags:
+        - scenario
+      summary: "Delete Episode"
+      description: "Deletes an episode by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the episode."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+  /scenario/group/{id}:
+    delete:
+      tags:
+        - scenario
+      summary: "Delete Group"
+      description: "Deletes a group by its ID."
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the group."
+          required: true
+          type: integer
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "string"
+
+definitions:
+  Project:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      created_at:
+        type: "string"
+        format: "date"
+      updated_at:
+        type: "string"
+        format: "date"
+      symbols:
+        type: "array"
+        items:
+          $ref: "#/definitions/Symbol"
+      scenarios:
+        type: "array"
+        items:
+          $ref: "#/definitions/Scenario"
+  ProjectInput:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      description:
+        type: "string"
+  Symbol:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      classification:
+        type: "string"
+      notion:
+        type: "string"
+      created_at:
+        type: "string"
+        format: "date"
+      updated_at:
+        type: "string"
+        format: "date"
+  SymbolInput:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      classification:
+        type: "string"
+      notion:
+        type: "string"
+        required: false
+      projectId:
+        type: "integer"
+  Scenario:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      title:
+        type: "string"
+      goal:
+        type: "string"
+      created_at:
+        type: "string"
+        format: "date"
+      updated_at:
+        type: "string"
+        format: "date"
+  ScenarioInput:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+      goal:
+        type: "string"
+      projectId:
+        type: "integer"
+  ScenarioWithLexicons:
+    type: "object"
+    properties:
+      title:
+        type: "object"
+        properties:
+          content:
+            type: "string"
+          foundLexicons:
+            type: "array"
+            items:
+              $ref: "#/definitions/LexiconUsage"
+  Exception:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      description:
+        type: "string"
+      created_at:
+        type: "string"
+        format: "date"
+      updated_at:
+        type: "string"
+        format: "date"
+  Episode:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      position:
+        type: "integer"
+      description:
+        type: "string"
+      type:
+        type: "string"
+      created_at:
+        type: "string"
+        format: "date"
+      updated_at:
+        type: "string"
+        format: "date"
+  Context:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      preCondition:
+        type: "string"
+      temporalLocation:
+        type: "string"
+      geographicLocation:
+        type: "string"
+      created_at:
+        type: "string"
+        format: "date"
+      updated_at:
+        type: "string"
+        format: "date"
+      restrictions:
+        type: "array"
+        items:
+          $ref: "#/definitions/Restriction"
+  Resource:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      created_at:
+        type: "string"
+        format: "date"
+      updated_at:
+        type: "string"
+        format: "date"
+  Actor:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      created_at:
+        type: "string"
+        format: "date"
+      updated_at:
+        type: "string"
+        format: "date"
+  Group:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      position:
+        type: "integer"
+      created_at:
+        type: "string"
+        format: "date"
+      updated_at:
+        type: "string"
+        format: "date"
+      nonSequentialEpisodes:
+        type: "array"
+        items:
+          $ref: "#/definitions/Episode"
+  LexiconUsage:
+    type: "object"
+    properties:
+      resource:
+        type: "string"
+      name:
+        type: "string"
+      starts:
+        type: "integer"
+      ends:
+        type: "integer"
+      type:
+        type: "string"
+  Restriction:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      description:
+        type: "string"
+      created_at:
+        type: "string"
+        format: "date"
+      updated_at:
+        type: "string"
+        format: "date"
+  ActorInput:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      scenarioId:
+        type: "integer"
+  EpisodeInput:
+    type: "object"
+    properties:
+      position:
+        type: "integer"
+      description:
+        type: "string"
+      type:
+        type: "string"
+      group:
+        type: "integer"
+        required: false
+      scenarioId:
+        type: "integer"
+  ResourceInput:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      scenarioId:
+        type: "integer"
+  ExceptionInput:
+    type: "object"
+    properties:
+      description:
+        type: "string"
+      scenarioId:
+        type: "integer"
+  ContextInput:
+    type: "object"
+    properties:
+      geographicLocation:
+        type: "string"
+      temporalLocation:
+        type: "string"
+      preCondition:
+        type: "string"
+      scenarioId:
+        type: "integer"
+  RestrictionInput:
+    type: "object"
+    properties:
+      description:
+        type: "string"
+      scenarioId:
+        type: "integer"
+      episodeId:
+        type: "integer"
+        required: false
+      resourceId:
+        type: "integer"
+        required: false
+      contextId:
+        type: "integer"
+        required: false
+  ErrorResponse:
+    type: "object"
+    properties:
+      error:
+        type: "string"
+      code:
+        type: "integer"

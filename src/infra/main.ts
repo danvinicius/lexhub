@@ -1,6 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import server from '@/infra/server';
+import swaggerUi from 'swagger-ui-express';
+import fs from 'fs';
+import YAML from 'yaml';
 import {
   MySQLProjectRepository,
   MySQLSymbolRepository,
@@ -16,6 +19,7 @@ import { ProjectControllerFactory } from '@/controllers/factories/project-contro
 import { SymbolControllerFactory } from '@/controllers/factories/symbol-controller-factory';
 import { ScenarioControllerFactory } from '../controllers/factories/scenario-controller-factory';
 import { UserControllerFactory } from '@/controllers/factories/user-controller-factory';
+import path from 'path';
 
 (async function () {
   const logger = Logger.getInstance();
@@ -40,6 +44,10 @@ import { UserControllerFactory } from '@/controllers/factories/user-controller-f
     projectRepository,
     symbolRepository
   );
+
+  const file = fs.readFileSync(path.resolve(__dirname, '..', '..', 'project', 'docs', 'swagger.yaml'), 'utf8');
+  const swaggerDocument = YAML.parse(file);
+  server.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
   server.use('/api/health', (_req: Request, res: Response) => {
     return res.json({ ok: 'ok' });

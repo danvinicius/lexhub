@@ -1,5 +1,4 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
-import { IContext } from '@/entities/scenario';
+import { IsNumber, IsString } from 'class-validator';
 
 export class CreateScenarioRequestDTO {
   @IsString()
@@ -8,16 +7,12 @@ export class CreateScenarioRequestDTO {
   @IsString()
   goal: string;
 
-  @IsOptional()
-  context: IContext;
-
   @IsNumber()
   projectId: number | string;
 
   constructor(data: any) {
     this.title = data.title;
     this.goal = data.goal;
-    this.context = data.context;
     this.projectId = data.projectId;
   }
 }

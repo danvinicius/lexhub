@@ -88,10 +88,6 @@ export class ProjectController {
   public deleteProject = async (req: Request) => {
     try {
       const { id } = req.params;
-      const projectExists = await this.getProjectUseCase.execute(id);
-      if (!projectExists) {
-        return notFound(new NotFoundError('This project does not exist'));
-      }
       await this.deleteProjectUseCase.execute(id);
       return ok({ message: 'Project deleted' });
     } catch (error: any) {

@@ -11,7 +11,7 @@ export class DeleteSymbolUseCase {
   async execute(id: string): Promise<void> {
     const symbolExists = await this.symbolRepository.getSymbol(id);
     if (!symbolExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new InvalidParamError('symbolId');
     }
     await this.symbolRepository.deleteSymbol(id);
   }
