@@ -45,7 +45,7 @@ import path from 'path';
     symbolRepository
   );
 
-  const file = fs.readFileSync(path.resolve(__dirname, '..', '..', 'project', 'docs', 'swagger.yaml'), 'utf8');
+  const file = fs.readFileSync(path.resolve(__dirname, '..', '..', 'swagger.yaml'), 'utf8');
   const swaggerDocument = YAML.parse(file);
   server.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
