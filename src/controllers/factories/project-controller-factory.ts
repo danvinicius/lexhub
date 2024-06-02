@@ -1,4 +1,4 @@
-import { ProjectRepository } from '@/infra/db/protocols';
+import { ProjectRepository, UserRepository } from '@/infra/db/protocols';
 
 import {
   GetProjectUseCase,
@@ -10,11 +10,11 @@ import {
 import { ProjectController } from '@/controllers';
 
 export class ProjectControllerFactory {
-  static makeProjectController(projectRepository: ProjectRepository) {
+  static makeProjectController(projectRepository: ProjectRepository, userRepository: UserRepository) {
     return new ProjectController(
       new GetProjectUseCase(projectRepository),
       new GetAllProjectsUseCase(projectRepository),
-      new CreateProjectUseCase(projectRepository),
+      new CreateProjectUseCase(projectRepository, userRepository),
       new UpdateProjectUseCase(projectRepository),
       new DeleteProjectUseCase(projectRepository)
     );

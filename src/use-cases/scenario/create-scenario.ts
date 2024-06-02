@@ -1,21 +1,13 @@
 import { IScenario } from '@/entities';
-import { ProjectRepository, ScenarioRepository } from '@/infra/db/protocols';
+import { ScenarioRepository } from '@/infra/db/protocols';
 import { CreateScenarioRequestDTO } from '@/infra/http/dtos';
-import { InvalidParamError } from '@/util/errors';
 
 export class CreateScenarioUseCase {
   constructor(
-    private scenarioRepository: ScenarioRepository,
-    private projectRepository: ProjectRepository
+    private scenarioRepository: ScenarioRepository
   ) {}
 
   async execute(scenario: CreateScenarioRequestDTO): Promise<IScenario> {
-    const projectExists = await this.projectRepository.getProject(
-      scenario.projectId
-    );
-    if (!projectExists) {
-      throw new InvalidParamError('projectId');
-    }
     return await this.scenarioRepository.createScenario(scenario);
   }
 }

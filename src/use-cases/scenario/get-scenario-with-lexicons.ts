@@ -1,6 +1,7 @@
 import {
   IActor,
   IException,
+  IProject,
   IResource,
   IRestriction,
   IScenario,
@@ -96,7 +97,7 @@ export class GetScenarioWithLexiconsUseCase {
   }
 
   private findPossibleLexicons = <
-    T extends { name?: string; title?: string; id?: number | string },
+    T extends { name?: string; title?: string; id?: number | string; project: IProject },
   >(
     text: string,
     termos: T[]
@@ -118,7 +119,7 @@ export class GetScenarioWithLexiconsUseCase {
         const { id } = termo;
         if (id) {
           possibleLexicons.push({
-            resource: termo.title ? `/api/scenario/${id}` : `/api/symbol/${id}`,
+            resource: termo.title ? `/api/project/${termo.project.id}/scenario/${id}` : `/api/project/${termo.project.id}/symbol/${id}`,
             name: lexiconName,
             starts,
             ends,

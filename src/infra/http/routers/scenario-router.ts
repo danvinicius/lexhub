@@ -1,72 +1,154 @@
 import { Router } from 'express';
 import { responseHandler } from '@/infra/http/response-handler';
 import { ScenarioController } from '@/controllers';
+import { authMiddleware, collabMiddleware, observerMiddleware } from '@/infra/http/middlewares';
 
 export const scenarioRouter = async (
   router: Router,
   controller: ScenarioController
 ): Promise<void> => {
-  router.get('/scenario', responseHandler(controller.getAllScenarios));
-  router.get('/scenario/:id', responseHandler(controller.getScenario));
   router.get(
-    '/scenario/:id/with-lexicons',
+    '/project/:projectId/scenario',
+    authMiddleware,
+    observerMiddleware,
+    responseHandler(controller.getAllScenarios)
+  );
+  router.get(
+    '/project/:projectId/scenario/:id',
+    authMiddleware,
+    observerMiddleware,
+    responseHandler(controller.getScenario)
+  );
+  router.get(
+    '/project/:projectId/scenario/:id/with-lexicons',
+    authMiddleware,
+    observerMiddleware,
     responseHandler(controller.getScenarioWithLexicons)
   );
-  router.post('/scenario', responseHandler(controller.createScenario));
   router.post(
-    '/scenario/many',
+    '/project/:projectId/scenario',
+    authMiddleware,
+    collabMiddleware,
+    responseHandler(controller.createScenario)
+  );
+  router.post(
+    '/project/:projectId/scenario/many',
+    authMiddleware,
+    collabMiddleware,
     responseHandler(controller.createManyScenarios)
   );
-  router.post('/scenario/actor', responseHandler(controller.createActor));
-  router.post('/scenario/context', responseHandler(controller.createContext));
-  router.post('/scenario/resource', responseHandler(controller.createResource));
   router.post(
-    '/scenario/exception',
+    '/project/:projectId/scenario/:scenarioId/actor',
+    authMiddleware,
+    collabMiddleware,
+    responseHandler(controller.createActor)
+  );
+  router.post(
+    '/project/:projectId/scenario/:scenarioId/context',
+    authMiddleware,
+    collabMiddleware,
+    responseHandler(controller.createContext)
+  );
+  router.post(
+    '/project/:projectId/scenario/:scenarioId/resource',
+    authMiddleware,
+    collabMiddleware,
+    responseHandler(controller.createResource)
+  );
+  router.post(
+    '/project/:projectId/scenario/:scenarioId/exception',
+    authMiddleware,
+    collabMiddleware,
     responseHandler(controller.createException)
   );
-  router.post('/scenario/episode', responseHandler(controller.createEpisode));
   router.post(
-    '/scenario/restriction',
+    '/project/:projectId/scenario/:scenarioId/episode',
+    authMiddleware,
+    collabMiddleware,
+    responseHandler(controller.createEpisode)
+  );
+  router.post(
+    '/project/:projectId/scenario/:scenarioId/restriction',
+    authMiddleware,
+    collabMiddleware,
     responseHandler(controller.createRestriction)
   );
   router.post(
-    '/scenario/:scenarioId/actor/:actorId',
+    '/project/:projectId/scenario/:scenarioId/actor/:actorId',
+    authMiddleware,
+    collabMiddleware,
     responseHandler(controller.addActor)
   );
   router.post(
-    '/scenario/:scenarioId/resource/:resourceId',
-    responseHandler(controller.removeActor)
-  );
-  router.patch('/scenario/:id', responseHandler(controller.updateScenario));
-  router.delete('/scenario/:id', responseHandler(controller.deleteScenario));
-  router.delete(
-    '/scenario/:scenarioId/actor/:actorId',
+    '/project/:projectId/scenario/:scenarioId/resource/:resourceId',
+    authMiddleware,
+    collabMiddleware,
     responseHandler(controller.addResource)
   );
+  router.patch(
+    '/project/:projectId/scenario/:id',
+    authMiddleware,
+    collabMiddleware,
+    responseHandler(controller.updateScenario)
+  );
   router.delete(
-    '/scenario/:scenarioId/resource/:resourceId',
+    '/project/:projectId/scenario/:id',
+    authMiddleware,
+    collabMiddleware,
+    responseHandler(controller.deleteScenario)
+  );
+  router.delete(
+    '/project/:projectId/scenario/:scenarioId/actor/:actorId',
+    authMiddleware,
+    collabMiddleware,
+    responseHandler(controller.removeActor)
+  );
+  router.delete(
+    '/project/:projectId/scenario/:scenarioId/resource/:resourceId',
+    authMiddleware,
+    collabMiddleware,
     responseHandler(controller.removeResource)
   );
-  router.delete('/scenario/actor/:id', responseHandler(controller.deleteActor));
   router.delete(
-    '/scenario/context/:id',
-    responseHandler(controller.deleteContext)
+    '/project/:projectId/actor/:actorId',
+    authMiddleware,
+    collabMiddleware,
+    responseHandler(controller.deleteActor)
   );
   router.delete(
-    '/scenario/episode/:id',
-    responseHandler(controller.deleteEpisode)
-  );
-  router.delete(
-    '/scenario/exception/:id',
-    responseHandler(controller.deleteException)
-  );
-  router.delete(
-    '/scenario/resource/:id',
+    '/project/:projectId/resource/:resourceId',
+    authMiddleware,
+    collabMiddleware,
     responseHandler(controller.deleteResource)
   );
   router.delete(
-    '/scenario/restriction/:id',
+    '/project/:projectId/context/:contextId',
+    authMiddleware,
+    collabMiddleware,
+    responseHandler(controller.deleteContext)
+  );
+  router.delete(
+    '/project/:projectId/episode/:episodeId',
+    authMiddleware,
+    collabMiddleware,
+    responseHandler(controller.deleteEpisode)
+  );
+  router.delete(
+    '/project/:projectId/exception/:exceptionId',
+    authMiddleware,
+    collabMiddleware,
+    responseHandler(controller.deleteException)
+  );
+  router.delete(
+    '/project/:projectId/restriction/:restrictionId',
+    authMiddleware,
+    collabMiddleware,
     responseHandler(controller.deleteRestriction)
   );
-  router.delete('/scenario/group/:id', responseHandler(controller.deleteGroup));
+  router.delete(
+    '/project/:projectId/group/:groupId',
+    authMiddleware,
+    collabMiddleware,
+    responseHandler(controller.deleteGroup)
+  );
 };

@@ -22,7 +22,9 @@ export class MySQLUserRepository implements UserRepository {
           password: true,
         },
         relations: {
-          projects: true,
+          projects: {
+            project: true
+          },
         },
       });
       delete user?.deletedAt;

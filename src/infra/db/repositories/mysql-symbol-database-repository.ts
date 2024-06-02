@@ -34,6 +34,7 @@ export class MySQLSymbolRepository implements SymbolRepository {
       relations: {
         synonyms: true,
         impacts: true,
+        project: true
       },
     });
     return symbols;

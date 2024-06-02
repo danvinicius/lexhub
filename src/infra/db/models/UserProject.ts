@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  JoinColumn,
 } from 'typeorm';
 import { IProject, IUser, IUserProject, UserRole } from '@/entities';
 import { Project, User } from '@/infra/db/models';
@@ -15,10 +16,16 @@ export class UserProject implements IUserProject {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    name: 'invited_by',
+    nullable: true,
+  })
   invitedBy: number;
 
-  @Column()
+  @Column({
+    name: 'removed_by',
+    nullable: true,
+  })
   removedBy: number;
 
   @Column({
@@ -28,14 +35,21 @@ export class UserProject implements IUserProject {
   role: UserRole;
 
   @ManyToOne(() => User, (user) => user.projects)
+  @JoinColumn({
+    name: 'user_id',
+  })
   user: IUser;
 
   @ManyToOne(() => Project, (project) => project.users)
+  @JoinColumn({
+    name: 'project_id',
+  })
   project: IProject;
 
   @CreateDateColumn({
     name: 'accepted_at',
     type: 'timestamp',
+    nullable: true,
   })
   acceptedAt: Date;
 

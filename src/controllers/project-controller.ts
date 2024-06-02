@@ -29,11 +29,11 @@ export class ProjectController {
     private createProjectUseCase: CreateProjectUseCase,
     private updateProjectUseCase: UpdateProjectUseCase,
     private deleteProjectUseCase: DeleteProjectUseCase
-  ) {}
+  ) { }
 
   public getAllProjects = async (req: Request) => {
     try {
-      const projects = await this.getAllProjectsUseCase.execute();
+      const projects = await this.getAllProjectsUseCase.execute(req.user);
       return ok(projects);
     } catch (error: any) {
       return serverError(error);
@@ -42,8 +42,8 @@ export class ProjectController {
 
   public getProject = async (req: Request) => {
     try {
-      const { id } = req.params;
-      const project = await this.getProjectUseCase.execute(id);
+      const { projectId } = req.params;
+      const project = await this.getProjectUseCase.execute(projectId);
       return ok(project);
     } catch (error: any) {
       if (error instanceof NotFoundError) {
@@ -54,9 +54,9 @@ export class ProjectController {
   };
   public createProject = async (req: Request) => {
     try {
-      const project = new DTO.CreateProjectRequestDTO(req.body);
-      await validate(project);
-      const projectCreated = await this.createProjectUseCase.execute(project);
+      const data = new DTO.CreateProjectRequestDTO(req.body);
+      await validate(data);
+      const projectCreated = await this.createProjectUseCase.execute(data, req.user);
       return created(projectCreated);
     } catch (error: any) {
       if (
@@ -70,10 +70,10 @@ export class ProjectController {
   };
   public updateProject = async (req: Request) => {
     try {
-      const { id } = req.params;
-      const project = new DTO.UpdateProjectRequestDTO(req.body);
-      await validate(project);
-      await this.updateProjectUseCase.execute({ id, project });
+      const { projectId } = req.params;
+      const data = new DTO.UpdateProjectRequestDTO(req.body);
+      await validate(data);
+      await this.updateProjectUseCase.execute({ id: projectId, project: data });
       return ok({ message: 'Project updated' });
     } catch (error: any) {
       if (
@@ -87,8 +87,8 @@ export class ProjectController {
   };
   public deleteProject = async (req: Request) => {
     try {
-      const { id } = req.params;
-      await this.deleteProjectUseCase.execute(id);
+      const { projectId } = req.params;
+      await this.deleteProjectUseCase.execute(projectId);
       return ok({ message: 'Project deleted' });
     } catch (error: any) {
       return serverError(error);

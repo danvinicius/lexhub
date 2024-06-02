@@ -20,7 +20,10 @@ import {
   ok,
   serverError,
 } from '@/infra/http/response';
-import { InvalidParamError, MissingParamError } from '@/util/errors';
+import {
+  InvalidParamError,
+  MissingParamError,
+} from '@/util/errors';
 
 export class SymbolController {
   constructor(
@@ -32,8 +35,8 @@ export class SymbolController {
     private createImpactUseCase: CreateImpactUseCase,
     private createSynonymUseCase: CreateSynonymUseCase,
     private deleteImpactUseCase: DeleteImpactUseCase,
-    private deleteSynonymUseCase: DeleteSynonymUseCase
-  ) {}
+    private deleteSynonymUseCase: DeleteSynonymUseCase,
+  ) { }
 
   public getAllSymbols = async (req: Request) => {
     try {
@@ -59,13 +62,12 @@ export class SymbolController {
   };
   public createSymbol = async (req: Request) => {
     try {
-      const symbol = new DTO.CreateSymbolRequestDTO(req.body);
+      const symbol = new DTO.CreateSymbolRequestDTO({ ...req.body, projectId: Number(req.params.projectId) });
       await validate(symbol);
       const symbolCreated = await this.createSymbolUseCase.execute(symbol);
       return created(symbolCreated);
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
         error instanceof MissingParamError
       ) {
         return badRequest(error);
@@ -75,7 +77,7 @@ export class SymbolController {
   };
   public createImpact = async (req: Request) => {
     try {
-      const impact = new DTO.CreateImpactRequestDTO(req.body);
+      const impact = new DTO.CreateImpactRequestDTO({ ...req.body, symbolId: Number(req.params.symbolId) });
       await validate(impact);
       await this.createImpactUseCase.execute(impact);
       return created({ message: 'Impact created' });
@@ -91,7 +93,7 @@ export class SymbolController {
   };
   public createSynonym = async (req: Request) => {
     try {
-      const synonym = new DTO.CreateSynonymRequestDTO(req.body);
+      const synonym = new DTO.CreateSynonymRequestDTO({ ...req.body, symbolId: Number(req.params.symbolId) });
       await validate(synonym);
       await this.createSynonymUseCase.execute(synonym);
       return created({ message: 'Synonym created' });
@@ -136,8 +138,8 @@ export class SymbolController {
   };
   public deleteImpact = async (req: Request) => {
     try {
-      const { id } = req.params;
-      await this.deleteImpactUseCase.execute(id);
+      const { impactId } = req.params;
+      await this.deleteImpactUseCase.execute(impactId);
       return ok({ message: 'Impact deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -146,8 +148,8 @@ export class SymbolController {
 
   public deleteSynonym = async (req: Request) => {
     try {
-      const { id } = req.params;
-      await this.deleteSynonymUseCase.execute(id);
+      const { synonymId } = req.params;
+      await this.deleteSynonymUseCase.execute(synonymId);
       return ok({ message: 'Synonym deleted' });
     } catch (error: any) {
       return serverError(error);

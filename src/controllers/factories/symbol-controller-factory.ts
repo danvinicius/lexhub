@@ -22,7 +22,7 @@ export class SymbolControllerFactory {
     return new SymbolController(
       new GetSymbolUseCase(symbolRepository),
       new GetAllSymbolsUseCase(symbolRepository),
-      new CreateSymbolUseCase(symbolRepository, projectRepository),
+      new CreateSymbolUseCase(symbolRepository),
       new UpdateSymbolUseCase(symbolRepository),
       new DeleteSymbolUseCase(symbolRepository),
       new CreateImpactUseCase(symbolRepository),

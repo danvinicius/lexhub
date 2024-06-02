@@ -67,7 +67,7 @@ export class ScenarioController {
     private removeResourceUseCase: RemoveResourceUseCase,
     private deleteEpisodeUseCase: DeleteEpisodeUseCase,
     private deleteGroupUseCase: DeleteGroupUseCase
-  ) {}
+  ) { }
 
   public getAllScenarios = async (req: Request) => {
     try {
@@ -107,14 +107,13 @@ export class ScenarioController {
   };
   public createScenario = async (req: Request) => {
     try {
-      const scenario = new DTO.CreateScenarioRequestDTO(req.body);
+      const scenario = new DTO.CreateScenarioRequestDTO({ ...req.body, projectId: Number(req.params.projectId) });
       await validate(scenario);
       const scenarioCreated =
         await this.createScenarioUseCase.execute(scenario);
       return created(scenarioCreated);
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
         error instanceof MissingParamError
       ) {
         return badRequest(error);
@@ -125,14 +124,13 @@ export class ScenarioController {
 
   public createManyScenarios = async (req: Request) => {
     try {
-      const data = new DTO.CreateManyScenariosRequestDTO(req.body);
+      const data = new DTO.CreateManyScenariosRequestDTO({ ...req.body, projectId: Number(req.params.projectId) });
       await validate(data);
       const scenariosCreated =
         await this.createManyScenariosUseCase.execute(data);
       return created(scenariosCreated);
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
         error instanceof MissingParamError
       ) {
         return badRequest(error);
@@ -143,7 +141,7 @@ export class ScenarioController {
 
   public createException = async (req: Request) => {
     try {
-      const exception = new DTO.CreateExceptionRequestDTO(req.body);
+      const exception = new DTO.CreateExceptionRequestDTO({ ...req.body, scenarioId: Number(req.params.scenarioId) });
       await validate(exception);
       await this.createExceptionUseCase.execute(exception);
       return created({ message: 'Exception created' });
@@ -159,7 +157,7 @@ export class ScenarioController {
   };
   public createContext = async (req: Request) => {
     try {
-      const context = new DTO.CreateContextRequestDTO(req.body);
+      const context = new DTO.CreateContextRequestDTO({ ...req.body, scenarioId: Number(req.params.scenarioId) });
       await validate(context);
       await this.createContextUseCase.execute(context);
       return created({ message: 'Context created' });
@@ -175,7 +173,7 @@ export class ScenarioController {
   };
   public createRestriction = async (req: Request) => {
     try {
-      const restriction = new DTO.CreateRestrictionRequestDTO(req.body);
+      const restriction = new DTO.CreateRestrictionRequestDTO({ ...req.body, scenarioId: Number(req.params.scenarioId) });
       await validate(restriction);
       await this.createRestrictionUseCase.execute(restriction);
       return created({ message: 'Restriction created' });
@@ -191,7 +189,7 @@ export class ScenarioController {
   };
   public createActor = async (req: Request) => {
     try {
-      const actor = new DTO.CreateActorRequestDTO(req.body);
+      const actor = new DTO.CreateActorRequestDTO({ ...req.body, scenarioId: Number(req.params.scenarioId) });
       await validate(actor);
       await this.createActorUseCase.execute(actor);
       return created({ message: 'Actor created' });
@@ -207,7 +205,7 @@ export class ScenarioController {
   };
   public createResource = async (req: Request) => {
     try {
-      const resource = new DTO.CreateResourceRequestDTO(req.body);
+      const resource = new DTO.CreateResourceRequestDTO({ ...req.body, scenarioId: Number(req.params.scenarioId) });
       await validate(resource);
       await this.createResourceUseCase.execute(resource);
       return created({ message: 'Resource created' });
@@ -253,7 +251,7 @@ export class ScenarioController {
   };
   public createEpisode = async (req: Request) => {
     try {
-      const episode = new DTO.CreateEpisodeRequestDTO(req.body);
+      const episode = new DTO.CreateEpisodeRequestDTO({ ...req.body, scenarioId: Number(req.params.scenarioId) });
       await validate(episode);
       await this.createEpisodeUseCase.execute(episode);
       return created({ message: 'Episode created' });
@@ -270,8 +268,8 @@ export class ScenarioController {
   };
   public deleteException = async (req: Request) => {
     try {
-      const { id } = req.params;
-      await this.deleteExceptionUseCase.execute(id);
+      const { exceptionId } = req.params;
+      await this.deleteExceptionUseCase.execute(exceptionId);
       return ok({ message: 'Exception deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -279,8 +277,8 @@ export class ScenarioController {
   };
   public deleteContext = async (req: Request) => {
     try {
-      const { id } = req.params;
-      await this.deleteContextUseCase.execute(id);
+      const { contextId } = req.params;
+      await this.deleteContextUseCase.execute(contextId);
       return ok({ message: 'Context deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -288,8 +286,8 @@ export class ScenarioController {
   };
   public deleteRestriction = async (req: Request) => {
     try {
-      const { id } = req.params;
-      await this.deleteRestrictionUseCase.execute(id);
+      const { restrictionId } = req.params;
+      await this.deleteRestrictionUseCase.execute(restrictionId);
       return ok({ message: 'Restriction deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -297,8 +295,8 @@ export class ScenarioController {
   };
   public deleteActor = async (req: Request) => {
     try {
-      const { id } = req.params;
-      await this.deleteActorUseCase.execute(id);
+      const { actorId } = req.params;
+      await this.deleteActorUseCase.execute(actorId);
       return ok({ message: 'Actor deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -306,8 +304,8 @@ export class ScenarioController {
   };
   public deleteResource = async (req: Request) => {
     try {
-      const { id } = req.params;
-      await this.deleteResourceUseCase.execute(id);
+      const { resourceId } = req.params;
+      await this.deleteResourceUseCase.execute(resourceId);
       return ok({ message: 'Resource deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -315,8 +313,8 @@ export class ScenarioController {
   };
   public deleteEpisode = async (req: Request) => {
     try {
-      const { id } = req.params;
-      await this.deleteEpisodeUseCase.execute(id);
+      const { episodeId } = req.params;
+      await this.deleteEpisodeUseCase.execute(episodeId);
       return ok({ message: 'Episode deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -324,8 +322,8 @@ export class ScenarioController {
   };
   public deleteGroup = async (req: Request) => {
     try {
-      const { id } = req.params;
-      await this.deleteGroupUseCase.execute(id);
+      const { groupId } = req.params;
+      await this.deleteGroupUseCase.execute(groupId);
       return ok({ message: 'group deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -370,7 +368,6 @@ export class ScenarioController {
       return ok({ message: 'Scenario updated' });
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
         error instanceof MissingParamError
       ) {
         return badRequest(error);
@@ -384,9 +381,6 @@ export class ScenarioController {
       await this.deleteScenarioUseCase.execute(id);
       return ok({ message: 'Scenario deleted' });
     } catch (error: any) {
-      if (error instanceof InvalidParamError) {
-        return badRequest(error);
-      }
       return serverError(error);
     }
   };

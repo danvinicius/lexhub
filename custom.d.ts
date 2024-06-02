@@ -1,5 +1,6 @@
 declare namespace Express {
   export interface Request {
-    payload?: any;
+    user?: number;
+    projects?: object[];
   }
 }

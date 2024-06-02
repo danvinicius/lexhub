@@ -8,8 +8,8 @@ export class GetAllProjectsUseCase {
     this.projectRepository = projectRepository;
   }
 
-  async execute(): Promise<IProject[]> {
-    const projects = await this.projectRepository.getAllProjects();
+  async execute(userId: number | string): Promise<IProject[]> {
+    const projects = await this.projectRepository.getAllProjects(userId);
     return projects;
   }
 }

@@ -9,7 +9,7 @@ export class RemoveResourceUseCase {
   }
   async execute({ resourceId, scenarioId }: AddOrRemoveEntity): Promise<void> {
     const scenarioExists =
-      await this.scenarioRepository.getScenario(scenarioId);
+    await this.scenarioRepository.getScenario(scenarioId);
     if (!scenarioExists) {
       throw new InvalidParamError('scenarioId');
     }

@@ -68,6 +68,7 @@ export class MySQLScenarioRepository implements ScenarioRepository {
         groups: {
           nonSequentialEpisodes: true,
         },
+        project: true
       },
     });
     return scenarios;
