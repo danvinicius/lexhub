@@ -3,7 +3,7 @@ import { User } from '@/infra/db/models/User'
 import { DataSource } from 'typeorm';
 import { ServerError } from '@/util/errors';
 
-export class MySQLUserRepository implements UserRepository {
+export class SQLUserRepository implements UserRepository {
   private dataSource: DataSource;
 
   constructor(dataSource: DataSource) {

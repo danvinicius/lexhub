@@ -3,7 +3,7 @@ import { DataSource } from 'typeorm';
 import { Symbol, Synonym, Project, Impact } from '@/infra/db/models'
 import { ServerError } from '@/util/errors';
 
-export class MySQLSymbolRepository implements SymbolRepository {
+export class SQLSymbolRepository implements SymbolRepository {
   private dataSource: DataSource;
 
   constructor(dataSource: DataSource) {

@@ -21,10 +21,10 @@ Before you begin, ensure you have the following installed:
 
 - Node.js (version >= 12)
 - Yarn
-- MySQL
+- Postgres
 
 ### Setup Database
-1. Ensure your MySQL server is running.
+1. Ensure your Postgres server is running.
 2. Create a database named scenarios_and_lexicons.
 
 ```sql
@@ -36,11 +36,11 @@ CREATE DATABASE scenarios_and_lexicons;
 2. Add the following environment variables:
 
 ```makefile
-DB_TYPE=mysql
-MYSQL_HOST=localhost
-MYSQL_USER=<your_mysql_username>
-MYSQL_PASSWORD=<your_mysql_password>
-MYSQL_NAME=scenarios_and_lexicons
+DB_TYPE=postgres
+DB_HOST=localhost
+DB_USER=<your_postgres_username>
+DB_PASSWORD=<your_postgres_password>
+DB_NAME=scenarios_and_lexicons
 ```
 
 ### Install Dependencies
@@ -75,11 +75,11 @@ Before you begin, ensure you have the following installed:
 2. Add the following environment variables (the database host on docker is 'db'):
 
 ```makefile
-DB_TYPE=mysql
-MYSQL_HOST=db
-MYSQL_USER=<your_mysql_username>
-MYSQL_PASSWORD=<your_mysql_password>
-MYSQL_NAME=scenarios_and_lexicons
+DB_TYPE=postgres
+DB_HOST=db
+DB_USER=<your_postgres_username>
+DB_PASSWORD=<your_postgres_password>
+DB_NAME=scenarios_and_lexicons
 ```
 
 ### Build and Run with Docker Compose

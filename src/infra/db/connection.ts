@@ -21,7 +21,7 @@ import { UserProject } from './models/UserProject';
 import { databaseConfig } from './config';
 
 export const AppDataSource = new DataSource({
-  type: 'mysql',
+  type: databaseConfig.type,
   host: databaseConfig.host,
   port: databaseConfig.port,
   username: databaseConfig.username,

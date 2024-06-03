@@ -1,5 +1,7 @@
+type SQLDatabaseType = 'postgres' | 'mysql'
+
 interface DatabaseConfig {
-  type: string;
+  type: SQLDatabaseType;
   host: string;
   port: number;
   username: string;
@@ -12,12 +14,12 @@ interface DatabaseConfig {
 }
 
 export const databaseConfig: DatabaseConfig = {
-  type: process.env.DB_TYPE || 'mysql',
-  host: process.env.MYSQL_HOST || '127.0.0.1',
-  port: Number(process.env.MYSQL_PORT) || 3306,
-  username: process.env.MYSQL_USER || 'root',
-  password: process.env.MYSQL_PASS || '123456',
-  database: process.env.MYSQL_NAME || 'scenarios_and_lexicons',
+  type: process.env.DB_TYPE as SQLDatabaseType || 'postgres',
+  host: process.env.DB_HOST || '127.0.0.1',
+  port: Number(process.env.DB_PORT) || 5432,
+  username: process.env.DB_USER || 'postgres',
+  password: process.env.DB_PASS || '123456',
+  database: process.env.DB_NAME || 'scenarios_and_lexicons',
   synchronize: true,
   logging: false,
   migrations: [],

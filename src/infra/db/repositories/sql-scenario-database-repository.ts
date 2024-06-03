@@ -21,7 +21,7 @@ import {
 } from '@/entities';
 import { BadRequestError, ServerError } from '@/util/errors';
 
-export class MySQLScenarioRepository implements ScenarioRepository {
+export class SQLScenarioRepository implements ScenarioRepository {
   private dataSource: DataSource;
 
   constructor(dataSource: DataSource) {

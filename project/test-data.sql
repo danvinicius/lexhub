@@ -1,5 +1,3 @@
-ALTER DATABASE scenarios_and_lexicons CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
 -- Inserindo Projetos
 INSERT INTO project (id, name, description) VALUES
   (1, 'Projeto Plataforma de Petróleo', 'Um projeto focado no desenvolvimento de uma plataforma de petróleo sustentável.');
@@ -75,7 +73,7 @@ INSERT INTO exception (description, scenario_id) VALUES
   -- Adicione mais exceções conforme necessário
 
 -- Inserindo Grupos
-INSERT INTO scenarios_and_lexicons.group (id, position, scenario_id) VALUES
+INSERT INTO "group" (id, position, scenario_id) VALUES
   (1, 3, 1),
   (2, 4, 1);
   -- Adicione mais grupos conforme necessário
@@ -88,6 +86,6 @@ INSERT INTO non_sequential_episode (id, position, description, type, group_id) V
 
 -- Inserindo Restrições
 INSERT INTO restriction (description, context_id, resource_id, episode_id) VALUES
-  ("Ativar Plano de Resposta a Emergências", 1, 1, 1),
-  ("Ativar Plano de Resposta a Derramamento de Óleo", 1, 1, 2);
+  ('Ativar Plano de Resposta a Emergências', 1, 1, 1),
+  ('Ativar Plano de Resposta a Derramamento de Óleo', 1, 1, 2);
   -- Adicione mais restrições conforme necessário

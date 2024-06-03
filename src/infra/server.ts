@@ -16,7 +16,7 @@ import { SymbolControllerFactory } from '@/controllers/factories/symbol-controll
 import { ProjectControllerFactory } from '@/controllers/factories/project-controller-factory';
 import { ScenarioControllerFactory } from '../controllers/factories/scenario-controller-factory';
 import { ProjectRepository, ScenarioRepository, SymbolRepository, UserRepository } from './db/protocols';
-import { MySQLProjectRepository, MySQLSymbolRepository, MySQLScenarioRepository, MySQLUserRepository } from '@/infra/db/repositories';
+import { SQLProjectRepository, SQLSymbolRepository, SQLScenarioRepository, SQLUserRepository } from '@/infra/db/repositories';
 
 export class Server {
   private ds: DataSource;
@@ -43,7 +43,7 @@ export class Server {
     await Server.getInstance().initDb();
     Server.getInstance().setupControllers();
     Server.getInstance().setupDocumentation();
-    this.server.listen(3000, () => Server.getInstance().logger.info('Server running on port 3000'));
+    this.server.listen(3000, () => Logger.info('Server running on port 3000'));
   }
 
   private config() {
@@ -59,10 +59,10 @@ export class Server {
 
   private async initDb() {
     this.ds = await AppDataSource.initialize();
-    this.projectRepository = new MySQLProjectRepository(this.ds);
-    this.symbolRepository = new MySQLSymbolRepository(this.ds);
-    this.scenarioRepository = new MySQLScenarioRepository(this.ds);
-    this.userRepository = new MySQLUserRepository(this.ds);
+    this.projectRepository = new SQLProjectRepository(this.ds);
+    this.symbolRepository = new SQLSymbolRepository(this.ds);
+    this.scenarioRepository = new SQLScenarioRepository(this.ds);
+    this.userRepository = new SQLUserRepository(this.ds);
   }
 
   private setupControllers() {

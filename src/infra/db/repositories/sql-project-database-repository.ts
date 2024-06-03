@@ -5,7 +5,7 @@ import { ServerError } from '@/util/errors';
 import { UserProject } from '../models';
 import { IProject, IUserProject, UserRole } from '@/entities';
 
-export class MySQLProjectRepository implements ProjectRepository {
+export class SQLProjectRepository implements ProjectRepository {
   private dataSource: DataSource;
 
   constructor(dataSource: DataSource) {
