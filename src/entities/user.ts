@@ -18,10 +18,8 @@ export interface IUser {
 
 export interface IUserProject {
   readonly id?: number;
-  invitedBy: number | string;
-  removedBy: number | string;
+  removedBy: number;
   role: UserRole;
   user: IUser;
   project: IProject;
-  acceptedAt: Date;
 }

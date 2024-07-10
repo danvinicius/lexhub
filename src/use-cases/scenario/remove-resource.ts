@@ -1,5 +1,5 @@
 import { AddOrRemoveEntity } from '@/use-cases/scenario/add-remove-entity';
-import { ScenarioRepository } from '@/infra/db/protocols';
+import { ScenarioRepository } from '@/infra/db/repositories';
 import { InvalidParamError } from '@/util/errors';
 
 export class RemoveResourceUseCase {

@@ -1,11 +1,22 @@
-import { ProjectRepository } from '@/infra/db/protocols';
 import { Project } from '@/infra/db/models/Project';
 import { DataSource } from 'typeorm';
 import { ServerError } from '@/util/errors';
 import { UserProject } from '../models';
-import { IProject, IUserProject, UserRole } from '@/entities';
+import { IProject, IUser, IUserProject, UserRole } from '@/entities';
 
-export class SQLProjectRepository implements ProjectRepository {
+export namespace ProjectRepository {
+  export interface CreateProjectParams {
+    name: string;
+    description: string;
+    user: IUser;
+  }
+  export interface UpdateProjectParams {
+    name: string;
+    description: string;
+  }
+}
+
+export class ProjectRepository {
   private dataSource: DataSource;
 
   constructor(dataSource: DataSource) {

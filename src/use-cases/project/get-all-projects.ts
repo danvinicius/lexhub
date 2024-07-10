@@ -1,5 +1,5 @@
 import { IProject } from '@/entities';
-import { ProjectRepository } from '@/infra/db/protocols';
+import { ProjectRepository } from '@/infra/db/repositories';
 
 export class GetAllProjectsUseCase {
   private projectRepository: ProjectRepository;
@@ -8,7 +8,7 @@ export class GetAllProjectsUseCase {
     this.projectRepository = projectRepository;
   }
 
-  async execute(userId: number | string): Promise<IProject[]> {
+  async execute(userId: number): Promise<IProject[]> {
     const projects = await this.projectRepository.getAllProjects(userId);
     return projects;
   }

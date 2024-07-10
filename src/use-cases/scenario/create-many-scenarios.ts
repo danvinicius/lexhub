@@ -1,5 +1,5 @@
 import { IScenario } from '@/entities';
-import { ScenarioRepository } from '@/infra/db/protocols';
+import { ScenarioRepository } from '@/infra/db/repositories';
 import { CreateManyScenariosRequestDTO } from '@/infra/http/dtos';
 
 export class CreateManyScenariosUseCase {

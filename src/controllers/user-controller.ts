@@ -9,17 +9,20 @@ import {
   unauthorized,
 } from '@/infra/http/response';
 import {
+  BadRequestError,
   EmailInUseError,
   InvalidParamError,
   MissingParamError,
   UnauthorizedError,
 } from '@/util/errors';
 import { AuthenticateUserUseCase, CreateUserUseCase } from '@/use-cases/user';
+import { AddUserToProjectUseCase } from '@/use-cases/user/add-user-to-project';
 
 export class UserController {
   constructor(
     private authenticateUserUseCase: AuthenticateUserUseCase,
-    private createUserUseCase: CreateUserUseCase
+    private createUserUseCase: CreateUserUseCase,
+    private addUserToProjectUseCase: AddUserToProjectUseCase,
   ) {}
 
   createUser = async (req: Request) => {
@@ -51,6 +54,27 @@ export class UserController {
       if (
         error instanceof InvalidParamError ||
         error instanceof MissingParamError
+      ) {
+        return badRequest(error);
+      }
+      if (error instanceof UnauthorizedError) {
+        return unauthorized(error);
+      }
+      return serverError(error);
+    }
+  };
+
+  addUserToProject = async (req: Request) => {
+    try {
+      const data = new DTO.AddUserToProjectRequestDTO({ ...req.body, projectId: Number(req.params.projectId) });
+      await validate(data);
+      const userProject = await this.addUserToProjectUseCase.execute(data, req.user);
+      return ok(userProject);
+    } catch (error: any) {
+      if (
+        error instanceof InvalidParamError ||
+        error instanceof MissingParamError ||
+        error instanceof BadRequestError
       ) {
         return badRequest(error);
       }

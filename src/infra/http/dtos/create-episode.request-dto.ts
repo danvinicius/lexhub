@@ -12,10 +12,10 @@ export class CreateEpisodeRequestDTO {
 
   @IsNumber()
   @IsOptional()
-  group: number | string;
+  group: number;
 
   @IsNumber()
-  scenarioId: number | string;
+  scenarioId: number;
 
   constructor(data: any) {
     this.position = data.position;

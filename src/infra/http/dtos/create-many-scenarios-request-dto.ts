@@ -8,7 +8,7 @@ export class CreateManyScenariosRequestDTO {
   }[];
 
   @IsNumber()
-  projectId: number | string;
+  projectId: number;
 
   constructor(data: any) {
     this.scenarios = data.scenarios;

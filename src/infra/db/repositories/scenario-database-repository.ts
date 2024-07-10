@@ -1,4 +1,3 @@
-import { ScenarioRepository } from '@/infra/db/protocols';
 import { DataSource } from 'typeorm';
 import {
   Project,
@@ -21,7 +20,58 @@ import {
 } from '@/entities';
 import { BadRequestError, ServerError } from '@/util/errors';
 
-export class SQLScenarioRepository implements ScenarioRepository {
+export namespace ScenarioRepository {
+  export interface CreateScenarioParams {
+    title: string;
+    goal: string;
+    projectId: number;
+  }
+  export interface CreateManyScenariosParams {
+    scenarios: {
+      title: string;
+      goal: string;
+    }[];
+    projectId: number;
+  }
+  export interface CreateExceptionParams {
+    description: string;
+    scenarioId: number;
+  }
+  export interface CreateContextParams {
+    geographicLocation: string;
+    temporalLocation: string;
+    preCondition: string;
+    scenarioId: number;
+  }
+  export interface CreateRestrictionParams {
+    description: string;
+    scenarioId: number;
+    episodeId: number;
+    resourceId: number;
+    contextId: number;
+  }
+  export interface CreateActorParams {
+    name: string;
+    scenarioId: number;
+  }
+  export interface CreateResourceParams {
+    name: string;
+    scenarioId: number;
+  }
+  export interface CreateEpisodeParams {
+    position: number;
+    description: string;
+    type: string;
+    group: number;
+    scenarioId: number;
+  }
+  export interface UpdateScenarioParams {
+    title: string;
+    goal: string;
+  }
+}
+
+export class ScenarioRepository {
   private dataSource: DataSource;
 
   constructor(dataSource: DataSource) {

@@ -7,7 +7,7 @@ import {
   IScenario,
   ISymbol,
 } from '@/entities';
-import { ScenarioRepository, SymbolRepository } from '@/infra/db/protocols';
+import { ScenarioRepository, SymbolRepository } from '@/infra/db/repositories';
 import { NotFoundError } from '@/util/errors/not-found-error';
 
 export interface FoundLexicon {
@@ -97,7 +97,7 @@ export class GetScenarioWithLexiconsUseCase {
   }
 
   private findPossibleLexicons = <
-    T extends { name?: string; title?: string; id?: number | string; project: IProject },
+    T extends { name?: string; title?: string; id?: number; project: IProject },
   >(
     text: string,
     termos: T[]

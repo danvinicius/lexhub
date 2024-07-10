@@ -1,5 +1,5 @@
 import { IScenario } from '@/entities';
-import { ScenarioRepository } from '@/infra/db/protocols';
+import { ScenarioRepository } from '@/infra/db/repositories';
 
 export class GetAllScenariosUseCase {
   private scenarioRepository: ScenarioRepository;
@@ -8,7 +8,7 @@ export class GetAllScenariosUseCase {
     this.scenarioRepository = scenarioRepository;
   }
 
-  async execute(projectId: number | string): Promise<IScenario[]> {
+  async execute(projectId: number): Promise<IScenario[]> {
     const scenarios = await this.scenarioRepository.getAllScenarios(projectId);
     return scenarios;
   }

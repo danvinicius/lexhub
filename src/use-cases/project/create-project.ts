@@ -1,5 +1,5 @@
 import { CreateProjectRequestDTO } from '@/infra/http/dtos';
-import { ProjectRepository, UserRepository } from '@/infra/db/protocols';
+import { ProjectRepository, UserRepository } from '@/infra/db/repositories';
 import { IProject } from '@/entities';
 
 export class CreateProjectUseCase {
@@ -11,7 +11,7 @@ export class CreateProjectUseCase {
     this.userRepository = userRepository;
   }
 
-  async execute(project: CreateProjectRequestDTO, userId: number | string): Promise<IProject> {
+  async execute(project: CreateProjectRequestDTO, userId: number): Promise<IProject> {
     const user = await this.userRepository.getUser({id: userId})
     
     return await this.projectRepository.createProject({...project, user});

@@ -1,10 +1,10 @@
 import { UpdateScenarioRequestDTO } from '@/infra/http/dtos';
-import { ScenarioRepository } from '@/infra/db/protocols';
+import { ScenarioRepository } from '@/infra/db/repositories';
 import { InvalidParamError } from '@/util/errors';
 
 export namespace UpdateScenarioUseCase {
   export interface Params {
-    id: number | string;
+    id: number;
     scenario: UpdateScenarioRequestDTO;
   }
 }

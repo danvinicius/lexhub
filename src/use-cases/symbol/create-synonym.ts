@@ -1,5 +1,5 @@
 import { CreateSynonymRequestDTO } from '@/infra/http/dtos';
-import { SymbolRepository } from '@/infra/db/protocols';
+import { SymbolRepository } from '@/infra/db/repositories';
 import { InvalidParamError } from '@/util/errors';
 
 export class CreateSynonymUseCase {

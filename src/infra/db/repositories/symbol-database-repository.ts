@@ -1,9 +1,34 @@
-import { SymbolRepository } from '@/infra/db/protocols';
 import { DataSource } from 'typeorm';
 import { Symbol, Synonym, Project, Impact } from '@/infra/db/models'
 import { ServerError } from '@/util/errors';
 
-export class SQLSymbolRepository implements SymbolRepository {
+export namespace SymbolRepository {
+  export interface CreateSymbolParams {
+    name: string;
+    classification: string;
+    notion: string;
+    projectId: number;
+  }
+
+  export interface UpdateSymbolParams {
+    name: string;
+    classification: string;
+    notion: string;
+  }
+
+  export interface CreateImpactParams {
+    description: string;
+    symbolId: number;
+  }
+
+  export interface CreateSynonymParams {
+    name: string;
+    symbolId: number;
+  }
+}
+
+
+export class SymbolRepository  {
   private dataSource: DataSource;
 
   constructor(dataSource: DataSource) {

@@ -17,12 +17,6 @@ export class UserProject implements IUserProject {
   id: number;
 
   @Column({
-    name: 'invited_by',
-    nullable: true,
-  })
-  invitedBy: number;
-
-  @Column({
     name: 'removed_by',
     nullable: true,
   })
@@ -45,13 +39,6 @@ export class UserProject implements IUserProject {
     name: 'project_id',
   })
   project: IProject;
-
-  @CreateDateColumn({
-    name: 'accepted_at',
-    type: 'timestamp',
-    nullable: true,
-  })
-  acceptedAt: Date;
 
   @CreateDateColumn({
     name: 'created_at',

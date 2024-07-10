@@ -14,7 +14,7 @@ export class CreateSymbolRequestDTO {
   notion: string;
 
   @IsNumber()
-  projectId: number | string;
+  projectId: number;
 
   constructor(data: any) {
     this.name = data.name;

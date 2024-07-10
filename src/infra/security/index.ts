@@ -1,2 +1,2 @@
-export * from './bcrypt-adapter';
-export * from './jwt-adapter';
+export * from './bcrypt-service';
+export * from './jwt-service';

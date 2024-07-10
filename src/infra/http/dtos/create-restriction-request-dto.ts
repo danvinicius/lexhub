@@ -5,19 +5,19 @@ export class CreateRestrictionRequestDTO {
   description: string;
 
   @IsNumber()
-  scenarioId: number | string;
+  scenarioId: number;
 
   @IsNumber()
   @IsOptional()
-  episodeId: number | string;
+  episodeId: number;
 
   @IsOptional()
   @IsNumber()
-  resourceId: number | string;
+  resourceId: number;
 
   @IsOptional()
   @IsNumber()
-  contextId: number | string;
+  contextId: number;
 
   constructor(data: any) {
     this.description = data.description;

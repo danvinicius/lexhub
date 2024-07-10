@@ -5,7 +5,7 @@ export class CreateSynonymRequestDTO {
   name: string;
 
   @IsNumber()
-  symbolId: number | string;
+  symbolId: number;
 
   constructor(data: any) {
     this.name = data.name;

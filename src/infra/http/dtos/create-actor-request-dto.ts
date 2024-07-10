@@ -5,7 +5,7 @@ export class CreateActorRequestDTO {
   name: string;
 
   @IsNumber()
-  scenarioId: number | string;
+  scenarioId: number;
 
   constructor(data: any) {
     this.name = data.name;

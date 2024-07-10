@@ -1,5 +1,5 @@
 import { ISymbol } from '@/entities';
-import { SymbolRepository } from '@/infra/db/protocols';
+import { SymbolRepository } from '@/infra/db/repositories';
 import { CreateSymbolRequestDTO } from '@/infra/http/dtos';
 
 export class CreateSymbolUseCase {

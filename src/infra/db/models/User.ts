@@ -18,7 +18,9 @@ export class User implements IUser {
   @Column()
   name: string;
 
-  @Column()
+  @Column({
+    unique: true
+  })
   email: string;
 
   @Column()

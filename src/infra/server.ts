@@ -11,12 +11,14 @@ import { AppDataSource } from '@/infra/db/connection';
 import { scenarioRouter } from '@/infra/http/routers/scenario-router';
 import express, { Application, Request, Response, Router } from 'express';
 import { userRouter, projectRouter, symbolRouter } from '@/infra/http/routers';
-import { UserControllerFactory } from '@/controllers/factories/user-controller-factory';
-import { SymbolControllerFactory } from '@/controllers/factories/symbol-controller-factory';
-import { ProjectControllerFactory } from '@/controllers/factories/project-controller-factory';
-import { ScenarioControllerFactory } from '../controllers/factories/scenario-controller-factory';
-import { ProjectRepository, ScenarioRepository, SymbolRepository, UserRepository } from './db/protocols';
-import { SQLProjectRepository, SQLSymbolRepository, SQLScenarioRepository, SQLUserRepository } from '@/infra/db/repositories';
+import { ProjectRepository, SymbolRepository, ScenarioRepository, UserRepository } from '@/infra/db/repositories';
+import { ProjectController, ScenarioController, SymbolController, UserController } from '@/controllers';
+import { CreateProjectUseCase, DeleteProjectUseCase, GetAllProjectsUseCase, GetProjectUseCase, UpdateProjectUseCase } from '@/use-cases/project';
+import { GetScenarioUseCase, GetScenarioWithLexiconsUseCase, GetAllScenariosUseCase, CreateScenarioUseCase, CreateManyScenariosUseCase, UpdateScenarioUseCase, DeleteScenarioUseCase, CreateExceptionUseCase, CreateContextUseCase, CreateRestrictionUseCase, CreateActorUseCase, CreateResourceUseCase, AddActorUseCase, AddResourceUseCase, CreateEpisodeUseCase, DeleteExceptionUseCase, DeleteContextUseCase, DeleteRestrictionUseCase, DeleteActorUseCase, DeleteResourceUseCase, RemoveActorUseCase, RemoveResourceUseCase, DeleteEpisodeUseCase, DeleteGroupUseCase } from '@/use-cases/scenario';
+import { GetSymbolUseCase, GetAllSymbolsUseCase, CreateSymbolUseCase, UpdateSymbolUseCase, DeleteSymbolUseCase, CreateImpactUseCase, CreateSynonymUseCase, DeleteImpactUseCase, DeleteSynonymUseCase } from '@/use-cases/symbol';
+import { AuthenticateUserUseCase, CreateUserUseCase } from '@/use-cases/user';
+import { AddUserToProjectUseCase } from '@/use-cases/user/add-user-to-project';
+import { BcryptService, JwtService } from './security';
 
 export class Server {
   private ds: DataSource;
@@ -26,6 +28,8 @@ export class Server {
   private symbolRepository: SymbolRepository;
   private scenarioRepository: ScenarioRepository;
   private userRepository: UserRepository;
+  private jwtService: JwtService;
+  private bcryptService: BcryptService;
   private server: Application
   private static _instance: Server;
 
@@ -59,28 +63,61 @@ export class Server {
 
   private async initDb() {
     this.ds = await AppDataSource.initialize();
-    this.projectRepository = new SQLProjectRepository(this.ds);
-    this.symbolRepository = new SQLSymbolRepository(this.ds);
-    this.scenarioRepository = new SQLScenarioRepository(this.ds);
-    this.userRepository = new SQLUserRepository(this.ds);
+    this.projectRepository = new ProjectRepository(this.ds);
+    this.symbolRepository = new SymbolRepository(this.ds);
+    this.scenarioRepository = new ScenarioRepository(this.ds);
+    this.userRepository = new UserRepository(this.ds);
   }
 
   private setupControllers() {
-    const projectController = ProjectControllerFactory.makeProjectController(
-      this.projectRepository,
-      this.userRepository
+    const projectController = new ProjectController(
+      new GetProjectUseCase(this.projectRepository),
+      new GetAllProjectsUseCase(this.projectRepository),
+      new CreateProjectUseCase(this.projectRepository, this.userRepository),
+      new UpdateProjectUseCase(this.projectRepository),
+      new DeleteProjectUseCase(this.projectRepository)
     );
-    const symbolController = SymbolControllerFactory.makeSymbolController(
-      this.symbolRepository,
-      this.projectRepository
+    const symbolController = new SymbolController(
+      new GetSymbolUseCase(this.symbolRepository),
+      new GetAllSymbolsUseCase(this.symbolRepository),
+      new CreateSymbolUseCase(this.symbolRepository),
+      new UpdateSymbolUseCase(this.symbolRepository),
+      new DeleteSymbolUseCase(this.symbolRepository),
+      new CreateImpactUseCase(this.symbolRepository),
+      new CreateSynonymUseCase(this.symbolRepository),
+      new DeleteImpactUseCase(this.symbolRepository),
+      new DeleteSynonymUseCase(this.symbolRepository)
+    )
+    const userController = new UserController(
+      new AuthenticateUserUseCase(this.userRepository, this.jwtService, this.bcryptService),
+      new CreateUserUseCase(this.userRepository, this.jwtService, this.bcryptService),
+      new AddUserToProjectUseCase(this.userRepository, this.projectRepository)
     );
-    const userController = UserControllerFactory.makeUserController(
-      this.userRepository
-    );
-    const scenarioController = ScenarioControllerFactory.makeScenarioController(
-      this.scenarioRepository,
-      this.projectRepository,
-      this.symbolRepository
+    const scenarioController = new ScenarioController(
+      new GetScenarioUseCase(this.scenarioRepository),
+      new GetScenarioWithLexiconsUseCase(this.scenarioRepository, this.symbolRepository),
+      new GetAllScenariosUseCase(this.scenarioRepository),
+      new CreateScenarioUseCase(this.scenarioRepository),
+      new CreateManyScenariosUseCase(this.scenarioRepository),
+      new UpdateScenarioUseCase(this.scenarioRepository),
+      new DeleteScenarioUseCase(this.scenarioRepository),
+      new CreateExceptionUseCase(this.scenarioRepository),
+      new CreateContextUseCase(this.scenarioRepository),
+      new CreateRestrictionUseCase(this.scenarioRepository),
+      new CreateActorUseCase(this.scenarioRepository),
+      new CreateResourceUseCase(this.scenarioRepository),
+      new AddActorUseCase(this.scenarioRepository),
+      new AddResourceUseCase(this.scenarioRepository),
+      new CreateEpisodeUseCase(this.scenarioRepository),
+      new DeleteExceptionUseCase(this.scenarioRepository),
+      new DeleteContextUseCase(this.scenarioRepository),
+      new DeleteRestrictionUseCase(this.scenarioRepository),
+      new DeleteActorUseCase(this.scenarioRepository),
+      new DeleteResourceUseCase(this.scenarioRepository),
+      new RemoveActorUseCase(this.scenarioRepository),
+      new RemoveResourceUseCase(this.scenarioRepository),
+      new DeleteEpisodeUseCase(this.scenarioRepository),
+      new DeleteGroupUseCase(this.scenarioRepository)
     );
     projectRouter(this.router, projectController);
     symbolRouter(this.router, symbolController);

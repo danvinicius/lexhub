@@ -1,8 +1,6 @@
-import { Encrypter, Decrypter } from '@/infra/security/protocols';
-
 import jwt from 'jsonwebtoken';
 
-export class JwtAdapter implements Encrypter, Decrypter {
+export class JwtService {
   constructor(private readonly secret: string) {}
 
   async encrypt(text: string): Promise<string> {

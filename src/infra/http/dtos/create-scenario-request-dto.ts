@@ -8,7 +8,7 @@ export class CreateScenarioRequestDTO {
   goal: string;
 
   @IsNumber()
-  projectId: number | string;
+  projectId: number;
 
   constructor(data: any) {
     this.title = data.title;

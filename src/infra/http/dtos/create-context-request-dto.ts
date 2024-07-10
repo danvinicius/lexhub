@@ -11,7 +11,7 @@ export class CreateContextRequestDTO {
   preCondition: string;
 
   @IsNumber()
-  scenarioId: number | string;
+  scenarioId: number;
 
   constructor(data: any) {
     this.geographicLocation = data.geographicLocation;

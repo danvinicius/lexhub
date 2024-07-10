@@ -1,4 +1,4 @@
-import { UserRepository } from '@/infra/db/protocols';
+import { UserRepository } from '@/infra/db/repositories';
 import { Decrypter, Encrypter, HashComparer, Hasher } from '@/infra/security/protocols';
 import {
   AuthenticateUserRequestDTO,

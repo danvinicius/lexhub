@@ -1,3 +1,3 @@
 export interface AddOrRemoveEntity {
-  [key: string]: number | string;
+  [key: string]: number;
 }

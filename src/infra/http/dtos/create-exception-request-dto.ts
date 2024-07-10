@@ -5,7 +5,7 @@ export class CreateExceptionRequestDTO {
   description: string;
 
   @IsNumber()
-  scenarioId: number | string;
+  scenarioId: number;
 
   constructor(data: any) {
     this.description = data.description;

@@ -1,4 +1,4 @@
-import { ScenarioRepository } from '@/infra/db/protocols';
+import { ScenarioRepository } from '@/infra/db/repositories';
 import { AddOrRemoveEntity } from '@/use-cases/scenario/add-remove-entity';
 import { InvalidParamError } from '@/util/errors';
 

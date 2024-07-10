@@ -1,5 +1,5 @@
 import { CreateContextRequestDTO } from '@/infra/http/dtos';
-import { ScenarioRepository } from '@/infra/db/protocols';
+import { ScenarioRepository } from '@/infra/db/repositories';
 import { InvalidParamError } from '@/util/errors';
 
 export class CreateContextUseCase {

@@ -5,7 +5,7 @@ export class CreateImpactRequestDTO {
   description: string;
 
   @IsNumber()
-  symbolId: number | string;
+  symbolId: number;
 
   constructor(data: any) {
     this.description = data.description;

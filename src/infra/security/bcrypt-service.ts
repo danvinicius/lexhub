@@ -1,8 +1,6 @@
-import { Hasher, HashComparer } from '@/infra/security/protocols';
-
 import bcrypt from 'bcryptjs';
 
-export class BcryptAdapter implements Hasher, HashComparer {
+export class BcryptService {
   constructor(private readonly salt: number) {}
 
   async hash(text: string): Promise<string> {

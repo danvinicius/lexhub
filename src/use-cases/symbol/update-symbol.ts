@@ -1,10 +1,10 @@
 import { UpdateSymbolRequestDTO } from '@/infra/http/dtos';
-import { SymbolRepository } from '@/infra/db/protocols';
+import { SymbolRepository } from '@/infra/db/repositories';
 import { InvalidParamError } from '@/util/errors';
 
 export namespace UpdateSymbolUseCase {
   export interface Params {
-    id: number | string;
+    id: number;
     symbol: UpdateSymbolRequestDTO;
   }
 }

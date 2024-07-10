@@ -1,5 +1,5 @@
 import { ISymbol } from '@/entities';
-import { SymbolRepository } from '@/infra/db/protocols';
+import { SymbolRepository } from '@/infra/db/repositories';
 
 export class GetAllSymbolsUseCase {
   private symbolRepository: SymbolRepository;
@@ -8,7 +8,7 @@ export class GetAllSymbolsUseCase {
     this.symbolRepository = symbolRepository;
   }
 
-  async execute(projectId: number | string): Promise<ISymbol[]> {
+  async execute(projectId: number): Promise<ISymbol[]> {
     const symbols = await this.symbolRepository.getAllSymbols(projectId);
     return symbols;
   }
