@@ -4,8 +4,8 @@ import {
   BadRequestError,
   InvalidParamError,
   MissingParamError,
-} from '@/util/errors';
-import { validate } from '../util/validation/validate';
+} from '@/utils/errors';
+import { validate } from '../utils/validation/validate';
 import * as DTO from '@/infra/http/dtos';
 import {
   badRequest,
@@ -14,65 +14,15 @@ import {
   ok,
   serverError,
 } from '@/infra/http/response';
-import {
-  GetScenarioUseCase,
-  GetScenarioWithLexiconsUseCase,
-  GetAllScenariosUseCase,
-  CreateScenarioUseCase,
-  CreateManyScenariosUseCase,
-  UpdateScenarioUseCase,
-  DeleteScenarioUseCase,
-  CreateExceptionUseCase,
-  CreateContextUseCase,
-  CreateRestrictionUseCase,
-  CreateActorUseCase,
-  CreateResourceUseCase,
-  AddActorUseCase,
-  AddResourceUseCase,
-  CreateEpisodeUseCase,
-  DeleteExceptionUseCase,
-  DeleteRestrictionUseCase,
-  DeleteActorUseCase,
-  DeleteResourceUseCase,
-  RemoveActorUseCase,
-  RemoveResourceUseCase,
-  DeleteEpisodeUseCase,
-  DeleteGroupUseCase,
-  DeleteContextUseCase,
-} from '@/use-cases/scenario';
+import { ScenarioService } from '@/services';
+
+const scenarioService = new ScenarioService();
 
 export class ScenarioController {
-  constructor(
-    private getScenarioUseCase: GetScenarioUseCase,
-    private getScenarioWithLexiconsUseCase: GetScenarioWithLexiconsUseCase,
-    private getAllScenariosUseCase: GetAllScenariosUseCase,
-    private createScenarioUseCase: CreateScenarioUseCase,
-    private createManyScenariosUseCase: CreateManyScenariosUseCase,
-    private updateScenarioUseCase: UpdateScenarioUseCase,
-    private deleteScenarioUseCase: DeleteScenarioUseCase,
-    private createExceptionUseCase: CreateExceptionUseCase,
-    private createContextUseCase: CreateContextUseCase,
-    private createRestrictionUseCase: CreateRestrictionUseCase,
-    private createActorUseCase: CreateActorUseCase,
-    private createResourceUseCase: CreateResourceUseCase,
-    private addActorUseCase: AddActorUseCase,
-    private addResourceUseCase: AddResourceUseCase,
-    private createEpisodeUseCase: CreateEpisodeUseCase,
-    private deleteExceptionUseCase: DeleteExceptionUseCase,
-    private deleteContextUseCase: DeleteContextUseCase,
-    private deleteRestrictionUseCase: DeleteRestrictionUseCase,
-    private deleteActorUseCase: DeleteActorUseCase,
-    private deleteResourceUseCase: DeleteResourceUseCase,
-    private removeActorUseCase: RemoveActorUseCase,
-    private removeResourceUseCase: RemoveResourceUseCase,
-    private deleteEpisodeUseCase: DeleteEpisodeUseCase,
-    private deleteGroupUseCase: DeleteGroupUseCase
-  ) { }
-
   public getAllScenarios = async (req: Request) => {
     try {
       const { projectId } = req.params;
-      const scenarios = await this.getAllScenariosUseCase.execute(projectId);
+      const scenarios = await scenarioService.getAllScenarios(+projectId);
       return ok(scenarios);
     } catch (error: any) {
       return serverError(error);
@@ -82,7 +32,7 @@ export class ScenarioController {
   public getScenario = async (req: Request) => {
     try {
       const { id } = req.params;
-      const scenario = await this.getScenarioUseCase.execute(id);
+      const scenario = await scenarioService.getScenario(+id);
       return ok(scenario);
     } catch (error: any) {
       if (error instanceof NotFoundError) {
@@ -94,9 +44,7 @@ export class ScenarioController {
   public getScenarioWithLexicons = async (req: Request) => {
     try {
       const { id } = req.params;
-      const scenario = await this.getScenarioWithLexiconsUseCase.execute(
-        Number(id)
-      );
+      const scenario = await scenarioService.getScenarioWithLexicon(+id);
       return ok(scenario);
     } catch (error: any) {
       if (error instanceof NotFoundError) {
@@ -107,15 +55,15 @@ export class ScenarioController {
   };
   public createScenario = async (req: Request) => {
     try {
-      const scenario = new DTO.CreateScenarioRequestDTO({ ...req.body, projectId: Number(req.params.projectId) });
+      const scenario = new DTO.CreateScenarioRequestDTO({
+        ...req.body,
+        projectId: Number(req.params.projectId),
+      });
       await validate(scenario);
-      const scenarioCreated =
-        await this.createScenarioUseCase.execute(scenario);
+      const scenarioCreated = await scenarioService.createScenario(scenario);
       return created(scenarioCreated);
     } catch (error: any) {
-      if (
-        error instanceof MissingParamError
-      ) {
+      if (error instanceof MissingParamError) {
         return badRequest(error);
       }
       return serverError(error);
@@ -124,15 +72,15 @@ export class ScenarioController {
 
   public createManyScenarios = async (req: Request) => {
     try {
-      const data = new DTO.CreateManyScenariosRequestDTO({ ...req.body, projectId: Number(req.params.projectId) });
+      const data = new DTO.CreateManyScenariosRequestDTO({
+        ...req.body,
+        projectId: Number(req.params.projectId),
+      });
       await validate(data);
-      const scenariosCreated =
-        await this.createManyScenariosUseCase.execute(data);
+      const scenariosCreated = await scenarioService.createManyScenarios(data);
       return created(scenariosCreated);
     } catch (error: any) {
-      if (
-        error instanceof MissingParamError
-      ) {
+      if (error instanceof MissingParamError) {
         return badRequest(error);
       }
       return serverError(error);
@@ -141,9 +89,12 @@ export class ScenarioController {
 
   public createException = async (req: Request) => {
     try {
-      const exception = new DTO.CreateExceptionRequestDTO({ ...req.body, scenarioId: Number(req.params.scenarioId) });
+      const exception = new DTO.CreateExceptionRequestDTO({
+        ...req.body,
+        scenarioId: Number(req.params.scenarioId),
+      });
       await validate(exception);
-      await this.createExceptionUseCase.execute(exception);
+      await scenarioService.createException(exception);
       return created({ message: 'Exception created' });
     } catch (error: any) {
       if (
@@ -157,9 +108,12 @@ export class ScenarioController {
   };
   public createContext = async (req: Request) => {
     try {
-      const context = new DTO.CreateContextRequestDTO({ ...req.body, scenarioId: Number(req.params.scenarioId) });
+      const context = new DTO.CreateContextRequestDTO({
+        ...req.body,
+        scenarioId: Number(req.params.scenarioId),
+      });
       await validate(context);
-      await this.createContextUseCase.execute(context);
+      await scenarioService.createContext(context);
       return created({ message: 'Context created' });
     } catch (error: any) {
       if (
@@ -173,9 +127,12 @@ export class ScenarioController {
   };
   public createRestriction = async (req: Request) => {
     try {
-      const restriction = new DTO.CreateRestrictionRequestDTO({ ...req.body, scenarioId: Number(req.params.scenarioId) });
+      const restriction = new DTO.CreateRestrictionRequestDTO({
+        ...req.body,
+        scenarioId: Number(req.params.scenarioId),
+      });
       await validate(restriction);
-      await this.createRestrictionUseCase.execute(restriction);
+      await scenarioService.createRestriction(restriction);
       return created({ message: 'Restriction created' });
     } catch (error: any) {
       if (
@@ -189,9 +146,12 @@ export class ScenarioController {
   };
   public createActor = async (req: Request) => {
     try {
-      const actor = new DTO.CreateActorRequestDTO({ ...req.body, scenarioId: Number(req.params.scenarioId) });
+      const actor = new DTO.CreateActorRequestDTO({
+        ...req.body,
+        scenarioId: Number(req.params.scenarioId),
+      });
       await validate(actor);
-      await this.createActorUseCase.execute(actor);
+      await scenarioService.createActor(actor);
       return created({ message: 'Actor created' });
     } catch (error: any) {
       if (
@@ -205,9 +165,12 @@ export class ScenarioController {
   };
   public createResource = async (req: Request) => {
     try {
-      const resource = new DTO.CreateResourceRequestDTO({ ...req.body, scenarioId: Number(req.params.scenarioId) });
+      const resource = new DTO.CreateResourceRequestDTO({
+        ...req.body,
+        scenarioId: Number(req.params.scenarioId),
+      });
       await validate(resource);
-      await this.createResourceUseCase.execute(resource);
+      await scenarioService.createResource(resource);
       return created({ message: 'Resource created' });
     } catch (error: any) {
       if (
@@ -222,7 +185,7 @@ export class ScenarioController {
   public addActor = async (req: Request) => {
     try {
       const { scenarioId, actorId } = req.params;
-      await this.addActorUseCase.execute({
+      await scenarioService.addActor({
         scenarioId: +scenarioId,
         actorId: +actorId,
       });
@@ -237,7 +200,7 @@ export class ScenarioController {
   public addResource = async (req: Request) => {
     try {
       const { scenarioId, resourceId } = req.params;
-      await this.addResourceUseCase.execute({
+      await scenarioService.addResource({
         scenarioId: +scenarioId,
         resourceId: +resourceId,
       });
@@ -251,9 +214,12 @@ export class ScenarioController {
   };
   public createEpisode = async (req: Request) => {
     try {
-      const episode = new DTO.CreateEpisodeRequestDTO({ ...req.body, scenarioId: Number(req.params.scenarioId) });
+      const episode = new DTO.CreateEpisodeRequestDTO({
+        ...req.body,
+        scenarioId: Number(req.params.scenarioId),
+      });
       await validate(episode);
-      await this.createEpisodeUseCase.execute(episode);
+      await scenarioService.createEpisode(episode);
       return created({ message: 'Episode created' });
     } catch (error: any) {
       if (
@@ -269,7 +235,7 @@ export class ScenarioController {
   public deleteException = async (req: Request) => {
     try {
       const { exceptionId } = req.params;
-      await this.deleteExceptionUseCase.execute(exceptionId);
+      await scenarioService.deleteException(+exceptionId);
       return ok({ message: 'Exception deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -278,7 +244,7 @@ export class ScenarioController {
   public deleteContext = async (req: Request) => {
     try {
       const { contextId } = req.params;
-      await this.deleteContextUseCase.execute(contextId);
+      await scenarioService.deleteContext(+contextId);
       return ok({ message: 'Context deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -287,7 +253,7 @@ export class ScenarioController {
   public deleteRestriction = async (req: Request) => {
     try {
       const { restrictionId } = req.params;
-      await this.deleteRestrictionUseCase.execute(restrictionId);
+      await scenarioService.deleteRestriction(+restrictionId);
       return ok({ message: 'Restriction deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -296,7 +262,7 @@ export class ScenarioController {
   public deleteActor = async (req: Request) => {
     try {
       const { actorId } = req.params;
-      await this.deleteActorUseCase.execute(actorId);
+      await scenarioService.deleteActor(+actorId);
       return ok({ message: 'Actor deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -305,7 +271,7 @@ export class ScenarioController {
   public deleteResource = async (req: Request) => {
     try {
       const { resourceId } = req.params;
-      await this.deleteResourceUseCase.execute(resourceId);
+      await scenarioService.deleteResource(+resourceId);
       return ok({ message: 'Resource deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -314,7 +280,7 @@ export class ScenarioController {
   public deleteEpisode = async (req: Request) => {
     try {
       const { episodeId } = req.params;
-      await this.deleteEpisodeUseCase.execute(episodeId);
+      await scenarioService.deleteEpisode(+episodeId);
       return ok({ message: 'Episode deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -323,7 +289,7 @@ export class ScenarioController {
   public deleteGroup = async (req: Request) => {
     try {
       const { groupId } = req.params;
-      await this.deleteGroupUseCase.execute(groupId);
+      await scenarioService.deleteGroup(+groupId);
       return ok({ message: 'group deleted' });
     } catch (error: any) {
       return serverError(error);
@@ -332,7 +298,7 @@ export class ScenarioController {
   public removeActor = async (req: Request) => {
     try {
       const { scenarioId, actorId } = req.params;
-      await this.removeActorUseCase.execute({
+      await scenarioService.removeActor({
         scenarioId: +scenarioId,
         actorId: +actorId,
       });
@@ -347,7 +313,7 @@ export class ScenarioController {
   public removeResource = async (req: Request) => {
     try {
       const { scenarioId, resourceId } = req.params;
-      await this.removeResourceUseCase.execute({
+      await scenarioService.removeResource({
         scenarioId: +scenarioId,
         resourceId: +resourceId,
       });
@@ -364,12 +330,10 @@ export class ScenarioController {
       const { id } = req.params;
       const scenario = new DTO.UpdateScenarioRequestDTO(req.body);
       await validate(scenario);
-      await this.updateScenarioUseCase.execute({ id, scenario });
+      await scenarioService.updateScenario({ id: +id, scenario });
       return ok({ message: 'Scenario updated' });
     } catch (error: any) {
-      if (
-        error instanceof MissingParamError
-      ) {
+      if (error instanceof MissingParamError) {
         return badRequest(error);
       }
       return serverError(error);
@@ -378,7 +342,7 @@ export class ScenarioController {
   public deleteScenario = async (req: Request) => {
     try {
       const { id } = req.params;
-      await this.deleteScenarioUseCase.execute(id);
+      await scenarioService.deleteScenario(+id);
       return ok({ message: 'Scenario deleted' });
     } catch (error: any) {
       return serverError(error);

@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import * as DTO from '@/infra/http/dtos';
-import { validate } from '@/util/validation/validate';
+import { validate } from '@/utils/validation/validate';
 import {
   badRequest,
   created,
@@ -13,27 +13,16 @@ import {
   InvalidParamError,
   MissingParamError,
   NotFoundError,
-} from '@/util/errors';
-import {
-  CreateProjectUseCase,
-  DeleteProjectUseCase,
-  GetAllProjectsUseCase,
-  GetProjectUseCase,
-  UpdateProjectUseCase,
-} from '@/use-cases/project';
+} from '@/utils/errors';
+
+import { ProjectService } from '@/services';
+
+const projectService = new ProjectService();
 
 export class ProjectController {
-  constructor(
-    private getProjectUseCase: GetProjectUseCase,
-    private getAllProjectsUseCase: GetAllProjectsUseCase,
-    private createProjectUseCase: CreateProjectUseCase,
-    private updateProjectUseCase: UpdateProjectUseCase,
-    private deleteProjectUseCase: DeleteProjectUseCase
-  ) { }
-
   public getAllProjects = async (req: Request) => {
     try {
-      const projects = await this.getAllProjectsUseCase.execute(req.user);
+      const projects = await projectService.getAllProjects(req.user);
       return ok(projects);
     } catch (error: any) {
       return serverError(error);
@@ -43,7 +32,7 @@ export class ProjectController {
   public getProject = async (req: Request) => {
     try {
       const { projectId } = req.params;
-      const project = await this.getProjectUseCase.execute(projectId);
+      const project = await projectService.getProject(+projectId);
       return ok(project);
     } catch (error: any) {
       if (error instanceof NotFoundError) {
@@ -56,7 +45,7 @@ export class ProjectController {
     try {
       const data = new DTO.CreateProjectRequestDTO(req.body);
       await validate(data);
-      const projectCreated = await this.createProjectUseCase.execute(data, req.user);
+      const projectCreated = await projectService.createProject(data, req.user);
       return created(projectCreated);
     } catch (error: any) {
       if (
@@ -73,7 +62,7 @@ export class ProjectController {
       const { projectId } = req.params;
       const data = new DTO.UpdateProjectRequestDTO(req.body);
       await validate(data);
-      await this.updateProjectUseCase.execute({ id: projectId, project: data });
+      await projectService.updateProject({ id: +projectId, project: data });
       return ok({ message: 'Project updated' });
     } catch (error: any) {
       if (
@@ -88,7 +77,7 @@ export class ProjectController {
   public deleteProject = async (req: Request) => {
     try {
       const { projectId } = req.params;
-      await this.deleteProjectUseCase.execute(projectId);
+      await projectService.deleteProject(+projectId);
       return ok({ message: 'Project deleted' });
     } catch (error: any) {
       return serverError(error);

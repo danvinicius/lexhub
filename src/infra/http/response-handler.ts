@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Logger } from '@/util/logger/logger';
+import { Logger } from '@/utils/logger/logger';
 import { HttpResponse } from './response';
 
 export const responseHandler = (handler: any) => {

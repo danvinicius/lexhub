@@ -1,4 +1,4 @@
-import { ServerError } from '@/util/errors';
+import { ServerError } from '@/utils/errors';
 
 export interface HttpResponse {
   statusCode: number;

@@ -1,4 +1,4 @@
-import { UserRole } from '@/entities';
+import { UserRole } from '@/models';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class AddUserToProjectRequestDTO {

@@ -1,7 +1,6 @@
-import { User } from '@/infra/db/models';
 import { JwtService } from '@/infra/security';
-import { Server } from '@/infra/server';
-import { GetUserUseCase } from '@/use-cases/user/get-user';
+import { IUser } from '@/models';
+import { UserService } from '@/services';
 import { Request, Response, NextFunction } from 'express';
 
 export const authMiddleware = async (
@@ -24,11 +23,10 @@ export const authMiddleware = async (
       });
     }
     const jwt = new JwtService(process.env.AUTH_SECRET);
-    const payload = (await jwt.decrypt(token)) as User;
+    const payload = (await jwt.decrypt(token)) as IUser;
     const id = Number(payload?.id);
-    const userRepository = Server.getInstance().getUserRepository();
-    const getUserUseCase = new GetUserUseCase(userRepository);
-    const user = await getUserUseCase.execute(id);
+    const userService = new UserService();
+    const user = await userService.getUser(id);
     req.user = id;
     req.projects = user.projects;
     next();

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { IUserProject } from '@/entities';
-import { isAdmin, isCollaborator, isOwner } from '@/util/validation/permission';
+import { isAdmin, isCollaborator, isOwner } from '@/utils/validation/permission';
+import { IUserProject } from '@/models';
 
 const userBelongsToProject = (userProjects: IUserProject[], projectId: Number) => {
   return userProjects?.find((p: IUserProject) => p.project.id == Number(projectId));

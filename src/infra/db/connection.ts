@@ -1,26 +1,26 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
+
+import { databaseConfig } from './config';
 import {
   Project,
-  Symbol,
   Synonym,
   Impact,
   Exception,
   Scenario,
-  Context,
   Actor,
+  Context,
   Restriction,
   Resource,
   Episode,
   Group,
-  User,
   NonSequentialEpisode,
-} from './models';
+  User,
+  UserProject,
+  Symbol,
+} from '@/models';
 
-import { UserProject } from './models/UserProject';
-import { databaseConfig } from './config';
-
-export const AppDataSource = new DataSource({
+const appDataSource = new DataSource({
   type: databaseConfig.type,
   host: databaseConfig.host,
   port: databaseConfig.port,
@@ -49,3 +49,12 @@ export const AppDataSource = new DataSource({
   migrations: databaseConfig.migrations,
   subscribers: databaseConfig.subscribers,
 });
+
+export const initializeDataSource = async () => {
+  if (!appDataSource.isInitialized) {
+    await appDataSource.initialize();
+  }
+  return appDataSource;
+};
+
+export default appDataSource;

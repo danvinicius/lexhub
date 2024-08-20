@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import * as DTO from '@/infra/http/dtos';
-import { validate } from '@/util/validation/validate';
+import { validate } from '@/utils/validation/validate';
 import {
   badRequest,
   created,
@@ -14,22 +14,18 @@ import {
   InvalidParamError,
   MissingParamError,
   UnauthorizedError,
-} from '@/util/errors';
-import { AuthenticateUserUseCase, CreateUserUseCase } from '@/use-cases/user';
-import { AddUserToProjectUseCase } from '@/use-cases/user/add-user-to-project';
+} from '@/utils/errors';
+import { UserService } from '@/services';
+
+const userService = new UserService();
 
 export class UserController {
-  constructor(
-    private authenticateUserUseCase: AuthenticateUserUseCase,
-    private createUserUseCase: CreateUserUseCase,
-    private addUserToProjectUseCase: AddUserToProjectUseCase,
-  ) {}
 
   createUser = async (req: Request) => {
     try {
       const user = new DTO.CreateUserRequestDTO(req.body);
       await validate(user);
-      const userCreated = await this.createUserUseCase.execute(user);
+      const userCreated = await userService.createUser(user);
       return created(userCreated);
     } catch (error: any) {
       if (
@@ -47,7 +43,7 @@ export class UserController {
     try {
       const login = new DTO.AuthenticateUserRequestDTO(req.body);
       await validate(login);
-      const user = await this.authenticateUserUseCase.execute(login);
+      const user = await userService.authenticateUser(login);
       const logged = new DTO.AuthenticateUserResponseDTO(user);
       return ok(logged);
     } catch (error: any) {
@@ -68,7 +64,7 @@ export class UserController {
     try {
       const data = new DTO.AddUserToProjectRequestDTO({ ...req.body, projectId: Number(req.params.projectId) });
       await validate(data);
-      const userProject = await this.addUserToProjectUseCase.execute(data, req.user);
+      const userProject = await userService.addUserToProject(data, req.user);
       return ok(userProject);
     } catch (error: any) {
       if (

@@ -1,1 +1,1 @@
-import './infra/main';
+import './main';
