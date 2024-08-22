@@ -1,0 +1,15 @@
+textarea {
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  border: none;
+  width: 100%;
+  resize: none;
+  font-family: Ubuntu, Avenir, Helvetica, Arial, sans-serif;
+
+  &::placeholder {
+    font-family: Ubuntu, Avenir, Helvetica, Arial, sans-serif;
+  }
+}

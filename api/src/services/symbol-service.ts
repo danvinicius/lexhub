@@ -5,13 +5,6 @@ import { InvalidParamError, NotFoundError } from "@/utils/errors";
 
 const symbolRepository = new SymbolRepository();
 
-export namespace SymbolService {
-  export interface UpdateSymbolParams {
-    id: number;
-    symbol: UpdateSymbolRequestDTO;
-  }
-}
-
 export class SymbolService {
   async createImpact(impact: CreateImpactRequestDTO): Promise<void> {
     const symbolExists = await symbolRepository.getSymbol(impact.symbolId);
@@ -64,7 +57,7 @@ export class SymbolService {
     return symbols;
   }
 
-  async updateSymbol({ id, symbol }: SymbolService.UpdateSymbolParams): Promise<void> {
+  async updateSymbol(id: number, symbol: UpdateSymbolRequestDTO): Promise<void> {
     const symbolExists = await symbolRepository.getSymbol(id);
     if (!symbolExists) {
       throw new InvalidParamError('symbolId');

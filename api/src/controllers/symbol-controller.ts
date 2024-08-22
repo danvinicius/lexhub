@@ -96,7 +96,7 @@ export class SymbolController {
       const { id } = req.params;
       const symbol = new DTO.UpdateSymbolRequestDTO(req.body);
       await validate(symbol);
-      await symbolService.updateSymbol({ id: +id, symbol });
+      await symbolService.updateSymbol(+id, symbol);
       return ok({ message: 'Symbol updated' });
     } catch (error: any) {
       if (

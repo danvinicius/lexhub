@@ -1,0 +1,35 @@
+.login-form, .signup-form, .forgot-password-form {
+    background: #fff;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    width: 100%;
+    
+    @media screen and (min-width: 998px) {
+      margin: auto;
+      width: 50%;
+      padding: 0 10rem;
+    }
+
+    .title {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+  
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-text-color);
+    }
+  
+    p.signup {
+      color: var(--secondary-text-color);
+  
+      span {
+        color: var(--primary-color);
+        cursor: pointer;
+      }
+    }
+  }

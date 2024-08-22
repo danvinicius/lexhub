@@ -62,7 +62,7 @@ export class ProjectController {
       const { projectId } = req.params;
       const data = new DTO.UpdateProjectRequestDTO(req.body);
       await validate(data);
-      await projectService.updateProject({ id: +projectId, project: data });
+      await projectService.updateProject(+projectId, data);
       return ok({ message: 'Project updated' });
     } catch (error: any) {
       if (

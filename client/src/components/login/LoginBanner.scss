@@ -1,0 +1,46 @@
+.login-banner {
+    background: var(--primary-color);
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+  
+    @media screen and (min-width: 998px) {
+      padding: 0 10rem;
+      align-items: flex-start;
+      height: 92vh;
+      width: 50%;
+    }
+  
+    img {
+      max-width: 100%;
+    }
+  
+    .content {
+      display: flex;
+      flex-direction: column;
+      color: #fff;
+      gap: 1rem;
+      text-align: center;
+  
+      @media screen and (min-width: 998px) {
+        text-align: left;
+      }
+  
+      h2 {
+        font-size: 2rem;
+        font-weight: bold;
+        
+        @media screen and (min-width: 998px) {
+          text-align: left;
+          font-size: 3rem;
+        }
+      }
+  
+      p {
+        font-size: 20px;
+      }
+    }
+  }

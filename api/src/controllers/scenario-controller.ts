@@ -330,7 +330,7 @@ export class ScenarioController {
       const { id } = req.params;
       const scenario = new DTO.UpdateScenarioRequestDTO(req.body);
       await validate(scenario);
-      await scenarioService.updateScenario({ id: +id, scenario });
+      await scenarioService.updateScenario(+id, scenario);
       return ok({ message: 'Scenario updated' });
     } catch (error: any) {
       if (error instanceof MissingParamError) {

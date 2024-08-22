@@ -1,0 +1,197 @@
+@font-face {
+  src: url('./assets/fonts/Ubuntu/Ubuntu-Regular.ttf') format('truetype');
+  font-display: swap;
+  font-family: Ubuntu;
+}
+
+:root {
+  font-family: Ubuntu, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1;
+  font-weight: 400;
+
+  --primary-color: #30b27f;
+  --secondary-color: #0abdc6;
+  --tertiary-color: #bd00ff;
+  --quaternary-color: #f2f5ff;
+  --primary-text-color: #091833;
+  --secondary-text-color: #6d6d6d;
+  --error-color: #ff3333;
+  --helper-color: #f2f2f2;
+}
+
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  position: relative;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  color: var(--primary-text-color);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scrollbar-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  text-decoration: none;
+}
+
+button, a, span {
+  user-select: none;
+}
+
+button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a {
+  line-height: 1.4;
+}
+
+.flex {
+  display: flex;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.row {
+  flex-direction: row;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.align-start {
+  align-items: flex-start;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.gap-1 {
+  gap: 1rem;
+}
+
+.gap-125 {
+  gap: 1.25rem;
+}
+
+.gap-15 {
+  gap: 1.5rem;
+}
+
+.gap-2 {
+  gap: 2rem;
+}
+
+.gap-25 {
+  gap: 0.25rem;
+}
+
+.gap-5 {
+  gap: 0.5rem;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.bg-primary {
+  background: var(--primary-color);
+}
+.bg-secondary {
+  background: var(--secondary-color);
+}
+.bg-tertiary {
+  background: var(--tertiary-color);
+}
+.primary-text-color {
+  color: var(--primary-text-color);
+}
+.secondary-text-color {
+  color: var(--secondary-text-color);
+}
+
+.decoration-none {
+  text-decoration: none;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+table,
+tr,
+td,
+th {
+  border: 1px solid var(--secondary-text-color);
+  text-align: center;
+}
+
+td,
+th {
+  padding: 0.75rem 4rem;
+}
+
+th {
+  font-weight: bold;
+}
+
+a {
+  color: var(--primary-color);
+}
+
+.error {
+  color: var(--error-color);
+}
+
+
+.container {
+  width: 100%;
+  @media screen and (min-width: 998px) {
+    padding: 0;
+    margin: 0 auto;
+    width: 85%;
+  }
+}

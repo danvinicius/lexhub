@@ -1,17 +1,13 @@
-import { CreateProjectRequestDTO, UpdateProjectRequestDTO } from '@/infra/http/dtos';
+import {
+  CreateProjectRequestDTO,
+  UpdateProjectRequestDTO,
+} from '@/infra/http/dtos';
 import { IProject } from '@/models';
 import { ProjectRepository, UserRepository } from '@/repositories';
 import { NotFoundError } from '@/utils/errors';
 
 const projectRepository = new ProjectRepository();
 const userRepository = new UserRepository();
-
-export namespace ProjectService {
-  export interface UpdateProjectParams {
-    id: number;
-    project: UpdateProjectRequestDTO;
-  }
-}
 
 export class ProjectService {
   async createProject(
@@ -35,10 +31,10 @@ export class ProjectService {
     return projects;
   }
 
-  async updateProject({
-    id,
-    project,
-  }: ProjectService.UpdateProjectParams): Promise<void> {
+  async updateProject(
+    id: number,
+    project: UpdateProjectRequestDTO
+  ): Promise<void> {
     await projectRepository.updateProject(id, project);
   }
 

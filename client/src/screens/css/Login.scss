@@ -1,0 +1,10 @@
+.login {
+  flex-wrap: wrap;
+  @media screen and (min-width: 998px) {
+    background-image: linear-gradient(
+      to right,
+      var(--primary-color) 50%,
+      #fff 50%
+      );
+    }
+  }

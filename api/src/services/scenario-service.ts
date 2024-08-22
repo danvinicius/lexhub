@@ -7,14 +7,7 @@ import { AddOrRemoveEntity } from '@/utils/share';
 const symbolRepository = new SymbolRepository();
 const scenarioRepository = new ScenarioRepository();
 
-export namespace ScenarioService {
-  export interface UpdateScenarioParams {
-    id: number;
-    scenario: UpdateScenarioRequestDTO;
-  }
-}
-
-export interface FoundLexicon {
+export interface Lexicon {
   resource: string;
   name: string;
   starts: number;
@@ -182,8 +175,8 @@ export class ScenarioService {
     ]);
 
     // retira o próprio cenário
-    const scenarioIndex = scenarios.findIndex((c: IScenario) => {
-      return c.id?.valueOf() === scenario?.id?.valueOf();
+    const scenarioIndex = scenarios.findIndex((current: IScenario) => {
+      return current.id?.valueOf() === scenario?.id?.valueOf();
     });
 
     scenarios.splice(scenarioIndex, 1);
@@ -211,37 +204,37 @@ export class ScenarioService {
       resources = [],
     } = scenario;
 
-    const findLexicon = (text: string, searchOtherScenarios: boolean) =>
-      this.findLexicons(text, symbols, scenarios, searchOtherScenarios);
+    const processedLexicon = (content: string, searchOtherScenarios: boolean) =>
+      this.processLexicon(content, symbols, scenarios, searchOtherScenarios);
 
     return {
-      title: findLexicon(title, false),
-      goal: findLexicon(goal, false),
+      title: processedLexicon(title, false),
+      goal: processedLexicon(goal, false),
       context: {
-        geographicLocation: findLexicon(geographicLocation, false),
-        temporalLocation: findLexicon(temporalLocation, false),
-        preCondition: findLexicon(preCondition, true),
+        geographicLocation: processedLexicon(geographicLocation, false),
+        temporalLocation: processedLexicon(temporalLocation, false),
+        preCondition: processedLexicon(preCondition, true),
         restrictions: restrictions.map((restriction: IRestriction) =>
-          findLexicon(restriction.description, true)
+          processedLexicon(restriction.description, true)
         ),
       },
       exceptions: exceptions.map((exception: IException) =>
-        findLexicon(exception.description, true)
+        processedLexicon(exception.description, true)
       ),
-      actors: actors.map((actor: IActor) => findLexicon(actor.name, false)),
+      actors: actors.map((actor: IActor) => processedLexicon(actor.name, false)),
       resources: resources.map((resource: IResource) =>
-        findLexicon(resource.name, false)
+        processedLexicon(resource.name, false)
       ),
     };
   }
 
-  private findPossibleLexicons = <
+  private findPossibleLexicon = <
     T extends { name?: string; title?: string; id?: number; project: IProject },
   >(
     text: string,
     termos: T[]
   ) => {
-    const possibleLexicons: FoundLexicon[] = [];
+    const possibleLexicon: Lexicon[] = [];
 
     for (const termo of termos) {
       const lexiconName = termo.name || termo.title || '';
@@ -257,7 +250,7 @@ export class ScenarioService {
         const ends = starts + lexiconName.length;
         const { id } = termo;
         if (id) {
-          possibleLexicons.push({
+          possibleLexicon.push({
             resource: termo.title ? `/api/project/${termo.project.id}/scenario/${id}` : `/api/project/${termo.project.id}/symbol/${id}`,
             name: lexiconName,
             starts,
@@ -268,7 +261,7 @@ export class ScenarioService {
       }
     }
 
-    return possibleLexicons;
+    return possibleLexicon;
   };
 
   //   　　　　/)─―ヘ
@@ -279,22 +272,22 @@ export class ScenarioService {
   // 　 U￣U￣￣￣￣U￣U
   // aqui que a mágica acontece
 
-  private findLexicons = (
+  private processLexicon = (
     content: string,
     symbols: ISymbol[],
     scenarios: IScenario[],
     searchOtherScenarios: boolean
   ) => {
-    const foundLexicons: FoundLexicon[] = [];
+    const foundLexicons: Lexicon[] = [];
 
-    const possibleSymbols = this.findPossibleLexicons(content, symbols);
-    let possibleScenarios: FoundLexicon[] = [];
+    const possibleSymbols = this.findPossibleLexicon(content, symbols);
+    let possibleScenarios: Lexicon[] = [];
     if (searchOtherScenarios) {
-      possibleScenarios = this.findPossibleLexicons(content, scenarios);
+      possibleScenarios = this.findPossibleLexicon(content, scenarios);
     }
 
     // primeiro, o cenário compete com outros cenários dentro do text
-    const scenariosFilter = (candidate: FoundLexicon) => {
+    const scenariosFilter = (candidate: Lexicon) => {
       return !possibleScenarios.some((scenario) => {
         return (
           scenario !== candidate &&
@@ -305,7 +298,7 @@ export class ScenarioService {
     };
 
     // depois, o símbolo compete com cenários (cenários tem prioridade) e depois com outros símbolos
-    const symbolsFilter = (candidate: FoundLexicon) => {
+    const symbolsFilter = (candidate: Lexicon) => {
       return (
         !possibleScenarios.some((scenario) => {
           return (
@@ -341,7 +334,7 @@ export class ScenarioService {
       .replace(/[\u0300-\u036f]/g, '');
   };
 
-  private orderByPosition = (a: FoundLexicon, b: FoundLexicon) => {
+  private orderByPosition = (a: Lexicon, b: Lexicon) => {
     if (a.starts > b.starts) {
       return 1;
     }
@@ -369,7 +362,7 @@ export class ScenarioService {
     return await scenarioRepository.removeResource(scenarioId, resourceId);
   }
 
-  async updateScenario({ id, scenario }: ScenarioService.UpdateScenarioParams): Promise<void> {
+  async updateScenario(id: number, scenario: UpdateScenarioRequestDTO): Promise<void> {
     const scenarioExists = await scenarioRepository.getScenario(id);
     if (!scenarioExists) {
       throw new InvalidParamError('scenarioId');
