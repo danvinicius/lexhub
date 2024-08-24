@@ -1,7 +1,7 @@
-import { Link } from 'react-scroll'
 import './Logo.scss'
 import React from 'react'
 import LogoImg from '../../assets/logo.svg'
+import { Link } from 'react-router-dom'
 
 interface LogoProps {
     toggleMenu?: () => void
@@ -9,7 +9,7 @@ interface LogoProps {
 
 export const Logo: React.FC<LogoProps> = ({toggleMenu}: LogoProps) => {
     return (
-        <Link to="home" smooth={true} duration={500} spy={true} activeClass="active" className="logo" onClick={toggleMenu}>
+        <Link to="/" className="logo" onClick={toggleMenu}>
             <img src={LogoImg} alt="Logo do Lexhub" title="Logo do Lexhub" />
         </Link>
     )

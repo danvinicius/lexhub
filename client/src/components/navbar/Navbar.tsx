@@ -3,7 +3,6 @@ import { Logo } from "../logo/Logo";
 import "./Navbar.scss";
 import Hamburger from "../../assets/icon/Hamburger.svg";
 import Close from "../../assets/icon/Close.svg";
-import { SocialMediaLinks } from "../contact/SocialMediaLinks";
 import { NavbarMenuLinks } from "./NavbarMenuLinks";
 
 

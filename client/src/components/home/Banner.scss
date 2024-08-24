@@ -1,0 +1,10 @@
+.banner {
+    height: 200px;
+    background-position: center 45%;
+    background-repeat: no-repeat;
+    
+    @media screen and (min-width: 998px) {
+        background-position: center 45%;
+        height: 350px;
+    }
+}

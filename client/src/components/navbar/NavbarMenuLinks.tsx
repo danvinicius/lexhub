@@ -1,14 +1,16 @@
 import ChevronRight from "../../assets/icon/ChevronRight.svg";
-import { Link } from "react-scroll";
 import "./Navbar.scss";
 import React from "react";
-import './NavbarMenuLinks.scss'
+import "./NavbarMenuLinks.scss";
+import { Link } from "react-router-dom";
 
 interface NavbarMenuLinksProps {
-  toggleMenu?: () => void
+  toggleMenu?: () => void;
 }
 
-export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({toggleMenu }: NavbarMenuLinksProps) => {
+export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
+  toggleMenu,
+}: NavbarMenuLinksProps) => {
   const [width, setWidth] = React.useState<number>(window.innerWidth);
 
   function handleWindowSizeChange() {
@@ -32,19 +34,15 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({toggleMenu }: N
   return (
     <ul className="navbarMenu">
       <li>
-        <Link
-          to="sobre"
-          smooth={!isMobile}
-          duration={isMobile ? 0 : 500}
-          spy={true}
-          hashSpy={true}
-          activeClass="active"
-          onClick={isMobile ? handleClick : undefined}
-        >
+        <Link to="sobre" onClick={isMobile ? handleClick : undefined}>
           {isMobile ? (
             <div className="arrowLink">
               Sobre o Lexhub
-              <img src={ChevronRight} alt="Ícone seta para direita" title="Ícone seta para direita" />
+              <img
+                src={ChevronRight}
+                alt="Ícone seta para direita"
+                title="Ícone seta para direita"
+              />
             </div>
           ) : (
             "Sobre o Lexhub"
@@ -52,19 +50,15 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({toggleMenu }: N
         </Link>
       </li>
       <li>
-        <Link
-          to="como-usar"
-          smooth={!isMobile}
-          duration={isMobile ? 0 : 500}
-          spy={true}
-          hashSpy={true}
-          activeClass="active"
-          onClick={isMobile ? handleClick : undefined}
-        >
+        <Link to="como-usar" onClick={isMobile ? handleClick : undefined}>
           {isMobile ? (
             <div className="arrowLink">
               Como usar
-              <img src={ChevronRight} alt="Ícone seta para direita" title="Ícone seta para direita" />
+              <img
+                src={ChevronRight}
+                alt="Ícone seta para direita"
+                title="Ícone seta para direita"
+              />
             </div>
           ) : (
             "Como usar"
@@ -72,19 +66,15 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({toggleMenu }: N
         </Link>
       </li>
       <li>
-        <Link
-          to="blog"
-          smooth={!isMobile}
-          duration={isMobile ? 0 : 500}
-          spy={true}
-          hashSpy={true}
-          activeClass="active"
-          onClick={isMobile ? handleClick : undefined}
-        >
+        <Link to="blog" onClick={isMobile ? handleClick : undefined}>
           {isMobile ? (
             <div className="arrowLink">
               Nosso blog
-              <img src={ChevronRight} alt="Ícone seta para direita" title="Ícone seta para direita" />
+              <img
+                src={ChevronRight}
+                alt="Ícone seta para direita"
+                title="Ícone seta para direita"
+              />
             </div>
           ) : (
             "Nosso blog"
@@ -92,19 +82,15 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({toggleMenu }: N
         </Link>
       </li>
       <li>
-        <Link
-          to="login"
-          smooth={!isMobile}
-          duration={isMobile ? 0 : 500}
-          spy={true}
-          hashSpy={true}
-          activeClass="active"
-          onClick={isMobile ? handleClick : undefined}
-        >
+        <Link to="login" onClick={isMobile ? handleClick : undefined}>
           {isMobile ? (
             <div className="arrowLink">
               Entrar
-              <img src={ChevronRight} alt="Ícone seta para direita" title="Ícone seta para direita" />
+              <img
+                src={ChevronRight}
+                alt="Ícone seta para direita"
+                title="Ícone seta para direita"
+              />
             </div>
           ) : (
             "Entrar"

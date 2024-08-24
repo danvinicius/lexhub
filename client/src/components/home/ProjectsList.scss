@@ -1,0 +1,75 @@
+.projectsListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-radius: 10px;
+  background: #fff;
+  padding: 1rem;
+  padding-bottom: 2rem;
+  
+  @media screen and (min-width: 998px) {
+    padding-bottom: 1rem;
+    gap: 2rem;
+    border: 1px solid var(--secondary-text-color);
+    position: absolute;
+    right: 7.5%;
+    top: 250px;
+    max-width: 40%;
+  }
+
+  h1 {
+    @media screen and (min-width: 998px) {
+      display: none;
+    }
+  }
+
+  .projectsListContainerHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    button {
+      max-width: 200px;
+    }
+  }
+
+  .projectsList {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    .project {
+      display: flex;
+      gap: 1rem;
+      cursor: pointer;
+
+      &:hover {
+        .projectContent {
+
+          p.projectName, p.projectDescription {
+            color: var(--primary-color);
+          }
+        }
+      }
+      .projectImage {
+        min-width: 50px;
+        height: 50px;
+        background: #ccc;
+        border-radius: 50%;
+      }
+
+      .projectContent {
+        display: flex;
+        flex-direction: column;
+
+        p.projectName {
+          transition: .1s linear;
+          font-weight: bold;
+        }
+        
+        p.projectDescription {
+          transition: .1s linear;
+          color: var(--secondary-text-color);
+        }
+      }
+    }
+  }
+}
