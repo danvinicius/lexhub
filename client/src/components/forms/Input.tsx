@@ -1,5 +1,6 @@
 import React from "react";
 import "./Input.scss";
+import Error from "../helper/Error";
 
 interface InputProps {
   type: string;
@@ -8,6 +9,7 @@ interface InputProps {
   value: string;
   label: string;
   required?: boolean;
+  error?: string;
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -19,6 +21,7 @@ const Input: React.FC<InputProps> = ({
   placeholder,
   value,
   label,
+  error,
   onChange,
   required = false,
 }: InputProps) => {
@@ -34,6 +37,7 @@ const Input: React.FC<InputProps> = ({
         onChange={onChange}
         required={required}
       />
+      <Error error={error}/>
     </label>
   );
 };

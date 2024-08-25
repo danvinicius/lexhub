@@ -21,6 +21,7 @@
     }
     & > h1 {
       display: none;
+      width: max-content;
       @media screen and (min-width: 998px) {
         display: initial;
       }

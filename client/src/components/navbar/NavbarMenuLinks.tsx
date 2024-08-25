@@ -3,6 +3,8 @@ import "./Navbar.scss";
 import React from "react";
 import "./NavbarMenuLinks.scss";
 import { Link } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
+import Button from "../forms/Button";
 
 interface NavbarMenuLinksProps {
   toggleMenu?: () => void;
@@ -12,6 +14,7 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
   toggleMenu,
 }: NavbarMenuLinksProps) => {
   const [width, setWidth] = React.useState<number>(window.innerWidth);
+  const { logged, logout } = React.useContext(UserContext) || {};
 
   function handleWindowSizeChange() {
     setWidth(window.innerWidth);
@@ -31,10 +34,16 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
     }
   };
 
+  const handleLogout = () => {
+    if (logged) {
+      if (logout) logout();
+    }
+  };
+
   return (
     <ul className="navbarMenu">
       <li>
-        <Link to="sobre" onClick={isMobile ? handleClick : undefined}>
+        <Link to="/sobre" onClick={isMobile ? handleClick : undefined}>
           {isMobile ? (
             <div className="arrowLink">
               Sobre o Lexhub
@@ -50,7 +59,7 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
         </Link>
       </li>
       <li>
-        <Link to="como-usar" onClick={isMobile ? handleClick : undefined}>
+        <Link to="/como-usar" onClick={isMobile ? handleClick : undefined}>
           {isMobile ? (
             <div className="arrowLink">
               Como usar
@@ -66,7 +75,7 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
         </Link>
       </li>
       <li>
-        <Link to="blog" onClick={isMobile ? handleClick : undefined}>
+        <Link to="/blog" onClick={isMobile ? handleClick : undefined}>
           {isMobile ? (
             <div className="arrowLink">
               Nosso blog
@@ -82,20 +91,10 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
         </Link>
       </li>
       <li>
-        <Link to="login" onClick={isMobile ? handleClick : undefined}>
-          {isMobile ? (
-            <div className="arrowLink">
-              Entrar
-              <img
-                src={ChevronRight}
-                alt="Ícone seta para direita"
-                title="Ícone seta para direita"
-              />
-            </div>
-          ) : (
-            "Entrar"
-          )}
-        </Link>
+        <Button
+          text={logged ? "Sair" : "Fazer login"}
+          onClick={handleLogout}
+        ></Button>
       </li>
     </ul>
   );

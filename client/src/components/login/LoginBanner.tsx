@@ -11,9 +11,8 @@ const LoginBanner = () => {
       <div className="content">
         <h2>Bem-vindo(a)!</h2>
         <p>
-          Transforme suas ideias em requisitos claros e gerenciáveis. Experimente
-          o Lexhub e melhore a eficiência dos seus projetos de software. Comece
-          agora!
+          Transforme suas ideias em requisitos claros e gerenciáveis! Experimente
+          o Lexhub e melhore a eficiência dos seus projetos de software.
         </p>
       </div>
     </section>

@@ -11,6 +11,7 @@ interface PasswordInputProps {
   value: string;
   placeholder: string;
   label: string;
+  error?: string
 }
 
 const PasswordInput: React.FC<PasswordInputProps> = ({
@@ -20,6 +21,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
   value,
   placeholder,
   label,
+  error,
 }: PasswordInputProps) => {
   const [type, setType] = React.useState("password");
   return (
@@ -40,6 +42,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
         label={label}
         value={value}
         onChange={onChange}
+        error={error}
       />
       {type == "password" && (
         <img

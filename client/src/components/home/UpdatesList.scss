@@ -1,4 +1,4 @@
-.notificationsListContainer {
+.updatesListContainer {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -11,33 +11,33 @@
       max-width: 40%;
     }
   
-    .notificationsListContainerHeader {
+    .updatesListContainerHeader {
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
   
-    .notificationsList {
+    .updatesList {
       display: flex;
       flex-direction: column;
       gap: 2rem;
-      .notification {
+      .update {
         cursor: pointer;
         display: flex;
         gap: 1rem;
 
         &:hover {
-          .notificationContent {
+          .updateContent {
   
-            p.notificationDescription {
+            p.updateDescription {
               color: var(--primary-color);
             }
           }
         }
   
-        .notificationContent {
+        .updateContent {
   
-          p.notificationDescription {
+          p.updateDescription {
             transition: .1s linear;
             color: var(--secondary-text-color);
           }

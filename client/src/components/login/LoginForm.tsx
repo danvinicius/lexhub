@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "../forms/Button";
 import Input from "../forms/Input";
 import Form from "../forms/Form";
 import "./LoginForm.scss";
 import PasswordInput from "../forms/PasswordInput";
+import { UserContext } from "../../context/UserContext";
+import Loading from "../helper/Loading";
 
 interface LoginFormProps {
   setCurrentScreen: (screen: string) => void;
@@ -17,6 +19,8 @@ const LoginForm: React.FC<LoginFormProps> = ({
     password: "",
   });
 
+  const { login, loading, error } = useContext(UserContext) || {};
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -26,17 +30,9 @@ const LoginForm: React.FC<LoginFormProps> = ({
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    try {
-      setFormData({
-        email: "",
-        password: "",
-      });
-    } catch (err) {
-      console.log(err);
-    }
+    if (login) login(formData);
   };
 
   return (
@@ -66,8 +62,9 @@ const LoginForm: React.FC<LoginFormProps> = ({
           value={formData.password}
           onChange={handleChange}
           setCurrentScreen={setCurrentScreen}
+          error={error}
         />
-        <Button text="Entrar" onClick={handleSubmit} />
+        {loading ? <Loading/> : <Button text="Entrar" onClick={handleSubmit} />}
       </Form>
     </section>
   );

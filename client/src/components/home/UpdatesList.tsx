@@ -1,17 +1,17 @@
-import "./NotificationsList.scss";
+import "./UpdatesList.scss";
 import ChevronRight from '../../assets/icon/ChevronRight.svg'
 
-const NotificationsList = () => {
+const UpdatesList = () => {
   return (
-    <section className="notificationsListContainer">
-      <div className="notificationsListContainerHeader">
+    <section className="updatesListContainer">
+      <div className="updatesListContainerHeader">
         <h2>Últimas atualizações</h2>
       </div>
-      <ul className="notificationsList">
+      <ul className="updatesList">
         <li>
-          <div className="notification">
-            <div className="notificationContent">
-              <p className="notificationDescription">
+          <div className="update">
+            <div className="updateContent">
+              <p className="updateDescription">
                 Lorem ipsum, dolor sit amet consectetur adipisicing, Lorem ipsum
                 dolor sit amet, consectetur adipisicing elit. Aliquid, ipsa.
               </p>
@@ -20,9 +20,9 @@ const NotificationsList = () => {
           </div>
         </li>
         <li>
-          <div className="notification">
-            <div className="notificationContent">
-              <p className="notificationDescription">
+          <div className="update">
+            <div className="updateContent">
+              <p className="updateDescription">
                 Lorem ipsum, dolor sit amet consectetur adipisicing, Lorem ipsum
                 dolor sit amet, consectetur adipisicing elit. Aliquid, ipsa.
               </p>
@@ -31,9 +31,9 @@ const NotificationsList = () => {
           </div>
         </li>
         <li>
-          <div className="notification">
-            <div className="notificationContent">
-              <p className="notificationDescription">
+          <div className="update">
+            <div className="updateContent">
+              <p className="updateDescription">
                 Lorem ipsum, dolor sit amet consectetur adipisicing, Lorem ipsum
                 dolor sit amet, consectetur adipisicing elit. Aliquid, ipsa.
               </p>
@@ -46,4 +46,4 @@ const NotificationsList = () => {
   );
 };
 
-export default NotificationsList;
+export default UpdatesList;

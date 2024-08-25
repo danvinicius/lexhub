@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Button from "../forms/Button";
 import Input from "../forms/Input";
 import Form from "../forms/Form";
 import "./LoginForm.scss";
+import { UserContext } from "../../context/UserContext";
+import Loading from "../helper/Loading";
 
 interface LoginFormProps {
-  setCurrentScreen: (screen: string) => void
+  setCurrentScreen: (screen: string) => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ setCurrentScreen }: LoginFormProps) => {
+const LoginForm: React.FC<LoginFormProps> = ({
+  setCurrentScreen,
+}: LoginFormProps) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     password: "",
   });
+
+  const { loading, error, signup } = useContext(UserContext) || {};
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -25,19 +31,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ setCurrentScreen }: LoginFormProp
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    try {
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        password: "",
-      });
-    } catch (err) {
-      console.log(err);
-    }
+    if (signup) signup(formData);
   };
 
   return (
@@ -45,8 +41,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ setCurrentScreen }: LoginFormProp
       <div className="title">
         <h1>Se inscreva</h1>
         <p className="signup">
-          Já tem uma conta?
-          &nbsp;
+          Já tem uma conta? &nbsp;
           <span onClick={() => setCurrentScreen("login")} className="pointer">
             Faça login
           </span>
@@ -84,11 +79,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ setCurrentScreen }: LoginFormProp
           label="Telefone"
           value={formData.phone}
           onChange={handleChange}
+          error={error}
         />
-        <Button
-          text="Entrar"
-          onClick={handleSubmit}
-        />
+        {loading ? (
+          <Loading />
+        ) : (
+          <Button text="Entrar" onClick={handleSubmit} />
+        )}
       </Form>
     </section>
   );
