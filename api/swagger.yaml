@@ -7,21 +7,36 @@ basePath: "/api"
 schemes:
   - "https"
 tags:
+  - name: health
+    description: "API health"
   - name: project
     description: "Any domain project, private or public, whose terms and jargon require good collective understanding."
   - name: symbol
     description: "Term or jargon within a project. It's a type of lexicon."
   - name: scenario
     description: "Specific description of a use case or an interaction between the system and its users. It's a type of lexicon."
+  - name: user
+    description: "The user of the system. It can be the owner of a project, an admin, an collaborator or an observer."
 
 paths:
   name: project
+  /health:
+    get:
+      tags:
+        - health 
+      summary: "Get API health"
+      description: "If API is working, it should return a... capybara."
+      responses:
+        200:
+          description: "OK"
   /project:
     get:
       tags:
         - project 
       summary: "Get All Projects"
       description: "Retrieves all projects."
+      security:
+        - bearerAuth: []
       responses:
         200:
           description: "OK"
@@ -34,6 +49,8 @@ paths:
         - project 
       summary: "Create Project"
       description: "Creates a new project."
+      security:
+        - bearerAuth: []
       parameters:
         - in: body
           name: body
@@ -56,6 +73,8 @@ paths:
         - project 
       summary: "Get Project by ID"
       description: "Retrieves a project by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -76,6 +95,8 @@ paths:
         - project 
       summary: "Update Project"
       description: "Updates an existing project."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -102,6 +123,8 @@ paths:
         - project 
       summary: "Delete Project"
       description: "Deletes a project by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -117,12 +140,14 @@ paths:
           description: "Bad Request: Invalid params"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /symbol/project/{projectId}:
+  /project/{projectId}/symbol:
     get:
       tags:
         - symbol
       summary: "Get All Symbols of a Project"
       description: "Retrieves all symbols of a given project."
+      security:
+        - bearerAuth: []
       parameters:
         - name: projectId
           in: path
@@ -136,12 +161,13 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Symbol"
-  /symbol:
     post:
       tags:
         - symbol
       summary: "Create Symbol within a Project"
       description: "Creates a new symbol within a Project."
+      security:
+        - bearerAuth: []
       parameters:
         - in: body
           name: body
@@ -158,12 +184,14 @@ paths:
           description: "Bad Request: Invalid or missing params"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /symbol/{id}:
+  /project/{projectId}/symbol/{id}:
     get:
       tags:
         - symbol
       summary: "Get Symbol by ID"
       description: "Retrieves a symbol by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -184,6 +212,8 @@ paths:
         - symbol
       summary: "Update Symbol"
       description: "Updates a symbol by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -210,6 +240,8 @@ paths:
         - symbol
       summary: "Delete Symbol"
       description: "Deletes a symbol by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -225,12 +257,14 @@ paths:
           description: "Bad Request: Invalid params"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /scenario/project/{projectId}:
+  /project/{projectId}/scenario:
     get:
       tags:
         - scenario
       summary: "Get All Scenarios of a Project"
       description: "Retrieves all scenarios of a given project."
+      security:
+        - bearerAuth: []
       parameters:
         - name: projectId
           in: path
@@ -244,12 +278,13 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Scenario"
-  /scenario:
     post:
       tags:
         - scenario
       summary: "Create Scenario within a Project"
       description: "Creates a new scenario within a Project."
+      security:
+        - bearerAuth: []
       parameters:
         - in: body
           name: body
@@ -266,12 +301,14 @@ paths:
           description: "Bad Request: Invalid or missing params"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /scenario/{id}/with-lexicons:
+  /project/{projectId}/scenario/{id}/with-lexicons:
     get:
       tags:
         - scenario
       summary: "Get Scenario with Lexicons"
       description: "Retrieves a scenario with lexicons by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -287,12 +324,14 @@ paths:
           description: "Not Found"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /scenario/many:
+  /project/{projectId}/scenario/many:
     post:
       tags:
         - scenario
       summary: "Create Many Scenarios within a Project"
       description: "Creates multiple scenarios within a Project."
+      security:
+        - bearerAuth: []
       parameters:
         - in: body
           name: body
@@ -313,12 +352,14 @@ paths:
           description: "Bad Request: Invalid or missing params"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /scenario/{id}:
+  /project/{projectId}/scenario/{id}:
     get:
       tags:
         - scenario
       summary: "Get Scenario by ID"
       description: "Retrieves a scenario by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -339,6 +380,8 @@ paths:
         - scenario
       summary: "Update Scenario"
       description: "Updates a scenario by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -365,6 +408,8 @@ paths:
         - scenario
       summary: "Delete Scenario"
       description: "Deletes a scenario by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -380,12 +425,14 @@ paths:
           description: "Bad Request: Invalid params"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /scenario/actor:
+  /project/{projectId}/scenario/actor:
     post:
       tags:
         - scenario
       summary: "Create Actor within a Scenario"
       description: "Creates a new actor within a Scenario."
+      security:
+        - bearerAuth: []
       parameters:
         - in: body
           name: body
@@ -402,12 +449,14 @@ paths:
           description: "Bad Request: Invalid or missing params"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /scenario/resource:
+  /project/{projectId}/scenario/resource:
     post:
       tags:
         - scenario
       summary: "Create Resource within a Scenario"
       description: "Creates a new resource within a Scenario."
+      security:
+        - bearerAuth: []
       parameters:
         - in: body
           name: body
@@ -424,12 +473,14 @@ paths:
           description: "Bad Request"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /scenario/episode:
+  /project/{projectId}/scenario/episode:
     post:
       tags:
         - scenario
       summary: "Create Episode within a Scenario"
       description: "Creates a new episode within a Scenario."
+      security:
+        - bearerAuth: []
       parameters:
         - in: body
           name: body
@@ -446,12 +497,14 @@ paths:
           description: "Bad Request"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /scenario/exception:
+  /project/{projectId}/scenario/exception:
     post:
       tags:
         - scenario
       summary: "Create Exception within a Scenario"
       description: "Creates a new exception within a Scenario."
+      security:
+        - bearerAuth: []
       parameters:
         - in: body
           name: body
@@ -468,12 +521,14 @@ paths:
           description: "Bad Request: Invalid or missing params"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /scenario/context:
+  /project/{projectId}/scenario/context:
     post:
       tags:
         - scenario
       summary: "Create Context within a Scenario"
       description: "Creates a new context within a Scenario."
+      security:
+        - bearerAuth: []
       parameters:
         - in: body
           name: body
@@ -490,12 +545,14 @@ paths:
           description: "Bad Request: Invalid or missing params"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /scenario/restriction:
+  /project/{projectId}/scenario/restriction:
     post:
       tags:
         - scenario
       summary: "Create Restriction within a Scenario"
       description: "Creates a new restriction within a Scenario."
+      security:
+        - bearerAuth: []
       parameters:
         - in: body
           name: body
@@ -512,12 +569,14 @@ paths:
           description: "Bad Request: Invalid or missing params"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /scenario/{scenarioId}/actor/{actorId}:
+  /project/{projectId}/scenario/{scenarioId}/actor/{actorId}:
     post:
       tags:
         - scenario
       summary: "Add Actor to Scenario"
       description: "Adds an actor to a scenario."
+      security:
+        - bearerAuth: []
       parameters:
         - name: scenarioId
           in: path
@@ -543,6 +602,8 @@ paths:
         - scenario
       summary: "Remove Actor from Scenario"
       description: "Removes an actor from a scenario."
+      security:
+        - bearerAuth: []
       parameters:
         - name: scenarioId
           in: path
@@ -563,12 +624,14 @@ paths:
           description: "Bad Request: Invalid params"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /scenario/{scenarioId}/resource/{resourceId}:
+  /project/{projectId}/scenario/{scenarioId}/resource/{resourceId}:
     post:
       tags:
         - scenario
       summary: "Add Resource to Scenario"
       description: "Adds a resource to a scenario."
+      security:
+        - bearerAuth: []
       parameters:
         - name: scenarioId
           in: path
@@ -594,6 +657,8 @@ paths:
         - scenario
       summary: "Remove Resource from Scenario"
       description: "Removes a resource from a scenario."
+      security:
+        - bearerAuth: []
       parameters:
         - name: scenarioId
           in: path
@@ -614,12 +679,14 @@ paths:
           description: "Bad Request: Invalid params"
           schema:
             $ref: "#/definitions/ErrorResponse"
-  /scenario/actor/{id}:
+  /project/{projectId}/actor/{id}:
     delete:
       tags:
         - scenario
       summary: "Delete Actor"
       description: "Deletes an actor by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -631,12 +698,14 @@ paths:
           description: "OK"
           schema:
             type: "string"
-  /scenario/resource/{id}:
+  /project/{projectId}/resource/{id}:
     delete:
       tags:
         - scenario
       summary: "Delete Resource"
       description: "Deletes a resource by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -648,12 +717,14 @@ paths:
           description: "OK"
           schema:
             type: "string"
-  /scenario/exception/{id}:
+  /project/{projectId}/exception/{id}:
     delete:
       tags:
         - scenario
       summary: "Delete Exception"
       description: "Deletes an exception by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -665,12 +736,14 @@ paths:
           description: "OK"
           schema:
             type: "string"
-  /scenario/context/{id}:
+  /project/{projectId}/context/{id}:
     delete:
       tags:
         - scenario
       summary: "Delete Context"
       description: "Deletes a context by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -682,12 +755,14 @@ paths:
           description: "OK"
           schema:
             type: "string"
-  /scenario/restriction/{id}:
+  /project/{projectId}/restriction/{id}:
     delete:
       tags:
         - scenario
       summary: "Delete Restriction"
       description: "Deletes a restriction by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -699,12 +774,14 @@ paths:
           description: "OK"
           schema:
             type: "string"
-  /scenario/episode/{id}:
+  /project/{projectId}/episode/{id}:
     delete:
       tags:
         - scenario
       summary: "Delete Episode"
       description: "Deletes an episode by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -716,12 +793,14 @@ paths:
           description: "OK"
           schema:
             type: "string"
-  /scenario/group/{id}:
+  /project/{projectId}/group/{id}:
     delete:
       tags:
         - scenario
       summary: "Delete Group"
       description: "Deletes a group by its ID."
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           in: path
@@ -733,6 +812,104 @@ paths:
           description: "OK"
           schema:
             type: "string"
+  /user/me:
+    get:
+      tags:
+        - user
+      summary: "Get request's user info"
+      description: "Get request's user info."
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/register:
+    post:
+      tags:
+        - user
+      summary: "Create user"
+      description: "Create a new user."
+      parameters:
+        - in: body
+          name: body
+          description: "User info object"
+          required: true
+          schema:
+            $ref: "#/definitions/RegisterInput"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/auth:
+    post:
+      tags:
+        - user
+      summary: "Authenticate user"
+      description: "Authenticate user."
+      parameters:
+        - in: body
+          name: body
+          description: "User info object"
+          required: true
+          schema:
+            $ref: "#/definitions/LoginInput"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        403:
+          description: "Forbidden: Invalid password"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /user/add/{projectId}:
+    post:
+      tags:
+        - user
+      summary: "Add user to project"
+      description: "Add user to a project."
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: "The ID of the project."
+          required: true
+          type: integer
+        - in: body
+          name: body
+          description: "User info object"
+          required: true
+          schema:
+            $ref: "#/definitions/AddUserToProjectInput"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/UserProject"
+        400:
+          description: "Bad Request: Invalid or missing params"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        401:
+          description: "Unauthorized: You have no permission to add a user as {role} to this project"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
 definitions:
   Project:
@@ -758,6 +935,10 @@ definitions:
         type: "array"
         items:
           $ref: "#/definitions/Scenario"
+      users:
+        type: "array"
+        items:
+          $ref: "#/definitions/UserProject"
   ProjectInput:
     type: "object"
     properties:
@@ -1019,3 +1200,67 @@ definitions:
         type: "string"
       code:
         type: "integer"
+  UserProject:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      role:
+        type: "string"
+      user:
+        type: "object"
+        $ref: "#/definitions/User"
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      email:
+        type: "string"
+      validated:
+        type: "boolean"
+  RegisterInput:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+  LoginInput:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      password:
+        type: "string"
+  LoginResponse:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      email:
+        type: "string"
+      token:
+        type: "string"
+      projects:
+        type: "string"
+  AddUserToProjectInput:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      role:
+        type: "string"
+      projectId:
+        type: "integer"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

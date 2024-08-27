@@ -14,6 +14,7 @@ import {
   EmailInUseError,
   NotFoundError,
 } from '@/utils/errors';
+import { ForbiddenError } from '@/utils/errors/forbidden-error';
 
 const userRepository = new UserRepository();
 const projectRepository = new ProjectRepository();
@@ -68,7 +69,7 @@ export class UserService {
     }
     const isPasswordCorrect = await hasher.compare(password, user.password);
     if (!isPasswordCorrect) {
-      throw new UnauthorizedError('Invalid password');
+      throw new ForbiddenError('Invalid password');
     }
     const token = await encrypter.encrypt(String(user.id));
     return new AuthenticateUserResponseDTO({

@@ -9,17 +9,17 @@ export const authMiddleware = async (
   next: NextFunction
 ) => {
   if (!req.headers?.authorization) {
-    return res.status(401).json({
+    return res.status(403).json({
       error: 'Authentication must be provided',
-      code: 401,
+      code: 403,
     });
   }
   try {
     const token = req.headers?.authorization.split(' ')[1];
     if (!token) {
-      return res.status(401).json({
+      return res.status(403).json({
         error: 'Invalid token',
-        code: 401,
+        code: 403,
       });
     }
     const jwt = new JwtService(process.env.AUTH_SECRET);
@@ -33,7 +33,7 @@ export const authMiddleware = async (
   } catch (error) {
     return res.status(401).json({
       error: 'Invalid token',
-      code: 401,
+      code: 403,
     });
   }
 };

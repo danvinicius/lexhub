@@ -18,7 +18,7 @@ export const databaseConfig: DatabaseConfig = {
   host: process.env.DB_HOST || '127.0.0.1',
   port: Number(process.env.DB_PORT) || 5432,
   username: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASS || '123456',
+  password: process.env.DB_PASSWORD || '123456',
   database: process.env.DB_NAME || 'scenarios_and_lexicons',
   synchronize: true,
   logging: false,

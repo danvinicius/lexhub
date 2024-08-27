@@ -4,6 +4,7 @@ import { validate } from '@/utils/validation/validate';
 import {
   badRequest,
   created,
+  forbidden,
   ok,
   serverError,
   unauthorized,
@@ -17,6 +18,7 @@ import {
   UnauthorizedError,
 } from '@/utils/errors';
 import { UserService } from '@/services';
+import { ForbiddenError } from '@/utils/errors/forbidden-error';
 
 const userService = new UserService();
 
@@ -68,8 +70,8 @@ export class UserController {
       ) {
         return badRequest(error);
       }
-      if (error instanceof UnauthorizedError) {
-        return unauthorized(error);
+      if (error instanceof ForbiddenError) {
+        return forbidden(error);
       }
       return serverError(error);
     }
