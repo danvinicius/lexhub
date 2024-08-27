@@ -2,11 +2,12 @@ import React, {
   createContext,
   ReactNode,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from "react";
 import useFetch from "../hooks/useFetch";
-import { AUTH_USER, CREATE_USER } from "../api";
+import { AUTH_USER, CREATE_USER, GET_ME } from "../api";
 import { AuthUserRequestDTO } from "../interfaces/dto/AuthUser";
 import { useNavigate } from "react-router-dom";
 import { UserProject } from "../interfaces/Project";
@@ -38,7 +39,7 @@ type UserStorageProps = {
 };
 
 export const UserStorage = ({ children }: UserStorageProps) => {
-  const { data, error, loading, request, setData } = useFetch<User>();
+  const { data, error, loading, request, setData, setError } = useFetch<User>();
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
@@ -66,6 +67,18 @@ export const UserStorage = ({ children }: UserStorageProps) => {
     navigate("/login");
   }, [navigate]);
 
+  const autoLogin = useCallback(() => {
+    const storedData = localStorage.getItem("user");
+    if (storedData) {
+      const token = JSON.parse(storedData)?.token || "";
+      const { url, options } = GET_ME(token);
+      request(url, options);
+    } else {
+      logout();
+    }
+    setError(null)
+  }, [logout, request, setError]);
+
   React.useEffect(() => {
     if (data) {
       setUser(data);
@@ -74,12 +87,11 @@ export const UserStorage = ({ children }: UserStorageProps) => {
       navigate("/");
       return;
     }
-    const storedUser = localStorage.getItem("user") || null;
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-      navigate("/");
-    }
-  }, [data, setUser, logged, navigate, setData]);
+  }, [data, setUser, logged, navigate, setData, request, logout, autoLogin]);
+
+  useEffect(() => {
+    autoLogin();
+  }, [autoLogin]);
 
   return (
     <UserContext.Provider

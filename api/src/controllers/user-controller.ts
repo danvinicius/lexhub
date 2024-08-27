@@ -13,6 +13,7 @@ import {
   EmailInUseError,
   InvalidParamError,
   MissingParamError,
+  NotFoundError,
   UnauthorizedError,
 } from '@/utils/errors';
 import { UserService } from '@/services';
@@ -20,6 +21,20 @@ import { UserService } from '@/services';
 const userService = new UserService();
 
 export class UserController {
+
+  getMe = async (req: Request) => {
+    try {
+      const user = await userService.getMe(req.user);
+      return ok(user);
+    } catch (error: any) {
+      if (
+        error instanceof NotFoundError
+      ) {
+        return badRequest(error);
+      }
+      return serverError(error);
+    }
+  };
 
   createUser = async (req: Request) => {
     try {

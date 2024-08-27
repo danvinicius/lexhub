@@ -110,6 +110,21 @@ export class UserService {
     return null;
   }
 
+  async getMe(id: number): Promise<null | AuthenticateUserResponseDTO> {
+    const user = await this.getUser(id);
+    if (!user) {
+      throw new NotFoundError('This user does not exist');
+    }
+    const { name, email, projects } = user;
+    const token = await encrypter.encrypt(String(user.id));
+    return new AuthenticateUserResponseDTO({
+      name,
+      email,
+      token,
+      projects,
+    });
+  }
+
   async getUser(id: number): Promise<null | IUser> {
     const user = await userRepository.getUser({ id });
     if (!user) {

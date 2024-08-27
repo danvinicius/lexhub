@@ -15,7 +15,6 @@ function useLocalStorage(key: string, initialValue?: any) {
 
   const setValue = (value: any) => {
   setStoredValue(value);
-  console.log(value);
   
   if (value === null) {
     localStorage.removeItem(key); // Remove item se o valor for null

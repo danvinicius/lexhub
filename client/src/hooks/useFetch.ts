@@ -6,6 +6,7 @@ export interface FetchResponse {
   loading: boolean;
   request: (url: string, options: RequestInit) => void
   setData: any
+  setError: any
 }
 
 function useFetch<T>(): FetchResponse {
@@ -31,7 +32,7 @@ function useFetch<T>(): FetchResponse {
     }
   }, []);
 
-  return { request, data, setData, error, loading };
+  return { request, data, setData, error, loading, setError };
 }
 
 export default useFetch;

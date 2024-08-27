@@ -7,6 +7,7 @@ export const userRouter = async (
   router: Router,
   controller: UserController
 ): Promise<void> => {
+  router.get('/user/me', authMiddleware, responseHandler(controller.getMe));
   router.post('/user/register', responseHandler(controller.createUser));
   router.post(
     '/user/auth',

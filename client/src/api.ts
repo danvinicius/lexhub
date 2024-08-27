@@ -28,3 +28,15 @@ export const AUTH_USER = (body: AuthUserRequestDTO) => {
     },
   };
 };
+
+export const GET_ME = (token: string) => {
+  return {
+    url: `${API_URL}/user/me`,
+    options: {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    },
+  };
+};
