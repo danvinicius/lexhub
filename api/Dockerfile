@@ -15,4 +15,4 @@ COPY ./src ./src
 RUN yarn install
 
 # Runs the dev yarn script to build & start the server
-CMD ["yarn", "dev"]
+CMD ["yarn", "start"]

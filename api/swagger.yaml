@@ -3,6 +3,10 @@ info:
   version: "1.0.0"
   title: "Scenarios and Lexicons API"
   description: "API for managing scenarios and lexicons inside a project"
+  contact:
+    name: "Daniel Vinícius"
+    url: "https://danvinicius.github.io/portfolio"
+    email: "viniccius774@gmail.com"
 basePath: "/api"
 schemes:
   - "https"
