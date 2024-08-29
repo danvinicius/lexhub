@@ -6,6 +6,6 @@ export class ServerError extends Error {
     super('Internal server error');
     this.name = 'ServerError';
     this.stack = stack;
-    Logger.error(this.stack);
+    Logger.error(this);
   }
 }
