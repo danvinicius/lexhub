@@ -1,1 +1,1 @@
-CREATE DATABASE IF NOT EXISTS scenarios-and-lexicons;
+CREATE DATABASE IF NOT EXISTS scenarios_and_lexicons;
