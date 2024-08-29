@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf dist && tsc --project tsconfig.json && tscpaths -p tsconfig.json -s . -o ./dist && cp swagger.yaml ./dist",
-    "start": "node -r tsconfig-paths/register dist/src/index.js",
+    "start": "yarn build && node -r tsconfig-paths/register dist/src/index.js",
     "dev": "tsnd --transpile-only --respawn -r tsconfig-paths/register src/index.ts",
     "test:unit": "jest",
     "test:functional": "jest --projects ./test --runInBand",

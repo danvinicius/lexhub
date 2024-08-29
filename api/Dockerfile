@@ -12,7 +12,7 @@ COPY ["package.json", "yarn.lock", "tsconfig.json", ".env", "./"]
 COPY ./src ./src
 
 # Installs all packages
-RUN yarn install
+RUN yarn --ignore-scripts
 
 # Runs the dev yarn script to build & start the server
 CMD ["yarn", "start"]
