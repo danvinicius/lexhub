@@ -1,0 +1,32 @@
+.createProject {
+  display: flex;
+  flex-direction: column;
+  height: 60vh;
+  justify-content: center;
+  @media screen and (min-width: 998px) {
+    gap: 1rem;
+  }
+  .container {
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    @media screen and (min-width: 998px) {
+      gap: 2rem;
+    }
+
+    hr {
+      @media screen and (min-width: 998px) {
+        display: none;
+      }
+    }
+    & > h1 {
+      display: none;
+      width: max-content;
+      @media screen and (min-width: 998px) {
+        display: initial;
+      }
+    }
+  }
+}

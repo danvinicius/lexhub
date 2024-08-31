@@ -9,8 +9,8 @@ import {
   ok,
   serverError,
 } from '@/infra/http/response';
-import { InvalidParamError, MissingParamError } from '@/utils/errors';
 import { SymbolService } from '@/services';
+import { BadRequestError } from '@/utils/errors';
 
 const symbolService = new SymbolService();
 
@@ -21,7 +21,7 @@ export class SymbolController {
       const symbols = await symbolService.getAllSymbols(+projectId);
       return ok(symbols);
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
 
@@ -32,9 +32,9 @@ export class SymbolController {
       return ok(symbol);
     } catch (error: any) {
       if (error instanceof NotFoundError) {
-        return notFound(error);
+        return notFound(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public createSymbol = async (req: Request) => {
@@ -47,10 +47,10 @@ export class SymbolController {
       const symbolCreated = await symbolService.createSymbol(symbol);
       return created(symbolCreated);
     } catch (error: any) {
-      if (error instanceof MissingParamError) {
-        return badRequest(error);
+      if (error instanceof BadRequestError) {
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public createImpact = async (req: Request) => {
@@ -64,12 +64,11 @@ export class SymbolController {
       return created({ message: 'Impact created' });
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
-        error instanceof MissingParamError
+        error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public createSynonym = async (req: Request) => {
@@ -83,12 +82,11 @@ export class SymbolController {
       return created({ message: 'Synonym created' });
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
-        error instanceof MissingParamError
+        error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public updateSymbol = async (req: Request) => {
@@ -100,12 +98,11 @@ export class SymbolController {
       return ok({ message: 'Symbol updated' });
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
-        error instanceof MissingParamError
+        error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public deleteSymbol = async (req: Request) => {
@@ -114,10 +111,10 @@ export class SymbolController {
       await symbolService.deleteSymbol(+id);
       return ok({ message: 'Symbol deleted' });
     } catch (error: any) {
-      if (error instanceof InvalidParamError) {
-        return badRequest(error);
+      if (error instanceof BadRequestError) {
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public deleteImpact = async (req: Request) => {
@@ -126,7 +123,7 @@ export class SymbolController {
       await symbolService.deleteImpact(+impactId);
       return ok({ message: 'Impact deleted' });
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
 
@@ -136,7 +133,7 @@ export class SymbolController {
       await symbolService.deleteSynonym(+synonymId);
       return ok({ message: 'Synonym deleted' });
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
 }

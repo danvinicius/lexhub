@@ -1,33 +1,46 @@
-import React, {
+import {
   createContext,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from "react";
-import useFetch from "../hooks/useFetch";
-import { AUTH_USER, CREATE_USER, GET_ME } from "../api";
-import { AuthUserRequestDTO } from "../interfaces/dto/AuthUser";
-import { useNavigate } from "react-router-dom";
-import { UserProject } from "../interfaces/Project";
-import { CreateUserRequestDTO } from "../interfaces/dto/CreateUser";
+import { useLocation, useNavigate } from "react-router-dom";
+import { IUserProject } from "../shared/interfaces";
+import api from "../lib/axios";
+import { GET_ME } from "../api";
+export interface CreateUserRequestDTO {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface AuthUserRequestDTO {
+  email: string;
+  password: string;
+}
+
+export interface AuthUserResponseDTO {
+  name: string;
+  email: string;
+  token: string;
+  projects: any;
+}
 
 type User = {
   name: string;
   email: string;
   token: string;
-  projects: UserProject[];
+  projects: IUserProject[];
 };
 
 type UserContextType = {
   user: User | null;
-  logged: boolean;
-  login: (formData: AuthUserRequestDTO) => void;
-  signup: (formData: CreateUserRequestDTO) => void;
+  setUser: Dispatch<SetStateAction<User | null>>;
   logout: () => void;
-  error: any;
-  loading: boolean;
+  isAuthenticated: () => any;
 };
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -39,27 +52,18 @@ type UserStorageProps = {
 };
 
 export const UserStorage = ({ children }: UserStorageProps) => {
-  const { data, error, loading, request, setData, setError } = useFetch<User>();
   const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
+  
+  const isAuthenticated = useCallback(() => {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      return {}
+    }
+    return JSON.parse(user);
+  }, []);
 
-  const logged = useMemo(() => !!user?.token, [user]);
-
-  const login = useCallback(
-    (formData: AuthUserRequestDTO) => {
-      const { url, options } = AUTH_USER(formData);
-      request(url, options);
-    },
-    [request]
-  );
-
-  const signup = useCallback(
-    (formData: CreateUserRequestDTO) => {
-      const { url, options } = CREATE_USER(formData);
-      request(url, options);
-    },
-    [request]
-  );
+  const location = useLocation();
 
   const logout = useCallback(() => {
     setUser(null);
@@ -67,35 +71,44 @@ export const UserStorage = ({ children }: UserStorageProps) => {
     navigate("/login");
   }, [navigate]);
 
-  const autoLogin = useCallback(() => {
-    const storedData = localStorage.getItem("user");
-    if (storedData) {
-      const token = JSON.parse(storedData)?.token || "";
-      const { url, options } = GET_ME(token);
-      request(url, options);
-    } else {
-      logout();
+  const autoLogin = useCallback(async () => {
+    if (!isAuthenticated) {
+      const storedData = localStorage.getItem("user");
+      if (storedData) {
+        try {
+          const token = JSON.parse(storedData)?.token || "";
+          const { url, options } = GET_ME(token);
+          const response = await api[options.method](url, options);
+          setUser(response.data);
+        } catch (error: any) {
+          console.log(error?.response.data.error)
+        }
+      } else {
+        logout();
+      }
     }
-    setError(null)
-  }, [logout, request, setError]);
+  }, [isAuthenticated, logout]);
 
-  React.useEffect(() => {
-    if (data) {
-      setUser(data);
-      localStorage.setItem("user", JSON.stringify(data));
-      setData(null);
-      navigate("/");
-      return;
-    }
-  }, [data, setUser, logged, navigate, setData, request, logout, autoLogin]);
 
   useEffect(() => {
-    autoLogin();
-  }, [autoLogin]);
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+      if (location.pathname == '/login') navigate("/");
+      return;
+    }
+  }, [navigate, user, location]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      autoLogin();
+    } else {
+      setUser(isAuthenticated())
+    }
+  }, [autoLogin, isAuthenticated, user]);
 
   return (
     <UserContext.Provider
-      value={{ user, logged, login, signup, logout, error, loading }}
+      value={{ user, setUser, logout, isAuthenticated}}
     >
       {children}
     </UserContext.Provider>

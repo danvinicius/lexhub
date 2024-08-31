@@ -10,8 +10,6 @@ import {
 } from '@/infra/http/response';
 import {
   BadRequestError,
-  InvalidParamError,
-  MissingParamError,
   NotFoundError,
 } from '@/utils/errors';
 
@@ -25,7 +23,7 @@ export class ProjectController {
       const projects = await projectService.getAllProjects(req.user);
       return ok(projects);
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
 
@@ -36,25 +34,25 @@ export class ProjectController {
       return ok(project);
     } catch (error: any) {
       if (error instanceof NotFoundError) {
-        return notFound(error);
+        return notFound(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public createProject = async (req: Request) => {
     try {
       const data = new DTO.CreateProjectRequestDTO(req.body);
+      
       await validate(data);
       const projectCreated = await projectService.createProject(data, req.user);
       return created(projectCreated);
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
-        error instanceof MissingParamError
+        error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public updateProject = async (req: Request) => {
@@ -66,12 +64,11 @@ export class ProjectController {
       return ok({ message: 'Project updated' });
     } catch (error: any) {
       if (
-        error instanceof BadRequestError ||
-        error instanceof MissingParamError
+        error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public deleteProject = async (req: Request) => {
@@ -80,7 +77,7 @@ export class ProjectController {
       await projectService.deleteProject(+projectId);
       return ok({ message: 'Project deleted' });
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
 }

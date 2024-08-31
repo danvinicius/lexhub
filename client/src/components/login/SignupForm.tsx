@@ -1,10 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Button from "../forms/Button";
 import Input from "../forms/Input";
 import Form from "../forms/Form";
 import "./LoginForm.scss";
-import { UserContext } from "../../context/UserContext";
+import { CreateUserRequestDTO, UserContext } from "../../context/UserContext";
 import Loading from "../helper/Loading";
+import {  CREATE_USER } from "../../api";
+import api from "../../lib/axios";
+import useForm from "../../hooks/useForm";
+import Error from "../helper/Error";
 
 interface LoginFormProps {
   setCurrentScreen: (screen: string) => void;
@@ -13,27 +17,34 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({
   setCurrentScreen,
 }: LoginFormProps) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-  });
+  const [error, setError] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
-  const { loading, error, signup } = useContext(UserContext) || {};
+  const {setUser} = useContext(UserContext) || {};
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const name = useForm()
+  const email = useForm('email');
+  const password = useForm('password');
+
+  const signup = async (body: CreateUserRequestDTO) => {
+    setLoading(true);
+    try {
+      const { url, options } = CREATE_USER();
+      const response = await api[options.method](url, body);
+      if (setUser) setUser(response.data);
+    } catch (error: any) {
+      setError(error.response.data.error)
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (signup) signup(formData);
+    if (email.validate() && password.validate()) {
+      if (signup) signup({ name: name.value, email: email.value, password: password.value });
+    }
   };
 
   return (
@@ -53,39 +64,31 @@ const LoginForm: React.FC<LoginFormProps> = ({
           name="name"
           placeholder="Seu nome"
           label="Nome completo"
-          value={formData.name}
-          onChange={handleChange}
+          {...name}
+          onInput={() => {setError('')}}
         />
         <Input
           type="email"
           name="email"
           placeholder="seu@email.com"
           label="E-mail"
-          value={formData.email}
-          onChange={handleChange}
+          {...email}
+          onInput={() => {setError('')}}
         />
         <Input
           type="password"
           name="password"
           placeholder="***********"
           label="Senha"
-          value={formData.password}
-          onChange={handleChange}
-        />
-        <Input
-          type="tel"
-          name="phone"
-          placeholder="(xx) xxxxx-xxxx"
-          label="Telefone"
-          value={formData.phone}
-          onChange={handleChange}
-          error={error}
+          {...password}
+          onInput={() => {setError('')}}
         />
         {loading ? (
           <Loading />
         ) : (
           <Button text="Entrar" onClick={handleSubmit} />
         )}
+        <Error error={error} />
       </Form>
     </section>
   );

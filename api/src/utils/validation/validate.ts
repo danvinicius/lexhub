@@ -1,4 +1,4 @@
-import { InvalidParamError, MissingParamError } from '@/utils/errors';
+import { BadRequestError} from '@/utils/errors';
 import { validate as validateClass } from 'class-validator';
 
 export const validate = async (data: any) => {
@@ -6,8 +6,8 @@ export const validate = async (data: any) => {
   if (errors.length) {
     const error = Object.values(errors[0].constraints)[0] as string;
     if (error.includes('empty')) {
-      throw new MissingParamError(error);
+      throw new BadRequestError(error);
     }
-    throw new InvalidParamError(error);
+    throw new BadRequestError(error);
   }
 };

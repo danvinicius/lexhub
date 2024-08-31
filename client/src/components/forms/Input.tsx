@@ -9,9 +9,15 @@ interface InputProps {
   value: string;
   label: string;
   required?: boolean;
-  error?: string;
+  error?: string | null;
   onChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  onInput: (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => void;
+  onBlur: (
+    e: React.ChangeEvent<HTMLInputElement>
   ) => void;
 }
 
@@ -23,10 +29,12 @@ const Input: React.FC<InputProps> = ({
   label,
   error,
   onChange,
+  onInput,
+  onBlur,
   required = false,
 }: InputProps) => {
   return (
-    <label htmlFor={name}>
+    <label htmlFor={name} className={error ? 'error' : ''}>
       {label}
       <input
         type={type}
@@ -35,6 +43,8 @@ const Input: React.FC<InputProps> = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        onInput={onInput}
+        onBlur={onBlur}
         required={required}
       />
       <Error error={error}/>

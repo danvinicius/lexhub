@@ -11,11 +11,19 @@ interface PasswordInputProps {
   value: string;
   placeholder: string;
   label: string;
-  error?: string
+  error?: string | null;
+  onInput: (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => void;
+  onBlur: (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => void;
 }
 
 const PasswordInput: React.FC<PasswordInputProps> = ({
   onChange,
+  onInput,
+  onBlur,
   setCurrentScreen,
   enableForgotPassword,
   value,
@@ -42,6 +50,8 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
         label={label}
         value={value}
         onChange={onChange}
+        onBlur={onBlur}
+        onInput={onInput}
         error={error}
       />
       {type == "password" && (

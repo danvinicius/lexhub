@@ -1,11 +1,9 @@
-import { ServerError } from '@/utils/errors';
-
 export interface HttpResponse {
   statusCode: number;
   body: any;
 }
 
-export const badRequest = (error: Error): HttpResponse => ({
+export const badRequest = (error: string): HttpResponse => ({
   statusCode: 400,
   body: error,
 });
@@ -15,27 +13,25 @@ export const created = (data: any): HttpResponse => ({
   body: data,
 });
 
-export const unauthorized = (error: Error): HttpResponse => ({
+export const unauthorized = (error: string): HttpResponse => ({
   statusCode: 401,
   body: error,
 });
 
-export const forbidden = (error: Error): HttpResponse => ({
+export const forbidden = (error: string): HttpResponse => ({
   statusCode: 403,
   body: error,
 });
 
-export const notFound = (error: Error): HttpResponse => ({
+export const notFound = (error: string): HttpResponse => ({
   statusCode: 404,
   body: error,
 });
 
-export const serverError = (error: Error): HttpResponse => {
-  return {
-    statusCode: 500,
-    body: new ServerError(error.message),
-  };
-};
+export const serverError = (error: string): HttpResponse => ({
+  statusCode: 500,
+  body: error,
+});
 
 export const ok = (data: any): HttpResponse => ({
   statusCode: 200,

@@ -1,7 +1,7 @@
 import { CreateImpactRequestDTO, CreateSymbolRequestDTO, CreateSynonymRequestDTO, UpdateSymbolRequestDTO } from "@/infra/http/dtos";
 import { ISymbol } from "@/models";
 import { SymbolRepository } from "@/repositories";
-import { InvalidParamError, NotFoundError } from "@/utils/errors";
+import { BadRequestError, NotFoundError } from "@/utils/errors";
 
 const symbolRepository = new SymbolRepository();
 
@@ -9,7 +9,7 @@ export class SymbolService {
   async createImpact(impact: CreateImpactRequestDTO): Promise<void> {
     const symbolExists = await symbolRepository.getSymbol(impact.symbolId);
     if (!symbolExists) {
-      throw new InvalidParamError('symbolId');
+      throw new BadRequestError('Parâmetro "symbolId" inválido ou inexistente');
     }
     return await symbolRepository.createImpact(impact);
   }
@@ -23,7 +23,7 @@ export class SymbolService {
       synonym.symbolId
     );
     if (!symbolExists) {
-      throw new InvalidParamError('symbolId');
+      throw new BadRequestError('Parâmetro "symbolId" inválido ou inexistente');
     }
     return await symbolRepository.createSynonym(synonym);
   }
@@ -35,7 +35,7 @@ export class SymbolService {
   async deleteSymbol(id: number): Promise<void> {
     const symbolExists = await symbolRepository.getSymbol(id);
     if (!symbolExists) {
-      throw new InvalidParamError('symbolId');
+      throw new BadRequestError('Parâmetro "symbolId" inválido ou inexistente');
     }
     await symbolRepository.deleteSymbol(id);
   }
@@ -47,7 +47,7 @@ export class SymbolService {
   async getSymbol(id: number): Promise<null | ISymbol> {
     const symbol = await symbolRepository.getSymbol(id);
     if (!symbol) {
-      throw new NotFoundError('Symbol not found');
+      throw new NotFoundError('Símbolo inexistente');
     }
     return symbol;
   }
@@ -60,7 +60,7 @@ export class SymbolService {
   async updateSymbol(id: number, symbol: UpdateSymbolRequestDTO): Promise<void> {
     const symbolExists = await symbolRepository.getSymbol(id);
     if (!symbolExists) {
-      throw new InvalidParamError('symbolId');
+      throw new BadRequestError('Parâmetro "symbolId" inválido ou inexistente');
     }
     await symbolRepository.updateSymbol(id, symbol);
   }

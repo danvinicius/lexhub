@@ -3,6 +3,18 @@ label {
   flex-direction: column;
   gap: 0.5rem;
 
+  &.error {
+    input {
+      border: 1px solid var(--error-color);
+    }
+  }
+
+  &:not(.error) {
+    input:focus {
+      border: 1px solid var(--primary-color);
+    }
+  }
+
   input {
     width: 100%;
     border-radius: 0.5rem;
@@ -11,9 +23,5 @@ label {
     padding: 0.75rem 1rem;
     font-size: 1rem;
     width: 100%;
-
-    &:focus {
-      border: 1px solid var(--primary-color);
-    }
   }
 }

@@ -1,12 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Button from "../forms/Button";
 import Input from "../forms/Input";
 import Form from "../forms/Form";
 import "./LoginForm.scss";
 import PasswordInput from "../forms/PasswordInput";
-import { UserContext } from "../../context/UserContext";
+import { AuthUserRequestDTO, UserContext } from "../../context/UserContext";
 import Loading from "../helper/Loading";
-
+import useForm from "../../hooks/useForm";
+import Error from "../helper/Error";
+import { AUTH_USER } from "../../api";
+import api from "../../lib/axios";
 interface LoginFormProps {
   setCurrentScreen: (screen: string) => void;
 }
@@ -14,25 +17,32 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({
   setCurrentScreen,
 }: LoginFormProps) => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const email = useForm();
+  const password = useForm();
+  
+  const [error, setError] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
-  const { login, loading, error } = useContext(UserContext) || {};
+  const {setUser} = useContext(UserContext) || {};
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const login = async (body: AuthUserRequestDTO) => {
+    setLoading(true);
+    try {
+      const { url, options } = AUTH_USER();
+      const response = await api[options.method](url, body);
+      if (setUser) setUser(response.data);
+    } catch (error: any) {
+      setError(error.response.data.error)
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (login) login(formData);
+    if (email.validate() && password.validate()) {
+      if (login) login({ email: email.value, password: password.value });
+    }
   };
 
   return (
@@ -52,19 +62,23 @@ const LoginForm: React.FC<LoginFormProps> = ({
           name="email"
           placeholder="seu@email.com"
           label="E-mail"
-          value={formData.email}
-          onChange={handleChange}
+          {...email}
+          onInput={() => {setError('')}}
         />
         <PasswordInput
-          enableForgotPassword={true}
           placeholder="*********"
           label="Senha"
-          value={formData.password}
-          onChange={handleChange}
           setCurrentScreen={setCurrentScreen}
-          error={error}
+          enableForgotPassword={true}
+          {...password}
+          onInput={() => {setError('')}}
         />
-        {loading ? <Loading/> : <Button text="Entrar" onClick={handleSubmit} />}
+        {loading ? (
+          <Loading />
+        ) : (
+          <Button text="Entrar" onClick={handleSubmit} />
+        )}
+        <Error error={error} />
       </Form>
     </section>
   );

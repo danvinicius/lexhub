@@ -2,8 +2,6 @@ import { Request } from 'express';
 import {
   NotFoundError,
   BadRequestError,
-  InvalidParamError,
-  MissingParamError,
 } from '@/utils/errors';
 import { validate } from '../utils/validation/validate';
 import * as DTO from '@/infra/http/dtos';
@@ -25,7 +23,7 @@ export class ScenarioController {
       const scenarios = await scenarioService.getAllScenarios(+projectId);
       return ok(scenarios);
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
 
@@ -36,9 +34,9 @@ export class ScenarioController {
       return ok(scenario);
     } catch (error: any) {
       if (error instanceof NotFoundError) {
-        return notFound(error);
+        return notFound(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public getScenarioWithLexicons = async (req: Request) => {
@@ -48,9 +46,9 @@ export class ScenarioController {
       return ok(scenario);
     } catch (error: any) {
       if (error instanceof NotFoundError) {
-        return notFound(error);
+        return notFound(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public createScenario = async (req: Request) => {
@@ -63,10 +61,10 @@ export class ScenarioController {
       const scenarioCreated = await scenarioService.createScenario(scenario);
       return created(scenarioCreated);
     } catch (error: any) {
-      if (error instanceof MissingParamError) {
-        return badRequest(error);
+      if (error instanceof BadRequestError) {
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
 
@@ -80,10 +78,10 @@ export class ScenarioController {
       const scenariosCreated = await scenarioService.createManyScenarios(data);
       return created(scenariosCreated);
     } catch (error: any) {
-      if (error instanceof MissingParamError) {
-        return badRequest(error);
+      if (error instanceof BadRequestError) {
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
 
@@ -98,12 +96,11 @@ export class ScenarioController {
       return created({ message: 'Exception created' });
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
-        error instanceof MissingParamError
+        error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public createContext = async (req: Request) => {
@@ -117,12 +114,11 @@ export class ScenarioController {
       return created({ message: 'Context created' });
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
-        error instanceof MissingParamError
+        error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public createRestriction = async (req: Request) => {
@@ -136,12 +132,11 @@ export class ScenarioController {
       return created({ message: 'Restriction created' });
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
-        error instanceof MissingParamError
+        error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public createActor = async (req: Request) => {
@@ -155,12 +150,11 @@ export class ScenarioController {
       return created({ message: 'Actor created' });
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
-        error instanceof MissingParamError
+        error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public createResource = async (req: Request) => {
@@ -174,12 +168,11 @@ export class ScenarioController {
       return created({ message: 'Resource created' });
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
-        error instanceof MissingParamError
+        error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public addActor = async (req: Request) => {
@@ -191,10 +184,10 @@ export class ScenarioController {
       });
       return created({ message: 'Actor added' });
     } catch (error: any) {
-      if (error instanceof InvalidParamError) {
-        return badRequest(error);
+      if (error instanceof BadRequestError) {
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public addResource = async (req: Request) => {
@@ -206,10 +199,10 @@ export class ScenarioController {
       });
       return created({ message: 'Resource added' });
     } catch (error: any) {
-      if (error instanceof InvalidParamError) {
-        return badRequest(error);
+      if (error instanceof BadRequestError) {
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public createEpisode = async (req: Request) => {
@@ -223,13 +216,12 @@ export class ScenarioController {
       return created({ message: 'Episode created' });
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
-        error instanceof MissingParamError ||
+        error instanceof BadRequestError ||
         error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public deleteException = async (req: Request) => {
@@ -238,7 +230,7 @@ export class ScenarioController {
       await scenarioService.deleteException(+exceptionId);
       return ok({ message: 'Exception deleted' });
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public deleteContext = async (req: Request) => {
@@ -247,7 +239,7 @@ export class ScenarioController {
       await scenarioService.deleteContext(+contextId);
       return ok({ message: 'Context deleted' });
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public deleteRestriction = async (req: Request) => {
@@ -256,7 +248,7 @@ export class ScenarioController {
       await scenarioService.deleteRestriction(+restrictionId);
       return ok({ message: 'Restriction deleted' });
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public deleteActor = async (req: Request) => {
@@ -265,7 +257,7 @@ export class ScenarioController {
       await scenarioService.deleteActor(+actorId);
       return ok({ message: 'Actor deleted' });
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public deleteResource = async (req: Request) => {
@@ -274,7 +266,7 @@ export class ScenarioController {
       await scenarioService.deleteResource(+resourceId);
       return ok({ message: 'Resource deleted' });
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public deleteEpisode = async (req: Request) => {
@@ -283,7 +275,7 @@ export class ScenarioController {
       await scenarioService.deleteEpisode(+episodeId);
       return ok({ message: 'Episode deleted' });
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public deleteGroup = async (req: Request) => {
@@ -292,7 +284,7 @@ export class ScenarioController {
       await scenarioService.deleteGroup(+groupId);
       return ok({ message: 'group deleted' });
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public removeActor = async (req: Request) => {
@@ -304,10 +296,10 @@ export class ScenarioController {
       });
       return ok({ message: 'Actor removed' });
     } catch (error: any) {
-      if (error instanceof InvalidParamError) {
-        return badRequest(error);
+      if (error instanceof BadRequestError) {
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public removeResource = async (req: Request) => {
@@ -319,10 +311,10 @@ export class ScenarioController {
       });
       return ok({ message: 'Resource removed' });
     } catch (error: any) {
-      if (error instanceof InvalidParamError) {
-        return badRequest(error);
+      if (error instanceof BadRequestError) {
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public updateScenario = async (req: Request) => {
@@ -333,10 +325,10 @@ export class ScenarioController {
       await scenarioService.updateScenario(+id, scenario);
       return ok({ message: 'Scenario updated' });
     } catch (error: any) {
-      if (error instanceof MissingParamError) {
-        return badRequest(error);
+      if (error instanceof BadRequestError) {
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
   public deleteScenario = async (req: Request) => {
@@ -345,7 +337,7 @@ export class ScenarioController {
       await scenarioService.deleteScenario(+id);
       return ok({ message: 'Scenario deleted' });
     } catch (error: any) {
-      return serverError(error);
+      return serverError(error.message);
     }
   };
 }

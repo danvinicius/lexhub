@@ -188,7 +188,7 @@ export class ScenarioRepository {
           });
         if (episodeWithSamePositionExists) {
           throw new BadRequestError(
-            'This position is already occupied by an episode'
+            'Posição já ocupada por outro episódio'
           );
         }
         const nonSequentialEpisode = new NonSequentialEpisode();
@@ -216,7 +216,7 @@ export class ScenarioRepository {
             )
           ) {
             throw new BadRequestError(
-              'This position is already occupied by an non-sequential episode'
+              'Posição já ocupada por outro episódio não sequencial'
             );
           }
           groupExists.nonSequentialEpisodes.push(nonSequentialEpisode);

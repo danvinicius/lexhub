@@ -2,37 +2,37 @@ export interface IScenario {
   readonly id?: number;
   title: string;
   goal: string;
-  project: Project;
+  project: IProject;
 }
 
-export interface User {
+export interface IUser {
   readonly id?: number;
   name: string;
   email: string;
   password: string;
   validated: boolean;
-  projects?: UserProject[];
+  projects?: IUserProject[];
 }
 
-export enum UserRole {
+export enum IUserRole {
   OWNER = "OWNER",
   ADMIN = "ADMIN",
   COLLABORATOR = "COLLABORATOR",
   OBSERVER = "OBSERVER",
 }
 
-export interface UserProject {
+export interface IUserProject {
   readonly id?: number;
   removedBy: number;
-  role: UserRole;
-  user: User;
-  project: Project;
+  role: IUserRole;
+  user: IUser;
+  project: IProject;
 }
 
-export interface Project {
+export interface IProject {
   readonly id?: number;
   name: string;
   description: string;
   scenarios?: IScenario[];
-  users: UserProject[];
+  users: IUserProject[];
 }

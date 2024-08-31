@@ -10,9 +10,6 @@ import { ProjectRepository, UserRepository } from '@/repositories';
 import {
   UnauthorizedError,
   BadRequestError,
-  InvalidParamError,
-  EmailInUseError,
-  NotFoundError,
 } from '@/utils/errors';
 import { ForbiddenError } from '@/utils/errors/forbidden-error';
 
@@ -33,7 +30,7 @@ export class UserService {
       (data.role == UserRole.ADMIN || data.role == UserRole.OWNER)
     ) {
       throw new UnauthorizedError(
-        `You have no permission to add a user as ${data.role} to this project`
+        `Você não tem permissão para realizar esta ação`
       );
     }
 
@@ -42,12 +39,12 @@ export class UserService {
         (p: IUserProject) => p.user.email == data.email
       )
     ) {
-      throw new BadRequestError('User already in project');
+      throw new BadRequestError('Este usuário já está neste projeto');
     }
 
     const user = await userRepository.getUser({ email: data.email });
     if (!user) {
-      throw new InvalidParamError("User doesn't exist");
+      throw new BadRequestError('Este usuário não existe');
     }
 
     const userProject = await userRepository.addUserToProject({
@@ -65,11 +62,11 @@ export class UserService {
     const { email, password } = data;
     const user = await userRepository.getUser({ email });
     if (!user) {
-      throw new InvalidParamError('email');
+      throw new ForbiddenError('Senha incorreta ou usuário inexistente');
     }
     const isPasswordCorrect = await hasher.compare(password, user.password);
     if (!isPasswordCorrect) {
-      throw new ForbiddenError('Invalid password');
+      throw new ForbiddenError('Senha incorreta ou usuário inexistente');
     }
     const token = await encrypter.encrypt(String(user.id));
     return new AuthenticateUserResponseDTO({
@@ -88,15 +85,12 @@ export class UserService {
       email: data.email,
     });
     if (alreadyExists) {
-      throw new EmailInUseError();
+      throw new BadRequestError('Já existe uma conta com este endereço de e-mail');
     }
     const { email } = await userRepository.createUser({
       ...data,
       password: hash,
     });
-    if (!email) {
-      throw new Error('Something went wrong');
-    }
     const user = await userRepository.getUser({ email });
     if (user) {
       const { name, email, projects } = user;
@@ -113,9 +107,6 @@ export class UserService {
 
   async getMe(id: number): Promise<null | AuthenticateUserResponseDTO> {
     const user = await this.getUser(id);
-    if (!user) {
-      throw new NotFoundError('This user does not exist');
-    }
     const { name, email, projects } = user;
     const token = await encrypter.encrypt(String(user.id));
     return new AuthenticateUserResponseDTO({
@@ -129,7 +120,7 @@ export class UserService {
   async getUser(id: number): Promise<null | IUser> {
     const user = await userRepository.getUser({ id });
     if (!user) {
-      throw new NotFoundError('This user does not exist');
+      throw new BadRequestError('Este usuário não existe');
     }
     return user;
   }

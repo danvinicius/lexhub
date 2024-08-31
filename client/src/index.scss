@@ -81,10 +81,6 @@ a {
   line-height: 1.4;
 }
 
-.error {
-  color: #f31;
-}
-
 .flex {
   display: flex;
 }
@@ -190,7 +186,7 @@ a {
   color: var(--primary-color);
 }
 
-.error {
+p.error {
   color: var(--error-color);
 }
 

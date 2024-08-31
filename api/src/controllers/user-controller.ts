@@ -11,9 +11,6 @@ import {
 } from '@/infra/http/response';
 import {
   BadRequestError,
-  EmailInUseError,
-  InvalidParamError,
-  MissingParamError,
   NotFoundError,
   UnauthorizedError,
 } from '@/utils/errors';
@@ -32,9 +29,9 @@ export class UserController {
       if (
         error instanceof NotFoundError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
 
@@ -46,13 +43,11 @@ export class UserController {
       return created(userCreated);
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
-        error instanceof EmailInUseError ||
-        error instanceof MissingParamError
+        error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
 
@@ -65,15 +60,14 @@ export class UserController {
       return ok(logged);
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
-        error instanceof MissingParamError
+        error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
       if (error instanceof ForbiddenError) {
-        return forbidden(error);
+        return forbidden(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
 
@@ -85,16 +79,14 @@ export class UserController {
       return ok(userProject);
     } catch (error: any) {
       if (
-        error instanceof InvalidParamError ||
-        error instanceof MissingParamError ||
         error instanceof BadRequestError
       ) {
-        return badRequest(error);
+        return badRequest(error.message);
       }
       if (error instanceof UnauthorizedError) {
-        return unauthorized(error);
+        return unauthorized(error.message);
       }
-      return serverError(error);
+      return serverError(error.message);
     }
   };
 }

@@ -1,42 +1,70 @@
-import { AuthUserRequestDTO } from "./interfaces/dto/AuthUser";
-import { CreateUserRequestDTO } from "./interfaces/dto/CreateUser";
+type Method = "head" | "options" | "put" | "post" | "patch" | "delete" | "get";
 
-export const API_URL = "http://localhost:3000/api";
+interface RequestFormat {
+  url: string;
+  options: {
+    method: Method,
+    headers: any,
+  }
+}
 
-export const CREATE_USER = (body: CreateUserRequestDTO) => {
+export const CREATE_USER = (): RequestFormat => {
   return {
-    url: `${API_URL}/user/register`,
+    url: `/user/register`,
     options: {
-      method: "POST",
+      method: "post",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
     },
   };
 };
 
-export const AUTH_USER = (body: AuthUserRequestDTO) => {
+export const AUTH_USER = (): RequestFormat => {
   return {
-    url: `${API_URL}/user/auth`,
+    url: `/user/auth`,
     options: {
-      method: "POST",
+      method: "post",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
     },
   };
 };
 
-export const GET_ME = (token: string) => {
+export const GET_ME = (token: string): RequestFormat => {
   return {
-    url: `${API_URL}/user/me`,
+    url: `/user/me`,
     options: {
-      method: "GET",
+      method: "get",
       headers: {
         "Authorization": `Bearer ${token}`
       }
+    },
+  };
+};
+
+export const GET_PROJECTS = (token: string): RequestFormat => {
+  return {
+    url: `/project`,
+    options: {
+      method: "get",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    },
+  };
+};
+
+export const CREATE_PROJECT = (token: string): RequestFormat => {  
+  return {
+    url: `/project`,
+    options: {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
     },
   };
 };

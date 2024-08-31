@@ -1,6 +1,7 @@
 import { JwtService } from '@/infra/security';
 import { IUser } from '@/models';
 import { UserService } from '@/services';
+import { ForbiddenError } from '@/utils/errors/forbidden-error';
 import { Request, Response, NextFunction } from 'express';
 
 export const authMiddleware = async (
@@ -18,7 +19,7 @@ export const authMiddleware = async (
     const token = req.headers?.authorization.split(' ')[1];
     if (!token) {
       return res.status(403).json({
-        error: 'Invalid token',
+        error: new ForbiddenError('Senha incorreta ou usuário inexistente').message,
         code: 403,
       });
     }
@@ -32,7 +33,7 @@ export const authMiddleware = async (
     next();
   } catch (error) {
     return res.status(401).json({
-      error: 'Invalid token',
+      error: new ForbiddenError('Senha incorreta ou usuário inexistente').message,
       code: 403,
     });
   }

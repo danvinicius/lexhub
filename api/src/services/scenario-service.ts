@@ -1,8 +1,8 @@
 import { CreateActorRequestDTO, CreateContextRequestDTO, CreateEpisodeRequestDTO, CreateExceptionRequestDTO, CreateManyScenariosRequestDTO, CreateResourceRequestDTO, CreateRestrictionRequestDTO, CreateScenarioRequestDTO, UpdateScenarioRequestDTO } from '@/infra/http/dtos';
 import { IScenario, IResource, IEpisode, IRestriction, IException, IActor, IProject, ISymbol } from '@/models';
 import { ScenarioRepository, SymbolRepository } from '@/repositories';
-import { InvalidParamError, NotFoundError } from '@/utils/errors';
-import { AddOrRemoveEntity } from '@/utils/share';
+import { BadRequestError, NotFoundError } from '@/utils/errors';
+import { AddOrRemoveEntity } from '@/utils/shared';
 
 const symbolRepository = new SymbolRepository();
 const scenarioRepository = new ScenarioRepository();
@@ -19,7 +19,7 @@ export class ScenarioService {
   async addActor({ scenarioId, resourceId }: AddOrRemoveEntity): Promise<void> {
     const scenarioExists = await scenarioRepository.getScenario(scenarioId);
     if (!scenarioExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
     }
     return await scenarioRepository.addResource(scenarioId, resourceId);
   }
@@ -28,7 +28,7 @@ export class ScenarioService {
     const scenarioExists =
       await scenarioRepository.getScenario(scenarioId);
     if (!scenarioExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
     }
     return await scenarioRepository.addResource(scenarioId, resourceId);
   }
@@ -38,7 +38,7 @@ export class ScenarioService {
       actor.scenarioId
     );
     if (!scenarioExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
     }
     return await scenarioRepository.createActor(actor);
   }
@@ -48,7 +48,7 @@ export class ScenarioService {
       context.scenarioId
     );
     if (!scenarioExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
     }
     return await scenarioRepository.createContext(context);
   }
@@ -58,7 +58,7 @@ export class ScenarioService {
       episode.scenarioId
     );
     if (!scenarioExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
     }
     return await scenarioRepository.createEpisode(episode);
   }
@@ -68,7 +68,7 @@ export class ScenarioService {
       exception.scenarioId
     );
     if (!scenarioExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
     }
     return await scenarioRepository.createException(exception);
   }
@@ -82,7 +82,7 @@ export class ScenarioService {
       resource.scenarioId
     );
     if (!scenarioExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
     }
     return await scenarioRepository.createResource(resource);
   }
@@ -92,7 +92,7 @@ export class ScenarioService {
       context.scenarioId
     );
     if (!scenarioExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
     }
     const resource = scenarioExists.resources?.find(
       (r: IResource) => r.id == context?.resourceId
@@ -101,10 +101,10 @@ export class ScenarioService {
       (r: IEpisode) => r.id == context?.episodeId
     );
     if (context.resourceId && !resource) {
-      throw new InvalidParamError('resourceId');
+      throw new BadRequestError('Parâmetro "resourceId" inválido ou inexistente');
     }
     if (context.episodeId && !episode) {
-      throw new InvalidParamError('episodeId');
+      throw new BadRequestError('Parâmetro "episodeId" inválido ou inexistente');
     }
     return await scenarioRepository.createRestriction(context);
   }
@@ -144,7 +144,7 @@ export class ScenarioService {
   async deleteScenario(id: number): Promise<void> {
     const scenarioExists = await scenarioRepository.getScenario(id);
     if (!scenarioExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
     }
     await scenarioRepository.deleteScenario(id);
   }
@@ -157,7 +157,7 @@ export class ScenarioService {
   async getScenario(id: number): Promise<null | IScenario> {
     const scenario = await scenarioRepository.getScenario(id);
     if (!scenario) {
-      throw new NotFoundError('Scenario not found');
+      throw new NotFoundError('Cenário inexistente');
     }
     return scenario;
   }
@@ -166,7 +166,7 @@ export class ScenarioService {
     const scenario = await scenarioRepository.getScenario(id);
 
     if (!scenario || !scenario.project.id) {
-      throw new NotFoundError('Scenario not found');
+      throw new NotFoundError('Cenário inexistente');
     }
 
     const [symbols, scenarios] = await Promise.all([
@@ -348,7 +348,7 @@ export class ScenarioService {
     const scenarioExists =
       await scenarioRepository.getScenario(scenarioId);
     if (!scenarioExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
     }
     return await scenarioRepository.removeActor(scenarioId, actorId);
   }
@@ -357,7 +357,7 @@ export class ScenarioService {
     const scenarioExists =
     await scenarioRepository.getScenario(scenarioId);
     if (!scenarioExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
     }
     return await scenarioRepository.removeResource(scenarioId, resourceId);
   }
@@ -365,7 +365,7 @@ export class ScenarioService {
   async updateScenario(id: number, scenario: UpdateScenarioRequestDTO): Promise<void> {
     const scenarioExists = await scenarioRepository.getScenario(id);
     if (!scenarioExists) {
-      throw new InvalidParamError('scenarioId');
+      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
     }
     return await scenarioRepository.updateScenario(id, scenario);
   }

@@ -14,7 +14,7 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
   toggleMenu,
 }: NavbarMenuLinksProps) => {
   const [width, setWidth] = React.useState<number>(window.innerWidth);
-  const { logged, logout } = React.useContext(UserContext) || {};
+  const { isAuthenticated, logout } = React.useContext(UserContext) || {};
 
   function handleWindowSizeChange() {
     setWidth(window.innerWidth);
@@ -35,7 +35,7 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
   };
 
   const handleLogout = () => {
-    if (logged) {
+    if (isAuthenticated) {
       if (logout) logout();
     }
   };
@@ -92,7 +92,7 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
       </li>
       <li>
         <Button
-          text={logged ? "Sair" : "Fazer login"}
+          text={isAuthenticated ? "Sair" : "Fazer login"}
           onClick={handleLogout}
         ></Button>
       </li>
