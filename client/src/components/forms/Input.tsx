@@ -1,4 +1,4 @@
-import React from "react";
+import { ChangeEvent, FC } from "react";
 import "./Input.scss";
 import Error from "../helper/Error";
 
@@ -11,17 +11,17 @@ interface InputProps {
   required?: boolean;
   error?: string | null;
   onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   onInput: (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement>
   ) => void;
   onBlur: (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement>
   ) => void;
 }
 
-const Input: React.FC<InputProps> = ({
+const Input: FC<InputProps> = ({
   type,
   name,
   placeholder,

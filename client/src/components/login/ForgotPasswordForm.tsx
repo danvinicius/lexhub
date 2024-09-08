@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { ChangeEvent, FC, FormEvent, useState } from "react";
 import Button from "../forms/Button";
 import Input from "../forms/Input";
 import Form from "../forms/Form";
@@ -8,7 +8,7 @@ interface ForgotPasswordProps {
   setCurrentScreen: (screen: string) => void;
 }
 
-const ForgotPassword: React.FC<ForgotPasswordProps> = ({
+const ForgotPassword: FC<ForgotPasswordProps> = ({
   setCurrentScreen,
 }: ForgotPasswordProps) => {
   const [formData, setFormData] = useState({
@@ -17,7 +17,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData({
       ...formData,
@@ -25,7 +25,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     try {
@@ -60,7 +60,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({
           value={formData.email}
           onChange={handleChange}
         />
-        <Button text="Enviar e-mail de recuperação" onClick={handleSubmit} />
+        <Button theme="primary" text="Enviar e-mail de recuperação" onClick={handleSubmit} />
       </Form>
     </section>
   );

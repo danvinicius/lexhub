@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import './MessageBox.scss'
 
 export enum MessageBoxTheme {
@@ -11,7 +11,7 @@ interface MessageBoxProps {
   theme: MessageBoxTheme
 }
 
-const MessageBox: React.FC<MessageBoxProps> = ({ message, theme }: MessageBoxProps) => {
+const MessageBox: FC<MessageBoxProps> = ({ message, theme }: MessageBoxProps) => {
   return (
     <div className={`messageBox ${theme == MessageBoxTheme.SUCCESS ? 'success' : 'error'}`} >
         <p>{message}</p>

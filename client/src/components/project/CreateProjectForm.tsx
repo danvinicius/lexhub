@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { FormEvent, useContext, useState } from "react";
 import Button from "../forms/Button";
 import Input from "../forms/Input";
 import Form from "../forms/Form";
@@ -17,13 +17,13 @@ export interface CreateProjectRequestDTO {
 }
 
 const CreateProjectForm = () => {
-  const name = useForm();
-  const description = useForm();
+  const name = useForm('dontValidateName');
+  const description = useForm('dontValidateDescription');
 
   const { isAuthenticated } = useContext(UserContext) || {};
 
-  const [error, setError] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate()
 
@@ -31,7 +31,7 @@ const CreateProjectForm = () => {
     setLoading(true);
     
     try {
-      const { url, options } = CREATE_PROJECT(isAuthenticated ? isAuthenticated().token : '');
+      const { url, options } = CREATE_PROJECT(isAuthenticated().token);
       await api[options.method](url, body, options);
       navigate('/');
     } catch (error: any) {
@@ -41,13 +41,15 @@ const CreateProjectForm = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (createProject) createProject({ name: name.value, description: description.value });
+    if (name.validate() && description.validate()) {
+      createProject({ name: name.value, description: description.value })
+    }
   };
 
   return (
-    <section className="createProjectForm flex column gap-125">
+    <section className="create-project-form flex column gap-125">
       <Form>
         <Input
           type="text"
@@ -68,7 +70,7 @@ const CreateProjectForm = () => {
         {loading ? (
           <Loading />
         ) : (
-          <Button text="Criar" onClick={handleSubmit} />
+          <Button theme="primary" text="Criar" onClick={handleSubmit} />
         )}
         <Error error={error}/>
       </Form>

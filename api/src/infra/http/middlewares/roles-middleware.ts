@@ -3,7 +3,7 @@ import { isAdmin, isCollaborator, isOwner } from '@/utils/validation/permission'
 import { IUserProject } from '@/models';
 
 const userBelongsToProject = (userProjects: IUserProject[], projectId: Number) => {
-  return userProjects?.find((p: IUserProject) => p.project.id == Number(projectId));
+  return userProjects?.find((p: IUserProject) => p.project?.id == Number(projectId));
 }
 
 export const observerMiddleware = async (

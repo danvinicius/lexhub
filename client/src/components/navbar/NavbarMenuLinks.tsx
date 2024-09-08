@@ -1,6 +1,6 @@
 import ChevronRight from "../../assets/icon/ChevronRight.svg";
 import "./Navbar.scss";
-import React from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import "./NavbarMenuLinks.scss";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
@@ -10,16 +10,16 @@ interface NavbarMenuLinksProps {
   toggleMenu?: () => void;
 }
 
-export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
+export const NavbarMenuLinks: FC<NavbarMenuLinksProps> = ({
   toggleMenu,
 }: NavbarMenuLinksProps) => {
-  const [width, setWidth] = React.useState<number>(window.innerWidth);
-  const { isAuthenticated, logout } = React.useContext(UserContext) || {};
+  const [width, setWidth] = useState<number>(window.innerWidth);
+  const { isAuthenticated, logout } = useContext(UserContext) || {};
 
   function handleWindowSizeChange() {
     setWidth(window.innerWidth);
   }
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener("resize", handleWindowSizeChange);
     return () => {
       window.removeEventListener("resize", handleWindowSizeChange);
@@ -35,17 +35,17 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
   };
 
   const handleLogout = () => {
-    if (isAuthenticated) {
+    if (isAuthenticated().token) {
       if (logout) logout();
     }
   };
 
   return (
-    <ul className="navbarMenu">
+    <ul className="navbar-menu">
       <li>
         <Link to="/sobre" onClick={isMobile ? handleClick : undefined}>
           {isMobile ? (
-            <div className="arrowLink">
+            <div className="arrow-link">
               Sobre o Lexhub
               <img
                 src={ChevronRight}
@@ -61,7 +61,7 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
       <li>
         <Link to="/como-usar" onClick={isMobile ? handleClick : undefined}>
           {isMobile ? (
-            <div className="arrowLink">
+            <div className="arrow-link">
               Como usar
               <img
                 src={ChevronRight}
@@ -77,7 +77,7 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
       <li>
         <Link to="/blog" onClick={isMobile ? handleClick : undefined}>
           {isMobile ? (
-            <div className="arrowLink">
+            <div className="arrow-link">
               Nosso blog
               <img
                 src={ChevronRight}
@@ -92,7 +92,8 @@ export const NavbarMenuLinks: React.FC<NavbarMenuLinksProps> = ({
       </li>
       <li>
         <Button
-          text={isAuthenticated ? "Sair" : "Fazer login"}
+          theme="primary"
+          text={isAuthenticated().token ? "Sair" : "Fazer login"}
           onClick={handleLogout}
         ></Button>
       </li>

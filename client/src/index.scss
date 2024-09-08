@@ -1,5 +1,5 @@
 @font-face {
-  src: url('./assets/fonts/Ubuntu/Ubuntu-Regular.ttf') format('truetype');
+  src: url("./assets/fonts/Ubuntu/Ubuntu-Regular.ttf") format("truetype");
   font-display: swap;
   font-family: Ubuntu;
 }
@@ -10,9 +10,6 @@
   font-weight: 400;
 
   --primary-color: #30b27f;
-  --secondary-color: #0abdc6;
-  --tertiary-color: #bd00ff;
-  --quaternary-color: #f2f5ff;
   --primary-text-color: #091833;
   --secondary-text-color: #6d6d6d;
   --error-color: #ff3333;
@@ -30,6 +27,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   color: var(--primary-text-color);
+  background: #f0f2f5;
 }
 
 * {
@@ -44,7 +42,9 @@ a {
   text-decoration: none;
 }
 
-button, a, span {
+button,
+a,
+span {
   user-select: none;
 }
 
@@ -59,7 +59,7 @@ ul {
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 
 h2 {
@@ -164,18 +164,22 @@ a {
 .relative {
   position: relative;
 }
+table {
+  max-width: 100%;
+}
 
 table,
 tr,
 td,
 th {
   border: 1px solid var(--secondary-text-color);
-  text-align: center;
+  border-collapse: collapse;
 }
 
 td,
 th {
-  padding: 0.75rem 4rem;
+  padding: 1rem;
+  line-height: 1.25;
 }
 
 th {
@@ -190,6 +194,11 @@ p.error {
   color: var(--error-color);
 }
 
+span.action {
+  color: var(--primary-color);
+  cursor: pointer;
+  font-weight: bold;
+}
 
 .container {
   width: 100%;
@@ -199,3 +208,27 @@ p.error {
     width: 85%;
   }
 }
+
+.slide-left {
+  animation: .2s slide-left;
+}
+.slide-right {
+  animation: .2s slide-right;
+}
+@keyframes slide-left {
+  from {
+    transform: translate(100%);
+  }
+  to {
+    transform: translate(0%);
+  }
+}
+@keyframes slide-right {
+  from {
+    transform: translate(0%);
+  }
+  to {
+    transform: translate(100%);
+  }
+}
+

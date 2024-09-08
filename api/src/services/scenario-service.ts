@@ -1,5 +1,26 @@
-import { CreateActorRequestDTO, CreateContextRequestDTO, CreateEpisodeRequestDTO, CreateExceptionRequestDTO, CreateManyScenariosRequestDTO, CreateResourceRequestDTO, CreateRestrictionRequestDTO, CreateScenarioRequestDTO, UpdateScenarioRequestDTO } from '@/infra/http/dtos';
-import { IScenario, IResource, IEpisode, IRestriction, IException, IActor, IProject, ISymbol } from '@/models';
+import {
+  CreateActorRequestDTO,
+  CreateContextRequestDTO,
+  CreateEpisodeRequestDTO,
+  CreateExceptionRequestDTO,
+  CreateManyScenariosRequestDTO,
+  CreateResourceRequestDTO,
+  CreateRestrictionRequestDTO,
+  CreateScenarioRequestDTO,
+  UpdateScenarioRequestDTO,
+} from '@/infra/http/dtos';
+import {
+  IScenario,
+  IResource,
+  IEpisode,
+  IRestriction,
+  IException,
+  IActor,
+  IProject,
+  ISymbol,
+  IGroup,
+  INonSequentialEpisode,
+} from '@/models';
 import { ScenarioRepository, SymbolRepository } from '@/repositories';
 import { BadRequestError, NotFoundError } from '@/utils/errors';
 import { AddOrRemoveEntity } from '@/utils/shared';
@@ -15,20 +36,94 @@ export interface Lexicon {
   type: string;
 }
 
+export interface ILexiconScenario {
+  id: number;
+  title: {
+    content: string;
+    foundLexicons: Lexicon[];
+  };
+  goal: {
+    content: string;
+    foundLexicons: Lexicon[];
+  };
+  context: {
+    geographicLocation: {
+      content: string;
+      foundLexicons: Lexicon[];
+    };
+    temporalLocation: {
+      content: string;
+      foundLexicons: Lexicon[];
+    };
+    preCondition: {
+      content: string;
+      foundLexicons: Lexicon[];
+    };
+    restrictions: {
+      description: {
+        content: string;
+        foundLexicons: Lexicon[];
+      };
+    }[];
+  };
+  exceptions: {
+    description: {
+      content: string;
+      foundLexicons: Lexicon[];
+    };
+  }[];
+  actors: {
+    name: {
+      content: string;
+      foundLexicons: Lexicon[];
+    };
+  }[];
+  resources: {
+    name: {
+      content: string;
+      foundLexicons: Lexicon[];
+    };
+  }[];
+  episodes: {
+    position: number,
+    restriction: IRestriction,
+    description: {
+      content: string;
+      foundLexicons: Lexicon[];
+    };
+  }[];
+  groups: {
+    position: number,
+    nonSequentialEpisodes: {
+      restriction: IRestriction,
+      description: {
+        content: string;
+        foundLexicons: Lexicon[];
+      };
+    }[]
+  }[];
+}
+
 export class ScenarioService {
   async addActor({ scenarioId, resourceId }: AddOrRemoveEntity): Promise<void> {
     const scenarioExists = await scenarioRepository.getScenario(scenarioId);
     if (!scenarioExists) {
-      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "scenarioId" inválido ou inexistente'
+      );
     }
     return await scenarioRepository.addResource(scenarioId, resourceId);
   }
 
-  async addResource({ scenarioId, resourceId }: AddOrRemoveEntity): Promise<void> {
-    const scenarioExists =
-      await scenarioRepository.getScenario(scenarioId);
+  async addResource({
+    scenarioId,
+    resourceId,
+  }: AddOrRemoveEntity): Promise<void> {
+    const scenarioExists = await scenarioRepository.getScenario(scenarioId);
     if (!scenarioExists) {
-      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "scenarioId" inválido ou inexistente'
+      );
     }
     return await scenarioRepository.addResource(scenarioId, resourceId);
   }
@@ -38,7 +133,9 @@ export class ScenarioService {
       actor.scenarioId
     );
     if (!scenarioExists) {
-      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "scenarioId" inválido ou inexistente'
+      );
     }
     return await scenarioRepository.createActor(actor);
   }
@@ -48,7 +145,9 @@ export class ScenarioService {
       context.scenarioId
     );
     if (!scenarioExists) {
-      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "scenarioId" inválido ou inexistente'
+      );
     }
     return await scenarioRepository.createContext(context);
   }
@@ -58,7 +157,9 @@ export class ScenarioService {
       episode.scenarioId
     );
     if (!scenarioExists) {
-      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "scenarioId" inválido ou inexistente'
+      );
     }
     return await scenarioRepository.createEpisode(episode);
   }
@@ -68,12 +169,16 @@ export class ScenarioService {
       exception.scenarioId
     );
     if (!scenarioExists) {
-      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "scenarioId" inválido ou inexistente'
+      );
     }
     return await scenarioRepository.createException(exception);
   }
 
-  async createManyScenarios(data: CreateManyScenariosRequestDTO): Promise<IScenario[]> {
+  async createManyScenarios(
+    data: CreateManyScenariosRequestDTO
+  ): Promise<IScenario[]> {
     return await scenarioRepository.createManyScenarios(data);
   }
 
@@ -82,7 +187,9 @@ export class ScenarioService {
       resource.scenarioId
     );
     if (!scenarioExists) {
-      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "scenarioId" inválido ou inexistente'
+      );
     }
     return await scenarioRepository.createResource(resource);
   }
@@ -92,7 +199,9 @@ export class ScenarioService {
       context.scenarioId
     );
     if (!scenarioExists) {
-      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "scenarioId" inválido ou inexistente'
+      );
     }
     const resource = scenarioExists.resources?.find(
       (r: IResource) => r.id == context?.resourceId
@@ -101,10 +210,14 @@ export class ScenarioService {
       (r: IEpisode) => r.id == context?.episodeId
     );
     if (context.resourceId && !resource) {
-      throw new BadRequestError('Parâmetro "resourceId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "resourceId" inválido ou inexistente'
+      );
     }
     if (context.episodeId && !episode) {
-      throw new BadRequestError('Parâmetro "episodeId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "episodeId" inválido ou inexistente'
+      );
     }
     return await scenarioRepository.createRestriction(context);
   }
@@ -144,7 +257,9 @@ export class ScenarioService {
   async deleteScenario(id: number): Promise<void> {
     const scenarioExists = await scenarioRepository.getScenario(id);
     if (!scenarioExists) {
-      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "scenarioId" inválido ou inexistente'
+      );
     }
     await scenarioRepository.deleteScenario(id);
   }
@@ -162,7 +277,7 @@ export class ScenarioService {
     return scenario;
   }
 
-  async getScenarioWithLexicon(id: number | number) {
+  async getScenarioWithLexicon(id: number | number): Promise<ILexiconScenario> {
     const scenario = await scenarioRepository.getScenario(id);
 
     if (!scenario || !scenario.project.id) {
@@ -202,29 +317,46 @@ export class ScenarioService {
       exceptions = [],
       actors = [],
       resources = [],
+      episodes = [],
+      groups = [],
     } = scenario;
 
     const processedLexicon = (content: string, searchOtherScenarios: boolean) =>
       this.processLexicon(content, symbols, scenarios, searchOtherScenarios);
 
     return {
+      id: scenario.id,
       title: processedLexicon(title, false),
       goal: processedLexicon(goal, false),
       context: {
         geographicLocation: processedLexicon(geographicLocation, false),
         temporalLocation: processedLexicon(temporalLocation, false),
         preCondition: processedLexicon(preCondition, true),
-        restrictions: restrictions.map((restriction: IRestriction) =>
-          processedLexicon(restriction.description, true)
-        ),
+        restrictions: restrictions.map((restriction: IRestriction) => ({
+          description: processedLexicon(restriction.description, true),
+        })),
       },
-      exceptions: exceptions.map((exception: IException) =>
-        processedLexicon(exception.description, true)
-      ),
-      actors: actors.map((actor: IActor) => processedLexicon(actor.name, false)),
-      resources: resources.map((resource: IResource) =>
-        processedLexicon(resource.name, false)
-      ),
+      exceptions: exceptions.map((exception: IException) => ({
+        description: processedLexicon(exception.description, true),
+      })),
+      actors: actors.map((actor: IActor) => ({
+        name: processedLexicon(actor.name, false),
+      })),
+      resources: resources.map((resource: IResource) => ({
+        name: processedLexicon(resource.name, false),
+      })),
+      episodes: episodes.map((episode: IEpisode) => ({
+        position: episode.position,
+        restriction: episode.restriction,
+        description: processedLexicon(episode.description, false),
+      })),
+      groups: groups.map((group: IGroup) => ({
+        position: group.position,
+        nonSequentialEpisodes: group.nonSequentialEpisodes.map((nonSequentialEpisode: INonSequentialEpisode) => ({
+          restriction: nonSequentialEpisode.restriction,
+          description: processedLexicon(nonSequentialEpisode.description, false),
+        }))
+      })),
     };
   }
 
@@ -251,7 +383,9 @@ export class ScenarioService {
         const { id } = termo;
         if (id) {
           possibleLexicon.push({
-            resource: termo.title ? `/api/project/${termo.project.id}/scenario/${id}` : `/api/project/${termo.project.id}/symbol/${id}`,
+            resource: termo.title
+              ? `/api/project/${termo.project.id}/scenario/${id}`
+              : `/api/project/${termo.project.id}/symbol/${id}`,
             name: lexiconName,
             starts,
             ends,
@@ -345,27 +479,37 @@ export class ScenarioService {
   };
 
   async removeActor({ actorId, scenarioId }: AddOrRemoveEntity): Promise<void> {
-    const scenarioExists =
-      await scenarioRepository.getScenario(scenarioId);
+    const scenarioExists = await scenarioRepository.getScenario(scenarioId);
     if (!scenarioExists) {
-      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "scenarioId" inválido ou inexistente'
+      );
     }
     return await scenarioRepository.removeActor(scenarioId, actorId);
   }
 
-  async removeResource({ resourceId, scenarioId }: AddOrRemoveEntity): Promise<void> {
-    const scenarioExists =
-    await scenarioRepository.getScenario(scenarioId);
+  async removeResource({
+    resourceId,
+    scenarioId,
+  }: AddOrRemoveEntity): Promise<void> {
+    const scenarioExists = await scenarioRepository.getScenario(scenarioId);
     if (!scenarioExists) {
-      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "scenarioId" inválido ou inexistente'
+      );
     }
     return await scenarioRepository.removeResource(scenarioId, resourceId);
   }
 
-  async updateScenario(id: number, scenario: UpdateScenarioRequestDTO): Promise<void> {
+  async updateScenario(
+    id: number,
+    scenario: UpdateScenarioRequestDTO
+  ): Promise<void> {
     const scenarioExists = await scenarioRepository.getScenario(id);
     if (!scenarioExists) {
-      throw new BadRequestError('Parâmetro "scenarioId" inválido ou inexistente');
+      throw new BadRequestError(
+        'Parâmetro "scenarioId" inválido ou inexistente'
+      );
     }
     return await scenarioRepository.updateScenario(id, scenario);
   }

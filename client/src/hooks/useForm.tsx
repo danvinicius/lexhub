@@ -1,4 +1,4 @@
-import React from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 
 interface ValidationRule {
   regex: RegExp;
@@ -19,16 +19,16 @@ const types: Record<string, ValidationRule> = {
 
 type UseFormReturn = {
   value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
-  onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  setValue: Dispatch<SetStateAction<string>>;
+  onChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   error: string | null;
   validate: () => boolean;
   onBlur: () => boolean;
 };
 
 const useForm = (type?: string): UseFormReturn => {
-  const [value, setValue] = React.useState<string>("");
-  const [error, setError] = React.useState<string | null>("");
+  const [value, setValue] = useState<string>("");
+  const [error, setError] = useState<string | null>("");
 
   const validate = (value: string): boolean => {
     if (!type) return true;
@@ -44,7 +44,7 @@ const useForm = (type?: string): UseFormReturn => {
     return true;
   };
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const onChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setError('')
     setValue(event.target.value);
   };

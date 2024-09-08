@@ -4,23 +4,28 @@ import CreateProject from "./screens/CreateProject";
 import Home from "./screens/Home";
 import Login from "./screens/Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Project from "./screens/Project";
+import { ProjectStorage } from "./context/ProjectContext";
 
 function App() {
   return (
     <BrowserRouter>
       <UserStorage>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="/projeto/criar" element={<CreateProject />} />
-        </Routes>
+        <ProjectStorage>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/projeto/:id" element={<Project />} />
+            <Route path="/projeto/criar" element={<CreateProject />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </ProjectStorage>
       </UserStorage>
     </BrowserRouter>
   );

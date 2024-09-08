@@ -1,0 +1,56 @@
+.project {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .project-info {
+    padding: 2rem 0 1rem;
+
+    .project-name, .project-description {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+
+      img {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .scenarios-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-radius: 5px;
+    
+    .scenarios-container-header {
+      display: flex;
+      margin-bottom: 1rem;
+      align-items: center;
+      gap: 1rem;
+      @media screen and (min-width: 998px) {
+        margin-bottom: unset;
+      }
+      
+      h2 {
+        font-size: 1.75rem;
+      }
+
+      a:not(:last-child){
+        margin-left: auto;
+      }
+      
+      & > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+    .scenarios-content {
+      display: grid;
+      grid-template-columns: 25% 75%;
+      gap: 1.5rem;
+      position: relative;
+    }
+  }
+}

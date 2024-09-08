@@ -5,6 +5,12 @@ import {
 import { IProject } from '@/models';
 import { ProjectRepository, UserRepository } from '@/repositories';
 import { NotFoundError } from '@/utils/errors';
+import { ILexiconScenario, ScenarioService } from './scenario-service';
+
+// Definindo um novo tipo de projeto onde os cenários têm o tipo ILexiconScenario
+export interface IProjectWithLexiconScenarios extends Omit<IProject, 'scenarios'> {
+  scenarios: ILexiconScenario[];
+}
 
 const projectRepository = new ProjectRepository();
 const userRepository = new UserRepository();
@@ -18,12 +24,25 @@ export class ProjectService {
     return await projectRepository.createProject({ ...project, user });
   }
 
-  async getProject(id: number): Promise<null | IProject> {
+  async getProject(id: number): Promise<null | IProjectWithLexiconScenarios> {
     const project = await projectRepository.getProject(id);
+    
     if (!project) {
       throw new NotFoundError('This project does not exist');
     }
-    return project;
+
+    const scenarioService = new ScenarioService();
+
+    const scenarios = await Promise.all(
+      project.scenarios.map(async (scenario) => {
+        return await scenarioService.getScenarioWithLexicon(scenario.id);
+      })
+    );
+
+    return {
+      ...project,
+      scenarios,
+    };
   }
 
   async getAllProjects(userId: number): Promise<IProject[]> {

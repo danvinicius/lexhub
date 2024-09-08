@@ -1,14 +1,15 @@
-import React from 'react'
+import { FC, FormEvent } from 'react'
 import './Button.scss'
 
 interface ButtonProps {
     text: string
-    onClick?: (e: React.FormEvent) => void
+    theme: 'primary' | 'secondary'
+    onClick?: (e: FormEvent) => void
 }
 
-const Button: React.FC<ButtonProps> = ({text, onClick}: ButtonProps) => {
+const Button: FC<ButtonProps> = ({text, theme, onClick}: ButtonProps) => {
     return (
-        <button className='button' onClick={onClick ? onClick : () => {}}>
+        <button className={`button ${theme}`} onClick={onClick ? onClick : () => {}}>
             {text}
         </button>
     )

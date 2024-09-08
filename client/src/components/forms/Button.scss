@@ -1,13 +1,21 @@
 .button {
-    border-radius: 0.5rem;
-    border: 2px solid var(--primary-color);
+    border-radius: 5px;
     outline: none;
-    background: var(--primary-color);
     padding: .75rem 2rem;
-    color: #fff;
     font-size: 1.25rem;
     cursor: pointer;
     transition: .2s;
+    
+    &.primary {
+        background: var(--primary-color);
+        color: #fff;
+        border: 2px solid var(--primary-color);
+    }
+    &.secondary {
+        color: var(--primary-text-color);
+        background: #fff;
+        border: 2px solid #fff;
+    }
     
     &:hover {
         transform: scale(1.02);

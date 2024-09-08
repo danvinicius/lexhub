@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { FC, FormEvent, useContext, useState } from "react";
 import Button from "../forms/Button";
 import Input from "../forms/Input";
 import Form from "../forms/Form";
@@ -14,11 +14,11 @@ interface LoginFormProps {
   setCurrentScreen: (screen: string) => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({
+const LoginForm: FC<LoginFormProps> = ({
   setCurrentScreen,
 }: LoginFormProps) => {
-  const [error, setError] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const {setUser} = useContext(UserContext) || {};
 
@@ -40,10 +40,10 @@ const LoginForm: React.FC<LoginFormProps> = ({
   };
 
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (email.validate() && password.validate()) {
-      if (signup) signup({ name: name.value, email: email.value, password: password.value });
+      signup({ name: name.value, email: email.value, password: password.value })
     }
   };
 
@@ -86,7 +86,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
         {loading ? (
           <Loading />
         ) : (
-          <Button text="Entrar" onClick={handleSubmit} />
+          <Button theme="primary" text="Entrar" onClick={handleSubmit} />
         )}
         <Error error={error} />
       </Form>

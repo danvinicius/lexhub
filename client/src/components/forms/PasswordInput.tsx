@@ -1,11 +1,11 @@
 import Input from "./Input";
 import Eye from "../../assets/icon/Eye.svg";
 import EyeOff from "../../assets/icon/Eye_Off.svg";
-import React from "react";
+import { ChangeEvent, FC, useState } from "react";
 import './PasswordInput.scss'
 
 interface PasswordInputProps {
-  onChange: ( e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: ( e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   setCurrentScreen: (screen: string) => void,
   enableForgotPassword: boolean;
   value: string;
@@ -13,14 +13,14 @@ interface PasswordInputProps {
   label: string;
   error?: string | null;
   onInput: (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement>
   ) => void;
   onBlur: (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement>
   ) => void;
 }
 
-const PasswordInput: React.FC<PasswordInputProps> = ({
+const PasswordInput: FC<PasswordInputProps> = ({
   onChange,
   onInput,
   onBlur,
@@ -31,7 +31,7 @@ const PasswordInput: React.FC<PasswordInputProps> = ({
   label,
   error,
 }: PasswordInputProps) => {
-  const [type, setType] = React.useState("password");
+  const [type, setType] = useState("password");
   return (
     <div className="password-input-wrapper">
       {enableForgotPassword && (

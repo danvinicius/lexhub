@@ -1,4 +1,4 @@
-ul.navbarMenu {
+ul.navbar-menu {
   list-style-type: none;
   display: flex;
   align-self: flex-start;
@@ -17,7 +17,7 @@ ul.navbarMenu {
       transition: 0.2s ease-in-out;
       color: #fff;
 
-      .arrowLink {
+      .arrow-link {
         display: flex;
         justify-content: space-between;
         width: 100%;

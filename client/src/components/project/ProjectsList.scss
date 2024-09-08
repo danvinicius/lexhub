@@ -1,8 +1,8 @@
-.projectsListContainer {
+.projects-list-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  border-radius: 10px;
+  border-radius: 5px;
   background: #fff;
   padding: 1rem;
   padding-bottom: 2rem;
@@ -24,13 +24,19 @@
     }
   }
 
-  .projectsListContainerHeader {
+  .projects-list-container-header {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     margin-bottom: 1rem;
     @media screen and (min-width: 998px) {
       margin-bottom: unset;
+    }
+
+    & > div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     button {
       max-width: 200px;
@@ -43,13 +49,14 @@
     gap: 2rem;
     .project {
       display: flex;
+      flex-direction: row;
       gap: 1rem;
+      background: #fff;
       cursor: pointer;
 
       &:hover {
         .projectContent {
-
-          p.projectName, p.projectDescription {
+          p.project-name, p.project-description {
             color: var(--primary-color);
           }
         }
@@ -69,12 +76,12 @@
         display: flex;
         flex-direction: column;
 
-        p.projectName {
+        p.project-name {
           transition: .1s linear;
           font-weight: bold;
         }
         
-        p.projectDescription {
+        p.project-description {
           transition: .1s linear;
           color: var(--secondary-text-color);
         }
@@ -84,6 +91,10 @@
     .noProjects{
       font-size: 1.5rem;
       color: var(--secondary-text-color);
+    }
+
+    .loading {
+      margin: 0 auto;
     }
   }
 }

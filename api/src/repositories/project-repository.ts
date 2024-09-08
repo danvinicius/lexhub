@@ -28,7 +28,10 @@ export class ProjectRepository {
           id,
         },
         relations: {
-          symbols: true,
+          symbols: {
+            impacts: true,
+            synonyms: true,
+          },
           scenarios: true,
           users: {
             user: true

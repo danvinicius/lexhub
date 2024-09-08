@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { FC, useState } from "react";
 import LoginForm from "../components/login/LoginForm";
 import SignupForm from "../components/login/SignupForm";
 import LoginBanner from "../components/login/LoginBanner";
@@ -6,7 +6,7 @@ import ForgotPasswordForm from "../components/login/ForgotPasswordForm";
 import "./css/Login.scss";
 import { Navbar } from "../components/navbar/Navbar";
 
-const Login: React.FC = () => {
+const Login: FC = () => {
   const [currentScreen, setCurrentScreen] = useState("login");
   return (
     <>

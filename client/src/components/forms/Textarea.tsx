@@ -1,4 +1,4 @@
-import React from "react";
+import { ChangeEvent, FC } from "react";
 import "./Textarea.scss";
 
 interface TextareaProps {
@@ -6,12 +6,12 @@ interface TextareaProps {
   name: string;
   value: string;
   onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   required?: boolean;
 }
 
-const Textarea: React.FC<TextareaProps> = ({
+const Textarea: FC<TextareaProps> = ({
   placeholder,
   name,
   value,

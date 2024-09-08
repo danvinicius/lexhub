@@ -1,0 +1,32 @@
+.scenarios-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-size: 1.15rem;
+  h3 {
+    color: var(--primary-text-color);
+  }
+
+  ol {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-left: 1rem;
+    color: var(--secondary-text-color);
+    li {
+      cursor: pointer;
+      transition: 0.1s linear;
+      &:hover {
+        color: var(--primary-color);
+      }
+      a {
+        color: inherit;
+        display: inline-block;
+        width: 100%;
+        &.active {
+          color: var(--primary-color);
+        }
+      }
+    }
+  }
+}

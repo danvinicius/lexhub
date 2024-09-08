@@ -1,4 +1,4 @@
-import React from "react";
+import { FC, useState } from "react";
 import { Logo } from "../logo/Logo";
 import "./Navbar.scss";
 import Hamburger from "../../assets/icon/Hamburger.svg";
@@ -10,8 +10,8 @@ interface NavbarProps {
   navBg: boolean;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ navBg }: NavbarProps) => {
-  const [isMobileMenuActive, setIsMobileMenuActive] = React.useState(false);
+export const Navbar: FC<NavbarProps> = ({ navBg }: NavbarProps) => {
+  const [isMobileMenuActive, setIsMobileMenuActive] = useState(false);
 
   const toggleMenu = () => {
     setIsMobileMenuActive(!isMobileMenuActive);
@@ -24,14 +24,14 @@ export const Navbar: React.FC<NavbarProps> = ({ navBg }: NavbarProps) => {
         <NavbarMenuLinks />
       </div>
 
-      <div className="menuToggle">
+      <div className="menu-toggle">
         <Logo />
-        <button className="menuToggleButton" onClick={toggleMenu}>
+        <button className="menu-toggle-button" onClick={toggleMenu}>
           {!isMobileMenuActive && <img src={Hamburger} alt="Ícone barra tripla abrir menu" title="Ícone barra tripla abrir menu" />}
           {isMobileMenuActive && <img src={Close} alt="Ícone 'X' fechar menu" title="Ícone 'X' fechar menu" />}
         </button>
         <div className={`menu ${isMobileMenuActive ? "active" : ""}`}>
-          <div className="menuHeader" onClick={toggleMenu}>
+          <div className="menu-header" onClick={toggleMenu}>
             <Logo toggleMenu={toggleMenu} />
           </div>
           <NavbarMenuLinks toggleMenu={toggleMenu}/>

@@ -43,9 +43,12 @@ type UserContextType = {
   isAuthenticated: () => any;
 };
 
-export const UserContext = createContext<UserContextType | undefined>(
-  undefined
-);
+export const UserContext = createContext<UserContextType>({
+  user: null,
+  setUser: () => {},
+  logout: () => {},
+  isAuthenticated: () => {}
+});
 
 type UserStorageProps = {
   children: ReactNode;
@@ -72,7 +75,7 @@ export const UserStorage = ({ children }: UserStorageProps) => {
   }, [navigate]);
 
   const autoLogin = useCallback(async () => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated().token) {
       const storedData = localStorage.getItem("user");
       if (storedData) {
         try {
@@ -99,12 +102,10 @@ export const UserStorage = ({ children }: UserStorageProps) => {
   }, [navigate, user, location]);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated().token) {
       autoLogin();
-    } else {
-      setUser(isAuthenticated())
     }
-  }, [autoLogin, isAuthenticated, user]);
+  }, [autoLogin, isAuthenticated]);
 
   return (
     <UserContext.Provider

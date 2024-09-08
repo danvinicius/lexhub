@@ -1,11 +1,11 @@
-import React, { ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import "./Form.scss";
 
 interface FormProps {
   children: ReactNode
 }
 
-const Form: React.FC<FormProps> = ({children}: FormProps) => {
+const Form: FC<FormProps> = ({children}: FormProps) => {
 
 
   return (

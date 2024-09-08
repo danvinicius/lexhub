@@ -56,6 +56,18 @@ export const GET_PROJECTS = (token: string): RequestFormat => {
   };
 };
 
+export const GET_PROJECT = (id: number, token: string): RequestFormat => {
+  return {
+    url: `/project/${id}`,
+    options: {
+      method: "get",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    },
+  };
+};
+
 export const CREATE_PROJECT = (token: string): RequestFormat => {  
   return {
     url: `/project`,
