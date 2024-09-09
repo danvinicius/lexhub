@@ -21,8 +21,22 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/projeto/:id" element={<Project />} />
-            <Route path="/projeto/criar" element={<CreateProject />} />
+            <Route
+              path="/projeto/:id"
+              element={
+                <ProtectedRoute>
+                  <Project />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/projeto/criar"
+              element={
+                <ProtectedRoute>
+                  <CreateProject />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/login" element={<Login />} />
           </Routes>
         </ProjectStorage>

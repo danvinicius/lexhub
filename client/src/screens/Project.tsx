@@ -4,18 +4,27 @@ import { Navbar } from "../components/navbar/Navbar";
 import { UserContext } from "../context/UserContext";
 import { GET_PROJECT } from "../api";
 import api from "../lib/axios";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Loading from "../components/helper/Loading";
 import Error from "../components/helper/Error";
 import ScenariosList from "../components/scenario/ScenariosList";
 import Button from "../components/forms/Button";
 import { ProjectContext } from "../context/ProjectContext";
 import SummaryWrapper from "../components/scenario/SummaryWrapper";
-import EditPen from '../assets/icon/Edit.svg'
+import EditPen from "../assets/icon/Edit.svg";
+import { Modal } from "@mui/material";
+import CreateSymbolForm from "../components/symbol/CreateSymbolForm";
 
 const Project: FC = () => {
   const { isAuthenticated } = useContext(UserContext) || {};
   const { setProject, project } = useContext(ProjectContext || {});
+
+  const [isCreateSymbolModalOpen, setIsCreateSymbolModalOpen] = useState(false);
+  const [isCreateScenarioModalOpen, setIsCreateScenarioModalOpen] = useState(false);
+  const handleOpenCreateSymbolModal = () => setIsCreateSymbolModalOpen(true);
+  const handleOpenCreateScenarioModal = () => setIsCreateScenarioModalOpen(true);
+  const handleCloseCreateSymbolModal = () => setIsCreateSymbolModalOpen(false);
+  const handleCloseCreateScenarioModal = () => setIsCreateScenarioModalOpen(false);
 
   const params = useParams();
 
@@ -59,28 +68,38 @@ const Project: FC = () => {
               <p className="project-description">
                 {project?.description}
                 <img src={EditPen} alt="Editar descrição do projeto" />
-                </p>
+              </p>
             </div>
           )}
           <div className="scenarios-container">
             <div className="scenarios-container-header">
-              <h2>Cenários</h2>
-              <Link to="/simbolo/criar">
-                <Button theme="secondary" text="Novo símbolo"></Button>
-              </Link>
-              <Link to="/cenario/criar">
-                <Button theme="primary" text="Novo cenário"></Button>
-              </Link>
+              <Button onClick={handleOpenCreateScenarioModal} theme="primary" text="Novo cenário"></Button>
+              <Button onClick={handleOpenCreateSymbolModal} theme="secondary" text="Novo símbolo"></Button>
             </div>
             <div className="scenarios-content">
-              <SummaryWrapper
-                ></SummaryWrapper>
+              <SummaryWrapper></SummaryWrapper>
               {project?.scenarios && (
-                <ScenariosList scenarios={project?.scenarios}/>
+                <ScenariosList scenarios={project?.scenarios} />
               )}
             </div>
           </div>
         </div>
+        <Modal
+          open={isCreateSymbolModalOpen}
+          onClose={handleCloseCreateSymbolModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <CreateSymbolForm/>
+        </Modal>
+        <Modal
+          open={isCreateScenarioModalOpen}
+          onClose={handleCloseCreateScenarioModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <CreateSymbolForm/>
+        </Modal>
       </div>
     </>
   );

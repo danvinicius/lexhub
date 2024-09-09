@@ -13,9 +13,9 @@ const ScenariosList = ({ scenarios }: IScenariosListProps) => {
   return (
     <section className="scenarios-list-container" id="scenarios-list">
       <div className="scenarios-list">
-        <ul>
-          {scenarios?.length ? (
-            scenarios.map((scenario: ILexiconScenario) => {
+        {!!scenarios?.length && (
+          <ul>
+            {scenarios.map((scenario: ILexiconScenario) => {
               return (
                 <li key={slugify(scenario.title.content)}>
                   <Element
@@ -26,13 +26,14 @@ const ScenariosList = ({ scenarios }: IScenariosListProps) => {
                   </Element>
                 </li>
               );
-            })
-          ) : (
-            <span className="no-scenarios">
-              Ainda não há símbolos cadastrados
-            </span>
-          )}
-        </ul>
+            })}
+          </ul>
+        )}
+        {!scenarios.length && (
+          <span className="no-scenarios">
+            Ainda não há cenários nesse projeto
+          </span>
+        )}
       </div>
     </section>
   );

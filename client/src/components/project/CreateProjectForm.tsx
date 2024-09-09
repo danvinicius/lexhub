@@ -17,25 +17,25 @@ export interface CreateProjectRequestDTO {
 }
 
 const CreateProjectForm = () => {
-  const name = useForm('dontValidateName');
-  const description = useForm('dontValidateDescription');
+  const name = useForm("dontValidateName");
+  const description = useForm("dontValidateDescription");
 
   const { isAuthenticated } = useContext(UserContext) || {};
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const createProject = async (body: CreateProjectRequestDTO) => {
     setLoading(true);
-    
+
     try {
       const { url, options } = CREATE_PROJECT(isAuthenticated().token);
-      await api[options.method](url, body, options);
-      navigate('/');
+      const { data } = await api[options.method](url, body, options);
+      navigate(`/projeto/${data.id}`);
     } catch (error: any) {
-      setError(error.response.data.error)
+      setError(error.response.data.error);
     } finally {
       setLoading(false);
     }
@@ -44,7 +44,7 @@ const CreateProjectForm = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (name.validate() && description.validate()) {
-      createProject({ name: name.value, description: description.value })
+      createProject({ name: name.value, description: description.value });
     }
   };
 
@@ -57,7 +57,7 @@ const CreateProjectForm = () => {
           placeholder="Plataforma de petróleo"
           label="Nome do projeto"
           {...name}
-          onInput={() => setError('')}
+          onInput={() => setError("")}
         />
         <Input
           type="text"
@@ -65,14 +65,14 @@ const CreateProjectForm = () => {
           placeholder="Um projeto focado no desenvolvimento de uma plataforma de petróleo sustentável."
           label="Descrição"
           {...description}
-          onInput={() => setError('')}
+          onInput={() => setError("")}
         />
         {loading ? (
           <Loading />
         ) : (
           <Button theme="primary" text="Criar" onClick={handleSubmit} />
         )}
-        <Error error={error}/>
+        <Error error={error} />
       </Form>
     </section>
   );

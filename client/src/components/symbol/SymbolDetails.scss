@@ -1,0 +1,41 @@
+.symbol-details {
+    display: flex;
+    gap: 1.5rem;
+    flex-direction: column;
+    font-size: 1rem;
+    
+    .symbol-details-notion {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      h3 {
+        color: var(--primary-text-color);
+      }
+      p {
+        font-size: 1.15rem;
+      }
+    }
+    .symbol-details-synonyms,
+    .symbol-details-impacts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      h4 {
+        font-size: 1.25rem;
+        color: var(--primary-text-color);
+      }
+
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        li {
+          padding: 0.5rem 1rem;
+          background: var(--primary-text-color);
+          color: #fff;
+          border-radius: 20px;
+        }
+      }
+    }
+  }

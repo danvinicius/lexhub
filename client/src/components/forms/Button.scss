@@ -12,9 +12,9 @@
         border: 2px solid var(--primary-color);
     }
     &.secondary {
-        color: var(--primary-text-color);
-        background: #fff;
-        border: 2px solid #fff;
+        color: #fff;
+        background: var(--primary-text-color);
+        border: 2px solid var(--primary-text-color);
     }
     
     &:hover {

@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from "react";
+import { ChangeEvent, CSSProperties, FC, KeyboardEvent } from "react";
 import "./Input.scss";
 import Error from "../helper/Error";
 
@@ -10,6 +10,7 @@ interface InputProps {
   label: string;
   required?: boolean;
   error?: string | null;
+  style?: CSSProperties
   onChange: (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -18,6 +19,9 @@ interface InputProps {
   ) => void;
   onBlur: (
     e: ChangeEvent<HTMLInputElement>
+  ) => void;
+  onKeyDown?: (
+    e: KeyboardEvent
   ) => void;
 }
 
@@ -28,9 +32,11 @@ const Input: FC<InputProps> = ({
   value,
   label,
   error,
+  style,
   onChange,
   onInput,
   onBlur,
+  onKeyDown,
   required = false,
 }: InputProps) => {
   return (
@@ -42,9 +48,11 @@ const Input: FC<InputProps> = ({
         id={name}
         placeholder={placeholder}
         value={value}
+        style={style}
         onChange={onChange}
         onInput={onInput}
         onBlur={onBlur}
+        onKeyDown={onKeyDown}
         required={required}
       />
       <Error error={error}/>

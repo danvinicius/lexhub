@@ -4,7 +4,7 @@
   justify-content: center;
 
   .project-info {
-    padding: 2rem 0 1rem;
+    padding: 2rem 0;
 
     .project-name, .project-description {
       display: flex;
@@ -30,14 +30,6 @@
       gap: 1rem;
       @media screen and (min-width: 998px) {
         margin-bottom: unset;
-      }
-      
-      h2 {
-        font-size: 1.75rem;
-      }
-
-      a:not(:last-child){
-        margin-left: auto;
       }
       
       & > div {

@@ -1,5 +1,5 @@
 import { ServerError } from '@/utils/errors';
-import { Project, Impact, Synonym, Symbol } from '@/models';
+import { Project, Impact, Synonym, Symbol, IImpact, ISynonym } from '@/models';
 import dataSource, { initializeDataSource } from '@/infra/db/connection';
 
 export namespace SymbolRepository {
@@ -7,6 +7,8 @@ export namespace SymbolRepository {
     name: string;
     classification: string;
     notion: string;
+    synonyms: ISynonym[];
+    impacts: IImpact[];
     projectId: number;
   }
 
@@ -27,9 +29,7 @@ export namespace SymbolRepository {
   }
 }
 
-
-export class SymbolRepository  {
-
+export class SymbolRepository {
   constructor() {
     initializeDataSource();
   }
@@ -58,28 +58,63 @@ export class SymbolRepository  {
       relations: {
         synonyms: true,
         impacts: true,
-        project: true
+        project: true,
       },
     });
     return symbols;
   }
-  async createSymbol(data: SymbolRepository.CreateSymbolParams): Promise<Symbol> {
+  async createSymbol(
+    data: SymbolRepository.CreateSymbolParams
+  ): Promise<Symbol> {
     try {
       const [project] = await dataSource.manager.findBy(Project, {
         id: data.projectId as number,
       });
-      const symbol = new Symbol();
-      symbol.name = data.name;
-      symbol.classification = data.classification;
-      symbol.notion = data.notion || '';
-      symbol.project = project;
-
-      await dataSource.manager.save(Symbol, symbol);
-      return symbol;
+      
+      // Criação e salvamento dos impactos
+      const newImpacts = data.impacts.map((newImpact: IImpact) => {
+        const impact = dataSource.manager.create(Impact, {
+          ...newImpact
+        });
+        return impact;
+      });
+  
+      await dataSource.manager.save(Impact, newImpacts);
+      
+      // Criação e salvamento dos sinônimos
+      const newSynonyms = data.synonyms.map((newSynonym: ISynonym) => {
+        const synonym = dataSource.manager.create(Synonym, {
+          ...newSynonym
+        });
+        return synonym;
+      });
+  
+      await dataSource.manager.save(Synonym, newSynonyms);
+  
+      // Criação e salvamento do símbolo
+      const newSymbol = dataSource.manager.create(Symbol, {
+        name: data.name,
+        notion: data.notion,
+        classification: data.classification,
+        project: project,
+      });
+      
+      await dataSource.manager.save(Symbol, newSymbol);
+  
+      // Associação dos impactos e sinônimos ao símbolo
+      newImpacts.forEach(impact => impact.symbol = newSymbol);
+      newSynonyms.forEach(synonym => synonym.symbol = newSymbol);
+  
+      // Atualizar os impactos e sinônimos com o símbolo associado
+      await dataSource.manager.save(Impact, newImpacts);
+      await dataSource.manager.save(Synonym, newSynonyms);
+  
+      return this.getSymbol(newSymbol.id);
     } catch (error: any) {
       throw new ServerError(error.message);
     }
   }
+  
   async createImpact(data: SymbolRepository.CreateImpactParams): Promise<void> {
     try {
       const symbol = await this.getSymbol(data?.symbolId as number);
@@ -91,7 +126,9 @@ export class SymbolRepository  {
       throw new ServerError(error.message);
     }
   }
-  async createSynonym(data: SymbolRepository.CreateSynonymParams): Promise<void> {
+  async createSynonym(
+    data: SymbolRepository.CreateSynonymParams
+  ): Promise<void> {
     try {
       const symbol = await this.getSymbol(data?.symbolId as number);
       const synonym = new Synonym();
@@ -126,7 +163,10 @@ export class SymbolRepository  {
       throw new ServerError(error.message);
     }
   }
-  async updateSymbol(id: number, data: SymbolRepository.UpdateSymbolParams): Promise<void> {
+  async updateSymbol(
+    id: number,
+    data: SymbolRepository.UpdateSymbolParams
+  ): Promise<void> {
     try {
       await dataSource.manager.update(Symbol, { id }, data);
     } catch (error: any) {

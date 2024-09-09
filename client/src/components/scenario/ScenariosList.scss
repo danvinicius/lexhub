@@ -8,14 +8,15 @@
       flex-direction: column;
       gap: 2rem;
 
-      .no-scenarios {
-        font-size: 1.5rem;
-        color: var(--secondary-text-color);
-      }
-
       .loading {
         margin: 0 auto;
       }
+    }
+    .no-scenarios {
+      font-size: 1.5rem;
+      color: var(--secondary-text-color);
+      position: absolute;
+      left: 50%;
     }
   }
 }

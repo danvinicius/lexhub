@@ -11,6 +11,27 @@ This API serves as a backend for managing scenarios and lexicons inside a projec
 ## Base URL:
 🚧 Not in production yet 🚧
 
+## To do
+
+- [ ] Adicionar cenários
+- [ ] Editar símbolos
+- [ ] Editar nome/descrição do projeto
+- [ ] Remover cenários
+- [ ] Remover símbolos
+- [ ] Ordenar episódios
+- [ ] Ver impactos existentes ao adicionar novo impacto
+- [ ] Ver sinônimos existentes ao adicionar novo sinônimo
+- [ ] Adicionar usuários ao projeto
+- [ ] Checar responsividade
+- [ ] Chegar reaproveitamento de classes, componentes e hooks
+- [ ] Checar viabilidade PG -> MongoDB
+- [ ] Visualizar e rastrear alterações (responsável, data/hora, conteúdo, motivo)
+- [ ] Importar arquivo próprio para criar projetos, cenários e símbolos
+- [ ] Exportar arquivos para BDD e TDD
+- [ ] Autenticação com Google / Facebook
+- [ ] Checar SEO e performance
+
+
 ## Resources documentation:
 Resources documentation is available at /api/docs using Swagger UI
 

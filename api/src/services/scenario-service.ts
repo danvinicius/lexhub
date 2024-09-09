@@ -444,7 +444,7 @@ export class ScenarioService {
           return (
             outro !== candidate &&
             outro.starts <= candidate.starts &&
-            outro.ends >= candidate.ends
+            outro.ends >= candidate.ends + 1
           );
         })
       );
@@ -461,7 +461,7 @@ export class ScenarioService {
     };
   };
 
-  private normalize = (str: string) => {
+  public normalize = (str: string) => {
     return str
       .toLowerCase()
       .normalize('NFD')

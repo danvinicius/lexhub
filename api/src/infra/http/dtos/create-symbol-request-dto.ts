@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateSymbolRequestDTO {
   @IsString()
@@ -13,6 +13,16 @@ export class CreateSymbolRequestDTO {
   @IsOptional()
   notion: string;
 
+  @IsArray()
+  synonyms: {
+    name: string;
+  }[];
+
+  @IsArray()
+  impacts: {
+    description: string;
+  }[];
+
   @IsNumber()
   projectId: number;
 
@@ -20,6 +30,8 @@ export class CreateSymbolRequestDTO {
     this.name = data.name;
     this.classification = data.classification;
     this.notion = data.notion;
+    this.impacts = data.impacts;
+    this.synonyms = data.synonyms;
     this.projectId = data.projectId;
   }
 }

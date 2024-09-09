@@ -9,7 +9,7 @@ const Form: FC<FormProps> = ({children}: FormProps) => {
 
 
   return (
-    <form className="form">
+    <form className="form" onSubmit={e => { e.preventDefault(); }}>
       {children}
     </form>
   );

@@ -1,0 +1,33 @@
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &.error {
+    input {
+      border: 1px solid var(--error-color);
+    }
+  }
+
+  &:not(.error) {
+    input:focus {
+      border: 1px solid var(--primary-color);
+    }
+  }
+
+  select {
+    background: #fff;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 5px;
+    outline: none;
+    border: 1px solid var(--secondary-text-color);
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    width: 100%;
+
+    option {
+        cursor: pointer;
+    }
+  }
+}
