@@ -1,5 +1,5 @@
-# Scenarios and Lexicons API
-This API serves as a backend for managing scenarios and lexicons inside a project.
+# Lexhub
+This platform helps software engineers and requirements engineers managing scenarios and lexicons inside a project.
 
 ## Glossary
 - Project: Any domain project, private or public, whose terms and jargon require good collective understanding.
