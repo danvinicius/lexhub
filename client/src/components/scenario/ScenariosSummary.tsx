@@ -12,7 +12,7 @@ export const ScenariosSummary = () => {
   const params = useParams()
 
   return (
-    <div className="scenarios-summary">
+    <div className="scenarios-summary slide-right">
       <h3>Sumário</h3>
       <ol>
         {project?.scenarios?.length ? (

@@ -93,21 +93,10 @@ export const CREATE_SYMBOL = (projectId: number, token: string): RequestFormat =
     },
   };
 };
-export const CREATE_IMPACT = (projectId: number, symbolId: number, token: string): RequestFormat => {
+
+export const CREATE_SCENARIO = (projectId: number, token: string): RequestFormat => {  
   return {
-    url: `/project${projectId}/symbol/${symbolId}/synonym`,
-    options: {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-    },
-  };
-};
-export const CREATE_SYNONYM = (projectId: number, symbolId: number, token: string): RequestFormat => {  
-  return {
-    url: `/project${projectId}/symbol/${symbolId}/impact`,
+    url: `/project/${projectId}/scenario`,
     options: {
       method: "post",
       headers: {

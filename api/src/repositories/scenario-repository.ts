@@ -1,11 +1,16 @@
 import { BadRequestError, ServerError } from '@/utils/errors';
-import { Scenario, Project, IScenario, Exception, Context, Episode, NonSequentialEpisode, Group, INonSequentialEpisode, IResource, IEpisode, Restriction, Actor, Resource, IActor } from '@/models';
+import { Scenario, Project, IScenario, Exception, Context, Episode, NonSequentialEpisode, Group, INonSequentialEpisode, IResource, IEpisode, Restriction, Actor, Resource, IActor, IImpact, Impact, IContext, IException } from '@/models';
 import dataSource, { initializeDataSource } from '@/infra/db/connection';
+import { normalize } from 'path';
 
 export namespace ScenarioRepository {
   export interface CreateScenarioParams {
     title: string;
     goal: string;
+    context: IContext;
+    actors: IActor[];
+    exceptions: IException[];
+    resources: IResource[];
     projectId: number;
   }
   export interface CreateManyScenariosParams {
@@ -111,13 +116,76 @@ export class ScenarioRepository {
       const [project] = await dataSource.manager.findBy(Project, {
         id: data.projectId as number,
       });
+
+      const context = dataSource.manager.create(Context, {
+        ...data.context
+      });
+      await dataSource.manager.save(Context, context);
+
+      
       const scenario = new Scenario();
       scenario.title = data.title;
       scenario.goal = data.goal;
       scenario.project = project;
       await dataSource.manager.save(Scenario, scenario);
+      context.scenario = scenario;
+      await dataSource.manager.save(Context, context);
+
+      // Todo: passar as verificações abaixo para a camada de serviço
+
+      // Atores
+      const existingActors = await dataSource.manager.find(Actor, {
+        where: {
+          scenarios: {
+            project: {
+              id: project.id
+            }
+          },
+        },
+      })
+      for (let verifyingActor of data.actors) {
+        const existingActor = existingActors.find((existingActor: IActor) => normalize(verifyingActor.name) == normalize(existingActor.name));
+        if (existingActor) {
+          console.log(existingActor);
+          
+          existingActor.scenarios.push(scenario);
+          await dataSource.manager.save(Actor, existingActor);
+        } else {
+          const actor = dataSource.manager.create(Actor, {
+            ...verifyingActor,
+          });
+          actor.scenarios = [scenario];
+          await dataSource.manager.save(Actor, actor);
+        }
+      }
+      // Recursos
+      const existingResources = await dataSource.manager.find(Resource, {
+        where: {
+          scenarios: {
+            project: {
+              id: project.id
+            }
+          },
+        },
+      })
+      for (let verifyingResource of data.resources) {
+        const existingResource = existingResources.find((existingResource: IResource) => normalize(verifyingResource.name) == normalize(existingResource.name));
+        if (existingResource) {
+          existingResource.scenarios.push(scenario);
+          await dataSource.manager.save(Resource, existingResource);
+        } else {
+          const resource = dataSource.manager.create(Resource, {
+            ...verifyingResource,
+          });
+          resource.scenarios = [scenario];
+          await dataSource.manager.save(Resource, resource);
+        }
+      }
+  
       return scenario;
     } catch (error: any) {
+      console.log(error);
+      
       throw new ServerError(error.message);
     }
   }

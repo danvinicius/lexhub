@@ -13,14 +13,15 @@ This API serves as a backend for managing scenarios and lexicons inside a projec
 
 ## To do
 
-- [ ] Adicionar cenários
+- [x] Adicionar cenários
 - [ ] Editar símbolos
 - [ ] Editar nome/descrição do projeto
 - [ ] Remover cenários
 - [ ] Remover símbolos
 - [ ] Ordenar episódios
-- [ ] Ver impactos existentes ao adicionar novo impacto
-- [ ] Ver sinônimos existentes ao adicionar novo sinônimo
+- [ ] Ver atores existentes ao adicionar novo ator
+- [ ] Ver recursos existentes ao adicionar novo recurso
+- [ ] Ver a questão das restrições
 - [ ] Adicionar usuários ao projeto
 - [ ] Checar responsividade
 - [ ] Chegar reaproveitamento de classes, componentes e hooks

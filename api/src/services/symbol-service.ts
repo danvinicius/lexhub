@@ -7,7 +7,7 @@ import {
 import { ISymbol } from '@/models';
 import { SymbolRepository } from '@/repositories';
 import { BadRequestError, NotFoundError } from '@/utils/errors';
-import { ScenarioService } from './scenario-service';
+import { normalize } from '@/utils/string/normalize';
 
 const symbolRepository = new SymbolRepository();
 
@@ -21,13 +21,12 @@ export class SymbolService {
   }
 
   async createSymbol(symbol: CreateSymbolRequestDTO): Promise<ISymbol> {
-    const scenarioService = new ScenarioService();
     const symbols = await this.getAllSymbols(symbol.projectId);
     if (
       symbols.some(
         (existingSymbol: ISymbol) =>
-          scenarioService.normalize(existingSymbol.name) ==
-          scenarioService.normalize(symbol.name)
+          normalize(existingSymbol.name) ==
+          normalize(symbol.name)
       )
     ) {
       throw new BadRequestError('Já existe um símbolo com o mesmo nome');

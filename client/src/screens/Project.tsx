@@ -14,6 +14,7 @@ import SummaryWrapper from "../components/scenario/SummaryWrapper";
 import EditPen from "../assets/icon/Edit.svg";
 import { Modal } from "@mui/material";
 import CreateSymbolForm from "../components/symbol/CreateSymbolForm";
+import CreateScenarioForm from "../components/scenario/CreateScenarioForm";
 
 const Project: FC = () => {
   const { isAuthenticated } = useContext(UserContext) || {};
@@ -85,16 +86,16 @@ const Project: FC = () => {
           </div>
         </div>
         <Modal
-          open={isCreateSymbolModalOpen}
-          onClose={handleCloseCreateSymbolModal}
+          open={isCreateScenarioModalOpen}
+          onClose={handleCloseCreateScenarioModal}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <CreateSymbolForm/>
+          <CreateScenarioForm/>
         </Modal>
         <Modal
-          open={isCreateScenarioModalOpen}
-          onClose={handleCloseCreateScenarioModal}
+          open={isCreateSymbolModalOpen}
+          onClose={handleCloseCreateSymbolModal}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >

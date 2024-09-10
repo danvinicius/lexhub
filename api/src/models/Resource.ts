@@ -40,7 +40,7 @@ export class Resource implements IResource {
       referencedColumnName: 'id',
     },
   })
-  scenario: IScenario[];
+  scenarios: IScenario[];
 
   @CreateDateColumn({
     name: 'created_at',

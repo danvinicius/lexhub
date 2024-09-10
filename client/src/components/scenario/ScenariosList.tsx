@@ -12,7 +12,7 @@ const ScenariosList = ({ scenarios }: IScenariosListProps) => {
   const { slugify } = useHelpers();
   return (
     <section className="scenarios-list-container" id="scenarios-list">
-      <div className="scenarios-list">
+      <div className="scenarios-list slide-right">
         {!!scenarios?.length && (
           <ul>
             {scenarios.map((scenario: ILexiconScenario) => {

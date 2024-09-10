@@ -24,6 +24,7 @@ import {
 import { ScenarioRepository, SymbolRepository } from '@/repositories';
 import { BadRequestError, NotFoundError } from '@/utils/errors';
 import { AddOrRemoveEntity } from '@/utils/shared';
+import { normalize } from '@/utils/string/normalize';
 
 const symbolRepository = new SymbolRepository();
 const scenarioRepository = new ScenarioRepository();
@@ -372,8 +373,8 @@ export class ScenarioService {
       const lexiconName = termo.name || termo.title || '';
       let starts = -1;
       while (true) {
-        starts = this.normalize(text).indexOf(
-          this.normalize(lexiconName),
+        starts = normalize(text).indexOf(
+          normalize(lexiconName),
           starts + 1
         );
         if (starts == -1) {
@@ -459,13 +460,6 @@ export class ScenarioService {
       content,
       foundLexicons,
     };
-  };
-
-  public normalize = (str: string) => {
-    return str
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '');
   };
 
   private orderByPosition = (a: Lexicon, b: Lexicon) => {
