@@ -1,9 +1,4 @@
-import {
-  FormEvent,
-  KeyboardEvent,
-  useContext,
-  useState,
-} from "react";
+import { FormEvent, KeyboardEvent, useContext, useState } from "react";
 import Input from "../forms/Input";
 import useForm from "../../hooks/useForm";
 import { useNavigate, useParams } from "react-router-dom";
@@ -15,8 +10,9 @@ import api from "../../lib/axios";
 import { CREATE_SCENARIO } from "../../api";
 import { UserContext } from "../../context/UserContext";
 import "./CreateScenarioForm.scss";
-import Close from "../../assets/icon/Close_S.svg";
-import Add from "../../assets/icon/Add.svg";
+import { AddActorComboBox } from "./actor/AddActorComboBox";
+import { AddExceptionComboBox } from "./exception/AddExceptionComboBox";
+import { AddResourceComboBox } from "./resource/AddResourceComboBox";
 
 interface CreateScenarioRequestDTO {
   title: string;
@@ -46,9 +42,6 @@ const CreateScenarioForm = () => {
   const geographicLocation = useForm("dontValidateGeographicLocation");
   const temporalLocation = useForm("dontValidateGeographicLocation");
   const preCondition = useForm("dontValidateGeographicLocation");
-  const actor = useForm("dontValidateActor");
-  const exception = useForm("dontValidateException");
-  const resource = useForm("dontValidateResource");
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -56,41 +49,9 @@ const CreateScenarioForm = () => {
   const navigate = useNavigate();
   const params = useParams();
 
-  const [addNewActor, setAddNewActor] = useState(false);
-  const [addNewException, setAddNewException] = useState(false);
-  const [addNewResource, setAddNewResource] = useState(false);
-
   const [exceptions, setExceptions] = useState<string[]>([]);
   const [actors, setActors] = useState<string[]>([]);
   const [resources, setResources] = useState<string[]>([]);
-
-  const handleAddException = (newException: string) => {
-    setExceptions([...exceptions, newException]);
-    exception.setValue("");
-    setAddNewException(false);
-  };
-
-  const handleAddActor = (newActor: string) => {
-    setActors([...actors, newActor]);
-    actor.setValue("");
-    setAddNewActor(false);
-  };
-  const handleAddResource = (newResource: string) => {
-    setResources([...resources, newResource]);
-    resource.setValue("");
-    setAddNewResource(false);
-  };
-
-  const handleDeleteActor = (index: number) => {
-    setActors(actors.filter((_, i) => i != index));
-  };
-
-  const handleDeleteException = (index: number) => {
-    setExceptions(exceptions.filter((_, i) => i != index));
-  };
-  const handleDeleteResource = (index: number) => {
-    setResources(resources.filter((_, i) => i != index));
-  };
 
   const createScenario = async (body: CreateScenarioRequestDTO) => {
     setLoading(true);
@@ -207,157 +168,18 @@ const CreateScenarioForm = () => {
             }}
           />
         </div>
-        <div className="actors">
-          <h3>Atores</h3>
-          {
-            <ul>
-              {actors?.map((actor: string, index: number) => {
-                return (
-                  <li key={index}>
-                    {actor}{" "}
-                    <img src={Close} onClick={() => handleDeleteActor(index)} />
-                  </li>
-                );
-              })}
-              {addNewActor ? (
-                <>
-                  <Input
-                    type="text"
-                    name="actor"
-                    placeholder="Novo ator"
-                    label=""
-                    style={{
-                      width: "max-content",
-                      borderRadius: "30px",
-                      padding: "0.5rem 0.75rem",
-                    }}
-                    onInput={() => setError("")}
-                    {...actor}
-                    onBlur={() => {
-                      actor.value.length > 0 && actor.validate();
-                    }}
-                    onKeyDown={(e) => {
-                      e.key === "Enter" && e.preventDefault();
-                      if (e.key === "Enter" && actor.validate()) {
-                        handleAddActor((e.target as HTMLInputElement).value);
-                        setAddNewActor(true);
-                      }
-                    }}
-                  />
-                </>
-              ) : null}
-              <li onClick={() => setAddNewActor(true)} className="add-actor">
-                Adicionar ator <img src={Add} />
-              </li>
-            </ul>
-          }
-        </div>
-        <div className="exceptions">
-          <h3>Exceções</h3>
-          {
-            <ul>
-              {exceptions?.map((exception: string, index: number) => {
-                return (
-                  <li key={index}>
-                    {exception}{" "}
-                    <img
-                      src={Close}
-                      onClick={() => handleDeleteException(index)}
-                    />
-                  </li>
-                );
-              })}
-              {addNewException ? (
-                <>
-                  <Input
-                    type="text"
-                    name="exception"
-                    placeholder="Nova exceção"
-                    label=""
-                    style={{
-                      width: "max-content",
-                      borderRadius: "30px",
-                      padding: "0.5rem 0.75rem",
-                    }}
-                    onInput={() => setError("")}
-                    {...exception}
-                    onBlur={() => {
-                      exception.value.length > 0 && exception.validate();
-                    }}
-                    onKeyDown={(e) => {
-                      e.key === "Enter" && e.preventDefault();
-                      if (e.key === "Enter" && exception.validate()) {
-                        handleAddException(
-                          (e.target as HTMLInputElement).value
-                        );
-                        setAddNewException(true);
-                      }
-                    }}
-                  />
-                </>
-              ) : null}
-
-              <li
-                onClick={() => setAddNewException(true)}
-                className="add-exception"
-              >
-                Adicionar exceção <img src={Add} />
-              </li>
-            </ul>
-          }
-        </div>
-        <div className="resources">
-          <h3>Recursos</h3>
-          {
-            <ul>
-              {resources?.map((resource: string, index: number) => {
-                return (
-                  <li key={index}>
-                    {resource}{" "}
-                    <img
-                      src={Close}
-                      onClick={() => handleDeleteResource(index)}
-                    />
-                  </li>
-                );
-              })}
-              {addNewResource ? (
-                <>
-                  <Input
-                    type="text"
-                    name="resource"
-                    placeholder="Novo recurso"
-                    label=""
-                    style={{
-                      width: "max-content",
-                      borderRadius: "30px",
-                      padding: "0.5rem 0.75rem",
-                    }}
-                    onInput={() => setError("")}
-                    {...resource}
-                    onBlur={() => {
-                      resource.value.length > 0 && resource.validate();
-                    }}
-                    onKeyDown={(e) => {
-                      e.key === "Enter" && e.preventDefault();
-                      if (e.key === "Enter" && resource.validate()) {
-                        handleAddResource((e.target as HTMLInputElement).value);
-                        setAddNewResource(true);
-                      }
-                    }}
-                  />
-                </>
-              ) : null}
-
-              <li
-                onClick={() => setAddNewResource(true)}
-                className="add-resource"
-              >
-                Adicionar recurso <img src={Add} />
-              </li>
-            </ul>
-          }
-        </div>
+        <AddActorComboBox
+          actors={actors}
+          setActors={setActors}
+        />
+          <AddResourceComboBox
+            resources={resources}
+            setResources={setResources}
+          />
+        <AddExceptionComboBox
+          exceptions={exceptions}
+          setExceptions={setExceptions}
+        />
         {loading ? (
           <Loading />
         ) : (

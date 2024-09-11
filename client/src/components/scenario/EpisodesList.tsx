@@ -2,7 +2,7 @@ import React from "react";
 import {
   ILexiconScenario,
   IRestriction,
-  Lexicon,
+  LexiconInfo,
 } from "../../shared/interfaces";
 import "./EpisodesList.scss";
 import { useLexicon } from "../../hooks/useLexicon";
@@ -13,13 +13,13 @@ interface CombinedEpisode {
   restriction?: IRestriction;
   description?: {
     content: string;
-    foundLexicons: Lexicon[];
+    foundLexicons: LexiconInfo[];
   };
   nonSequentialEpisodes?: {
     restriction: IRestriction;
     description: {
       content: string;
-      foundLexicons: Lexicon[];
+      foundLexicons: LexiconInfo[];
     };
   }[];
 }

@@ -27,35 +27,6 @@
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
-      ul {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-  
-        li {
-          padding: 0.25rem 0.75rem;
-          background: var(--primary-text-color);
-          color: #fff;
-          border-radius: 20px;
-          align-self: flex-start;
-          display: flex;
-          gap: .5rem;
-          align-items: center;
-  
-          img {
-            cursor: pointer;
-          }
-        }
-        .add-exception,
-        .add-actor,
-        .add-resource {
-          padding: 0.25rem 0.75rem;
-          background: var(--helper-color);
-          color: var(--primary-text-color);
-          width: max-content;
-          cursor: pointer;
-        }
-      }
       button {
         background: var(--helper-color);
         color: var(--primary-text-color);

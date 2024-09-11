@@ -55,7 +55,7 @@ const useForm = (type?: string): UseFormReturn => {
     onChange,
     error,
     validate: () => validate(value),
-    onBlur: () => validate(value),
+    onBlur: () => value.length > 0 && validate(value),
   };
 };
 

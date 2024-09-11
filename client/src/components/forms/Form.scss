@@ -8,8 +8,9 @@
       gap: 16px;
       flex-wrap: wrap;
 
-      label {
+      label, input, textarea, select {
         flex: 1;
+        width: 100%;
       }
     }
   }

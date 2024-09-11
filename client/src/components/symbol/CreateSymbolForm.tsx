@@ -1,10 +1,4 @@
-import {
-  ChangeEvent,
-  FormEvent,
-  KeyboardEvent,
-  useContext,
-  useState,
-} from "react";
+import { FormEvent, KeyboardEvent, useContext, useState } from "react";
 import Input from "../forms/Input";
 import useForm from "../../hooks/useForm";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,8 +12,8 @@ import { UserContext } from "../../context/UserContext";
 import "./CreateSymbolForm.scss";
 import Select from "../forms/Select";
 import { useSelect } from "../../hooks/useSelect";
-import Close from "../../assets/icon/Close_S.svg";
-import Add from "../../assets/icon/Add.svg";
+import { AddImpactComboBox } from "./impact/AddImpactComboBox";
+import { AddSynonymComboBox } from "./synonym/AddSynonymComboBox";
 
 interface CreateSymbolRequestDTO {
   name: string;
@@ -39,9 +33,7 @@ const CreateSymbolForm = () => {
   const { isAuthenticated } = useContext(UserContext || {});
 
   const name = useForm("dontValidateName");
-  const notion = useForm('dontValidateNotion');
-  const synonym = useForm("dontValidateSynonym");
-  const impact = useForm("dontValidateImpact");
+  const notion = useForm("dontValidateNotion");
   const classification = useSelect();
 
   const [error, setError] = useState("");
@@ -50,31 +42,8 @@ const CreateSymbolForm = () => {
   const navigate = useNavigate();
   const params = useParams();
 
-  const [addNewSynonym, setAddNewSynonym] = useState(false);
-  const [addNewImpact, setAddNewImpact] = useState(false);
-
   const [impacts, setImpacts] = useState<string[]>([]);
   const [synonyms, setSynonyms] = useState<string[]>([]);
-
-  const handleAddImpact = (newImpact: string) => {
-    setImpacts([...impacts, newImpact]);
-    impact.setValue("");
-    setAddNewImpact(false);
-  };
-
-  const handleAddSynonym = (newSynonym: string) => {
-    setSynonyms([...synonyms, newSynonym]);
-    synonym.setValue("");
-    setAddNewSynonym(false);
-  };
-
-  const handleDeleteSynonym = (index: number) => {
-    setSynonyms(synonyms.filter((_, i) => i != index));
-  };
-
-  const handleDeleteImpact = (index: number) => {
-    setImpacts(impacts.filter((_, i) => i != index));
-  };
 
   const createSymbol = async (body: CreateSymbolRequestDTO) => {
     setLoading(true);
@@ -164,108 +133,8 @@ const CreateSymbolForm = () => {
           ]}
           {...classification}
         ></Select>
-        <div className="synonyms">
-          <h3>Sinônimos</h3>
-          {
-            <ul>
-              {synonyms?.map((synonym: string, index: number) => {
-                return (
-                  <li key={index}>
-                    {synonym}{" "}
-                    <img
-                      src={Close}
-                      onClick={() => handleDeleteSynonym(index)}
-                    />
-                  </li>
-                );
-              })}
-              {addNewSynonym ? (
-                <>
-                  <Input
-                    type="text"
-                    name="synonym"
-                    placeholder="Novo sinônimo"
-                    label=""
-                    style={{
-                      width: "max-content",
-                      borderRadius: "30px",
-                      padding: "0.5rem 0.75rem",
-                    }}
-                    onInput={() => setError("")}
-                    {...synonym}
-                    onBlur={(
-                      event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-                    ) => {
-                      if (synonym.validate())
-                        handleAddSynonym(event.target.value);
-                    }}
-                    onKeyDown={(e) => {
-                      e.key === "Enter" && e.preventDefault();
-                      if (e.key === "Enter" && synonym.validate())
-                        handleAddSynonym((e.target as HTMLInputElement).value);
-                    }}
-                  />
-                </>
-              ) : null}
-              <li
-                onClick={() => setAddNewSynonym(true)}
-                className="add-synonym"
-              >
-                Adicionar sinônimo <img src={Add} />
-              </li>
-            </ul>
-          }
-        </div>
-        <div className="impacts">
-          <h3>Impactos</h3>
-          {
-            <ul>
-              {impacts?.map((impact: string, index: number) => {
-                return (
-                  <li key={index}>
-                    {impact}{" "}
-                    <img
-                      src={Close}
-                      onClick={() => handleDeleteImpact(index)}
-                    />
-                  </li>
-                );
-              })}
-              {addNewImpact ? (
-                <>
-                  <Input
-                    type="text"
-                    name="impact"
-                    placeholder="Novo impacto"
-                    label=""
-                    style={{
-                      width: "max-content",
-                      borderRadius: "30px",
-                      padding: "0.5rem 0.75rem",
-                    }}
-                    onInput={() => setError("")}
-                    {...impact}
-                    onBlur={(
-                      event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-                    ) => {
-                      if (impact.validate())
-                        handleAddImpact(event.target.value);
-                    }}
-                    onKeyDown={(e) => {
-                      e.key === "Enter" && e.preventDefault();
-                      if (e.key === "Enter" && impact.validate())
-                        handleAddImpact((e.target as HTMLInputElement).value);
-                    }}
-                  />
-                </>
-              ) : null}
-
-              <li onClick={() => setAddNewImpact(true)} className="add-impact">
-                Adicionar impacto <img src={Add} />
-              </li>
-            </ul>
-          }
-        </div>
+        <AddSynonymComboBox synonyms={synonyms} setSynonyms={setSynonyms} />
+        <AddImpactComboBox impacts={impacts} setImpacts={setImpacts} />
         {loading ? (
           <Loading />
         ) : (

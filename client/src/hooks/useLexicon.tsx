@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import LexiconSpan from "../components/lexicon/LexiconSpan";
 import { ProjectContext } from "../context/ProjectContext";
-import { Lexicon } from "../shared/interfaces";
+import { LexiconInfo } from "../shared/interfaces";
 
 export const useLexicon = () => {
   const { setChosenType } = useContext(ProjectContext || {});
@@ -10,7 +10,7 @@ export const useLexicon = () => {
     foundLexicons,
   }: {
     content: string;
-    foundLexicons: Lexicon[];
+    foundLexicons: LexiconInfo[];
   }): (string | JSX.Element)[] {
     foundLexicons.sort((a, b) => a.starts - b.starts);
 

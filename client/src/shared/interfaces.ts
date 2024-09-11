@@ -112,7 +112,7 @@ export interface IException {
   description: string;
 }
 
-export interface Lexicon {
+export interface LexiconInfo {
   resource: string;
   name: string;
   starts: number;
@@ -120,70 +120,42 @@ export interface Lexicon {
   type: string;
 }
 
+export interface Lexicon {
+  content: string;
+  foundLexicons: LexiconInfo[];
+}
+
 export interface ILexiconScenario {
   id: number;
-  title: {
-    content: string;
-    foundLexicons: Lexicon[];
-  };
-  goal: {
-    content: string;
-    foundLexicons: Lexicon[];
-  };
+  title: Lexicon;
+  goal: Lexicon;
   context: {
-    geographicLocation: {
-      content: string;
-      foundLexicons: Lexicon[];
-    };
-    temporalLocation: {
-      content: string;
-      foundLexicons: Lexicon[];
-    };
-    preCondition: {
-      content: string;
-      foundLexicons: Lexicon[];
-    };
+    geographicLocation: Lexicon;
+    temporalLocation: Lexicon;
+    preCondition: Lexicon;
     restrictions: {
-      description: {
-        content: string;
-        foundLexicons: Lexicon[];
-      };
+      description: Lexicon;
     }[];
   };
   exceptions: {
-    description: {
-      content: string;
-      foundLexicons: Lexicon[];
-    };
+    description: Lexicon;
   }[];
   actors: {
-    name: {
-      content: string;
-      foundLexicons: Lexicon[];
-    };
+    name: Lexicon;
   }[];
   resources: {
-    name: {
-      content: string;
-      foundLexicons: Lexicon[];
-    };
+    name: Lexicon;
   }[];
   episodes: {
-    position: number,
-    restriction: IRestriction,
-    description: {
-      content: string;
-      foundLexicons: Lexicon[];
-    };
+    position: number;
+    restriction: IRestriction;
+    description: Lexicon;
   }[];
   groups: {
-    position: number,
+    position: number;
     nonSequentialEpisodes: {
-      restriction: IRestriction,
-      description: {
-        content: string;
-        foundLexicons: Lexicon[];
-      };
-    }[]
+      restriction: IRestriction;
+      description: Lexicon;
+    }[];
   }[];
 }

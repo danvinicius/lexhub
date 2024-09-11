@@ -1,5 +1,25 @@
 import { BadRequestError, ServerError } from '@/utils/errors';
-import { Scenario, Project, IScenario, Exception, Context, Episode, NonSequentialEpisode, Group, INonSequentialEpisode, IResource, IEpisode, Restriction, Actor, Resource, IActor, IImpact, Impact, IContext, IException } from '@/models';
+import {
+  Scenario,
+  Project,
+  IScenario,
+  Exception,
+  Context,
+  Episode,
+  NonSequentialEpisode,
+  Group,
+  INonSequentialEpisode,
+  IResource,
+  IEpisode,
+  Restriction,
+  Actor,
+  Resource,
+  IActor,
+  IImpact,
+  Impact,
+  IContext,
+  IException,
+} from '@/models';
 import dataSource, { initializeDataSource } from '@/infra/db/connection';
 import { normalize } from 'path';
 
@@ -59,7 +79,6 @@ export namespace ScenarioRepository {
 }
 
 export class ScenarioRepository {
-
   constructor() {
     initializeDataSource();
   }
@@ -104,7 +123,7 @@ export class ScenarioRepository {
         groups: {
           nonSequentialEpisodes: true,
         },
-        project: true
+        project: true,
       },
     });
     return scenarios;
@@ -118,11 +137,10 @@ export class ScenarioRepository {
       });
 
       const context = dataSource.manager.create(Context, {
-        ...data.context
+        ...data.context,
       });
       await dataSource.manager.save(Context, context);
 
-      
       const scenario = new Scenario();
       scenario.title = data.title;
       scenario.goal = data.goal;
@@ -131,6 +149,18 @@ export class ScenarioRepository {
       context.scenario = scenario;
       await dataSource.manager.save(Context, context);
 
+      const newExceptions = data.exceptions.map((newException: IException) => {
+        const exception = dataSource.manager.create(Exception, {
+          ...newException,
+        });
+        return exception;
+      });
+
+      await dataSource.manager.save(Exception, newExceptions);
+
+      newExceptions.forEach(exception => exception.scenario = scenario);
+      await dataSource.manager.save(Exception, newExceptions);
+
       // Todo: passar as verificações abaixo para a camada de serviço
 
       // Atores
@@ -138,16 +168,18 @@ export class ScenarioRepository {
         where: {
           scenarios: {
             project: {
-              id: project.id
-            }
+              id: project.id,
+            },
           },
         },
-      })
+        relations: ['scenarios'],
+      });
       for (let verifyingActor of data.actors) {
-        const existingActor = existingActors.find((existingActor: IActor) => normalize(verifyingActor.name) == normalize(existingActor.name));
+        const existingActor = existingActors.find(
+          (existingActor: IActor) =>
+            normalize(verifyingActor.name) == normalize(existingActor.name)
+        );
         if (existingActor) {
-          console.log(existingActor);
-          
           existingActor.scenarios.push(scenario);
           await dataSource.manager.save(Actor, existingActor);
         } else {
@@ -163,13 +195,18 @@ export class ScenarioRepository {
         where: {
           scenarios: {
             project: {
-              id: project.id
-            }
+              id: project.id,
+            },
           },
         },
-      })
+        relations: ['scenarios'],
+      });
       for (let verifyingResource of data.resources) {
-        const existingResource = existingResources.find((existingResource: IResource) => normalize(verifyingResource.name) == normalize(existingResource.name));
+        const existingResource = existingResources.find(
+          (existingResource: IResource) =>
+            normalize(verifyingResource.name) ==
+            normalize(existingResource.name)
+        );
         if (existingResource) {
           existingResource.scenarios.push(scenario);
           await dataSource.manager.save(Resource, existingResource);
@@ -181,11 +218,11 @@ export class ScenarioRepository {
           await dataSource.manager.save(Resource, resource);
         }
       }
-  
+
       return scenario;
     } catch (error: any) {
       console.log(error);
-      
+
       throw new ServerError(error.message);
     }
   }
@@ -248,16 +285,16 @@ export class ScenarioRepository {
       const scenario = await this.getScenario(data?.scenarioId as number);
       const { description, type, position } = data;
       if (data?.group) {
-        const [episodeWithSamePositionExists] =
-          await dataSource.manager.find(Episode, {
+        const [episodeWithSamePositionExists] = await dataSource.manager.find(
+          Episode,
+          {
             where: {
               position: data.group as number,
             },
-          });
+          }
+        );
         if (episodeWithSamePositionExists) {
-          throw new BadRequestError(
-            'Posição já ocupada por outro episódio'
-          );
+          throw new BadRequestError('Posição já ocupada por outro episódio');
         }
         const nonSequentialEpisode = new NonSequentialEpisode();
         nonSequentialEpisode.description = description;
