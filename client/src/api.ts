@@ -94,6 +94,19 @@ export const EDIT_PROJECT = (id: number, token: string): RequestFormat => {
   };
 };
 
+export const DELETE_PROJECT = (id: number, token: string): RequestFormat => {  
+  return {
+    url: `/project/${id}`,
+    options: {
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+    },
+  };
+};
+
 export const CREATE_SYMBOL = (projectId: number, token: string): RequestFormat => {  
   return {
     url: `/project/${projectId}/symbol`,

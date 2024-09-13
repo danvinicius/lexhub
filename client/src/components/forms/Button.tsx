@@ -3,7 +3,7 @@ import './Button.scss'
 
 interface ButtonProps {
     text: string
-    theme: 'primary' | 'secondary'
+    theme: 'primary' | 'secondary' | 'danger'
     onClick?: (e: FormEvent) => void
 }
 

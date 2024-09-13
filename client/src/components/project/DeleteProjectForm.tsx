@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FormEvent, useContext, useEffect, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import Button from "../forms/Button";
 import Input from "../forms/Input";
 import Form from "../forms/Form";
-import "./EditProjectForm.scss";
+import "./DeleteProjectForm.scss";
 import { UserContext } from "../../context/UserContext";
 import Loading from "../helper/Loading";
-import { EDIT_PROJECT } from "../../api";
+import { DELETE_PROJECT } from "../../api";
 import useForm from "../../hooks/useForm";
 import api from "../../lib/axios";
 import Error from "../helper/Error";
@@ -14,24 +14,18 @@ import { useNavigate } from "react-router-dom";
 import { IProject } from "../../shared/interfaces";
 import Close from "../../assets/icon/Close_Dark.svg";
 
-export interface EditProjectRequestDTO {
+export interface DeleteProjectRequestDTO {
   name: string;
   description: string;
 }
 
-interface EditProjectFormProps {
+interface DeleteProjectFormProps {
   project: IProject;
   onClose: () => void;
 }
 
-const EditProjectForm = ({ project, onClose }: EditProjectFormProps) => {
-  const nameEdit = useForm("dontValidateName");
-  const descriptionEdit = useForm("dontValidateDescription");
-
-  useEffect(() => {
-    nameEdit.setValue(project.name);
-    descriptionEdit.setValue(project.description);
-  }, []);
+const DeleteProjectForm = ({ project, onClose }: DeleteProjectFormProps) => {
+  const nameDelete = useForm("dontValidateName");
 
   const { isAuthenticated } = useContext(UserContext) || {};
 
@@ -40,18 +34,17 @@ const EditProjectForm = ({ project, onClose }: EditProjectFormProps) => {
 
   const navigate = useNavigate();
 
-  const editProject = async (body: EditProjectRequestDTO) => {
-    
+  const deleteProject = async () => {
     if (project?.id) {
       setLoading(true);
 
       try {
-        const { url, options } = EDIT_PROJECT(
+        const { url, options } = DELETE_PROJECT(
           project.id,
           isAuthenticated().token
         );
-        await api[options.method](url, body, options);
-        navigate(0);
+        await api[options.method](url, options);
+        navigate('/');
       } catch (error: any) {
         setError(error.response.data.error);
       } finally {
@@ -62,15 +55,17 @@ const EditProjectForm = ({ project, onClose }: EditProjectFormProps) => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (nameEdit.validate() && descriptionEdit.validate()) {
-      editProject({ name: nameEdit.value, description: descriptionEdit.value });
+    if (nameDelete.value != project.name) {
+      nameDelete.setError("Nome inválido");
+      return;
     }
+    deleteProject();
   };
 
   return (
-    <section className="edit-project-form flex column gap-125">
-      <div className="edit-scenario-form-header">
-        <h2>Editar projeto</h2>
+    <section className="delete-project-form flex column gap-125">
+      <div className="delete-scenario-form-header">
+        <h2>Tem certeza que deseja excluir o projeto {project.name}?</h2>
         <img
           src={Close}
           alt="Ícone 'X' popup"
@@ -79,27 +74,24 @@ const EditProjectForm = ({ project, onClose }: EditProjectFormProps) => {
         />
       </div>
       <br />
-      <Form>
+      <Form style={{gap: '.5rem', userSelect: 'none'}}>
+        <p>
+          Por motivos de segurança, para excluir este projeto digite{" "}
+          <b>{project.name}</b>
+        </p>
         <Input
           type="text"
           name="name"
-          placeholder="Plataforma de petróleo"
-          label="Nome do projeto"
-          {...nameEdit}
+          placeholder=""
+          label=""
+          {...nameDelete}
           onInput={() => setError("")}
-        />
-        <Input
-          type="text"
-          name="description"
-          placeholder="Um projeto focado no desenvolvimento de uma plataforma de petróleo sustentável."
-          label="Descrição"
-          {...descriptionEdit}
-          onInput={() => setError("")}
+          onBlur={() => {}}
         />
         {loading ? (
           <Loading />
         ) : (
-          <Button theme="primary" text="Salvar" onClick={handleSubmit} />
+          <Button theme="danger" text="Excluir" onClick={handleSubmit} />
         )}
         <Error error={error} />
       </Form>
@@ -107,4 +99,4 @@ const EditProjectForm = ({ project, onClose }: EditProjectFormProps) => {
   );
 };
 
-export default EditProjectForm;
+export default DeleteProjectForm;

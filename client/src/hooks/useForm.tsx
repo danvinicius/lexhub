@@ -24,6 +24,7 @@ type UseFormReturn = {
   error: string | null;
   validate: () => boolean;
   onBlur: () => boolean;
+  setError: Dispatch<SetStateAction<string | null>>;
 };
 
 const useForm = (type?: string): UseFormReturn => {
@@ -54,6 +55,7 @@ const useForm = (type?: string): UseFormReturn => {
     setValue,
     onChange,
     error,
+    setError,
     validate: () => validate(value),
     onBlur: () => value.length > 0 && validate(value),
   };

@@ -11,13 +11,15 @@ import ScenariosList from "../components/scenario/ScenariosList";
 import Button from "../components/forms/Button";
 import { ProjectContext } from "../context/ProjectContext";
 import SummaryWrapper from "../components/scenario/SummaryWrapper";
-import EditPen from "../assets/icon/Edit.svg";
 import UserAdd from "../assets/icon/User_Add.svg";
+import Kebab from "../assets/icon/Kebab_Vertical.svg";
 import { Modal } from "@mui/material";
 import CreateSymbolForm from "../components/symbol/CreateSymbolForm";
 import CreateScenarioForm from "../components/scenario/CreateScenarioForm";
 import { IProject, IUserProject } from "../shared/interfaces";
 import EditProjectForm from "../components/project/EditProjectForm";
+import { ProjectActionsOptionsMenu } from "../components/project/ProjectActionsOptionsMenu";
+import DeleteProjectForm from "../components/project/DeleteProjectForm";
 
 const Project: FC = () => {
   const { isAuthenticated } = useContext(UserContext) || {};
@@ -25,8 +27,11 @@ const Project: FC = () => {
   const owner = project?.users.find(
     (userProject: IUserProject) => userProject.role == "OWNER"
   )?.user;
+  const [isProjectActionsOptionsMenu, setIsProjectActionsOptionsMenu] =
+    useState(false);
 
   const [isEditProjectModalOpen, setIsEditProjectModalOpen] = useState(false);
+  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
   const [isCreateSymbolModalOpen, setIsCreateSymbolModalOpen] = useState(false);
   const [isCreateScenarioModalOpen, setIsCreateScenarioModalOpen] =
     useState(false);
@@ -38,6 +43,8 @@ const Project: FC = () => {
     setIsCreateScenarioModalOpen(false);
   const handleOpenEditProjectModal = () => setIsEditProjectModalOpen(true);
   const handleCloseEditProjectModal = () => setIsEditProjectModalOpen(false);
+  const handleCloseDeleteProjectModal = () => setIsDeleteProjectModalOpen(false);
+  const handleOpenDeleteProjectModal = () => setIsDeleteProjectModalOpen(true);
 
   const params = useParams();
 
@@ -76,12 +83,25 @@ const Project: FC = () => {
             <div className="project-info">
               <div className="project-name">
                 <h1 className="project-name">{project?.name}</h1>
-                <img
-                  src={EditPen}
-                  alt="Editar projeto"
-                  onClick={handleOpenEditProjectModal}
-                />
-                <img src={UserAdd} alt="Compartilhar projeto" />
+                <div className="project-options">
+                  <img src={UserAdd} alt="Compartilhar projeto" />
+                  <img
+                    src={Kebab}
+                    alt="Compartilhar projeto"
+                    onClick={() => setIsProjectActionsOptionsMenu(true)}
+                  />
+                  {isProjectActionsOptionsMenu && (
+                    <ProjectActionsOptionsMenu
+                      handleOpenEditProjectModal={handleOpenEditProjectModal}
+                      handleCloseEditProjectModal={handleCloseEditProjectModal}
+                      setIsProjectActionsOptionsMenu={
+                        setIsProjectActionsOptionsMenu
+                      }
+                      isProjectActionsOptionsMenu={isProjectActionsOptionsMenu}
+                      handleOpenDeleteProjectModal={handleOpenDeleteProjectModal}
+                    />
+                  )}
+                </div>
               </div>
               <p className="project-description">{project?.description}</p>
               {owner && (
@@ -122,6 +142,17 @@ const Project: FC = () => {
         >
           <EditProjectForm
             onClose={handleCloseEditProjectModal}
+            project={project ? project : ({} as IProject)}
+          />
+        </Modal>
+        <Modal
+          open={isDeleteProjectModalOpen}
+          onClose={handleCloseDeleteProjectModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <DeleteProjectForm
+            onClose={handleCloseDeleteProjectModal}
             project={project ? project : ({} as IProject)}
           />
         </Modal>

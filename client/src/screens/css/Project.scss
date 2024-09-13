@@ -6,28 +6,34 @@
   .project-info {
     padding: 2rem 0;
 
-    .project-name, .project-description {
+    .project-name,
+    .project-description {
+      display: flex;
+      gap: 4rem;
+      align-items: center;
+      position: relative;
+    }
+    .project-options {
       display: flex;
       gap: 1.5rem;
       align-items: center;
-
+      position: relative;
       img {
         cursor: pointer;
       }
     }
     .project-owner {
-      font-size: .85rem;
+      font-size: 0.85rem;
       color: var(--primary-color);
     }
-
   }
-  
+
   .scenarios-container {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     border-radius: 5px;
-    
+
     .scenarios-container-header {
       display: flex;
       margin-bottom: 1rem;
@@ -36,7 +42,7 @@
       @media screen and (min-width: 998px) {
         margin-bottom: unset;
       }
-      
+
       & > div {
         display: flex;
         justify-content: space-between;

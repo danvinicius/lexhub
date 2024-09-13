@@ -16,6 +16,11 @@
         background: var(--primary-text-color);
         border: 2px solid var(--primary-text-color);
     }
+    &.danger {
+        color: #fff;
+        background: var(--error-color);
+        border: 2px solid var(--error-color);
+    }
     
     &:hover {
         transform: scale(1.02);
