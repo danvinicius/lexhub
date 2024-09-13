@@ -81,6 +81,19 @@ export const CREATE_PROJECT = (token: string): RequestFormat => {
   };
 };
 
+export const EDIT_PROJECT = (id: number, token: string): RequestFormat => {  
+  return {
+    url: `/project/${id}`,
+    options: {
+      method: "patch",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+    },
+  };
+};
+
 export const CREATE_SYMBOL = (projectId: number, token: string): RequestFormat => {  
   return {
     url: `/project/${projectId}/symbol`,

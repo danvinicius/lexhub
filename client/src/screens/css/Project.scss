@@ -8,19 +8,20 @@
 
     .project-name, .project-description {
       display: flex;
-      gap: 1rem;
+      gap: 1.5rem;
       align-items: center;
-
-      &.is-edit-project-name-active {
-        margin-bottom: .5rem;
-      }
 
       img {
         cursor: pointer;
       }
     }
-  }
+    .project-owner {
+      font-size: .85rem;
+      color: var(--primary-color);
+    }
 
+  }
+  
   .scenarios-container {
     display: flex;
     flex-direction: column;

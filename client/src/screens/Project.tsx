@@ -12,20 +12,32 @@ import Button from "../components/forms/Button";
 import { ProjectContext } from "../context/ProjectContext";
 import SummaryWrapper from "../components/scenario/SummaryWrapper";
 import EditPen from "../assets/icon/Edit.svg";
+import UserAdd from "../assets/icon/User_Add.svg";
 import { Modal } from "@mui/material";
 import CreateSymbolForm from "../components/symbol/CreateSymbolForm";
 import CreateScenarioForm from "../components/scenario/CreateScenarioForm";
+import { IProject, IUserProject } from "../shared/interfaces";
+import EditProjectForm from "../components/project/EditProjectForm";
 
 const Project: FC = () => {
   const { isAuthenticated } = useContext(UserContext) || {};
   const { setProject, project } = useContext(ProjectContext || {});
+  const owner = project?.users.find(
+    (userProject: IUserProject) => userProject.role == "OWNER"
+  )?.user;
 
+  const [isEditProjectModalOpen, setIsEditProjectModalOpen] = useState(false);
   const [isCreateSymbolModalOpen, setIsCreateSymbolModalOpen] = useState(false);
-  const [isCreateScenarioModalOpen, setIsCreateScenarioModalOpen] = useState(false);
+  const [isCreateScenarioModalOpen, setIsCreateScenarioModalOpen] =
+    useState(false);
   const handleOpenCreateSymbolModal = () => setIsCreateSymbolModalOpen(true);
-  const handleOpenCreateScenarioModal = () => setIsCreateScenarioModalOpen(true);
+  const handleOpenCreateScenarioModal = () =>
+    setIsCreateScenarioModalOpen(true);
   const handleCloseCreateSymbolModal = () => setIsCreateSymbolModalOpen(false);
-  const handleCloseCreateScenarioModal = () => setIsCreateScenarioModalOpen(false);
+  const handleCloseCreateScenarioModal = () =>
+    setIsCreateScenarioModalOpen(false);
+  const handleOpenEditProjectModal = () => setIsEditProjectModalOpen(true);
+  const handleCloseEditProjectModal = () => setIsEditProjectModalOpen(false);
 
   const params = useParams();
 
@@ -64,18 +76,35 @@ const Project: FC = () => {
             <div className="project-info">
               <div className="project-name">
                 <h1 className="project-name">{project?.name}</h1>
-                <img src={EditPen} alt="Editar nome do projeto" />
+                <img
+                  src={EditPen}
+                  alt="Editar projeto"
+                  onClick={handleOpenEditProjectModal}
+                />
+                <img src={UserAdd} alt="Compartilhar projeto" />
               </div>
-              <p className="project-description">
-                {project?.description}
-                <img src={EditPen} alt="Editar descrição do projeto" />
-              </p>
+              <p className="project-description">{project?.description}</p>
+              {owner && (
+                <small className="project-owner">
+                  Criado por {owner.name} em{" "}
+                  {new Date(project?.createdAt).toLocaleDateString("pt-br")} às{" "}
+                  {new Date(project?.createdAt).toLocaleTimeString("pt-br")}
+                </small>
+              )}
             </div>
           )}
           <div className="scenarios-container">
             <div className="scenarios-container-header">
-              <Button onClick={handleOpenCreateScenarioModal} theme="primary" text="Novo cenário"></Button>
-              <Button onClick={handleOpenCreateSymbolModal} theme="secondary" text="Novo símbolo"></Button>
+              <Button
+                onClick={handleOpenCreateScenarioModal}
+                theme="primary"
+                text="Novo cenário"
+              ></Button>
+              <Button
+                onClick={handleOpenCreateSymbolModal}
+                theme="secondary"
+                text="Novo símbolo"
+              ></Button>
             </div>
             <div className="scenarios-content" id="project">
               <SummaryWrapper></SummaryWrapper>
@@ -86,12 +115,23 @@ const Project: FC = () => {
           </div>
         </div>
         <Modal
+          open={isEditProjectModalOpen}
+          onClose={handleCloseEditProjectModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <EditProjectForm
+            onClose={handleCloseEditProjectModal}
+            project={project ? project : ({} as IProject)}
+          />
+        </Modal>
+        <Modal
           open={isCreateScenarioModalOpen}
           onClose={handleCloseCreateScenarioModal}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <CreateScenarioForm onClose={handleCloseCreateScenarioModal}/>
+          <CreateScenarioForm onClose={handleCloseCreateScenarioModal} />
         </Modal>
         <Modal
           open={isCreateSymbolModalOpen}
@@ -99,7 +139,7 @@ const Project: FC = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <CreateSymbolForm onClose={handleCloseCreateSymbolModal}/>
+          <CreateSymbolForm onClose={handleCloseCreateSymbolModal} />
         </Modal>
       </div>
     </>

@@ -3,6 +3,7 @@ import { ILexiconScenario } from "../../shared/interfaces";
 import { useHelpers } from "../../hooks/useHelpers";
 import { EpisodesList } from "./EpisodesList";
 import { useLexicon } from "../../hooks/useLexicon";
+import KebabVertical from "../../assets/icon/Kebab_Vertical.svg";
 
 interface IScenarioProps {
   scenario: ILexiconScenario;
@@ -17,6 +18,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
       className="scenario"
       id={`${scenario.id}-${slugify(scenario.title.content)}`}
     >
+      <img src={KebabVertical} alt="" />
       <div className="scenario-header">
         <h2>{processContent(scenario.title)}</h2>
       </div>

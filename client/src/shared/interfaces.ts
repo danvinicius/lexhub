@@ -42,6 +42,7 @@ export interface IProject {
   scenarios?: ILexiconScenario[];
   symbols: ISymbol[];
   users: IUserProject[];
+  createdAt: string;
 }
 
 export interface ISymbol {

@@ -1,0 +1,33 @@
+.edit-project-form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  width: 100%;
+  background: #fff;
+  border-radius: 5px;
+  overflow: scroll;
+
+  @media screen and (min-width: 998px) {
+    margin: 5% auto;
+    width: 700px;
+    padding: 2rem;
+  }
+  .edit-scenario-form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    img {
+      cursor: pointer;
+    }
+  }
+
+  form {
+    max-height: 85vh;
+  }
+
+  .loading {
+    margin: 0 auto;
+  }
+}
