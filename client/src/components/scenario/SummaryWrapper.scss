@@ -6,6 +6,10 @@
     rgba(17, 17, 26, 0.1) 0px 0px 8px;
   overflow: hidden;
   height: max-content;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(26.5% - 1.5rem);
 
   .summary-wrapper {
     color: var(--secondary-text-color);

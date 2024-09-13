@@ -17,10 +17,10 @@ const ScenariosList = ({ scenarios }: IScenariosListProps) => {
           <ul>
             {scenarios.map((scenario: ILexiconScenario) => {
               return (
-                <li key={slugify(scenario.title.content)}>
+                <li key={`${scenario.id}-${slugify(scenario.title.content)}`}>
                   <Element
-                    key={slugify(scenario.title.content)}
-                    name={slugify(scenario.title.content)}
+                    key={`${scenario.id}-${slugify(scenario.title.content)}`}
+                    name={`${scenario.id}-${slugify(scenario.title.content)}`}
                   >
                     <Scenario scenario={scenario} />
                   </Element>

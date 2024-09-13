@@ -56,7 +56,7 @@ const Project: FC = () => {
   return (
     <>
       <Navbar navBg={true} />
-      <div className="project">
+      <div className="project" id="project">
         <div className="container">
           {loading && <Loading />}
           {error && <Error error={error} />}
@@ -77,7 +77,7 @@ const Project: FC = () => {
               <Button onClick={handleOpenCreateScenarioModal} theme="primary" text="Novo cenário"></Button>
               <Button onClick={handleOpenCreateSymbolModal} theme="secondary" text="Novo símbolo"></Button>
             </div>
-            <div className="scenarios-content">
+            <div className="scenarios-content" id="project">
               <SummaryWrapper></SummaryWrapper>
               {project?.scenarios && (
                 <ScenariosList scenarios={project?.scenarios} />
@@ -91,7 +91,7 @@ const Project: FC = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <CreateScenarioForm/>
+          <CreateScenarioForm onClose={handleCloseCreateScenarioModal}/>
         </Modal>
         <Modal
           open={isCreateSymbolModalOpen}
@@ -99,7 +99,7 @@ const Project: FC = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <CreateSymbolForm/>
+          <CreateSymbolForm onClose={handleCloseCreateSymbolModal}/>
         </Modal>
       </div>
     </>

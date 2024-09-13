@@ -13,7 +13,10 @@ const Scenario = ({ scenario }: IScenarioProps) => {
   const { processContent } = useLexicon();
 
   return (
-    <div className="scenario" id={slugify(scenario.title.content)}>
+    <div
+      className="scenario"
+      id={`${scenario.id}-${slugify(scenario.title.content)}`}
+    >
       <div className="scenario-header">
         <h2>{processContent(scenario.title)}</h2>
       </div>
@@ -81,19 +84,21 @@ const Scenario = ({ scenario }: IScenarioProps) => {
         </div>
         <h3>Recursos</h3>
         <div className="scenario-resources">
-          {scenario.resources?.length ? (
-            <ul>
+          <table className="scenario-resources-details">
+            <tbody>
+              <tr>
+                <th>Nome</th>
+                <th>Restrições</th>
+              </tr>
               {scenario.resources?.map((resource) => {
                 return (
-                  <li key={resource.name.content}>
-                    {processContent(resource.name)}
-                  </li>
+                  <tr key={resource.name.content}>
+                    <td>{processContent(resource.name)}</td>
+                  </tr>
                 );
               })}
-            </ul>
-          ) : (
-            <p>N/A</p>
-          )}
+            </tbody>
+          </table>
         </div>
         <h3>Episódios</h3>
         {scenario.episodes?.length || scenario.groups.length ? (

@@ -21,12 +21,11 @@ export const ScenariosSummary = () => {
               <li key={scenario.id}>
                 <Link
                   activeClass="active"
-                  to={slugify(scenario.title.content)}
+                  to={`${scenario.id}-${slugify(scenario.title.content)}`}
                   spy={true}
                   hashSpy={params.id == project.id}
                   smooth={true}
                   duration={800}
-                  containerId="scenarios-list"
                 >
                   {scenario.title.content}
                 </Link>

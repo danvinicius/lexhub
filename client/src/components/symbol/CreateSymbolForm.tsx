@@ -14,6 +14,7 @@ import Select from "../forms/Select";
 import { useSelect } from "../../hooks/useSelect";
 import { AddImpactComboBox } from "./impact/AddImpactComboBox";
 import { AddSynonymComboBox } from "./synonym/AddSynonymComboBox";
+import Close from "../../assets/icon/Close_Dark.svg";
 
 interface CreateSymbolRequestDTO {
   name: string;
@@ -29,7 +30,11 @@ interface CreateSymbolRequestDTO {
   projectId: number;
 }
 
-const CreateSymbolForm = () => {
+interface CreateSymbolFormProps {
+  onClose: () => void;
+}
+
+const CreateSymbolForm = ({ onClose }: CreateSymbolFormProps) => {
   const { isAuthenticated } = useContext(UserContext || {});
 
   const name = useForm("dontValidateName");
@@ -85,7 +90,15 @@ const CreateSymbolForm = () => {
 
   return (
     <section className="create-symbol-form flex column gap-125">
-      <h2>Adicionar novo símbolo</h2>
+      <div className="create-symbol-form-header">
+        <h2>Adicionar novo símbolo</h2>
+        <img
+          src={Close}
+          alt="Ícone 'X' popup"
+          title="Ícone 'X' popup"
+          onClick={onClose}
+        />
+      </div>
       <br />
       <Form>
         <Input

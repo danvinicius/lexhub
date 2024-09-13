@@ -13,6 +13,7 @@ import "./CreateScenarioForm.scss";
 import { AddActorComboBox } from "./actor/AddActorComboBox";
 import { AddExceptionComboBox } from "./exception/AddExceptionComboBox";
 import { AddResourceComboBox } from "./resource/AddResourceComboBox";
+import Close from "../../assets/icon/Close_Dark.svg";
 
 interface CreateScenarioRequestDTO {
   title: string;
@@ -34,7 +35,11 @@ interface CreateScenarioRequestDTO {
   projectId: number;
 }
 
-const CreateScenarioForm = () => {
+interface CreateScenarioFormProps {
+  onClose: () => void;
+}
+
+const CreateScenarioForm = ({onClose}: CreateScenarioFormProps) => {
   const { isAuthenticated } = useContext(UserContext || {});
 
   const title = useForm("dontValidateTitle");
@@ -106,7 +111,10 @@ const CreateScenarioForm = () => {
 
   return (
     <section className="create-scenario-form flex column gap-125">
-      <h2>Adicionar novo cenário</h2>
+      <div className="create-scenario-form-header">
+        <h2>Adicionar novo cenário</h2>
+        <img src={Close} alt="Ícone 'X' popup" title="Ícone 'X' popup" onClick={onClose}/>
+      </div>
       <br />
       <Form>
         <Input
@@ -168,14 +176,11 @@ const CreateScenarioForm = () => {
             }}
           />
         </div>
-        <AddActorComboBox
-          actors={actors}
-          setActors={setActors}
+        <AddActorComboBox actors={actors} setActors={setActors} />
+        <AddResourceComboBox
+          resources={resources}
+          setResources={setResources}
         />
-          <AddResourceComboBox
-            resources={resources}
-            setResources={setResources}
-          />
         <AddExceptionComboBox
           exceptions={exceptions}
           setExceptions={setExceptions}

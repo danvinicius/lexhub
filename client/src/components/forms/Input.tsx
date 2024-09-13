@@ -54,6 +54,7 @@ const Input: FC<InputProps> = ({
         onBlur={onBlur}
         onKeyDown={onKeyDown}
         required={required}
+        autoFocus
       />
       <Error error={error}/>
     </label>

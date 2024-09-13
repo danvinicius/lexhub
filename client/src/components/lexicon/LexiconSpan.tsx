@@ -6,13 +6,14 @@ import { Link } from "react-scroll";
 import { useHelpers } from "../../hooks/useHelpers";
 
 interface LexiconSpanProps {
+  id: string;
   resource: string;
   name: string;
   type: string;
   children: ReactNode;
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
-const LexiconSpan = ({ name, type, children }: LexiconSpanProps) => {
+const LexiconSpan = ({ id, name, type, children }: LexiconSpanProps) => {
   const { project, setSymbol } = useContext(ProjectContext || {});
   const { slugify } = useHelpers();
 
@@ -36,12 +37,12 @@ const LexiconSpan = ({ name, type, children }: LexiconSpanProps) => {
   ) : (
     <Link
       className="lexicon-span"
-      to={slugify(name)}
+      to={`${id}-${slugify(name)}`}
       spy={true}
       hashSpy={true}
       smooth={true}
       duration={800}
-      containerId="scenarios-list"
+      containerId="project"
       onClick={() => setSymbol(null)}
     >
       {name}

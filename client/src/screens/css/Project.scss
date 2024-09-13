@@ -11,6 +11,10 @@
       gap: 1rem;
       align-items: center;
 
+      &.is-edit-project-name-active {
+        margin-bottom: .5rem;
+      }
+
       img {
         cursor: pointer;
       }

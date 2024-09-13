@@ -24,8 +24,10 @@ export const useLexicon = () => {
       }
 
       // Adiciona o LexiconSpan com o conteúdo correspondente
+      const id = lexicon.resource.match(/[^/]+$/)?.[0];
       elements.push(
-        <LexiconSpan
+        <LexiconSpan 
+          id={id ? id : ''}
           resource={lexicon.resource}
           name={lexicon.name}
           type={lexicon.type}
