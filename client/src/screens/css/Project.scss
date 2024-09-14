@@ -4,9 +4,14 @@
   justify-content: center;
 
   .project-info {
-    padding: 2rem 0;
+    padding: 2rem 0 3rem;
 
-    .project-name,
+    .project-description {
+      font-size: 1.25rem;
+      margin-bottom: .5rem;
+    }
+
+    .project-header,
     .project-description {
       display: flex;
       gap: 4rem;
@@ -22,8 +27,13 @@
         cursor: pointer;
       }
     }
+    .buttons-container {
+      margin-left: auto;
+      display: flex;
+      gap: 1rem;
+    }
     .project-owner {
-      font-size: 0.85rem;
+      font-size: 1rem;
       color: var(--primary-color);
     }
   }
@@ -54,6 +64,10 @@
       grid-template-columns: 25% 75%;
       gap: 1.5rem;
       position: relative;
+
+      & > :only-child {
+        grid-column: 1 / -1; /* Faz o único filho ocupar toda a largura */
+      }
     }
   }
 }

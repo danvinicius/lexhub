@@ -128,19 +128,19 @@ const CreateSymbolForm = ({ onClose }: CreateSymbolFormProps) => {
           label="Classificação do símbolo"
           options={[
             {
-              value: "resource",
+              value: "Recurso",
               label: "Recurso",
             },
             {
-              value: "actor",
+              value: "Ator",
               label: "Ator",
             },
             {
-              value: "state",
+              value: "Estado",
               label: "Estado",
             },
             {
-              value: "object",
+              value: "Objeto",
               label: "Objeto",
             },
           ]}

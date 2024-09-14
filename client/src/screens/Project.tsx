@@ -13,17 +13,56 @@ import { ProjectContext } from "../context/ProjectContext";
 import SummaryWrapper from "../components/scenario/SummaryWrapper";
 import UserAdd from "../assets/icon/User_Add.svg";
 import Kebab from "../assets/icon/Kebab_Vertical.svg";
-import { Modal } from "@mui/material";
+import { Box, Modal, Tab, Tabs } from "@mui/material";
 import CreateSymbolForm from "../components/symbol/CreateSymbolForm";
 import CreateScenarioForm from "../components/scenario/CreateScenarioForm";
 import { IProject, IUserProject } from "../shared/interfaces";
 import EditProjectForm from "../components/project/EditProjectForm";
 import { ProjectActionsOptionsMenu } from "../components/project/ProjectActionsOptionsMenu";
 import DeleteProjectForm from "../components/project/DeleteProjectForm";
+import SymbolsList from "../components/symbol/SymbolsList";
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function CustomTabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      style={{ display: value !== index ? "none" : "block", width: "100%" }}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: "1rem 0rem", width: "100%" }}>{children}</Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
 
 const Project: FC = () => {
   const { isAuthenticated } = useContext(UserContext) || {};
-  const { setProject, project } = useContext(ProjectContext || {});
+  const { setProject, project, setSymbol } = useContext(ProjectContext || {});
+  const [currentTab, setCurrentTab] = useState(0);
+
+  const handleChange = (_: React.SyntheticEvent, newValue: number) => {
+    setSymbol(null);
+    setCurrentTab(newValue);
+  };
+
   const owner = project?.users.find(
     (userProject: IUserProject) => userProject.role == "OWNER"
   )?.user;
@@ -31,7 +70,8 @@ const Project: FC = () => {
     useState(false);
 
   const [isEditProjectModalOpen, setIsEditProjectModalOpen] = useState(false);
-  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
+  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] =
+    useState(false);
   const [isCreateSymbolModalOpen, setIsCreateSymbolModalOpen] = useState(false);
   const [isCreateScenarioModalOpen, setIsCreateScenarioModalOpen] =
     useState(false);
@@ -43,7 +83,8 @@ const Project: FC = () => {
     setIsCreateScenarioModalOpen(false);
   const handleOpenEditProjectModal = () => setIsEditProjectModalOpen(true);
   const handleCloseEditProjectModal = () => setIsEditProjectModalOpen(false);
-  const handleCloseDeleteProjectModal = () => setIsDeleteProjectModalOpen(false);
+  const handleCloseDeleteProjectModal = () =>
+    setIsDeleteProjectModalOpen(false);
   const handleOpenDeleteProjectModal = () => setIsDeleteProjectModalOpen(true);
 
   const params = useParams();
@@ -81,7 +122,7 @@ const Project: FC = () => {
           {error && <Error error={error} />}
           {!loading && !error && (
             <div className="project-info">
-              <div className="project-name">
+              <div className="project-header">
                 <h1 className="project-name">{project?.name}</h1>
                 <div className="project-options">
                   <img src={UserAdd} alt="Compartilhar projeto" />
@@ -98,9 +139,23 @@ const Project: FC = () => {
                         setIsProjectActionsOptionsMenu
                       }
                       isProjectActionsOptionsMenu={isProjectActionsOptionsMenu}
-                      handleOpenDeleteProjectModal={handleOpenDeleteProjectModal}
+                      handleOpenDeleteProjectModal={
+                        handleOpenDeleteProjectModal
+                      }
                     />
                   )}
+                </div>
+                <div className="buttons-container">
+                  <Button
+                    onClick={handleOpenCreateScenarioModal}
+                    theme="primary"
+                    text="Novo cenário"
+                  ></Button>
+                  <Button
+                    onClick={handleOpenCreateSymbolModal}
+                    theme="secondary"
+                    text="Novo símbolo"
+                  ></Button>
                 </div>
               </div>
               <p className="project-description">{project?.description}</p>
@@ -114,24 +169,52 @@ const Project: FC = () => {
             </div>
           )}
           <div className="scenarios-container">
-            <div className="scenarios-container-header">
-              <Button
-                onClick={handleOpenCreateScenarioModal}
-                theme="primary"
-                text="Novo cenário"
-              ></Button>
-              <Button
-                onClick={handleOpenCreateSymbolModal}
-                theme="secondary"
-                text="Novo símbolo"
-              ></Button>
-            </div>
-            <div className="scenarios-content" id="project">
-              <SummaryWrapper></SummaryWrapper>
-              {project?.scenarios && (
-                <ScenariosList scenarios={project?.scenarios} />
-              )}
-            </div>
+            <Box sx={{ width: "100%", padding: 0 }}>
+              <Box
+                sx={{
+                  borderBottom: 1,
+                  borderColor: "divider",
+                  padding: 0,
+                  width: "100%",
+                }}
+              >
+                <Tabs
+                  value={currentTab}
+                  onChange={handleChange}
+                  aria-label="basic tabs example"
+                  sx={{
+                    ".Mui-selected": {
+                      color: "var(--primary-color) !important", // Cor da aba ativa
+                    },
+                    ".MuiTabs-indicator": {
+                      backgroundColor: "var(--primary-color) !important", // Cor da barra abaixo da aba ativa
+                    },
+                  }}
+                >
+                  <Tab label="Cenários" {...a11yProps(0)} />
+                  <Tab label="Símbolos" {...a11yProps(1)} />
+                </Tabs>
+              </Box>
+              <div className="scenarios-content">
+                {currentTab == 0 && (
+                  <>
+                    <SummaryWrapper></SummaryWrapper>
+                    <CustomTabPanel value={currentTab} index={0}>
+                      {project?.scenarios && (
+                        <ScenariosList scenarios={project?.scenarios} />
+                      )}
+                    </CustomTabPanel>
+                  </>
+                )}
+                {currentTab == 1 && (
+                  <CustomTabPanel value={currentTab} index={1}>
+                    {project?.symbols && (
+                      <SymbolsList symbols={project?.symbols} />
+                    )}
+                  </CustomTabPanel>
+                )}
+              </div>
+            </Box>
           </div>
         </div>
         <Modal

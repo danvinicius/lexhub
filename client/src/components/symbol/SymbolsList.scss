@@ -1,0 +1,32 @@
+.symbols-list-container {
+  overflow: hidden;
+  .symbols-list {
+    padding-right: 0.75rem;
+    & > ul {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fill,
+        minmax(350px, 1fr)
+      ); /* Cada card será no mínimo 200px, com o máximo ajustado ao espaço disponível */
+      gap: 1rem; /* Espaçamento entre os cards */
+
+      li {
+        height: 100%;
+        box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
+        div {
+          height: 100%;
+        }
+      }
+
+      .loading {
+        margin: 0 auto;
+      }
+    }
+    .no-symbols {
+      font-size: 1.5rem;
+      color: var(--secondary-text-color);
+      position: absolute;
+      left: 50%;
+    }
+  }
+}

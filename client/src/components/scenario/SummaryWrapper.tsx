@@ -58,7 +58,7 @@ const SummaryWrapper = () => {
                 onClick={() => setSymbol(null)}
               />
             </div>
-            <SymbolDetails></SymbolDetails>
+            <SymbolDetails symbol={symbol}></SymbolDetails>
           </div>
         )}
       </div>

@@ -1,14 +1,20 @@
-import { useContext } from "react";
-import { ProjectContext } from "../../context/ProjectContext";
-import { ISynonym, IImpact } from "../../shared/interfaces";
+import { CSSProperties } from "react";
+import { ISynonym, IImpact, ISymbol } from "../../shared/interfaces";
 import './SymbolDetails.scss'
 
-const SymbolDetails = () => {
-  const { symbol } = useContext(ProjectContext || {});
+interface SymbolDetailsProps {
+  symbol: ISymbol;
+  style?: CSSProperties;
+}
+
+const SymbolDetails = ({symbol, style}: SymbolDetailsProps) => {
   return (
-    <div className="symbol-details">
+    <div className="symbol-details" style={style}>
       <div className="symbol-details-notion">
+        <div className="symbol-name">
         <h3>{symbol?.name}</h3>
+        <div className="classification"><p>{symbol?.classification}</p></div>
+        </div>
         <p>{symbol?.notion}</p>
       </div>
       <div className="symbol-details-synonyms">
