@@ -32,7 +32,7 @@ export const AddSynonymComboBox = ({
 
   return (
     <div className="synonyms">
-      <p>Sinônimos do símbolo</p>
+      <p>Sinônimos</p>
       <br />
       <br />
       <br />

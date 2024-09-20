@@ -112,7 +112,7 @@ const CreateScenarioForm = ({onClose}: CreateScenarioFormProps) => {
   return (
     <section className="create-scenario-form flex column gap-125">
       <div className="create-scenario-form-header">
-        <h2>Adicionar novo cenário</h2>
+        <h2>Novo cenário</h2>
         <img src={Close} alt="Ícone 'X' popup" title="Ícone 'X' popup" onClick={onClose}/>
       </div>
       <br />
@@ -121,7 +121,8 @@ const CreateScenarioForm = ({onClose}: CreateScenarioFormProps) => {
           type="text"
           name="title"
           placeholder="Logar no sistema"
-          label="Título do cenário"
+          label="Título"
+          autoFocus
           {...title}
           onInput={() => setError("")}
           onKeyDown={(e: KeyboardEvent) => {
@@ -133,7 +134,7 @@ const CreateScenarioForm = ({onClose}: CreateScenarioFormProps) => {
             type="text"
             name="goal"
             placeholder="Permitir ao usuário se identificar"
-            label="Objetivo do cenário"
+            label="Objetivo"
             {...goal}
             onInput={() => setError("")}
             onKeyDown={(e) => {

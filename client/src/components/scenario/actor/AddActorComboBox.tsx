@@ -32,7 +32,7 @@ export const AddActorComboBox = ({
 
   return (
     <div className="actors">
-      <p>Atores do cenário</p>
+      <p>Atores</p>
       <br />
       <br />
       <br />

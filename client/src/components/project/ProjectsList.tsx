@@ -43,9 +43,11 @@ const ProjectsList = () => {
       <div className="projects-list-container-header">
         <div>
           <h2>Seus projetos</h2>
+          {projects.length > 5 && 
           <Link to="/projetos">
             <span className="action">Ver todos</span>
           </Link>
+          }
         </div>
         <Link to="/projeto/criar">
           <Button theme="primary" text="Criar projeto"></Button>

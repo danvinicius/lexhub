@@ -51,7 +51,7 @@ const LoginForm: FC<LoginFormProps> = ({
         <h1>Login</h1>
         <p className="signup">
           Não tem uma conta ainda? &nbsp;
-          <span onClick={() => setCurrentScreen("signup")} className="action">
+          <span onClick={() => setCurrentScreen("signup")} className="action pointer">
             Se inscreva.
           </span>
         </p>
@@ -62,6 +62,7 @@ const LoginForm: FC<LoginFormProps> = ({
           name="email"
           placeholder="seu@email.com"
           label="E-mail"
+          autoFocus
           {...email}
           onInput={() => {setError('')}}
         />

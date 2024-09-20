@@ -91,7 +91,7 @@ const CreateSymbolForm = ({ onClose }: CreateSymbolFormProps) => {
   return (
     <section className="create-symbol-form flex column gap-125">
       <div className="create-symbol-form-header">
-        <h2>Adicionar novo símbolo</h2>
+        <h2>Novo símbolo</h2>
         <img
           src={Close}
           alt="Ícone 'X' popup"
@@ -105,7 +105,8 @@ const CreateSymbolForm = ({ onClose }: CreateSymbolFormProps) => {
           type="text"
           name="name"
           placeholder="Usuário do sistema"
-          label="Nome do símbolo"
+          label="Nome"
+          autoFocus
           {...name}
           onInput={() => setError("")}
           onKeyDown={(e: KeyboardEvent) => {
@@ -116,7 +117,7 @@ const CreateSymbolForm = ({ onClose }: CreateSymbolFormProps) => {
           type="text"
           name="notion"
           placeholder="Usuário principal que irá interagir com o software"
-          label="Noção do símbolo"
+          label="Noção"
           {...notion}
           onInput={() => setError("")}
           onKeyDown={(e) => {
@@ -125,7 +126,7 @@ const CreateSymbolForm = ({ onClose }: CreateSymbolFormProps) => {
         />
         <Select
           name="classification"
-          label="Classificação do símbolo"
+          label="Classificação"
           options={[
             {
               value: "Recurso",

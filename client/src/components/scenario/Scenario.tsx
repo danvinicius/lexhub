@@ -4,6 +4,7 @@ import { useHelpers } from "../../hooks/useHelpers";
 import { EpisodesList } from "./EpisodesList";
 import { useLexicon } from "../../hooks/useLexicon";
 import KebabVertical from "../../assets/icon/Kebab_Vertical.svg";
+import Button from "../forms/Button";
 
 interface IScenarioProps {
   scenario: ILexiconScenario;
@@ -49,6 +50,11 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                       );
                     })}
                   </ul>
+                  <Button
+                    text="Adicionar restrição +"
+                    theme="helper"
+                    style={{ padding: ".5rem", fontSize: 14 }}
+                  />
                 </td>
               </tr>
             </tbody>
@@ -96,6 +102,13 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                 return (
                   <tr key={resource.name.content}>
                     <td>{processContent(resource.name)}</td>
+                    <td>
+                      <Button
+                        text="Adicionar restrição +"
+                        theme="helper"
+                        style={{ padding: ".5rem", fontSize: 14 }}
+                      />
+                    </td>
                   </tr>
                 );
               })}

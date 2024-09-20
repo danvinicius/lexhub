@@ -30,7 +30,7 @@ export const AddExceptionComboBox = ({
 
   return (
     <div className="exceptions">
-      <p>Exceções do cenário</p>
+      <p>Exceções</p>
       <br />
       <br />
       <br />

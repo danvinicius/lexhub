@@ -32,7 +32,7 @@ export const AddResourceComboBox = ({
 
   return (
     <div className="resources">
-      <p>Recursos do cenário</p>
+      <p>Recursos</p>
       <br />
       <br />
       <br />

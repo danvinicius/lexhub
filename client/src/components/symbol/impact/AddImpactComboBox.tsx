@@ -32,7 +32,7 @@ export const AddImpactComboBox = ({
 
   return (
     <div className="impacts">
-      <p>Impactos do símbolo</p>
+      <p>Impactos</p>
       <br />
       <br />
       <br />

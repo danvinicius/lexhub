@@ -21,6 +21,11 @@
         background: var(--error-color);
         border: 2px solid var(--error-color);
     }
+    &.helper {
+        color: #fff;
+        background: var(--secondary-text-color);
+        border: 2px solid var(--secondary-text-color);
+    }
     
     &:hover {
         transform: scale(1.02);

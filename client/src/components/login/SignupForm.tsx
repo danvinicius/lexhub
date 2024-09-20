@@ -53,7 +53,7 @@ const LoginForm: FC<LoginFormProps> = ({
         <h1>Se inscreva</h1>
         <p className="signup">
           Já tem uma conta? &nbsp;
-          <span onClick={() => setCurrentScreen("login")} className="pointer">
+          <span onClick={() => setCurrentScreen("login")} className="action pointer">
             Faça login
           </span>
         </p>
@@ -64,6 +64,7 @@ const LoginForm: FC<LoginFormProps> = ({
           name="name"
           placeholder="Seu nome"
           label="Nome completo"
+          autoFocus
           {...name}
           onInput={() => {setError('')}}
         />

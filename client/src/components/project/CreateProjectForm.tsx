@@ -56,6 +56,7 @@ const CreateProjectForm = () => {
           name="name"
           placeholder="Plataforma de petróleo"
           label="Nome do projeto"
+          autoFocus
           {...name}
           onInput={() => setError("")}
         />
