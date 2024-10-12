@@ -3,8 +3,6 @@ import { Autocomplete, TextField } from "@mui/material";
 import { ProjectContext } from "../../../context/ProjectContext";
 import { ISymbol } from "../../../shared/interfaces";
 
-// Supondo que o contexto das opções seja algo como o contexto abaixo:
-
 interface AddSynonymComboBoxProps {
   synonyms: string[];
   setSynonyms: React.Dispatch<React.SetStateAction<string[]>>;

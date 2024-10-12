@@ -1,7 +1,7 @@
 import { FormEvent, KeyboardEvent, useContext, useState } from "react";
 import Input from "../forms/Input";
 import useForm from "../../hooks/useForm";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Form from "../forms/Form";
 import Loading from "../helper/Loading";
 import Button from "../forms/Button";
@@ -15,6 +15,7 @@ import { useSelect } from "../../hooks/useSelect";
 import { AddImpactComboBox } from "./impact/AddImpactComboBox";
 import { AddSynonymComboBox } from "./synonym/AddSynonymComboBox";
 import Close from "../../assets/icon/Close_Dark.svg";
+import { ProjectContext } from "../../context/ProjectContext";
 
 interface CreateSymbolRequestDTO {
   name: string;
@@ -27,7 +28,7 @@ interface CreateSymbolRequestDTO {
   impacts: {
     description: string;
   }[];
-  projectId: number;
+  projectId: string;
 }
 
 interface CreateSymbolFormProps {
@@ -45,17 +46,18 @@ const CreateSymbolForm = ({ onClose }: CreateSymbolFormProps) => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const params = useParams();
 
   const [impacts, setImpacts] = useState<string[]>([]);
   const [synonyms, setSynonyms] = useState<string[]>([]);
 
+  const projectContext = useContext(ProjectContext);
+
   const createSymbol = async (body: CreateSymbolRequestDTO) => {
     setLoading(true);
-    if (params.id) {
+    if (projectContext.project?.id) {
       try {
         const { url, options } = CREATE_SYMBOL(
-          +params.id,
+          projectContext.project.id,
           isAuthenticated().token
         );
         await api[options.method](url, body, options);
@@ -71,12 +73,12 @@ const CreateSymbolForm = ({ onClose }: CreateSymbolFormProps) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (name.validate() && notion.validate() && classification.validate()) {
-      if (params.id) {
+      if (projectContext.project?.id) {
         createSymbol({
           name: name.value,
           notion: notion.value,
           classification: classification.value,
-          projectId: +params.id,
+          projectId: projectContext.project.id,
           impacts: impacts.map((impact: string) => ({
             description: impact,
           })),

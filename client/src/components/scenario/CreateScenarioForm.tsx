@@ -1,7 +1,7 @@
 import { FormEvent, KeyboardEvent, useContext, useState } from "react";
 import Input from "../forms/Input";
 import useForm from "../../hooks/useForm";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Form from "../forms/Form";
 import Loading from "../helper/Loading";
 import Button from "../forms/Button";
@@ -12,8 +12,8 @@ import { UserContext } from "../../context/UserContext";
 import "./CreateScenarioForm.scss";
 import { AddActorComboBox } from "./actor/AddActorComboBox";
 import { AddExceptionComboBox } from "./exception/AddExceptionComboBox";
-import { AddResourceComboBox } from "./resource/AddResourceComboBox";
 import Close from "../../assets/icon/Close_Dark.svg";
+import { ProjectContext } from "../../context/ProjectContext";
 
 interface CreateScenarioRequestDTO {
   title: string;
@@ -29,10 +29,7 @@ interface CreateScenarioRequestDTO {
   actors: {
     name: string;
   }[];
-  resources: {
-    name: string;
-  }[];
-  projectId: number;
+  projectId: string;
 }
 
 interface CreateScenarioFormProps {
@@ -47,23 +44,22 @@ const CreateScenarioForm = ({onClose}: CreateScenarioFormProps) => {
   const geographicLocation = useForm("dontValidateGeographicLocation");
   const temporalLocation = useForm("dontValidateGeographicLocation");
   const preCondition = useForm("dontValidateGeographicLocation");
+  const projectContext = useContext(ProjectContext);
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const params = useParams();
 
   const [exceptions, setExceptions] = useState<string[]>([]);
   const [actors, setActors] = useState<string[]>([]);
-  const [resources, setResources] = useState<string[]>([]);
 
   const createScenario = async (body: CreateScenarioRequestDTO) => {
     setLoading(true);
-    if (params.id) {
+    if (projectContext.project?.id) {
       try {
         const { url, options } = CREATE_SCENARIO(
-          +params.id,
+          projectContext.project.id,
           isAuthenticated().token
         );
         await api[options.method](url, body, options);
@@ -85,7 +81,7 @@ const CreateScenarioForm = ({onClose}: CreateScenarioFormProps) => {
       temporalLocation.validate() &&
       preCondition.validate()
     ) {
-      if (params.id) {
+      if (projectContext.project?.id) {
         createScenario({
           title: title.value,
           goal: goal.value,
@@ -100,10 +96,7 @@ const CreateScenarioForm = ({onClose}: CreateScenarioFormProps) => {
           actors: actors.map((actor: string) => ({
             name: actor,
           })),
-          resources: resources.map((resource: string) => ({
-            name: resource,
-          })),
-          projectId: +params.id,
+          projectId: projectContext.project.id,
         });
       }
     }
@@ -178,10 +171,6 @@ const CreateScenarioForm = ({onClose}: CreateScenarioFormProps) => {
           />
         </div>
         <AddActorComboBox actors={actors} setActors={setActors} />
-        <AddResourceComboBox
-          resources={resources}
-          setResources={setResources}
-        />
         <AddExceptionComboBox
           exceptions={exceptions}
           setExceptions={setExceptions}

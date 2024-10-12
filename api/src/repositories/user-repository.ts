@@ -1,7 +1,8 @@
 
 import { ServerError } from '@/utils/errors';
-import { IUserProject, Project, User, UserProject, UserRole } from '../models';
-import dataSource, { initializeDataSource } from '@/infra/db/connection';
+import User, { IUser, IUserProject, UserRole } from '@/models/User';
+import Project from '@/models/Project';
+import {Types} from 'mongoose'
 
 export namespace UserRepository {
   export interface CreateUserParams {
@@ -12,80 +13,98 @@ export namespace UserRepository {
 
   export interface AddUserToProjectParams {
     role: UserRole;
-    projectId: number;
-    userId: number;
+    projectId: string;
+    userId: string;
   }
 }
 
 export class UserRepository {
 
-  constructor() {
-    initializeDataSource();
-  }
-
   async addUserToProject(data: UserRepository.AddUserToProjectParams): Promise<IUserProject> {
     try {
-      const [user] = await dataSource.manager.find(User, {
-        where: {
-          id: data.userId
-        }
-      })
-      const [project] = await dataSource.manager.find(Project, {
-        where: {
-          id: data.projectId
-        }
-      })
-      const userProject = new UserProject();
-      userProject.user = user;
-      userProject.project = project;
-      userProject.role = data.role;
-      await dataSource.manager.save(UserProject, userProject);
-      return userProject;
+      const user = await User.findById(data.userId);
+      const project = await Project.findById(data.projectId);
+
+      if (!user || !project) {
+        throw new ServerError('User or Project not found');
+      }
+
+      const userProject: IUserProject = {
+        user: user,
+        project: project,
+        role: data.role,
+      };
+
+      user.projects.push({
+        ...userProject,
+        project: project.id,
+        user: user.id
+      });
+  
+      project.users.push({
+        ...userProject,
+        project: project.id,
+        user: user.id
+      });
+
+      await project.save();
+      await user.save();
+
+      return {
+        ...userProject,
+        project: project.toJSON(),
+        user: user.toJSON()
+      };
     } catch (error: any) {
-      throw new ServerError(error?.message);
+      throw new ServerError(error.message);
     }
   }
 
-  async getUser(query: any): Promise<null | User> {
+  async getUser(query: any): Promise<null | IUser> {
     try {
-      const [user] = await dataSource.manager.find(User, {
-        where: query,
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          projects: true,
-          password: true,
-        },
-        relations: {
-          projects: {
-            project: true
-          },
-        },
+      const user = await User.findOne(query)
+        .select('id name email projects password')
+
+      return user?.toJSON();
+    } catch (error: any) {
+      throw new ServerError(error.message);
+    }
+  }
+
+  async getUserById(id: string): Promise<null | IUser> {    
+    try {
+      const user = await User.findOne({_id: id})
+        .select('name email projects password')
+      
+      return user?.toJSON();
+    } catch (error: any) {
+      console.log(error);
+      
+      throw new ServerError(error.message);
+    }
+  }
+
+  async createUser(data: UserRepository.CreateUserParams): Promise<IUser> {
+    try {
+      const newUser = new User({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        validated: false,
       });
-      delete user?.deletedAt;
-      return user;
+
+      await newUser.save();
+      return newUser.toJSON();
     } catch (error: any) {
-      throw new ServerError(error?.message);
+      throw new ServerError(error.message);
     }
   }
-  async createUser(data: UserRepository.CreateUserParams): Promise<User> {
-    try {
-      const user = new User();
-      user.name = data.name;
-      user.email = data.email;
-      user.password = data.password;
-      await dataSource.manager.save(User, { ...user, validated: false });
-      return user;
-    } catch (error: any) {
-      throw new ServerError(error?.message);
-    }
-  }
+
   async deleteUser(id: string): Promise<void> {
     try {
-      await dataSource.manager.softDelete(User, id);
+      await User.findByIdAndDelete(id);
     } catch (error: any) {
-      throw new ServerError(error?.message);
+      throw new ServerError(error.message);
     }
   }
 }

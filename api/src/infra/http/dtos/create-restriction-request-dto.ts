@@ -1,25 +1,29 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class CreateRestrictionRequestDTO {
   @IsString()
+  id: string;
+
+  @IsString()
   description: string;
 
-  @IsNumber()
-  scenarioId: number;
+  @IsString()
+  scenarioId: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
-  episodeId: number;
-
-  @IsOptional()
-  @IsNumber()
-  resourceId: number;
+  episodeId: string;
 
   @IsOptional()
-  @IsNumber()
-  contextId: number;
+  @IsString()
+  resourceId: string;
+
+  @IsOptional()
+  @IsString()
+  contextId: string;
 
   constructor(data: any) {
+    this.id = data.id;
     this.description = data.description;
     this.scenarioId = data.scenarioId;
     this.resourceId = data.resourceId;

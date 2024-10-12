@@ -21,7 +21,7 @@ const hasher = new BcryptService(10);
 export class UserService {
   async addUserToProject(
     data: AddUserToProjectRequestDTO,
-    inviterId: number
+    inviterId: string
   ): Promise<null | IUserProject> {
     const inviter = await userRepository.getUser({ id: inviterId });
     if (
@@ -68,7 +68,7 @@ export class UserService {
     if (!isPasswordCorrect) {
       throw new ForbiddenError('Senha incorreta ou usuário inexistente');
     }
-    const token = await encrypter.encrypt(String(user.id));
+    const token = await encrypter.encrypt(user.id);
     return new AuthenticateUserResponseDTO({
       name: user.name,
       email: user.email,
@@ -92,9 +92,10 @@ export class UserService {
       password: hash,
     });
     const user = await userRepository.getUser({ email });
+    
     if (user) {
       const { name, email, projects } = user;
-      const token = await encrypter.encrypt(String(user.id));
+      const token = await encrypter.encrypt(user.id);
       return new AuthenticateUserResponseDTO({
         name,
         email,
@@ -105,10 +106,10 @@ export class UserService {
     return null;
   }
 
-  async getMe(id: number): Promise<null | AuthenticateUserResponseDTO> {
+  async getMe(id: string): Promise<null | AuthenticateUserResponseDTO> {
     const user = await this.getUser(id);
     const { name, email, projects } = user;
-    const token = await encrypter.encrypt(String(user.id));
+    const token = await encrypter.encrypt(user.id);
     return new AuthenticateUserResponseDTO({
       name,
       email,
@@ -117,8 +118,8 @@ export class UserService {
     });
   }
 
-  async getUser(id: number): Promise<null | IUser> {
-    const user = await userRepository.getUser({ id });
+  async getUser(id: string): Promise<null | IUser> {
+    const user = await userRepository.getUserById(id);
     if (!user) {
       throw new BadRequestError('Este usuário não existe');
     }

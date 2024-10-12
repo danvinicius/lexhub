@@ -17,9 +17,9 @@
     }
 
     .symbol-name {
+      align-items: flex-start;
       display: flex;
       gap: 1rem;
-      align-items: center;
       .classification {
         display: flex;
         align-items: center;

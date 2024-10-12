@@ -2,8 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import { isAdmin, isCollaborator, isOwner } from '@/utils/validation/permission';
 import { IUserProject } from '@/models';
 
-const userBelongsToProject = (userProjects: IUserProject[], projectId: Number) => {
-  return userProjects?.find((p: IUserProject) => p.project?.id == Number(projectId));
+const userBelongsToProject = (userProjects: IUserProject[], projectId: string) => {
+  
+  return userProjects?.find((p: IUserProject) => p.project?.toString() == projectId);
 }
 
 export const observerMiddleware = async (
@@ -11,7 +12,8 @@ export const observerMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const project = userBelongsToProject(req.projects as IUserProject[], Number(req.params.projectId))
+  
+  const project = userBelongsToProject(req.projects as IUserProject[], req.params.projectId)
   
   if (!project) {
     return res.status(401).json({
@@ -28,7 +30,7 @@ export const collabMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const project = userBelongsToProject(req.projects as IUserProject[], Number(req.params.projectId))
+  const project = userBelongsToProject(req.projects as IUserProject[], req.params.projectId)
   if (!project) {
     return res.status(401).json({
       error: "You don't belong to this project.",
@@ -52,7 +54,7 @@ export const adminMiddleware = async (
   next: NextFunction
 ) => {
   
-  const project = userBelongsToProject(req.projects as IUserProject[], Number(req.params.projectId))
+  const project = userBelongsToProject(req.projects as IUserProject[], req.params.projectId)
   if (!project) {
     return res.status(401).json({
       error: "You don't belong to this project.",
@@ -76,7 +78,7 @@ export const ownerMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const project = userBelongsToProject(req.projects as IUserProject[], Number(req.params.projectId))
+  const project = userBelongsToProject(req.projects as IUserProject[], req.params.projectId)
   if (!project) {
     return res.status(401).json({
       error: "You don't belong to this project.",

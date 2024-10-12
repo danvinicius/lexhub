@@ -19,12 +19,12 @@ export const scenarioRouter = async (
     observerMiddleware,
     responseHandler(controller.getScenario)
   );
-  router.get(
-    '/project/:projectId/scenario/:id/with-lexicons',
-    authMiddleware,
-    observerMiddleware,
-    responseHandler(controller.getScenarioWithLexicons)
-  );
+  // router.get(
+  //   '/project/:projectId/scenario/:id/with-lexicons',
+  //   authMiddleware,
+  //   observerMiddleware,
+  //   responseHandler(controller.getScenarioWithLexicons)
+  // );
   router.post(
     '/project/:projectId/scenario',
     authMiddleware,
@@ -38,52 +38,16 @@ export const scenarioRouter = async (
     responseHandler(controller.createManyScenarios)
   );
   router.post(
-    '/project/:projectId/scenario/:scenarioId/actor',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.createActor)
-  );
-  router.post(
-    '/project/:projectId/scenario/:scenarioId/context',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.createContext)
-  );
-  router.post(
     '/project/:projectId/scenario/:scenarioId/resource',
     authMiddleware,
     collabMiddleware,
     responseHandler(controller.createResource)
   );
   router.post(
-    '/project/:projectId/scenario/:scenarioId/exception',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.createException)
-  );
-  router.post(
-    '/project/:projectId/scenario/:scenarioId/episode',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.createEpisode)
-  );
-  router.post(
     '/project/:projectId/scenario/:scenarioId/restriction',
     authMiddleware,
     collabMiddleware,
     responseHandler(controller.createRestriction)
-  );
-  router.post(
-    '/project/:projectId/scenario/:scenarioId/actor/:actorId',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.addActor)
-  );
-  router.post(
-    '/project/:projectId/scenario/:scenarioId/resource/:resourceId',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.addResource)
   );
   router.patch(
     '/project/:projectId/scenario/:id',
@@ -98,57 +62,15 @@ export const scenarioRouter = async (
     responseHandler(controller.deleteScenario)
   );
   router.delete(
-    '/project/:projectId/scenario/:scenarioId/actor/:actorId',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.removeActor)
-  );
-  router.delete(
-    '/project/:projectId/scenario/:scenarioId/resource/:resourceId',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.removeResource)
-  );
-  router.delete(
-    '/project/:projectId/actor/:actorId',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.deleteActor)
-  );
-  router.delete(
     '/project/:projectId/resource/:resourceId',
     authMiddleware,
     collabMiddleware,
     responseHandler(controller.deleteResource)
   );
   router.delete(
-    '/project/:projectId/context/:contextId',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.deleteContext)
-  );
-  router.delete(
-    '/project/:projectId/episode/:episodeId',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.deleteEpisode)
-  );
-  router.delete(
-    '/project/:projectId/exception/:exceptionId',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.deleteException)
-  );
-  router.delete(
     '/project/:projectId/restriction/:restrictionId',
     authMiddleware,
     collabMiddleware,
     responseHandler(controller.deleteRestriction)
-  );
-  router.delete(
-    '/project/:projectId/group/:groupId',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.deleteGroup)
   );
 };

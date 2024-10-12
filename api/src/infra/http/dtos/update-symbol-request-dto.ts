@@ -1,25 +1,42 @@
+import "reflect-metadata";
 import {
-  IsNotEmpty,
+  IsArray,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+import { SynonymDTO, ImpactDTO } from "./create-symbol-request-dto";
 
 export class UpdateSymbolRequestDTO {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   name: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   classification: string;
 
   @IsString()
-  @IsOptional()
   notion: string;
+
+  @IsArray()
+  @ValidateNested({each: true})
+  @Type(() => SynonymDTO)
+  synonyms: SynonymDTO[];
+  
+  @IsArray()
+  @ValidateNested({each: true})
+  @Type(() => ImpactDTO)
+  impacts: ImpactDTO[];
+
+  // todo: synonyms and impacts validation not working
 
   constructor(data: any) {
     this.name = data.name;
     this.classification = data.classification;
     this.notion = data.notion;
+    this.synonyms = data.synonyms;
+    this.impacts = data.impacts;
   }
 }

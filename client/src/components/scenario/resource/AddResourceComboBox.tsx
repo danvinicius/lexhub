@@ -3,22 +3,22 @@ import { Autocomplete, TextField } from "@mui/material";
 import { ProjectContext } from "../../../context/ProjectContext";
 import { ILexiconScenario } from "../../../shared/interfaces";
 
-// Supondo que o contexto das opções seja algo como o contexto abaixo:
-
 interface AddResourceComboBoxProps {
   resources: string[];
   setResources: React.Dispatch<React.SetStateAction<string[]>>;
+  currentScenarioId: string
 }
 
 export const AddResourceComboBox = ({
   resources,
   setResources,
+  currentScenarioId
 }: AddResourceComboBoxProps) => {
   const projectContext = useContext(ProjectContext);
 
   const [localOptions, setLocalOptions] = useState([
     ...new Set(
-      projectContext.project?.scenarios
+      projectContext.project?.scenarios?.filter(scenario => scenario.id !== currentScenarioId)
         ?.map((scenario: ILexiconScenario) =>
           scenario.resources.map((resource) => resource.name.content)
         )
@@ -32,10 +32,6 @@ export const AddResourceComboBox = ({
 
   return (
     <div className="resources">
-      <p>Recursos</p>
-      <br />
-      <br />
-      <br />
       <Autocomplete
         multiple
         freeSolo

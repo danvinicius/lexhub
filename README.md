@@ -15,12 +15,12 @@ This platform helps software engineers and requirements engineers managing scena
 
 - [x] Adicionar cenários
 - [ ] Editar símbolos
-- [ ] Editar nome/descrição do projeto
+- [x] Editar nome/descrição do projeto
 - [ ] Remover cenários
 - [ ] Remover símbolos
 - [ ] Ordenar episódios
-- [ ] Ver atores existentes ao adicionar novo ator
-- [ ] Ver recursos existentes ao adicionar novo recurso
+- [x] Ver atores existentes ao adicionar novo ator
+- [x] Ver recursos existentes ao adicionar novo recurso
 - [ ] Ver a questão das restrições
 - [ ] Adicionar usuários ao projeto
 - [ ] Checar responsividade

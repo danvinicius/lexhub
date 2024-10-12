@@ -1,5 +1,5 @@
 export interface IScenario {
-  readonly id?: number;
+  readonly id?: string;
   title: string;
   goal: string;
   exceptions?: IException[];
@@ -12,7 +12,7 @@ export interface IScenario {
 }
 
 export interface IUser {
-  readonly id?: number;
+  readonly id?: string;
   name: string;
   email: string;
   password: string;
@@ -28,7 +28,7 @@ export enum IUserRole {
 }
 
 export interface IUserProject {
-  readonly id?: number;
+  readonly id?: string;
   removedBy: number;
   role: IUserRole;
   user: IUser;
@@ -36,7 +36,7 @@ export interface IUserProject {
 }
 
 export interface IProject {
-  readonly id?: number;
+  readonly id?: string;
   name: string;
   description: string;
   scenarios?: ILexiconScenario[];
@@ -46,7 +46,7 @@ export interface IProject {
 }
 
 export interface ISymbol {
-  readonly id?: number;
+  readonly id?: string;
   name: string;
   classification: string;
   notion?: string;
@@ -56,23 +56,23 @@ export interface ISymbol {
 }
 
 export interface ISynonym {
-  readonly id?: number;
+  readonly id?: string;
   name: string;
 }
 
 export interface IImpact {
-  readonly id?: number;
+  readonly id?: string;
   description: string;
 }
 
 export interface IGroup {
-  readonly id?: number;
+  readonly id?: string;
   position: number;
   nonSequentialEpisodes: INonSequentialEpisode[];
 }
 
 export interface IEpisode {
-  readonly id?: number;
+  readonly id?: string;
   position: number;
   description: string;
   type: string;
@@ -80,12 +80,12 @@ export interface IEpisode {
 }
 
 export interface IRestriction {
-  readonly id?: number;
+  readonly id?: string;
   description: string;
 }
 
 export interface IContext {
-  readonly id?: number;
+  readonly id?: string;
   geographicLocation: string;
   temporalLocation: string;
   preCondition: string;
@@ -93,23 +93,23 @@ export interface IContext {
 }
 
 export interface INonSequentialEpisode extends IEpisode {
-  readonly id?: number;
+  readonly id?: string;
   group: IGroup;
 }
 
 export interface IActor {
-  readonly id?: number;
+  readonly id?: string;
   name: string;
 }
 
 export interface IResource {
-  readonly id?: number;
+  readonly id?: string;
   name: string;
   restrictions?: IRestriction[];
 }
 
 export interface IException {
-  readonly id?: number;
+  readonly id?: string;
   description: string;
 }
 
@@ -127,7 +127,7 @@ export interface Lexicon {
 }
 
 export interface ILexiconScenario {
-  id: number;
+  id: string;
   title: Lexicon;
   goal: Lexicon;
   context: {
@@ -145,6 +145,7 @@ export interface ILexiconScenario {
     name: Lexicon;
   }[];
   resources: {
+    id: string,
     name: Lexicon;
   }[];
   episodes: {

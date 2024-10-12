@@ -22,16 +22,6 @@ export const symbolRouter = async (
     authMiddleware,
     responseHandler(controller.createSymbol)
   );
-  router.post(
-    '/project/:projectId/symbol/:symbolId/impact',
-    authMiddleware,
-    responseHandler(controller.createImpact)
-  );
-  router.post(
-    '/project/:projectId/symbol/:symbolId/synonym',
-    authMiddleware,
-    responseHandler(controller.createSynonym)
-  );
   router.patch(
     '/project/:projectId/symbol/:id',
     authMiddleware,
@@ -41,15 +31,5 @@ export const symbolRouter = async (
     '/project/:projectId/symbol/:id',
     authMiddleware,
     responseHandler(controller.deleteSymbol)
-  );
-  router.delete(
-    '/project/:projectId/impact/:impactId',
-    authMiddleware,
-    responseHandler(controller.deleteImpact)
-  );
-  router.delete(
-    '/project/:projectId/synonym/:synonymId',
-    authMiddleware,
-    responseHandler(controller.deleteSynonym)
   );
 };

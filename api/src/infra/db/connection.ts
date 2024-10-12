@@ -1,60 +1,7 @@
-import 'reflect-metadata';
-import { DataSource } from 'typeorm';
+import mongoose, { Mongoose } from 'mongoose';
 
-import { databaseConfig } from './config';
-import {
-  Project,
-  Synonym,
-  Impact,
-  Exception,
-  Scenario,
-  Actor,
-  Context,
-  Restriction,
-  Resource,
-  Episode,
-  Group,
-  NonSequentialEpisode,
-  User,
-  UserProject,
-  Symbol,
-} from '@/models';
+// docker run -p 27017:27017 -d mongo
+export const connect = async (): Promise<Mongoose> =>
+  await mongoose.connect('mongodb://localhost:27017/cel');
 
-const appDataSource = new DataSource({
-  type: databaseConfig.type,
-  host: databaseConfig.host,
-  port: databaseConfig.port,
-  username: databaseConfig.username,
-  password: databaseConfig.password,
-  database: databaseConfig.database,
-  synchronize: databaseConfig.synchronize,
-  logging: databaseConfig.logging,
-  entities: [
-    Project,
-    Symbol,
-    Synonym,
-    Impact,
-    Exception,
-    Scenario,
-    Actor,
-    Context,
-    Restriction,
-    Resource,
-    Episode,
-    Group,
-    NonSequentialEpisode,
-    User,
-    UserProject,
-  ],
-  migrations: databaseConfig.migrations,
-  subscribers: databaseConfig.subscribers,
-});
-
-export const initializeDataSource = async () => {
-  if (!appDataSource.isInitialized) {
-    await appDataSource.initialize();
-  }
-  return appDataSource;
-};
-
-export default appDataSource;
+export const close = (): Promise<void> => mongoose.connection.close();

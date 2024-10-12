@@ -20,7 +20,7 @@ const projectService = new ProjectService();
 export class ProjectController {
   public getAllProjects = async (req: Request) => {
     try {
-      const projects = await projectService.getAllProjects(req.user);
+      const projects = await projectService.getAllProjects(req.userId);
       return ok(projects);
     } catch (error: any) {
       return serverError(error.message);
@@ -30,7 +30,7 @@ export class ProjectController {
   public getProject = async (req: Request) => {
     try {
       const { projectId } = req.params;
-      const project = await projectService.getProject(+projectId);
+      const project = await projectService.getProject(projectId);
       return ok(project);
     } catch (error: any) {
       if (error instanceof NotFoundError) {
@@ -44,7 +44,7 @@ export class ProjectController {
       const data = new DTO.CreateProjectRequestDTO(req.body);
       
       await validate(data);
-      const projectCreated = await projectService.createProject(data, req.user);
+      const projectCreated = await projectService.createProject(data, req.userId);
       return created(projectCreated);
     } catch (error: any) {
       if (
@@ -60,7 +60,7 @@ export class ProjectController {
       const { projectId } = req.params;
       const data = new DTO.UpdateProjectRequestDTO(req.body);
       await validate(data);
-      await projectService.updateProject(+projectId, data);
+      await projectService.updateProject(projectId, data);
       return ok({ message: 'Project updated' });
     } catch (error: any) {
       if (
@@ -74,7 +74,7 @@ export class ProjectController {
   public deleteProject = async (req: Request) => {
     try {
       const { projectId } = req.params;
-      await projectService.deleteProject(+projectId);
+      await projectService.deleteProject(projectId);
       return ok({ message: 'Project deleted' });
     } catch (error: any) {
       return serverError(error.message);

@@ -23,7 +23,7 @@ export class UserController {
 
   getMe = async (req: Request) => {
     try {
-      const user = await userService.getMe(req.user);
+      const user = await userService.getMe(req.userId);
       return ok(user);
     } catch (error: any) {
       if (
@@ -73,9 +73,9 @@ export class UserController {
 
   addUserToProject = async (req: Request) => {
     try {
-      const data = new DTO.AddUserToProjectRequestDTO({ ...req.body, projectId: Number(req.params.projectId) });
+      const data = new DTO.AddUserToProjectRequestDTO({ ...req.body, projectId: req.params.projectId });
       await validate(data);
-      const userProject = await userService.addUserToProject(data, req.user);
+      const userProject = await userService.addUserToProject(data, req.userId);
       return ok(userProject);
     } catch (error: any) {
       if (

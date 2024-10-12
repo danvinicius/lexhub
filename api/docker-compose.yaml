@@ -2,7 +2,7 @@ version: '3.8'
 services:
   api:
     container_name: api
-    restart: always
+    restart: "no"
     build: .
     ports:
       - ${PORT}:${PORT}
@@ -13,7 +13,7 @@ services:
 
   db:
     container_name: postgres
-    restart: always
+    restart: "no"
     image: postgres
     ports:
       - '5433:${DB_PORT}'

@@ -1,28 +1,53 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  ManyToMany,
-  JoinTable,
-  OneToOne,
-  ManyToOne,
-  DeleteDateColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  JoinColumn,
-} from 'typeorm';
-import { Exception, IException } from './Exception';
-import { Actor, IActor } from './Actor';
-import { Context, IContext } from './Context';
-import { Project } from './Project';
-import { IResource, Resource } from './Resource';
-import { Episode, IEpisode } from './Episode';
 import { IProject } from './Project';
-import { Group, IGroup } from './Group';
+import { model, Schema } from 'mongoose';
+
+export interface IGroup {
+  readonly id?: string;
+  position: number;
+  nonSequentialEpisodes: INonSequentialEpisode[];
+}
+
+export interface INonSequentialEpisode extends IEpisode {
+  readonly id?: string;
+  group: IGroup;
+}
+
+export interface IException {
+  description: string;
+}
+
+export interface IActor {
+  name: string;
+}
+
+export interface IContext {
+  geographicLocation: string;
+  temporalLocation: string;
+  preCondition: string;
+  restrictions?: IRestriction[];
+}
+
+export interface IEpisode {
+  position: number;
+  description: string;
+  type: string;
+  restriction?: IRestriction;
+}
+
+export interface IRestriction {
+  readonly id?: string;
+  description: string;
+}
+
+export interface IResource {
+  readonly id?: string;
+  name: string;
+  restrictions?: IRestriction[];
+  scenarios: IScenario[];
+}
 
 export interface IScenario {
-  readonly id?: number;
+  readonly id?: string;
   title: string;
   goal: string;
   exceptions?: IException[];
@@ -34,78 +59,82 @@ export interface IScenario {
   project: IProject;
 }
 
-@Entity()
-export class Scenario implements IScenario {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  title: string;
-
-  @Column()
-  goal: string;
-
-  @OneToMany(() => Exception, (exception) => exception.scenario)
-  exceptions: IException[];
-
-  @ManyToMany(() => Actor)
-  @JoinTable({
-    name: 'scenario_actor',
-    joinColumn: {
-      name: 'scenario_id',
-      referencedColumnName: 'id',
+const restrictionSchema = new Schema<IRestriction>(
+  {
+    description: String,
+  },
+  {
+    toJSON: {
+      transform: (_, ret): void => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+      },
     },
-    inverseJoinColumn: {
-      name: 'actor_id',
-      referencedColumnName: 'id',
+    timestamps: true,
+  }
+);
+
+const resourceSchema = new Schema<IResource>(
+  {
+    name: String,
+    restrictions: [{ type: Schema.Types.ObjectId, ref: 'Restriction' }],
+    scenarios: [{ type: Schema.Types.ObjectId, ref: 'Scenario' }],
+  },
+  {
+    toJSON: {
+      transform: (_, ret): void => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+      },
     },
-  })
-  actors: IActor[];
+    timestamps: true,
+  }
+);
 
-  @ManyToMany(() => Resource)
-  @JoinTable({
-    name: 'scenario_resource',
-    joinColumn: {
-      name: 'scenario_id',
-      referencedColumnName: 'id',
+const scenarioSchema = new Schema<IScenario>(
+  {
+    title: String,
+    goal: String,
+    exceptions: [] as IException[],
+    actors: [] as IActor[],
+    resources: [{ type: Schema.Types.ObjectId, ref: 'Resource' }],
+    context: {
+      geographicLocation: String,
+      temporalLocation: String,
+      preCondition: String,
+      restrictions: [{ type: Schema.Types.ObjectId, ref: 'Restriction' }],
     },
-    inverseJoinColumn: {
-      name: 'resource_id',
-      referencedColumnName: 'id',
+    episodes: [
+      {
+        position: Number,
+        description: String,
+        type: String,
+        restriction: { type: Schema.Types.ObjectId, ref: 'Restriction' },
+      },
+    ],
+    groups: [{
+      position: Number,
+      nonSequentialEpisodes: [] as IEpisode[],
+    }],
+  },
+  {
+    toJSON: {
+      transform: (_, ret): void => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+      },
     },
-  })
-  resources: IResource[];
+    timestamps: true,
+  }
+);
 
-  @OneToOne(() => Context, (context) => context.scenario)
-  context: IContext;
+const Resource = model('Resource', resourceSchema);
 
-  @OneToMany(() => Episode, (episode) => episode.scenario)
-  episodes: IEpisode[];
+const Restriction = model('Restriction', restrictionSchema);
 
-  @OneToMany(() => Group, (group) => group.scenario)
-  groups: IGroup[];
+export { Resource, Restriction };
 
-  @ManyToOne(() => Project, (project) => project.scenarios)
-  @JoinColumn({
-    name: 'project_id',
-  })
-  project: IProject;
-
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  createdAt: Date;
-
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  updatedAt: Date;
-
-  @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt?: Date;
-}
+export default model('Scenario', scenarioSchema);

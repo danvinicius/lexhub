@@ -56,7 +56,7 @@ export const GET_PROJECTS = (token: string): RequestFormat => {
   };
 };
 
-export const GET_PROJECT = (id: number, token: string): RequestFormat => {
+export const GET_PROJECT = (id: string, token: string): RequestFormat => {
   return {
     url: `/project/${id}`,
     options: {
@@ -81,7 +81,7 @@ export const CREATE_PROJECT = (token: string): RequestFormat => {
   };
 };
 
-export const EDIT_PROJECT = (id: number, token: string): RequestFormat => {  
+export const EDIT_PROJECT = (id: string, token: string): RequestFormat => {  
   return {
     url: `/project/${id}`,
     options: {
@@ -94,7 +94,7 @@ export const EDIT_PROJECT = (id: number, token: string): RequestFormat => {
   };
 };
 
-export const DELETE_PROJECT = (id: number, token: string): RequestFormat => {  
+export const DELETE_PROJECT = (id: string, token: string): RequestFormat => {  
   return {
     url: `/project/${id}`,
     options: {
@@ -107,7 +107,7 @@ export const DELETE_PROJECT = (id: number, token: string): RequestFormat => {
   };
 };
 
-export const CREATE_SYMBOL = (projectId: number, token: string): RequestFormat => {  
+export const CREATE_SYMBOL = (projectId: string, token: string): RequestFormat => {  
   return {
     url: `/project/${projectId}/symbol`,
     options: {
@@ -120,9 +120,22 @@ export const CREATE_SYMBOL = (projectId: number, token: string): RequestFormat =
   };
 };
 
-export const CREATE_SCENARIO = (projectId: number, token: string): RequestFormat => {  
+export const CREATE_SCENARIO = (projectId: string, token: string): RequestFormat => {  
   return {
     url: `/project/${projectId}/scenario`,
+    options: {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+    },
+  };
+};
+
+export const CREATE_RESOURCE = (projectId: string, scenarioId: string, token: string): RequestFormat => {  
+  return {
+    url: `/project/${projectId}/scenario/${scenarioId}/resource`,
     options: {
       method: "post",
       headers: {

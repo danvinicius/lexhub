@@ -18,13 +18,13 @@ const userRepository = new UserRepository();
 export class ProjectService {
   async createProject(
     project: CreateProjectRequestDTO,
-    userId: number
+    userId: string
   ): Promise<IProject> {
-    const user = await userRepository.getUser({ id: userId });
+    const user = await userRepository.getUserById(userId);
     return await projectRepository.createProject({ ...project, user });
   }
 
-  async getProject(id: number): Promise<null | IProjectWithLexiconScenarios> {
+  async getProject(id: string): Promise<null | IProjectWithLexiconScenarios> {
     const project = await projectRepository.getProject(id);
     
     if (!project) {
@@ -35,7 +35,7 @@ export class ProjectService {
 
     const scenarios = await Promise.all(
       project.scenarios.map(async (scenario) => {
-        return await scenarioService.getScenarioWithLexicon(scenario.id);
+        return await scenarioService.getScenarioWithLexicon(scenario.id, project.id);
       })
     );
 
@@ -45,19 +45,29 @@ export class ProjectService {
     };
   }
 
-  async getAllProjects(userId: number): Promise<IProject[]> {
+  async getCleanProject(id: string): Promise<null | IProject> {
+    const project = await projectRepository.getProject(id);
+    
+    if (!project) {
+      throw new NotFoundError('This project does not exist');
+    }
+
+    return project;
+  }
+
+  async getAllProjects(userId: string): Promise<IProject[]> {
     const projects = await projectRepository.getAllProjects(userId);
     return projects;
   }
 
   async updateProject(
-    id: number,
+    id: string,
     project: UpdateProjectRequestDTO
-  ): Promise<void> {
-    await projectRepository.updateProject(id, project);
+  ): Promise<IProject> {
+    return await projectRepository.updateProject(id, project);
   }
 
-  async deleteProject(id: number): Promise<void> {
+  async deleteProject(id: string): Promise<void> {
     await projectRepository.deleteProject(id);
   }
 }

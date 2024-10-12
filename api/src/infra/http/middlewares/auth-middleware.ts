@@ -17,6 +17,7 @@ export const authMiddleware = async (
   }
   try {
     const token = req.headers?.authorization.split(' ')[1];
+    
     if (!token) {
       return res.status(403).json({
         error: new ForbiddenError('Senha incorreta ou usuário inexistente').message,
@@ -25,10 +26,12 @@ export const authMiddleware = async (
     }
     const jwt = new JwtService(process.env.AUTH_SECRET);
     const payload = (await jwt.decrypt(token)) as IUser;
-    const id = Number(payload?.id);
+    const id = payload?.id;
+    
     const userService = new UserService();
     const user = await userService.getUser(id);
-    req.user = id;
+    
+    req.userId = user.id;
     req.projects = user.projects;
     next();
   } catch (error) {

@@ -16,6 +16,7 @@ import {
   SymbolController,
   UserController,
 } from '@/controllers';
+import { connect, close } from './infra/db/connection';
 
 export class Server {
   private router = Router();
@@ -23,6 +24,7 @@ export class Server {
 
   public async run() {
     this.config();
+    this.databaseSetup();
     this.setupControllers();
     this.setupDocumentation();
     this.server.listen(3000, () => Logger.info('Server running on port 3000'));
@@ -74,6 +76,14 @@ export class Server {
     symbolRouter(this.router, symbolController);
     scenarioRouter(this.router, scenarioController);
     userRouter(this.router, userController);
+  }
+
+  private async databaseSetup(): Promise<void> {
+    await connect();
+  }
+  
+  public async close(): Promise<void> {
+    await close();
   }
 
   private setupDocumentation() {

@@ -1,18 +1,11 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  CreateDateColumn,
-  DeleteDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { ISymbol, Symbol } from './Symbol';
-import { IScenario, Scenario } from './Scenario';
-import { IUserProject, UserProject } from './UserProject';
+import Symbol, { ISymbol } from './Symbol';
+import Scenario, { IScenario } from './Scenario';
+import { IUserProject } from './User';
+import { model, Schema } from 'mongoose';
+import { UserRole } from './User';
 
 export interface IProject {
-  readonly id?: number;
+  readonly id?: string;
   name: string;
   description: string;
   scenarios?: IScenario[];
@@ -20,41 +13,64 @@ export interface IProject {
   users: IUserProject[];
 }
 
-@Entity()
-export class Project implements IProject {
-  @PrimaryGeneratedColumn()
-  id: number;
+const projectSchema = new Schema<IProject>(
+  {
+    name: String,
+    description: String,
+    scenarios: [
+      { type: Schema.Types.ObjectId, ref: 'Scenario', required: true },
+    ],
+    symbols: [{ type: Schema.Types.ObjectId, ref: 'Symbol', required: true }],
+    users: [
+      {
+        role: {
+          type: String,
+          enum: UserRole,
+          default: UserRole.OBSERVER
+        },
+        user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+      },
+    ],
+  },
+  {
+    toJSON: {
+      transform: (_, ret): void => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
 
-  @Column()
-  name: string;
+        if (ret.users) {
+          ret.users.forEach((user: any) => {
+            delete user._id;
+          });
+        }
+      },
+    },
+    timestamps: true,
+  }
+);
 
-  @Column()
-  description: string;
+projectSchema.pre('deleteOne', async function (next) {
+  try {
+    // Obter o projeto que está sendo removido
+    const project = await this.model.findOne(this.getFilter());
 
-  @OneToMany(() => Symbol, (symbol) => symbol.project)
-  symbols: ISymbol[];
+    if (!project) {
+      return next(new Error('Projeto não encontrado'));
+    }
 
-  @OneToMany(() => Scenario, (scenario) => scenario.project)
-  scenarios: IScenario[];
+    // Remover todos os cenários associados
+    await Scenario.deleteMany({ _id: { $in: project.scenarios } });
 
-  @OneToMany(() => UserProject, (user) => user.project)
-  users: IUserProject[];
+    // Remover todos os símbolos associados
+    await Symbol.deleteMany({ _id: { $in: project.symbols } });
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  createdAt: Date;
+    next(); // Continuar com a remoção do projeto
+  } catch (error) {
+    next(error);
+  }
+});
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  updatedAt: Date;
 
-  @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt?: Date;
-}
+
+export default model('Project', projectSchema)

@@ -97,7 +97,7 @@ const Project: FC = () => {
     if (params?.id) {
       try {
         const { url, options } = GET_PROJECT(
-          +params.id,
+          params.id,
           isAuthenticated ? isAuthenticated().token : ""
         );
         const response = await api[options.method](url, options);

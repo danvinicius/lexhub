@@ -1,7 +1,7 @@
-
 import { ServerError } from '@/utils/errors';
-import { IProject, IUser, IUserProject, Project, UserProject, UserRole } from '../models';
-import dataSource, { initializeDataSource } from '@/infra/db/connection';
+import Project, { IProject } from '@/models/Project';
+import { IUser, UserRole } from '@/models';
+import User from '@/models/User';
 
 export namespace ProjectRepository {
   export interface CreateProjectParams {
@@ -16,105 +16,84 @@ export namespace ProjectRepository {
 }
 
 export class ProjectRepository {
-
-  constructor() {
-    initializeDataSource();
-  }
-
-  async getProject(id: number): Promise<null | Project> {
+  async getProject(id: string): Promise<null | IProject> {
     try {
-      const [project] = await dataSource.manager.find(Project, {
-        where: {
-          id,
-        },
-        relations: {
-          symbols: {
-            impacts: true,
-            synonyms: true,
-          },
-          scenarios: true,
-          users: {
-            user: true
-          }
-        },
-      });
-      delete project?.deletedAt;
-      project?.users.map((user: IUserProject) => {
-        delete user.user.password;
-        delete user.user.projects;
-      })
-      return project;
+      const project = await Project.findById(id)
+        .populate('symbols')
+        .populate('scenarios')
+        .populate('users.user');
+
+      if (!project) return null;
+      return project?.toJSON();
     } catch (error: any) {
       throw new ServerError(error.message);
     }
   }
-  async getAllProjects(userId: number): Promise<Project[]> {
+
+  async getAllProjects(userId: string): Promise<IProject[]> {
     try {
-      const projects = await dataSource.manager.find(Project, {
-        where: {
-          users: {
-            user: {
-              id: userId
-            }
-          }
-        },
-        relations: {
-          symbols: true,
-          scenarios: true,
-          users: {
-            user: true
-          }
-        },
-      });
-      projects?.map((project: IProject) => {
-        project.users.map((user: IUserProject) => {
-          delete user.user.password;
-          delete user.user.projects;
-        })
+      const projects = await Project.find({
+        'users.user': userId,
       })
-      return projects;
+        .populate('symbols')
+        .populate('scenarios')
+        .populate('users');
+        
+      return projects.map(project => project.toJSON());
     } catch (error: any) {
       throw new ServerError(error?.message);
     }
   }
 
-  // todo: create response dtos
   async createProject(
     data: ProjectRepository.CreateProjectParams
-  ): Promise<Project> {
+  ): Promise<IProject> {
+    
     try {
-      const project = new Project();
-      project.name = data.name;
-      project.description = data.description;
-      const user = new UserProject()
-      delete data.user.password;
-      user.user = data.user;
-      user.role = UserRole.OWNER;
-      project.users = [user]
-      await dataSource.manager.save(UserProject, user);
-      await dataSource.manager.save(Project, project);
-      project.users.map((user: IUserProject) => {
-        delete user.user.password;
-        delete user.user.projects;
-      })
-      return project;
+      const project = new Project({
+        name: data.name,
+        description: data.description,
+        users: [{ user: data.user.id, role: UserRole.OWNER }],
+      });
+
+      await project.save();
+
+      await User.findByIdAndUpdate(
+        data.user.id,
+        {
+          $push: {
+            projects: {
+              project: project._id,
+              role: UserRole.OWNER,
+            },
+          },
+        },
+        { new: true }
+      );
+
+      return project.toJSON();
     } catch (error: any) {
+      console.log(error);
+      
       throw new ServerError(error.message);
     }
   }
+
   async updateProject(
-    id: number,
+    id: string,
     data: ProjectRepository.UpdateProjectParams
-  ): Promise<void> {
+  ): Promise<IProject> {
     try {
-      await dataSource.manager.update(Project, { id }, data);
+      await Project.updateOne({ _id: id }, { $set: data });
+      return await this.getProject(id);
     } catch (error: any) {
       throw new ServerError(error.message);
     }
   }
-  async deleteProject(id: number): Promise<void> {
+
+  async deleteProject(id: string): Promise<void> {
     try {
-      await dataSource.manager.softDelete(Project, id);
+      await Project.deleteOne({ _id: id });
     } catch (error: any) {
       throw new ServerError(error.message);
     }

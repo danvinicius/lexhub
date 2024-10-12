@@ -1,7 +1,5 @@
 import {
-  CreateImpactRequestDTO,
   CreateSymbolRequestDTO,
-  CreateSynonymRequestDTO,
   UpdateSymbolRequestDTO,
 } from '@/infra/http/dtos';
 import { ISymbol } from '@/models';
@@ -12,21 +10,12 @@ import { normalize } from '@/utils/string/normalize';
 const symbolRepository = new SymbolRepository();
 
 export class SymbolService {
-  async createImpact(impact: CreateImpactRequestDTO): Promise<void> {
-    const symbolExists = await symbolRepository.getSymbol(impact.symbolId);
-    if (!symbolExists) {
-      throw new BadRequestError('Parâmetro "symbolId" inválido ou inexistente');
-    }
-    return await symbolRepository.createImpact(impact);
-  }
-
   async createSymbol(symbol: CreateSymbolRequestDTO): Promise<ISymbol> {
     const symbols = await this.getAllSymbols(symbol.projectId);
     if (
       symbols.some(
         (existingSymbol: ISymbol) =>
-          normalize(existingSymbol.name) ==
-          normalize(symbol.name)
+          normalize(existingSymbol.name) == normalize(symbol.name)
       )
     ) {
       throw new BadRequestError('Já existe um símbolo com o mesmo nome');
@@ -34,31 +23,15 @@ export class SymbolService {
     return await symbolRepository.createSymbol(symbol);
   }
 
-  async createSynonym(synonym: CreateSynonymRequestDTO): Promise<void> {
-    const symbolExists = await symbolRepository.getSymbol(synonym.symbolId);
-    if (!symbolExists) {
-      throw new BadRequestError('Parâmetro "symbolId" inválido ou inexistente');
-    }
-    return await symbolRepository.createSynonym(synonym);
-  }
-
-  async deleteImpact(id: number): Promise<void> {
-    return await symbolRepository.deleteImpact(id);
-  }
-
-  async deleteSymbol(id: number): Promise<void> {
+  async deleteSymbol(id: string): Promise<void> {
     const symbolExists = await symbolRepository.getSymbol(id);
     if (!symbolExists) {
-      throw new BadRequestError('Parâmetro "symbolId" inválido ou inexistente');
+      throw new BadRequestError('Símbolo inválido ou inexistente');
     }
     await symbolRepository.deleteSymbol(id);
   }
 
-  async deleteSynonym(id: number): Promise<void> {
-    return await symbolRepository.deleteSynonym(id);
-  }
-
-  async getSymbol(id: number): Promise<null | ISymbol> {
+  async getSymbol(id: string): Promise<null | ISymbol> {
     const symbol = await symbolRepository.getSymbol(id);
     if (!symbol) {
       throw new NotFoundError('Símbolo inexistente');
@@ -66,19 +39,19 @@ export class SymbolService {
     return symbol;
   }
 
-  async getAllSymbols(projectId: number): Promise<ISymbol[]> {
+  async getAllSymbols(projectId: string): Promise<ISymbol[]> {
     const symbols = await symbolRepository.getAllSymbols(projectId);
     return symbols;
   }
 
   async updateSymbol(
-    id: number,
+    id: string,
     symbol: UpdateSymbolRequestDTO
-  ): Promise<void> {
+  ): Promise<ISymbol> {
     const symbolExists = await symbolRepository.getSymbol(id);
     if (!symbolExists) {
-      throw new BadRequestError('Parâmetro "symbolId" inválido ou inexistente');
+      throw new BadRequestError('Símbolo inválido ou inexistente');
     }
-    await symbolRepository.updateSymbol(id, symbol);
+    return symbolRepository.updateSymbol(id, symbol);
   }
 }

@@ -1,23 +1,21 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-} from 'typeorm';
-import { IUserProject, UserProject } from './UserProject';
+import { IProject } from './Project';
+import { model, Schema } from 'mongoose';
 
 export enum UserRole {
-  OWNER = 'OWNER',
   ADMIN = 'ADMIN',
+  OWNER = 'OWNER',
   COLLABORATOR = 'COLLABORATOR',
   OBSERVER = 'OBSERVER',
 }
 
+export interface IUserProject {
+  role: UserRole;
+  user: IUser;
+  project: IProject;
+}
+
 export interface IUser {
-  readonly id?: number;
+  readonly id?: string;
   name: string;
   email: string;
   password: string;
@@ -25,43 +23,42 @@ export interface IUser {
   projects?: IUserProject[];
 }
 
-@Entity()
-export class User implements IUser {
-  @PrimaryGeneratedColumn()
-  id: number;
+const userSchema = new Schema<IUser>(
+  {
+    name: String,
+    email: String,
+    password: String,
+    projects: [
+      {
+        role: {
+          type: String,
+          enum: UserRole,
+          default: UserRole.OBSERVER
+        },
+        project: {
+          type: Schema.Types.ObjectId,
+          ref: 'Project',
+          required: true,
+        },
+      },
+    ],
+  },
+  {
+    toJSON: {
+      transform: (_, ret): void => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
 
-  @Column()
-  name: string;
+        if (ret.projects) {
+          ret.projects.forEach((project: any) => {
+            delete project._id;
+          });
+        }
+      },
+    },
+    timestamps: true,
+  }
+);
 
-  @Column({
-    unique: true
-  })
-  email: string;
-
-  @Column()
-  password: string;
-
-  @Column()
-  validated: boolean;
-
-  @OneToMany(() => UserProject, (project) => project.user)
-  projects: IUserProject[];
-
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  createdAt: Date;
-
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  updatedAt: Date;
-
-  @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt?: Date;
-}
+export default model('User', userSchema);

@@ -1,20 +1,18 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  ManyToOne,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-  JoinColumn,
-} from 'typeorm';
-import { ISynonym, Synonym } from './Synonym';
-import { IImpact, Impact } from './Impact';
-import { IProject, Project } from './Project';
+import { IProject } from './Project';
+import { model, Schema } from 'mongoose';
+
+export interface IImpact {
+  readonly id?: string;
+  description: string;
+}
+
+export interface ISynonym {
+  readonly id?: string;
+  name: string;
+}
 
 export interface ISymbol {
-  id?: number;
+  readonly id?: string;
   name: string;
   classification: string;
   notion?: string;
@@ -23,47 +21,25 @@ export interface ISymbol {
   project: IProject;
 }
 
-@Entity()
-export class Symbol implements ISymbol {
-  @PrimaryGeneratedColumn()
-  id: number;
+const symbolSchema = new Schema<ISymbol>(
+  {
+    name: String,
+    classification: String,
+    notion: String,
+    synonyms: [] as ISynonym[],
+    impacts: [] as IImpact[],
+    project: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
+  },
+  {
+    toJSON: {
+      transform: (_, ret): void => {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+      },
+    },
+    timestamps: true,
+  }
+);
 
-  @Column()
-  name: string;
-
-  @Column()
-  classification: string;
-
-  @Column({ nullable: true })
-  notion: string;
-
-  @OneToMany(() => Synonym, (synonym) => synonym.symbol)
-  synonyms: Synonym[];
-
-  @OneToMany(() => Impact, (Impact) => Impact.symbol)
-  impacts: Impact[];
-
-  @ManyToOne(() => Project, (project) => project.symbols)
-  @JoinColumn({
-    name: 'project_id',
-  })
-  project: Project;
-
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-  })
-  createdAt: Date;
-
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP(6)',
-    onUpdate: 'CURRENT_TIMESTAMP(6)',
-  })
-  updatedAt: Date;
-
-  @DeleteDateColumn({ name: 'deleted_at' })
-  deletedAt?: Date;
-}
+export default model('Symbol', symbolSchema)

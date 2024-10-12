@@ -1,4 +1,24 @@
-import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import "reflect-metadata";
+import { Type } from 'class-transformer';
+import { IsArray, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+
+export class SynonymDTO {
+  @IsString()
+  name: string;
+
+  constructor(data: any) {
+    this.name = data.name;
+  }
+}
+
+export class ImpactDTO {
+  @IsString()
+  description: string;
+
+  constructor(data: any) {
+    this.description = data.description;
+  }
+}
 
 export class CreateSymbolRequestDTO {
   @IsString()
@@ -14,17 +34,19 @@ export class CreateSymbolRequestDTO {
   notion: string;
 
   @IsArray()
-  synonyms: {
-    name: string;
-  }[];
-
+  @ValidateNested({each: true})
+  @Type(() => SynonymDTO)
+  synonyms: SynonymDTO[];
+  
   @IsArray()
-  impacts: {
-    description: string;
-  }[];
+  @ValidateNested({each: true})
+  @Type(() => ImpactDTO)
+  impacts: ImpactDTO[];
 
-  @IsNumber()
-  projectId: number;
+   // todo: synonyms and impacts validation not working
+
+  @IsString()
+  projectId: string;
 
   constructor(data: any) {
     this.name = data.name;

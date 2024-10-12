@@ -1,4 +1,4 @@
-import { IsArray, IsNumber } from 'class-validator';
+import { IsArray, IsString } from 'class-validator';
 
 export class CreateManyScenariosRequestDTO {
   @IsArray()
@@ -7,8 +7,8 @@ export class CreateManyScenariosRequestDTO {
     goal: string;
   }[];
 
-  @IsNumber()
-  projectId: number;
+  @IsString()
+  projectId: string;
 
   constructor(data: any) {
     this.scenarios = data.scenarios;
