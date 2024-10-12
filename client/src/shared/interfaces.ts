@@ -160,4 +160,5 @@ export interface ILexiconScenario {
       description: Lexicon;
     }[];
   }[];
+  projectId: string;
 }

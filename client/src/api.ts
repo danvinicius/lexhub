@@ -107,6 +107,19 @@ export const DELETE_PROJECT = (id: string, token: string): RequestFormat => {
   };
 };
 
+export const DELETE_SCENARIO = (projectId: string, scenarioId: string, token: string): RequestFormat => {  
+  return {
+    url: `/project/${projectId}/scenario/${scenarioId}`,
+    options: {
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+    },
+  };
+};
+
 export const CREATE_SYMBOL = (projectId: string, token: string): RequestFormat => {  
   return {
     url: `/project/${projectId}/symbol`,
@@ -125,6 +138,19 @@ export const CREATE_SCENARIO = (projectId: string, token: string): RequestFormat
     url: `/project/${projectId}/scenario`,
     options: {
       method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+    },
+  };
+};
+
+export const EDIT_SCENARIO = (projectId: string, scenarioId: string, token: string): RequestFormat => {  
+  return {
+    url: `/project/${projectId}/scenario/${scenarioId}`,
+    options: {
+      method: "patch",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`

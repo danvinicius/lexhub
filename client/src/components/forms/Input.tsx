@@ -7,8 +7,8 @@ interface InputProps {
   name: string;
   placeholder: string;
   value: string;
-  label: string;
   required?: boolean;
+  label: string;
   error?: string | null;
   style?: CSSProperties;
   autoFocus?: boolean;

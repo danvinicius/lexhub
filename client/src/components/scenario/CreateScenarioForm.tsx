@@ -14,6 +14,7 @@ import { AddActorComboBox } from "./actor/AddActorComboBox";
 import { AddExceptionComboBox } from "./exception/AddExceptionComboBox";
 import Close from "../../assets/icon/Close_Dark.svg";
 import { ProjectContext } from "../../context/ProjectContext";
+import Textarea from "../forms/Textarea";
 
 interface CreateScenarioRequestDTO {
   title: string;
@@ -36,7 +37,7 @@ interface CreateScenarioFormProps {
   onClose: () => void;
 }
 
-const CreateScenarioForm = ({onClose}: CreateScenarioFormProps) => {
+const CreateScenarioForm = ({ onClose }: CreateScenarioFormProps) => {
   const { isAuthenticated } = useContext(UserContext || {});
 
   const title = useForm("dontValidateTitle");
@@ -106,82 +107,89 @@ const CreateScenarioForm = ({onClose}: CreateScenarioFormProps) => {
     <section className="create-scenario-form flex column gap-125">
       <div className="create-scenario-form-header">
         <h2>Novo cenário</h2>
-        <img src={Close} alt="Ícone 'X' popup" title="Ícone 'X' popup" onClick={onClose}/>
+        <img
+          src={Close}
+          alt="Ícone 'X' popup"
+          title="Ícone 'X' popup"
+          onClick={onClose}
+        />
       </div>
       <br />
-      <Form>
-        <Input
-          type="text"
-          name="title"
-          placeholder="Logar no sistema"
-          label="Título"
-          autoFocus
-          {...title}
-          onInput={() => setError("")}
-          onKeyDown={(e: KeyboardEvent) => {
-            e.key === "Enter" && e.preventDefault();
-          }}
-        />
-        <div className="formGroup">
+      <div className="flex gap-2">
+        <Form>
           <Input
             type="text"
-            name="goal"
-            placeholder="Permitir ao usuário se identificar"
-            label="Objetivo"
-            {...goal}
-            onInput={() => setError("")}
-            onKeyDown={(e) => {
-              e.key === "Enter" && e.preventDefault();
-            }}
-          />
-          <Input
-            type="text"
-            name="geographicLocation"
-            placeholder="Um lugar qualquer"
-            label="Localização geográfica"
-            {...geographicLocation}
+            name="title"
+            placeholder="Logar no sistema"
+            label="Título"
+            autoFocus
+            {...title}
             onInput={() => setError("")}
             onKeyDown={(e: KeyboardEvent) => {
               e.key === "Enter" && e.preventDefault();
             }}
           />
-        </div>
-        <div className="formGroup">
-          <Input
-            type="text"
-            name="temporalLocation"
-            placeholder="Um dia qualquer"
-            label="Localização temporal"
-            {...temporalLocation}
+          <Textarea
+            name="goal"
+            placeholder="Permitir ao usuário se identificar"
+            label="Objetivo"
             onInput={() => setError("")}
+            rows={5}
             onKeyDown={(e) => {
               e.key === "Enter" && e.preventDefault();
             }}
+            {...goal}
           />
-          <Input
-            type="text"
+          <AddActorComboBox actors={actors} setActors={setActors} />
+          <AddExceptionComboBox
+            exceptions={exceptions}
+            setExceptions={setExceptions}
+          />
+        </Form>
+        <Form>
+          <h3>Contexto</h3>
+            <Input
+              type="text"
+              name="geographicLocation"
+              placeholder="Um lugar qualquer"
+              label="Localização geográfica"
+              {...geographicLocation}
+              onInput={() => setError("")}
+              onKeyDown={(e: KeyboardEvent) => {
+                e.key === "Enter" && e.preventDefault();
+              }}
+            />
+            <Input
+              type="text"
+              name="temporalLocation"
+              placeholder="Um dia qualquer"
+              label="Localização temporal"
+              {...temporalLocation}
+              onInput={() => setError("")}
+              onKeyDown={(e) => {
+                e.key === "Enter" && e.preventDefault();
+              }}
+            />
+          <Textarea
             name="preCondition"
             placeholder="Para isso deve-se..."
             label="Pré-condição"
-            {...preCondition}
             onInput={() => setError("")}
+            rows={5}
             onKeyDown={(e) => {
               e.key === "Enter" && e.preventDefault();
             }}
+            {...preCondition}
           />
-        </div>
-        <AddActorComboBox actors={actors} setActors={setActors} />
-        <AddExceptionComboBox
-          exceptions={exceptions}
-          setExceptions={setExceptions}
-        />
-        {loading ? (
-          <Loading />
-        ) : (
-          <Button theme="primary" text="Criar" onClick={handleSubmit} />
-        )}
-        <Error error={error} />
-      </Form>
+        </Form>
+      </div>
+
+      {loading ? (
+        <Loading />
+      ) : (
+        <Button theme="primary" text="Criar" onClick={handleSubmit} />
+      )}
+      <Error error={error} />
     </section>
   );
 };

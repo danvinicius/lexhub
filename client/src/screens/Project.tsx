@@ -81,12 +81,17 @@ const Project: FC = () => {
   const handleCloseCreateSymbolModal = () => setIsCreateSymbolModalOpen(false);
   const handleCloseCreateScenarioModal = () =>
     setIsCreateScenarioModalOpen(false);
-  const handleOpenEditProjectModal = () => setIsEditProjectModalOpen(true);
+  const handleOpenEditProjectModal = () => {
+    setIsEditProjectModalOpen(true);
+    setIsProjectActionsOptionsMenu(false);
+  };
   const handleCloseEditProjectModal = () => setIsEditProjectModalOpen(false);
   const handleCloseDeleteProjectModal = () =>
     setIsDeleteProjectModalOpen(false);
-  const handleOpenDeleteProjectModal = () => setIsDeleteProjectModalOpen(true);
-
+  const handleOpenDeleteProjectModal = () => {
+    setIsDeleteProjectModalOpen(true);
+    setIsProjectActionsOptionsMenu(false);
+  };
   const params = useParams();
 
   const [error, setError] = useState("");
@@ -128,7 +133,7 @@ const Project: FC = () => {
                   <img src={UserAdd} alt="Compartilhar projeto" />
                   <img
                     src={Kebab}
-                    alt="Compartilhar projeto"
+                    alt="Abrir opções do projeto"
                     onClick={() => setIsProjectActionsOptionsMenu(true)}
                   />
                   {isProjectActionsOptionsMenu && (

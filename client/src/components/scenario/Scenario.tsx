@@ -5,101 +5,79 @@ import { EpisodesList } from "./EpisodesList";
 import { useLexicon } from "../../hooks/useLexicon";
 import KebabVertical from "../../assets/icon/Kebab_Vertical.svg";
 import Plus from "../../assets/icon/Plus.svg";
-import { AddResourceComboBox } from "./resource/AddResourceComboBox";
-import { useContext, useState } from "react";
-import Button from "../forms/Button";
-import { useNavigate } from "react-router-dom";
-import { CREATE_RESOURCE } from "../../api";
-import { UserContext } from "../../context/UserContext";
-import api from "../../lib/axios";
-import { ProjectContext } from "../../context/ProjectContext";
+import { useState } from "react";
+import { Modal } from "@mui/material";
+import { CreateResourceForm } from "./resource/CreateResourceForm";
+import { ScenarioActionsOptionsMenu } from "./ScenarioActionsOptionsMenu";
+import EditScenarioForm from "./EditScenarioForm";
+import DeleteScenarioForm from "./DeleteScenarioForm";
+import User from '../../assets/icon/User_Empty.svg'
+import Warning from '../../assets/icon/Triangle_Warning.svg'
 
 interface IScenarioProps {
   scenario: ILexiconScenario;
 }
 
-interface CreateResourceDTO {
-  id?: string;
-  name: string;
-  scenarioId: string;
-}
-
 const Scenario = ({ scenario }: IScenarioProps) => {
   const { slugify } = useHelpers();
   const { processContent } = useLexicon();
-  const { isAuthenticated } = useContext(UserContext || {});
-  const projectContext = useContext(ProjectContext);
 
-  const [isCreateResourceInputActive, setIsCreateResourceInputActive] =
+  const [isCreateResourceModalOpen, setIsCreateResourceModalOpen] =
     useState(false);
-  const [resources, setResources] = useState<string[]>([]);
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [
+    isScenarioActionsOptionsMenuOpen,
+    setIsScenarioActionsOptionsMenuOpen,
+  ] = useState(false);
 
-  const createResource = async (body: CreateResourceDTO) => {
-    setLoading(true);
-    if (projectContext.project?.id) {
-      try {
-        const { url, options } = CREATE_RESOURCE(
-          projectContext.project.id,
-          scenario.id,
-          isAuthenticated().token
-        );
-        await api[options.method](url, body, options);
-        navigate(0);
-      } catch (err: any) {
-        console.log(error);
-        console.log(loading);
-        setError(err.response.data.error);
-      } finally {
-        setLoading(false);
-      }
-    }
+  const [isEdiScenarioModalOpen, setIsEdiScenarioModalOpen] = useState(false);
+
+  const [isDeleteScenarioModalOpen, setIsDeleteScenarioModalOpen] =
+    useState(false);
+
+  const handleCloseDeleteScenarioModal = () =>
+    setIsDeleteScenarioModalOpen(false);
+  const handleOpenDeleteScenarioModal = () => {
+    setIsDeleteScenarioModalOpen(true);
+    setIsScenarioActionsOptionsMenuOpen(false);
   };
 
-  const handleAddResources = async () => {
-    const existingResources = [
-      ...new Set(
-        projectContext.project?.scenarios
-          ?.map((scenario: ILexiconScenario) => scenario.resources)
-          .flat()
-      ),
-    ];
-    const mappedResources: CreateResourceDTO[] = [];
-    resources.map((resource) => {
-      const existingResource = existingResources.find(
-        (existingResource) => existingResource.name.content == resource
-      );
-      if (existingResource) {
-        mappedResources.push({
-          id: existingResource.id,
-          name: resource,
-          scenarioId: scenario.id,
-        });
-      } else {
-        mappedResources.push({
-          name: resource,
-          scenarioId: scenario.id,
-        });
-      }
-    });
-    await Promise.all(
-      mappedResources.map((resource) => {
-        createResource(resource);
-      })
-    );
+  const handleCloseEdiScenarioModal = () => setIsEdiScenarioModalOpen(false);
+  const handleOpenEditScenarioModal = () => {
+    setIsEdiScenarioModalOpen(true);
+    setIsScenarioActionsOptionsMenuOpen(false);
   };
+  const handleCloseEditScenarioModal = () =>
+    setIsScenarioActionsOptionsMenuOpen(false);
 
   return (
     <div
       className="scenario"
       id={`${scenario.id}-${slugify(scenario.title.content)}`}
     >
-      <img src={KebabVertical} alt="" className="scenario-options" />
       <div className="scenario-header">
         <h2>{processContent(scenario.title)}</h2>
+        <img
+          src={KebabVertical}
+          alt=""
+          className="scenario-options"
+          onClick={() => setIsScenarioActionsOptionsMenuOpen(true)}
+        />
+        <div className="scenario-options">
+          {isScenarioActionsOptionsMenuOpen && (
+            <ScenarioActionsOptionsMenu
+              handleOpenEditScenarioModal={handleOpenEditScenarioModal}
+              handleCloseEditScenarioModal={handleCloseEditScenarioModal}
+              setIsScenarioActionsOptionsMenuOpen={
+                setIsScenarioActionsOptionsMenuOpen
+              }
+              isScenarioActionsOptionsMenuOpen={
+                isScenarioActionsOptionsMenuOpen
+              }
+              handleOpenDeleteScenarioModal={handleOpenDeleteScenarioModal}
+            />
+          )}
+        </div>
       </div>
       <div className="scenario-details">
         <h3>Objetivo</h3>
@@ -142,7 +120,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
             <ul>
               {scenario.actors?.map((actor) => {
                 return (
-                  <li key={actor.name.content}>{processContent(actor.name)}</li>
+                  <li key={actor.name.content}><img src={User} alt="" />{processContent(actor.name)}</li>
                 );
               })}
             </ul>
@@ -157,6 +135,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
               {scenario.exceptions?.map((exception) => {
                 return (
                   <li key={exception.description.content}>
+                    <img src={Warning} alt="" />
                     {processContent(exception.description)}
                   </li>
                 );
@@ -168,22 +147,12 @@ const Scenario = ({ scenario }: IScenarioProps) => {
         </div>
         <h3>Recursos</h3>
         <div className="scenario-resources">
-          {!isCreateResourceInputActive && <span
+          <span
             className="add-resource"
-            onClick={() => setIsCreateResourceInputActive(true)}
+            onClick={() => setIsCreateResourceModalOpen(true)}
           >
             Adicionar recurso <img src={Plus} alt="" />{" "}
-          </span>}
-          {isCreateResourceInputActive && (
-            <div className="add-resource-field">
-              <AddResourceComboBox
-                resources={resources}
-                setResources={setResources}
-                currentScenarioId={scenario.id}
-              />
-              <Button text="Adicionar recurso(s)" theme="secondary" onClick={handleAddResources}/>
-            </div>
-          )}
+          </span>
           {scenario.resources.length > 0 && (
             <table className="scenario-resources-details">
               <tbody>
@@ -214,6 +183,41 @@ const Scenario = ({ scenario }: IScenarioProps) => {
           <p>N/A</p>
         )}
       </div>
+      <Modal
+        open={isEdiScenarioModalOpen}
+        onClose={handleCloseEdiScenarioModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <EditScenarioForm
+          onClose={handleCloseEdiScenarioModal}
+          scenario={scenario ? scenario : ({} as ILexiconScenario)}
+          projectId={scenario.projectId}
+        />
+      </Modal>
+      <Modal
+        open={isDeleteScenarioModalOpen}
+        onClose={handleCloseDeleteScenarioModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <DeleteScenarioForm
+          onClose={handleCloseDeleteScenarioModal}
+          scenario={scenario ? scenario : ({} as ILexiconScenario)}
+          projectId={scenario.projectId}
+        />
+      </Modal>
+      <Modal
+        open={isCreateResourceModalOpen}
+        onClose={() => setIsCreateResourceModalOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <CreateResourceForm
+          onClose={() => setIsCreateResourceModalOpen(false)}
+          scenarioId={scenario.id}
+        />
+      </Modal>
     </div>
   );
 };

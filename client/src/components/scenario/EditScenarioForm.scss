@@ -1,4 +1,4 @@
-.create-scenario-form {
+.edit-scenario-form {
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -7,43 +7,32 @@
     background: #fff;
     border-radius: 5px;
     overflow: scroll;
+  
     @media screen and (min-width: 998px) {
       margin: 2.5% auto;
       width: 1000px;
       padding: 2rem;
     }
-
-    .create-scenario-form-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-
-      img {
-        cursor: pointer;
-      }
-    }
-
     form {
       max-height: 85vh;
       width: 100%;
     }
-    
-    .loading {
-      margin: 0 auto;
-    }
-  
-    .actors,
-    .exceptions,
-    .resources {
+    .edit-scenario-form-header {
       display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      button {
-        background: var(--helper-color);
-        color: var(--primary-text-color);
-        width: max-content;
+      align-items: flex-start;
+      justify-content: space-between;
+  
+      img {
         cursor: pointer;
       }
+    }
+  
+    form {
+      max-height: 85vh;
+    }
+  
+    .loading {
+      margin: 0 auto;
     }
   }
   

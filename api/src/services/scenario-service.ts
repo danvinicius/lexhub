@@ -107,6 +107,7 @@ export interface ILexiconScenario {
       };
     }[];
   }[];
+  projectId: string;
 }
 
 export class ScenarioService {
@@ -285,6 +286,7 @@ export class ScenarioService {
           })
         ),
       })),
+      projectId,
     };
   }
 

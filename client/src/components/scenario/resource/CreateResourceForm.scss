@@ -1,4 +1,4 @@
-.create-scenario-form {
+.create-resource-form {
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -8,12 +8,12 @@
     border-radius: 5px;
     overflow: scroll;
     @media screen and (min-width: 998px) {
-      margin: 2.5% auto;
-      width: 1000px;
+      margin: 10% auto;
+      width: 700px;
       padding: 2rem;
     }
 
-    .create-scenario-form-header {
+    .create-resource-form-header {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
@@ -30,20 +30,6 @@
     
     .loading {
       margin: 0 auto;
-    }
-  
-    .actors,
-    .exceptions,
-    .resources {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      button {
-        background: var(--helper-color);
-        color: var(--primary-text-color);
-        width: max-content;
-        cursor: pointer;
-      }
     }
   }
   

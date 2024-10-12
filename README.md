@@ -25,7 +25,7 @@ This platform helps software engineers and requirements engineers managing scena
 - [ ] Adicionar usuários ao projeto
 - [ ] Checar responsividade
 - [ ] Chegar reaproveitamento de classes, componentes e hooks
-- [ ] Checar viabilidade PG -> MongoDB
+- [x] Checar viabilidade PG -> MongoDB
 - [ ] Visualizar e rastrear alterações (responsável, data/hora, conteúdo, motivo)
 - [ ] Importar arquivo próprio para criar projetos, cenários e símbolos
 - [ ] Exportar arquivos para BDD e TDD
