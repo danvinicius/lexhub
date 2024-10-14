@@ -60,7 +60,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
         <img
           src={KebabVertical}
           alt=""
-          className="scenario-options"
+          className="scenario-options-button"
           onClick={() => setIsScenarioActionsOptionsMenuOpen(true)}
         />
         <div className="scenario-options">

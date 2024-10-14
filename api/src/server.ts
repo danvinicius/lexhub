@@ -23,11 +23,12 @@ export class Server {
   private server: Application;
 
   public async run() {
+    const PORT = process.env.PORT
     this.config();
     this.databaseSetup();
     this.setupControllers();
     this.setupDocumentation();
-    this.server.listen(3000, () => Logger.info('Server running on port 3000'));
+    this.server.listen(PORT, () => Logger.info(`Server running on port ${PORT}`));
   }
 
   private config() {

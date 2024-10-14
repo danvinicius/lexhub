@@ -1,0 +1,188 @@
+import {
+  FormEvent,
+  KeyboardEvent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import Button from "../forms/Button";
+import Input from "../forms/Input";
+import Form from "../forms/Form";
+import "./EditSymbolForm.scss";
+import { UserContext } from "../../context/UserContext";
+import Loading from "../helper/Loading";
+import { EDIT_SYMBOL } from "../../api";
+import useForm from "../../hooks/useForm";
+import api from "../../lib/axios";
+import Error from "../helper/Error";
+import { useNavigate } from "react-router-dom";
+import { ISynonym, ISymbol, IImpact } from "../../shared/interfaces";
+import Close from "../../assets/icon/Close_Dark.svg";
+import { AddSynonymComboBox } from "./synonym/AddSynonymComboBox";
+import { AddImpactComboBox } from "./impact/AddImpactComboBox";
+import Select from "../forms/Select";
+import { useSelect } from "../../hooks/useSelect";
+
+export interface EditSymbolRequestDTO {
+  name: string;
+  notion: string;
+  classification: string;
+  synonyms: ISynonym[];
+  impacts: IImpact[];
+  projectId: string;
+}
+
+interface EditSymbolFormProps {
+  symbol: ISymbol;
+  onClose: () => void;
+  projectId: string;
+}
+
+const EditSymbolForm = ({
+  symbol,
+  onClose,
+  projectId,
+}: EditSymbolFormProps) => {
+  const nameEdit = useForm("dontValidateName");
+  const notionEdit = useForm("dontValidateNotion");
+  const classificationEdit = useSelect();
+  const [synonymsEdit, setSynonymsEdit] = useState<string[]>([]);
+  const [impactsEdit, setImpactsEdit] = useState<string[]>([]);
+
+  useEffect(() => {
+    nameEdit.setValue(symbol.name);
+    notionEdit.setValue(symbol.notion || "");
+    classificationEdit.setValue(symbol.classification || "");
+    setSynonymsEdit(symbol?.synonyms?.map((synonym) => synonym.name) || []);
+    setImpactsEdit(symbol?.impacts?.map((impact) => impact.description) || []);
+  }, []);
+
+  const { isAuthenticated } = useContext(UserContext) || {};
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const editSymbol = async (body: EditSymbolRequestDTO) => {
+    console.log(projectId);
+    console.log(symbol.id);
+    
+    if (projectId && symbol?.id) {
+      setLoading(true);
+
+      try {
+        const { url, options } = EDIT_SYMBOL(
+          projectId,
+          symbol.id,
+          isAuthenticated().token
+        );
+        await api[options.method](url, body, options);
+        navigate(0);
+      } catch (error: any) {
+        setError(error.response.data.error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (nameEdit.validate() && notionEdit.validate()) {
+      editSymbol({
+        name: nameEdit.value,
+        notion: notionEdit.value,
+        classification: classificationEdit.value,
+        impacts: impactsEdit.map((impact: string) => ({
+          description: impact,
+        })),
+        synonyms: synonymsEdit.map((synonym: string) => ({
+          name: synonym,
+        })),
+        projectId,
+      });
+    }
+  };
+
+  return (
+    <section className="edit-symbol-form flex column gap-125">
+      <div className="edit-symbol-form-header">
+        <h2>Editar símbolo</h2>
+        <img
+          src={Close}
+          alt="Ícone 'X' popup"
+          title="Ícone 'X' popup"
+          onClick={onClose}
+        />
+      </div>
+      <br />
+      <div className="flex gap-2">
+        <Form>
+          <Input
+            type="text"
+            name="name"
+            placeholder="Usuário do sistema"
+            label="Nome"
+            autoFocus
+            {...nameEdit}
+            onInput={() => setError("")}
+            onKeyDown={(e: KeyboardEvent) => {
+              e.key === "Enter" && e.preventDefault();
+            }}
+          />
+          <Input
+            type="text"
+            name="notion"
+            placeholder="Usuário principal que irá interagir com o software"
+            label="Noção"
+            {...notionEdit}
+            onInput={() => setError("")}
+            onKeyDown={(e) => {
+              e.key === "Enter" && e.preventDefault();
+            }}
+          />
+          <Select
+            name="classification"
+            label="Classificação"
+            options={[
+              {
+                value: "Recurso",
+                label: "Recurso",
+              },
+              {
+                value: "Ator",
+                label: "Ator",
+              },
+              {
+                value: "Estado",
+                label: "Estado",
+              },
+              {
+                value: "Objeto",
+                label: "Objeto",
+              },
+            ]}
+            {...classificationEdit}
+          ></Select>
+          <AddSynonymComboBox
+            synonyms={synonymsEdit}
+            setSynonyms={setSynonymsEdit}
+          />
+          <AddImpactComboBox
+            impacts={impactsEdit}
+            setImpacts={setImpactsEdit}
+          />
+          {loading ? (
+            <Loading />
+          ) : (
+            <Button theme="primary" text="Salvar" onClick={handleSubmit} />
+          )}
+          <Error error={error} />
+        </Form>
+      </div>
+    </section>
+  );
+};
+
+export default EditSymbolForm;

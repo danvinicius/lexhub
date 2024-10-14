@@ -20,6 +20,8 @@
       align-items: flex-start;
       display: flex;
       gap: 1rem;
+      width: 100%;
+      position: relative;
       .classification {
         display: flex;
         align-items: center;
@@ -31,6 +33,13 @@
           color: #fff;
           border-radius: 20px;
         }
+      }
+
+      img.symbol-options-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        cursor: pointer;
       }
     }
   }

@@ -14,14 +14,14 @@ This platform helps software engineers and requirements engineers managing scena
 ## To do
 
 - [x] Adicionar cenários
-- [ ] Editar símbolos
+- [x] Editar símbolos
 - [x] Editar nome/descrição do projeto
-- [ ] Remover cenários
-- [ ] Remover símbolos
-- [ ] Ordenar episódios
+- [x] Remover cenários
+- [x] Remover símbolos
+- [ ] Ver a questão das restrições
 - [x] Ver atores existentes ao adicionar novo ator
 - [x] Ver recursos existentes ao adicionar novo recurso
-- [ ] Ver a questão das restrições
+- [ ] Criar e ordenar episódios
 - [ ] Adicionar usuários ao projeto
 - [ ] Checar responsividade
 - [ ] Chegar reaproveitamento de classes, componentes e hooks

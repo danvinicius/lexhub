@@ -52,7 +52,7 @@ export interface ISymbol {
   notion?: string;
   synonyms?: ISynonym[];
   impacts?: IImpact[];
-  project: IProject;
+  project: string;
 }
 
 export interface ISynonym {

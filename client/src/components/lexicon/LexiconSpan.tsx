@@ -42,7 +42,6 @@ const LexiconSpan = ({ id, name, type, children }: LexiconSpanProps) => {
       hashSpy={true}
       smooth={true}
       duration={800}
-      containerId="project"
       onClick={() => setSymbol(null)}
     >
       {name}

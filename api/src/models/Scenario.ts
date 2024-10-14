@@ -118,6 +118,7 @@ const scenarioSchema = new Schema<IScenario>(
       position: Number,
       nonSequentialEpisodes: [] as IEpisode[],
     }],
+    project: { type: Schema.Types.ObjectId, ref: 'Project' }
   },
   {
     toJSON: {
