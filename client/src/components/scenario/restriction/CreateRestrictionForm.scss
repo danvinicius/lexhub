@@ -1,0 +1,35 @@
+.create-restriction-form {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    overflow: scroll;
+    @media screen and (min-width: 998px) {
+      margin: 10% auto;
+      width: 700px;
+      padding: 2rem;
+    }
+
+    .create-restriction-form-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+
+      img {
+        cursor: pointer;
+      }
+    }
+
+    form {
+      max-height: 85vh;
+      width: 100%;
+    }
+    
+    .loading {
+      margin: 0 auto;
+    }
+  }
+  

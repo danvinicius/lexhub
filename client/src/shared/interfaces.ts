@@ -135,6 +135,7 @@ export interface ILexiconScenario {
     temporalLocation: Lexicon;
     preCondition: Lexicon;
     restrictions: {
+      id: string;
       description: Lexicon;
     }[];
   };
@@ -145,12 +146,19 @@ export interface ILexiconScenario {
     name: Lexicon;
   }[];
   resources: {
-    id: string,
+    id: string;
     name: Lexicon;
+    restrictions: {
+      id: string;
+      description: Lexicon;
+    }[];
   }[];
   episodes: {
     position: number;
-    restriction: IRestriction;
+    restriction: {
+      id: string;
+      description: Lexicon
+    };
     description: Lexicon;
   }[];
   groups: {

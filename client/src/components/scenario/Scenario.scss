@@ -53,6 +53,13 @@
       }
     }
 
+    .restrictions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      border: none;
+    }
+
     .add-restriction, .add-resource {
       text-decoration: underline;
       cursor: pointer;

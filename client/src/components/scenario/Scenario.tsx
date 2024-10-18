@@ -11,8 +11,9 @@ import { CreateResourceForm } from "./resource/CreateResourceForm";
 import { ScenarioActionsOptionsMenu } from "./ScenarioActionsOptionsMenu";
 import EditScenarioForm from "./EditScenarioForm";
 import DeleteScenarioForm from "./DeleteScenarioForm";
-import User from '../../assets/icon/User_Empty.svg'
-import Warning from '../../assets/icon/Triangle_Warning.svg'
+import User from "../../assets/icon/User_Empty.svg";
+import Warning from "../../assets/icon/Triangle_Warning.svg";
+import { CreateRestrictionForm } from "./restriction/CreateRestrictionForm";
 
 interface IScenarioProps {
   scenario: ILexiconScenario;
@@ -24,6 +25,29 @@ const Scenario = ({ scenario }: IScenarioProps) => {
 
   const [isCreateResourceModalOpen, setIsCreateResourceModalOpen] =
     useState(false);
+
+  const [isCreateRestrictionModalOpen, setIsCreateRestrictionModalOpen] =
+    useState(false);
+
+  const handleOpenCreateRestriction = (
+    resourceId?: string,
+    episodeId?: string
+  ) => {
+    setRestrictionResourceId(resourceId);
+    setRestrictionEpisodeId(episodeId);
+    setIsCreateRestrictionModalOpen(true);
+  };
+
+  const handleCloseCreateRestriction = () => {
+    setRestrictionResourceId("");
+    setRestrictionEpisodeId("");
+    setIsCreateRestrictionModalOpen(false);
+  };
+
+  const [restrictionResourceId, setRestrictionResourceId] = useState<
+    string | undefined
+  >("");
+  const [, setRestrictionEpisodeId] = useState<string | undefined>("");
 
   const [
     isScenarioActionsOptionsMenuOpen,
@@ -96,19 +120,24 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                 <td>{processContent(scenario.context?.preCondition)}</td>
                 <td>{processContent(scenario.context?.geographicLocation)}</td>
                 <td>{processContent(scenario.context?.temporalLocation)}</td>
-                <td>
-                  <ul>
-                    {scenario.context?.restrictions?.map((restriction) => {
-                      return (
-                        <li key={restriction.description.content}>
-                          {processContent(restriction.description)}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  <span className="add-restriction">
+                <td className="restrictions">
+                  <span
+                    className="add-restriction"
+                    onClick={() => handleOpenCreateRestriction()}
+                  >
                     Adicionar restrição <img src={Plus} alt="" />{" "}
                   </span>
+                  {scenario.context.restrictions.length > 0 && (
+                    <ul>
+                      {scenario.context?.restrictions?.map((restriction) => {
+                        return (
+                          <li key={restriction.description.content}>
+                            {processContent(restriction.description)}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
                 </td>
               </tr>
             </tbody>
@@ -120,7 +149,10 @@ const Scenario = ({ scenario }: IScenarioProps) => {
             <ul>
               {scenario.actors?.map((actor) => {
                 return (
-                  <li key={actor.name.content}><img src={User} alt="" />{processContent(actor.name)}</li>
+                  <li key={actor.name.content}>
+                    <img src={User} alt="" />
+                    {processContent(actor.name)}
+                  </li>
                 );
               })}
             </ul>
@@ -164,10 +196,26 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                   return (
                     <tr key={resource.name.content}>
                       <td>{processContent(resource.name)}</td>
-                      <td>
-                        <span className="add-restriction">
+                      <td className="restrictions">
+                        <span
+                          className="add-restriction"
+                          onClick={() =>
+                            handleOpenCreateRestriction(resource.id)
+                          }
+                        >
                           Adicionar restrição <img src={Plus} alt="" />{" "}
                         </span>
+                        {resource.restrictions.length > 0 && (
+                          <ul>
+                            {resource.restrictions?.map((restriction) => {
+                              return (
+                                <li key={restriction.description.content}>
+                                  {processContent(restriction.description)}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        )}
                       </td>
                     </tr>
                   );
@@ -215,6 +263,18 @@ const Scenario = ({ scenario }: IScenarioProps) => {
       >
         <CreateResourceForm
           onClose={() => setIsCreateResourceModalOpen(false)}
+          scenarioId={scenario.id}
+        />
+      </Modal>
+      <Modal
+        open={isCreateRestrictionModalOpen}
+        onClose={handleCloseCreateRestriction}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <CreateRestrictionForm
+          resourceId={restrictionResourceId}
+          onClose={handleCloseCreateRestriction}
           scenarioId={scenario.id}
         />
       </Modal>

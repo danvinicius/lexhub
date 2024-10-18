@@ -2,6 +2,7 @@ import { IsOptional, IsString } from 'class-validator';
 
 export class CreateRestrictionRequestDTO {
   @IsString()
+  @IsOptional()
   id: string;
 
   @IsString()
@@ -10,17 +11,13 @@ export class CreateRestrictionRequestDTO {
   @IsString()
   scenarioId: string;
 
-  @IsString()
-  @IsOptional()
-  episodeId: string;
-
   @IsOptional()
   @IsString()
   resourceId: string;
 
-  @IsOptional()
   @IsString()
-  contextId: string;
+  @IsOptional()
+  episodeId: string;
 
   constructor(data: any) {
     this.id = data.id;
@@ -28,6 +25,5 @@ export class CreateRestrictionRequestDTO {
     this.scenarioId = data.scenarioId;
     this.resourceId = data.resourceId;
     this.episodeId = data.episodeId;
-    this.contextId = data.contextId;
   }
 }

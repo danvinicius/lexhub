@@ -45,7 +45,7 @@ export const useLexicon = () => {
     });
 
     // Adiciona o texto restante
-    if (lastIndex < content.length) {
+    if (lastIndex < content?.length) {
       elements.push(content.substring(lastIndex));
     }
 

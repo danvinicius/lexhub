@@ -196,3 +196,16 @@ export const CREATE_RESOURCE = (projectId: string, scenarioId: string, token: st
     },
   };
 };
+
+export const CREATE_RESTRICTION = (projectId: string, scenarioId: string, token: string): RequestFormat => {  
+  return {
+    url: `/project/${projectId}/scenario/${scenarioId}/restriction`,
+    options: {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+    },
+  };
+};

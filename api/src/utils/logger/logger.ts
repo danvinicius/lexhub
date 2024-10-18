@@ -2,7 +2,7 @@ import jetLoger from 'jet-logger';
 
 export class Logger {
   static error(error: Error): void {
-    jetLoger.err(error);
+    jetLoger.err(error.stack);
   }
   static info(text: string): void {
     jetLoger.info(text);

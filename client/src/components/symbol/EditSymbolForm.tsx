@@ -65,8 +65,6 @@ const EditSymbolForm = ({
   const navigate = useNavigate();
 
   const editSymbol = async (body: EditSymbolRequestDTO) => {
-    console.log(projectId);
-    console.log(symbol.id);
     
     if (projectId && symbol?.id) {
       setLoading(true);

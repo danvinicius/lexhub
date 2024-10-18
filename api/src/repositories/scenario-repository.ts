@@ -72,7 +72,12 @@ export namespace ScenarioRepository {
 export class ScenarioRepository {
   async getScenario(id: string): Promise<IScenario | null> {
     const scenario = await Scenario.findById(id)
-      .populate('resources')
+      .populate({
+      path: 'resources', // Popula os recursos
+      populate: {
+        path: 'restrictions', // Popula as restrições dentro de cada recurso
+      },
+    })
       .populate('context.restrictions')
       .populate('episodes.restriction')
       .exec();
@@ -81,7 +86,12 @@ export class ScenarioRepository {
 
   async getAllScenarios(projectId: string): Promise<IScenario[]> {
     const scenarios = await Scenario.find({ project: projectId })
-      .populate('resources')
+      .populate({
+      path: 'resources', // Popula os recursos
+      populate: {
+        path: 'restrictions', // Popula as restrições dentro de cada recurso
+      },
+    })
       .populate('context.restrictions')
       .populate('episodes.restriction')
       .exec();
@@ -179,7 +189,7 @@ export namespace ResourceRepository {
 export class ResourceRepository {
   async getResource(id: string): Promise<IResource | null> {
     try {
-      const resource = await Resource.findById(id).exec();
+      const resource = await Resource.findById(id).populate('restrictions').exec();
       return resource?.toJSON();
     } catch (error: any) {
       throw new ServerError(error.message);
@@ -204,6 +214,7 @@ export class ResourceRepository {
     id: string,
     data: ResourceRepository.UpdateResourceParams
   ): Promise<IResource> {
+    
     try {
       await Resource.findByIdAndUpdate(id, {
         restrictions: data.restrictions
