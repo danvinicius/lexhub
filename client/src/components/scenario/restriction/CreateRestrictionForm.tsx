@@ -1,62 +1,98 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CREATE_RESTRICTION } from "../../../api";
+import { UPDATE_SCENARIO, GET_SCENARIO } from "../../../api";
 import api from "../../../lib/axios";
-import { ILexiconScenario } from "../../../shared/interfaces";
+import {
+  IActor,
+  IContext,
+  IException,
+  IResource,
+  IScenario,
+} from "../../../shared/interfaces";
 import Button from "../../forms/Button";
 import { AddRestrictionComboBox } from "./AddRestrictionComboBox";
-import { ProjectContext } from "../../../context/ProjectContext";
 import { UserContext } from "../../../context/UserContext";
 import Close from "../../../assets/icon/Close_Dark.svg";
-import './CreateRestrictionForm.scss'
+import "./CreateRestrictionForm.scss";
+import { ProjectContext } from "../../../context/ProjectContext";
 
-interface CreateRestrictionDTO {
-  id?: string;
-  description: string;
-  scenarioId: string;
-  contextId?: string;
-  resourceId?: string;
-  episodeId?: string;
+export interface EditScenarioRequestDTO {
+  title?: string;
+  goal?: string;
+  context?: IContext;
+  actors?: IActor[];
+  exceptions?: IException[];
+  resources?: IResource[];
+  projectId: string;
 }
 
 interface CreateRestrictionFormProps {
   onClose: () => void;
   scenarioId: string;
-  contextId?: string;
+  projectId: string;
   resourceId?: string;
-  episodeId?: string;
 }
 
 export const CreateRestrictionForm = ({
   onClose,
   scenarioId,
-  episodeId,
+  projectId,
   resourceId,
-  contextId
 }: CreateRestrictionFormProps) => {
+  const projectContext = useContext(ProjectContext);
   const [restrictions, setRestrictions] = useState<string[]>([]);
   const { isAuthenticated } = useContext(UserContext || {});
-  const projectContext = useContext(ProjectContext);
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (projectContext?.project && scenarioId) {
+      const scenario = projectContext.project.scenarios?.find(
+        (scenario) => scenario.id === scenarioId
+      );
+      if (scenario) {
+        let initialRestrictions;
+        if (resourceId) {
+          initialRestrictions = [
+            ...new Set(
+              scenario.resources
+                .find((resource) => resource.id == resourceId)
+                ?.restrictions?.map(
+                  (restriction) => restriction.description.content
+                ) || []
+            ),
+          ];
+        } else {
+          initialRestrictions = [
+            ...new Set(
+              scenario.context.restrictions?.map(
+                (restriction) => restriction.description.content
+              ) || []
+            ),
+          ];
+        }
+        setRestrictions(initialRestrictions);
+      }
+    }
+  }, [projectContext, resourceId, scenarioId]);
+
+  const [, setError] = useState("");
+  const [, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const createRestriction = async (body: CreateRestrictionDTO) => {
-    setLoading(true);
-    if (projectContext.project?.id) {
+  const updateScenarioWithRestriction = async (
+    body: EditScenarioRequestDTO
+  ) => {
+    if (projectId && scenarioId) {
+      setLoading(true);
       try {
-        const { url, options } = CREATE_RESTRICTION(
-          projectContext.project.id,
+        const { url, options } = UPDATE_SCENARIO(
+          projectId,
           scenarioId,
           isAuthenticated().token
         );
         await api[options.method](url, body, options);
         navigate(0);
-      } catch (err: any) {
-        console.log(error);
-        console.log(loading);
-        setError(err.response.data.error);
+      } catch (error: any) {
+        setError(error.response.data.error);
       } finally {
         setLoading(false);
       }
@@ -64,42 +100,44 @@ export const CreateRestrictionForm = ({
   };
 
   const handleAddRestrictions = async () => {
-    const existingRestrictions = [
-      ...new Set(
-        projectContext.project?.scenarios
-          ?.map((scenario: ILexiconScenario) => scenario.context.restrictions)
-          .flat()
-      ),
-    ];
-    const mappedRestrictions: CreateRestrictionDTO[] = [];
-    restrictions.map((restriction) => {
-      const existingRestriction = existingRestrictions.find(
-        (existingRestriction) => existingRestriction.description.content == restriction
-      );
-      if (existingRestriction) {
-        mappedRestrictions.push({
-          id: existingRestriction.id,
-          description: restriction,
-          scenarioId,
-          contextId,
-          resourceId,
-          episodeId,
-        });
-      } else {
-        mappedRestrictions.push({
-          description: restriction,
-          scenarioId,
-          contextId,
-          resourceId,
-          episodeId,
-        });
-      }
-    });
-    await Promise.all(
-      mappedRestrictions.map((restriction) => {
-        createRestriction(restriction);
-      })
+    const { url, options } = GET_SCENARIO(
+      projectId,
+      scenarioId,
+      isAuthenticated().token
     );
+    const response = await api[options.method](url, options);
+    const originalScenario: IScenario = response.data;
+    if (resourceId) {
+      const updatedResources = originalScenario.resources?.map((resource) => {
+        if (resource.id == resourceId) {
+          return {
+            ...resource,
+            restrictions: [...restrictions.map((restriction) => ({
+              description: restriction,
+            }))],
+          };
+        }
+        return resource;
+      });
+
+      await updateScenarioWithRestriction({
+        ...originalScenario,
+        resources: updatedResources,
+        projectId: originalScenario.project,
+      });
+      return;
+    }
+    const updatedContext = {
+      ...originalScenario.context,
+      restrictions: restrictions.map((restriction) => ({
+        description: restriction,
+      })),
+    };
+    await updateScenarioWithRestriction({
+      ...originalScenario,
+      context: updatedContext,
+      projectId: originalScenario.project,
+    });
   };
   return (
     <section className="create-restriction-form flex column gap-125">
@@ -112,17 +150,14 @@ export const CreateRestrictionForm = ({
           onClick={onClose}
         />
       </div>
-      <br />
+      {!resourceId && <p>Adicione uma restrição a este contexto</p>}
+      {resourceId && <p>Adicione uma restrição a este recurso</p>}
       <AddRestrictionComboBox
+      scenarioId={scenarioId}
         restrictions={restrictions}
         setRestrictions={setRestrictions}
-        currentScenarioId={scenarioId}
       />
-      <Button
-        text="Adicionar restrições"
-        theme="secondary"
-        onClick={handleAddRestrictions}
-      />
+      <Button text="Salvar" theme="secondary" onClick={handleAddRestrictions} />
     </section>
   );
 };

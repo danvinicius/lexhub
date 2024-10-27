@@ -68,6 +68,18 @@ export const GET_PROJECT = (id: string, token: string): RequestFormat => {
   };
 };
 
+export const GET_SCENARIO = (projectId: string, scenarioId: string, token: string): RequestFormat => {
+  return {
+    url: `/project/${projectId}/scenario/${scenarioId}`,
+    options: {
+      method: "get",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    },
+  };
+};
+
 export const CREATE_PROJECT = (token: string): RequestFormat => {  
   return {
     url: `/project`,
@@ -81,7 +93,7 @@ export const CREATE_PROJECT = (token: string): RequestFormat => {
   };
 };
 
-export const EDIT_PROJECT = (id: string, token: string): RequestFormat => {  
+export const UPDATE_PROJECT = (id: string, token: string): RequestFormat => {  
   return {
     url: `/project/${id}`,
     options: {
@@ -158,7 +170,7 @@ export const CREATE_SCENARIO = (projectId: string, token: string): RequestFormat
   };
 };
 
-export const EDIT_SCENARIO = (projectId: string, scenarioId: string, token: string): RequestFormat => {  
+export const UPDATE_SCENARIO = (projectId: string, scenarioId: string, token: string): RequestFormat => {  
   return {
     url: `/project/${projectId}/scenario/${scenarioId}`,
     options: {
@@ -171,7 +183,7 @@ export const EDIT_SCENARIO = (projectId: string, scenarioId: string, token: stri
   };
 };
 
-export const EDIT_SYMBOL = (projectId: string, symbolId: string, token: string): RequestFormat => {  
+export const UPDATE_SYMBOL = (projectId: string, symbolId: string, token: string): RequestFormat => {  
   return {
     url: `/project/${projectId}/symbol/${symbolId}`,
     options: {

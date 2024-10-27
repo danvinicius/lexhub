@@ -16,6 +16,10 @@ export interface IException {
   description: string;
 }
 
+export interface IRestriction {
+  description: string;
+}
+
 export interface IActor {
   name: string;
 }
@@ -32,11 +36,6 @@ export interface IEpisode {
   description: string;
   type: string;
   restriction?: IRestriction;
-}
-
-export interface IRestriction {
-  readonly id?: string;
-  description: string;
 }
 
 export interface IResource {
@@ -59,65 +58,16 @@ export interface IScenario {
   project: IProject;
 }
 
-const restrictionSchema = new Schema<IRestriction>(
-  {
-    description: String,
-  },
-  {
-    toJSON: {
-      transform: (_, ret): void => {
-        ret.id = ret._id.toString();
-        delete ret._id;
-        delete ret.__v;
-      },
-    },
-    timestamps: true,
-  }
-);
-
-const resourceSchema = new Schema<IResource>(
-  {
-    name: String,
-    restrictions: [{ type: Schema.Types.ObjectId, ref: 'Restriction' }],
-    scenarios: [{ type: Schema.Types.ObjectId, ref: 'Scenario' }],
-  },
-  {
-    toJSON: {
-      transform: (_, ret): void => {
-        ret.id = ret._id.toString();
-        delete ret._id;
-        delete ret.__v;
-      },
-    },
-    timestamps: true,
-  }
-);
-
 const scenarioSchema = new Schema<IScenario>(
   {
     title: String,
     goal: String,
     exceptions: [] as IException[],
     actors: [] as IActor[],
-    resources: [{ type: Schema.Types.ObjectId, ref: 'Resource' }],
-    context: {
-      geographicLocation: String,
-      temporalLocation: String,
-      preCondition: String,
-      restrictions: [{ type: Schema.Types.ObjectId, ref: 'Restriction' }],
-    },
-    episodes: [
-      {
-        position: Number,
-        description: String,
-        type: String,
-        restriction: { type: Schema.Types.ObjectId, ref: 'Restriction' },
-      },
-    ],
-    groups: [{
-      position: Number,
-      nonSequentialEpisodes: [] as IEpisode[],
-    }],
+    resources: [] as IResource[],
+    context: {} as IContext,
+    episodes: [] as IEpisode[],
+    groups: [] as IGroup[],
     project: { type: Schema.Types.ObjectId, ref: 'Project' }
   },
   {
@@ -131,11 +81,5 @@ const scenarioSchema = new Schema<IScenario>(
     timestamps: true,
   }
 );
-
-const Resource = model('Resource', resourceSchema);
-
-const Restriction = model('Restriction', restrictionSchema);
-
-export { Resource, Restriction };
 
 export default model('Scenario', scenarioSchema);

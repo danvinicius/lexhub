@@ -1,30 +1,38 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import { ProjectContext } from "../../../context/ProjectContext";
-import { ILexiconScenario } from "../../../shared/interfaces";
 
 interface AddResourceComboBoxProps {
+  scenarioId: string;
   resources: string[];
   setResources: React.Dispatch<React.SetStateAction<string[]>>;
-  currentScenarioId: string
 }
 
 export const AddResourceComboBox = ({
+  scenarioId,
   resources,
   setResources,
-  currentScenarioId
 }: AddResourceComboBoxProps) => {
   const projectContext = useContext(ProjectContext);
 
-  const [localOptions, setLocalOptions] = useState([
-    ...new Set(
-      projectContext.project?.scenarios?.filter(scenario => scenario.id !== currentScenarioId)
-        ?.map((scenario: ILexiconScenario) =>
-          scenario.resources.map((resource) => resource.name.content)
-        )
-        .flat()
-    ),
-  ]);
+  const [localOptions, setLocalOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const updatedOptions = [
+      ...new Set(
+        projectContext.project?.scenarios
+          ?.filter((scenario) => scenario.id !== scenarioId)
+          .map((scenario) =>
+            scenario.resources
+              .map((resource) => resource.name.content)
+              .filter((exceptionName) => !resources.includes(exceptionName))
+          )
+          .flat()
+      ),
+    ];
+
+    setLocalOptions(updatedOptions);
+  }, [resources, scenarioId, projectContext.project?.scenarios]);
 
   const handleAddResource = (newResources: string[]) => {
     setResources(newResources);
@@ -57,17 +65,17 @@ export const AddResourceComboBox = ({
                   border: "1px solid var(--secondary-text-color)",
                 },
                 "&.Mui-focused fieldset": {
-                  border: "1px solid var(--primary-color)",
+                  border: "1px solid var(--primary-text-color)",
                 },
-                '& input': {
-                  padding: '0.5rem 1rem',
+                "& input": {
+                  padding: "0.5rem 1rem",
                 },
               },
-              '& .MuiInputLabel-outlined': {
-                color: 'var(--primary-text-color)',
+              "& .MuiInputLabel-outlined": {
+                color: "var(--primary-text-color)",
               },
-              '& .MuiInputLabel-outlined.Mui-focused': {
-                color: 'var(--primary-text-color)',
+              "& .MuiInputLabel-outlined.Mui-focused": {
+                color: "var(--primary-text-color)",
               },
             }}
           />

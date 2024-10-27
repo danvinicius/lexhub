@@ -1,28 +1,38 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import { ProjectContext } from "../../../context/ProjectContext";
-import { ILexiconScenario } from "../../../shared/interfaces";
 
 interface AddExceptionComboBoxProps {
+  scenarioId?: string;
   exceptions: string[];
   setExceptions: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const AddExceptionComboBox = ({
+  scenarioId,
   exceptions,
   setExceptions,
 }: AddExceptionComboBoxProps) => {
   const projectContext = useContext(ProjectContext);
 
-  const [localOptions, setLocalOptions] = useState([
-    ...new Set(
-      projectContext.project?.scenarios
-        ?.map((scenario: ILexiconScenario) =>
-          scenario.exceptions.map((exception) => exception.description.content)
-        )
-        .flat()
-    ),
-  ]);
+  const [localOptions, setLocalOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const updatedOptions = [
+      ...new Set(
+        projectContext.project?.scenarios
+          ?.filter((scenario) => scenario.id !== scenarioId)
+          .map((scenario) =>
+            scenario.exceptions
+              .map((actor) => actor.description.content)
+              .filter((exceptionDescription) => !exceptions.includes(exceptionDescription))
+          )
+          .flat()
+      ),
+    ];
+
+    setLocalOptions(updatedOptions);
+  }, [exceptions, scenarioId, projectContext.project?.scenarios]);
 
   const handleAddException = (newExceptions: string[]) => {
     setExceptions(newExceptions);
@@ -31,9 +41,6 @@ export const AddExceptionComboBox = ({
   return (
     <div className="exceptions">
       <p>Exceções</p>
-      <br />
-      <br />
-      <br />
       <Autocomplete
         multiple
         freeSolo
@@ -49,7 +56,7 @@ export const AddExceptionComboBox = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Exceções"
+            placeholder="Cadastre ou remova exceções ('Enter' para salvar)"
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {

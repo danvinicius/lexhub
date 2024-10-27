@@ -140,7 +140,7 @@ const CreateScenarioForm = ({ onClose }: CreateScenarioFormProps) => {
             }}
             {...goal}
           />
-          <AddActorComboBox actors={actors} setActors={setActors} />
+          <AddActorComboBox actors={actors} setActors={setActors}/>
           <AddExceptionComboBox
             exceptions={exceptions}
             setExceptions={setExceptions}

@@ -6,14 +6,14 @@ import { useEffect, useRef } from "react";
 interface ProjectActionsOptionsMenuProps {
     isProjectActionsOptionsMenu: boolean;
     setIsProjectActionsOptionsMenu:  React.Dispatch<React.SetStateAction<boolean>>;
-  handleOpenEditProjectModal: () => void;
-  handleCloseEditProjectModal: () => void;
+  handleOpenUpdateProjectModal: () => void;
+  handleCloseUpdateProjectModal: () => void;
   handleOpenDeleteProjectModal: () => void;
 }
 
 export const ProjectActionsOptionsMenu = ({
-  handleOpenEditProjectModal,
-  handleCloseEditProjectModal,
+  handleOpenUpdateProjectModal,
+  handleCloseUpdateProjectModal,
   setIsProjectActionsOptionsMenu,
   isProjectActionsOptionsMenu,
   handleOpenDeleteProjectModal,
@@ -37,14 +37,14 @@ export const ProjectActionsOptionsMenu = ({
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);
       };
-    }, [handleCloseEditProjectModal, isProjectActionsOptionsMenu, setIsProjectActionsOptionsMenu]);
+    }, [handleCloseUpdateProjectModal, isProjectActionsOptionsMenu, setIsProjectActionsOptionsMenu]);
   
     if (!isProjectActionsOptionsMenu) return null;
 
   return (
     <div className="project-actions-options-menu" ref={popupRef}>
       <ul>
-        <li onClick={handleOpenEditProjectModal} key='edit-project'>
+        <li onClick={handleOpenUpdateProjectModal} key='update-project'>
           <img src={EditPen} alt="Editar projeto" />
           Editar projeto
         </li>

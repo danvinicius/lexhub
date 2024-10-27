@@ -19,12 +19,6 @@ export const scenarioRouter = async (
     observerMiddleware,
     responseHandler(controller.getScenario)
   );
-  // router.get(
-  //   '/project/:projectId/scenario/:id/with-lexicons',
-  //   authMiddleware,
-  //   observerMiddleware,
-  //   responseHandler(controller.getScenarioWithLexicons)
-  // );
   router.post(
     '/project/:projectId/scenario',
     authMiddleware,
@@ -37,18 +31,6 @@ export const scenarioRouter = async (
     collabMiddleware,
     responseHandler(controller.createManyScenarios)
   );
-  router.post(
-    '/project/:projectId/scenario/:scenarioId/resource',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.createResource)
-  );
-  router.post(
-    '/project/:projectId/scenario/:scenarioId/restriction',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.createRestriction)
-  );
   router.patch(
     '/project/:projectId/scenario/:id',
     authMiddleware,
@@ -60,17 +42,5 @@ export const scenarioRouter = async (
     authMiddleware,
     collabMiddleware,
     responseHandler(controller.deleteScenario)
-  );
-  router.delete(
-    '/project/:projectId/resource/:resourceId',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.deleteResource)
-  );
-  router.delete(
-    '/project/:projectId/restriction/:restrictionId',
-    authMiddleware,
-    collabMiddleware,
-    responseHandler(controller.deleteRestriction)
   );
 };

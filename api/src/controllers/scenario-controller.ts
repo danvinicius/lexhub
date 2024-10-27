@@ -39,18 +39,6 @@ export class ScenarioController {
       return serverError(error.message);
     }
   };
-  // public getScenarioWithLexicons = async (req: Request) => {
-  //   try {
-  //     const { id } = req.params;
-  //     const scenario = await scenarioService.getScenarioWithLexicon(id);
-  //     return ok(scenario);
-  //   } catch (error: any) {
-  //     if (error instanceof NotFoundError) {
-  //       return notFound(error.message);
-  //     }
-  //     return serverError(error.message);
-  //   }
-  // };
   public createScenario = async (req: Request) => {
     try {
       const scenario = new DTO.CreateScenarioRequestDTO({
@@ -81,60 +69,6 @@ export class ScenarioController {
       if (error instanceof BadRequestError) {
         return badRequest(error.message);
       }
-      return serverError(error.message);
-    }
-  };
-  public createRestriction = async (req: Request) => {
-    try {
-      const restriction = new DTO.CreateRestrictionRequestDTO({
-        ...req.body,
-        scenarioId: req.params.scenarioId,
-      });
-      await validate(restriction);
-      await scenarioService.createRestriction(restriction);
-      return created({ message: 'Restriction created' });
-    } catch (error: any) {
-      if (
-        error instanceof BadRequestError
-      ) {
-        return badRequest(error.message);
-      }
-      return serverError(error.message);
-    }
-  };
-  public createResource = async (req: Request) => {
-    try {
-      const resource = new DTO.CreateResourceRequestDTO({
-        ...req.body,
-        scenarioId: req.params.scenarioId,
-      });
-      await validate(resource);
-      await scenarioService.createResource(resource);
-      return created({ message: 'Resource created' });
-    } catch (error: any) {
-      if (
-        error instanceof BadRequestError
-      ) {
-        return badRequest(error.message);
-      }
-      return serverError(error.message);
-    }
-  };
-  public deleteRestriction = async (req: Request) => {
-    try {
-      const { restrictionId } = req.params;
-      await scenarioService.deleteRestriction(restrictionId);
-      return ok({ message: 'Restriction deleted' });
-    } catch (error: any) {
-      return serverError(error.message);
-    }
-  };
-  public deleteResource = async (req: Request) => {
-    try {
-      const { resourceId } = req.params;
-      await scenarioService.deleteResource(resourceId);
-      return ok({ message: 'Resource deleted' });
-    } catch (error: any) {
       return serverError(error.message);
     }
   };

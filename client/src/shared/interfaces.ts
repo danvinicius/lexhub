@@ -8,7 +8,7 @@ export interface IScenario {
   context?: IContext;
   episodes?: IEpisode[];
   groups?: IGroup[];
-  project: IProject;
+  project: string;
 }
 
 export interface IUser {
@@ -56,12 +56,10 @@ export interface ISymbol {
 }
 
 export interface ISynonym {
-  readonly id?: string;
   name: string;
 }
 
 export interface IImpact {
-  readonly id?: string;
   description: string;
 }
 
@@ -80,15 +78,13 @@ export interface IEpisode {
 }
 
 export interface IRestriction {
-  readonly id?: string;
   description: string;
 }
 
 export interface IContext {
-  readonly id?: string;
-  geographicLocation: string;
-  temporalLocation: string;
-  preCondition: string;
+  geographicLocation?: string;
+  temporalLocation?: string;
+  preCondition?: string;
   restrictions?: IRestriction[];
 }
 
@@ -98,7 +94,6 @@ export interface INonSequentialEpisode extends IEpisode {
 }
 
 export interface IActor {
-  readonly id?: string;
   name: string;
 }
 
@@ -109,7 +104,6 @@ export interface IResource {
 }
 
 export interface IException {
-  readonly id?: string;
   description: string;
 }
 

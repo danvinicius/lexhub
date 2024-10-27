@@ -1,7 +1,5 @@
 import {
   CreateManyScenariosRequestDTO,
-  CreateResourceRequestDTO,
-  CreateRestrictionRequestDTO,
   CreateScenarioRequestDTO,
   UpdateScenarioRequestDTO,
 } from '@/infra/http/dtos';
@@ -18,20 +16,14 @@ import {
   INonSequentialEpisode,
 } from '@/models';
 import {
-  ResourceRepository,
-  RestrictionRepository,
   ScenarioRepository,
   SymbolRepository,
 } from '@/repositories';
 import { BadRequestError, NotFoundError } from '@/utils/errors';
-import { Logger } from '@/utils/logger/logger';
 import { normalize } from '@/utils/string/normalize';
-import mongoose from 'mongoose';
 
 const symbolRepository = new SymbolRepository();
 const scenarioRepository = new ScenarioRepository();
-const restrictionRepository = new RestrictionRepository();
-const resourceRepository = new ResourceRepository();
 
 export interface Lexicon {
   resource: string;
@@ -65,7 +57,6 @@ export interface ILexiconScenario {
       foundLexicons: Lexicon[];
     };
     restrictions: {
-      id: string;
       description: {
         content: string;
         foundLexicons: Lexicon[];
@@ -90,7 +81,6 @@ export interface ILexiconScenario {
       foundLexicons: Lexicon[];
     };
     restrictions: {
-      id: string;
       description: {
         content: string;
         foundLexicons: Lexicon[];
@@ -100,7 +90,6 @@ export interface ILexiconScenario {
   episodes: {
     position: number;
     restriction: {
-      id: string;
       description: {
         content: string;
         foundLexicons: Lexicon[];
@@ -131,101 +120,8 @@ export class ScenarioService {
     return await scenarioRepository.createManyScenarios(data);
   }
 
-  async createResource(resource: CreateResourceRequestDTO) {
-    try {
-      const scenario = await scenarioRepository.getScenario(
-        resource.scenarioId
-      );
-      let newResource: IResource;
-      if (resource?.id) {
-        newResource = await resourceRepository.getResource(resource.id);
-        if (!newResource) {
-          throw new BadRequestError('Recurso inválido ou inexistente');
-        }
-      } else {
-        newResource = await resourceRepository.createResource(resource);
-      }
-      
-      await scenarioRepository.updateScenario(scenario.id, {
-        ...scenario,
-        context: {
-          ...scenario.context,
-          restrictions: scenario.context.restrictions?.map(
-            (r) => r.id
-          ) as any[],
-        },
-        resources: [
-          ...scenario.resources?.map((resource) => resource.id),
-          newResource.id,
-        ] as any,
-      });
-    } catch (error) {
-      Logger.error(error);
-    }
-  }
-
-  async createRestriction(restriction: CreateRestrictionRequestDTO) {
-    try {
-      const scenario = await scenarioRepository.getScenario(
-        restriction.scenarioId
-      );
-      let newRestriction: IRestriction;
-      if (newRestriction?.id) {
-        newRestriction = await restrictionRepository.getRestriction(
-          restriction.id
-        );
-        if (newRestriction) {
-          throw new BadRequestError('Restrição inválida ou inexistente');
-        }
-      } else {
-        newRestriction =
-          await restrictionRepository.createRestriction(restriction);
-      }
-
-      let updatedContext: any;
-
-      if (!restriction.resourceId && !restriction.episodeId) {
-        updatedContext = {
-          ...scenario.context,
-          restrictions: [
-            ...scenario.context.restrictions?.map((r) => r.id),
-            newRestriction.id,
-          ],
-        };
-      }
-      if (restriction.resourceId) {
-        const resource = await resourceRepository.getResource(
-          restriction.resourceId
-        );
-        
-        await resourceRepository.updateResource(resource.id, {
-          ...resource,
-          restrictions: [
-            ...resource.restrictions?.map((r) => r?.id),
-            newRestriction.id,
-          ],
-        });
-      }
-      await scenarioRepository.updateScenario(scenario.id, {
-        ...scenario,
-        resources: scenario.resources?.map((resource) => resource.id) as any,
-        context: updatedContext,
-      });
-    } catch (error) {
-      Logger.error(error);
-    }
-  }
-
   async createScenario(scenario: CreateScenarioRequestDTO): Promise<IScenario> {
     return await scenarioRepository.createScenario(scenario);
-  }
-
-  async deleteResource(id: string): Promise<void> {
-    return await resourceRepository.deleteResource(id);
-  }
-
-  async deleteRestriction(id: string): Promise<void> {
-    return await restrictionRepository.deleteRestriction(id);
   }
 
   async deleteScenario(id: string): Promise<void> {
@@ -294,7 +190,6 @@ export class ScenarioService {
 
     const processedLexicon = (content: string, searchOtherScenarios: boolean) =>
       this.processLexicon(content, symbols, scenarios, searchOtherScenarios);
-
     return {
       id: scenario.id,
       title: processedLexicon(title, false),
@@ -304,7 +199,6 @@ export class ScenarioService {
         temporalLocation: processedLexicon(temporalLocation, false),
         preCondition: processedLexicon(preCondition, true),
         restrictions: restrictions?.map((restriction: IRestriction) => ({
-          id: restriction.id,
           description: processedLexicon(restriction.description, true),
         })),
       },
@@ -319,7 +213,6 @@ export class ScenarioService {
         name: processedLexicon(resource.name, false),
         restrictions: resource.restrictions?.map(
           (restriction: IRestriction) => ({
-            id: restriction.id,
             description: processedLexicon(restriction.description, true),
           })
         ),
@@ -327,7 +220,6 @@ export class ScenarioService {
       episodes: episodes?.map((episode: IEpisode) => ({
         position: episode.position,
         restriction: {
-          id: episode.restriction.id,
           description: processedLexicon(episode.restriction.description, true),
         },
         description: processedLexicon(episode.description, false),

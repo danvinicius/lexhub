@@ -1,19 +1,31 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+
 import { useNavigate } from "react-router-dom";
-import { CREATE_RESOURCE } from "../../../api";
+import { GET_SCENARIO, UPDATE_SCENARIO } from "../../../api";
 import api from "../../../lib/axios";
-import { ILexiconScenario } from "../../../shared/interfaces";
+import {
+  IActor,
+  IContext,
+  IException,
+  IResource,
+  IScenario,
+} from "../../../shared/interfaces";
 import Button from "../../forms/Button";
 import { AddResourceComboBox } from "./AddResourceComboBox";
 import { ProjectContext } from "../../../context/ProjectContext";
 import { UserContext } from "../../../context/UserContext";
 import Close from "../../../assets/icon/Close_Dark.svg";
-import './CreateResourceForm.scss'
+import "./CreateResourceForm.scss";
 
-interface CreateResourceDTO {
-  id?: string;
-  name: string;
-  scenarioId: string;
+export interface EditScenarioRequestDTO {
+  title: string;
+  goal: string;
+  context: IContext;
+  resources: IResource[];
+  actors: IActor[];
+  exceptions: IException[];
+  projectId: string;
 }
 
 interface CreateResourceFormProps {
@@ -25,19 +37,34 @@ export const CreateResourceForm = ({
   onClose,
   scenarioId,
 }: CreateResourceFormProps) => {
-  const [resources, setResources] = useState<string[]>([]);
-  const { isAuthenticated } = useContext(UserContext || {});
   const projectContext = useContext(ProjectContext);
+  const [resources, setResources] = useState<string[]>([]);
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (projectContext?.project && scenarioId) {
+      const scenario = projectContext.project.scenarios?.find(
+        (scenario) => scenario.id === scenarioId
+      );
+      if (scenario) {
+        const initialResources = scenario.resources.map(
+          (resource) => resource.name.content
+        );
+        setResources(initialResources);
+      }
+    }
+  }, [projectContext, scenarioId]);
+
+  const { isAuthenticated } = useContext(UserContext || {});
+
+  const [, setError] = useState("");
+  const [, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const createResource = async (body: CreateResourceDTO) => {
+  const updateScenarioWithResources = async (body: EditScenarioRequestDTO) => {
     setLoading(true);
     if (projectContext.project?.id) {
       try {
-        const { url, options } = CREATE_RESOURCE(
+        const { url, options } = UPDATE_SCENARIO(
           projectContext.project.id,
           scenarioId,
           isAuthenticated().token
@@ -45,8 +72,6 @@ export const CreateResourceForm = ({
         await api[options.method](url, body, options);
         navigate(0);
       } catch (err: any) {
-        console.log(error);
-        console.log(loading);
         setError(err.response.data.error);
       } finally {
         setLoading(false);
@@ -55,36 +80,27 @@ export const CreateResourceForm = ({
   };
 
   const handleAddResources = async () => {
-    const existingResources = [
-      ...new Set(
-        projectContext.project?.scenarios
-          ?.map((scenario: ILexiconScenario) => scenario.resources)
-          .flat()
-      ),
-    ];
-    const mappedResources: CreateResourceDTO[] = [];
-    resources.map((resource) => {
-      const existingResource = existingResources.find(
-        (existingResource) => existingResource.name.content == resource
-      );
-      if (existingResource) {
-        mappedResources.push({
-          id: existingResource.id,
-          name: resource,
-          scenarioId: scenarioId,
-        });
-      } else {
-        mappedResources.push({
-          name: resource,
-          scenarioId: scenarioId,
-        });
-      }
-    });
-    await Promise.all(
-      mappedResources.map((resource) => {
-        createResource(resource);
-      })
+    const { url, options } = GET_SCENARIO(
+      projectContext.project?.id || "",
+      scenarioId,
+      isAuthenticated().token
     );
+    const response = await api[options.method](url, options);
+    const originalScenario: IScenario = response.data;
+
+    await updateScenarioWithResources({
+      title: originalScenario.title,
+      goal: originalScenario.goal,
+      actors: originalScenario.actors || [],
+      exceptions: originalScenario.exceptions || [],
+      context: originalScenario.context || {},
+      projectId: projectContext.project?.id || "",
+      resources: resources.map((resource) => ({
+        id:  uuidv4(),
+        name: resource,
+        restrictions: originalScenario.resources?.find(r => r.name == resource)?.restrictions
+      })),
+    });
   };
   return (
     <section className="create-resource-form flex column gap-125">
@@ -97,14 +113,14 @@ export const CreateResourceForm = ({
           onClick={onClose}
         />
       </div>
-      <br />
+      <p>Adicione um recurso a este cenário</p>
       <AddResourceComboBox
         resources={resources}
         setResources={setResources}
-        currentScenarioId={scenarioId}
+        scenarioId={scenarioId}
       />
       <Button
-        text="Adicionar recurso(s)"
+        text="Salvar"
         theme="secondary"
         onClick={handleAddResources}
       />

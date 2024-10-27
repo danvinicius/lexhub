@@ -1,13 +1,10 @@
 import Project from '@/models/Project';
 import Scenario, {
   IScenario,
-  IResource,
-  Restriction,
-  Resource,
   IActor,
   IContext,
   IException,
-  IRestriction,
+  IResource,
 } from '@/models/Scenario';
 import { ServerError } from '@/utils/errors';
 
@@ -65,7 +62,7 @@ export namespace ScenarioRepository {
     context?: IContext;
     actors?: IActor[];
     exceptions?: IException[];
-    resources?: string[];
+    resources?: IResource[];
   }
 }
 
@@ -152,6 +149,8 @@ export class ScenarioRepository {
     id: string,
     data: ScenarioRepository.UpdateScenarioParams
   ): Promise<IScenario> {
+    console.log(data);
+    
     try {
       await Scenario.findByIdAndUpdate(id, {
         title: data.title,
@@ -170,103 +169,6 @@ export class ScenarioRepository {
   async deleteScenario(id: string): Promise<void> {
     try {
       await Scenario.findByIdAndDelete(id);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-}
-
-export namespace ResourceRepository {
-  export interface CreateResourceParams {
-    name: string;
-  }
-
-  export interface UpdateResourceParams {
-    restrictions: string[];
-  }
-}
-
-export class ResourceRepository {
-  async getResource(id: string): Promise<IResource | null> {
-    try {
-      const resource = await Resource.findById(id).populate('restrictions').exec();
-      return resource?.toJSON();
-    } catch (error: any) {
-      throw new ServerError(error.message);
-    }
-  }
-
-  async createResource(
-    data: ResourceRepository.CreateResourceParams
-  ): Promise<IResource> {
-    try {
-      const resource = new Resource({
-        name: data.name,
-      });
-      await resource.save();
-      return resource.toJSON();
-    } catch (error: any) {
-      throw new ServerError(error.message);
-    }
-  }
-
-  async updateResource(
-    id: string,
-    data: ResourceRepository.UpdateResourceParams
-  ): Promise<IResource> {
-    
-    try {
-      await Resource.findByIdAndUpdate(id, {
-        restrictions: data.restrictions
-      });
-      return await this.getResource(id);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-
-  async deleteResource(id: string): Promise<void> {
-    try {
-      await Resource.findByIdAndDelete(id);
-    } catch (error) {
-      throw new Error(error.message);
-    }
-  }
-}
-
-export namespace RestrictionRepository {
-  export interface CreateRestrictionParams {
-    description: string;
-  }
-}
-
-export class RestrictionRepository {
-  async getRestriction(id: string): Promise<IRestriction | null> {
-    try {
-      const restriction = await Restriction.findById(id).exec();
-      return restriction?.toJSON();
-    } catch (error: any) {
-      throw new ServerError(error.message);
-    }
-  }
-
-  async createRestriction(
-    data: RestrictionRepository.CreateRestrictionParams
-  ): Promise<IRestriction> {
-    try {
-      const restriction = new Restriction({
-        description: data.description,
-      });
-      await restriction.save();
-      return await this.getRestriction(restriction.id);
-    } catch (error: any) {
-      throw new ServerError(error.message);
-    }
-  }
-
-  async deleteRestriction(id: string): Promise<void> {
-    try {
-      await Restriction.findByIdAndDelete(id);
     } catch (error) {
       throw new Error(error.message);
     }

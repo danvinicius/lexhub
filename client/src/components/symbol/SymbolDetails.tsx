@@ -4,7 +4,7 @@ import "./SymbolDetails.scss";
 import KebabVertical from "../../assets/icon/Kebab_Vertical.svg";
 import { SymbolActionsOptionsMenu } from "./SymbolActionsOptionsMenu";
 import { Modal } from "@mui/material";
-import EditSymbolForm from "./EditSymbolForm";
+import UpdateSymbolForm from "./UpdateSymbolForm";
 import DeleteSymbolForm from "./DeleteSymbolForm";
 
 interface SymbolDetailsProps {
@@ -15,10 +15,10 @@ interface SymbolDetailsProps {
 const SymbolDetails = ({ symbol, style }: SymbolDetailsProps) => {
   const [isSymbolActionsOptionsMenuOpen, setIsSymbolActionsOptionsMenuOpen] =
     useState(false);
-  const [isEditSymbolModalOpen, setIsEditSymbolModalOpen] = useState(false);
+  const [isUpdateSymbolModalOpen, setIsUpdateSymbolModalOpen] = useState(false);
   const [isDeleteSymbolModalOpen, setIsDeleteSymbolModalOpen] = useState(false);
-  const handleOpenEditSymbolModal = () => setIsEditSymbolModalOpen(true);
-  const handleCloseEditSymbolModal = () => setIsEditSymbolModalOpen(false);
+  const handleOpenUpdateSymbolModal = () => setIsUpdateSymbolModalOpen(true);
+  const handleCloseUpdateSymbolModal = () => setIsUpdateSymbolModalOpen(false);
   const handleOpenDeleteSymbolModal = () => setIsDeleteSymbolModalOpen(true);
   const handleCloseDeleteSymbolModal = () => setIsDeleteSymbolModalOpen(false);
   return (
@@ -38,8 +38,8 @@ const SymbolDetails = ({ symbol, style }: SymbolDetailsProps) => {
           <div className="symbol-options">
             {isSymbolActionsOptionsMenuOpen && (
               <SymbolActionsOptionsMenu
-                handleOpenEditSymbolModal={handleOpenEditSymbolModal}
-                handleCloseEditSymbolModal={handleCloseEditSymbolModal}
+                handleOpenUpdateSymbolModal={handleOpenUpdateSymbolModal}
+                handleCloseUpdateSymbolModal={handleCloseUpdateSymbolModal}
                 setIsSymbolActionsOptionsMenuOpen={
                   setIsSymbolActionsOptionsMenuOpen
                 }
@@ -76,13 +76,13 @@ const SymbolDetails = ({ symbol, style }: SymbolDetailsProps) => {
         )}
       </div>
       <Modal
-        open={isEditSymbolModalOpen}
-        onClose={handleCloseEditSymbolModal}
+        open={isUpdateSymbolModalOpen}
+        onClose={handleCloseUpdateSymbolModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <EditSymbolForm
-          onClose={handleCloseEditSymbolModal}
+        <UpdateSymbolForm
+          onClose={handleCloseUpdateSymbolModal}
           symbol={symbol ? symbol : ({} as ISymbol)}
           projectId={symbol.project || ''}
         />

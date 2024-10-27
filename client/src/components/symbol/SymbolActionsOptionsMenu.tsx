@@ -6,14 +6,14 @@ import { useEffect, useRef } from "react";
 interface SymbolActionsOptionsMenuProps {
     isSymbolActionsOptionsMenuOpen: boolean;
     setIsSymbolActionsOptionsMenuOpen:  React.Dispatch<React.SetStateAction<boolean>>;
-  handleOpenEditSymbolModal: () => void;
-  handleCloseEditSymbolModal: () => void;
+  handleOpenUpdateSymbolModal: () => void;
+  handleCloseUpdateSymbolModal: () => void;
   handleOpenDeleteSymbolModal: () => void;
 }
 
 export const SymbolActionsOptionsMenu = ({
-  handleOpenEditSymbolModal,
-  handleCloseEditSymbolModal,
+  handleOpenUpdateSymbolModal,
+  handleCloseUpdateSymbolModal,
   setIsSymbolActionsOptionsMenuOpen,
   isSymbolActionsOptionsMenuOpen,
   handleOpenDeleteSymbolModal,
@@ -37,14 +37,14 @@ export const SymbolActionsOptionsMenu = ({
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);
       };
-    }, [handleCloseEditSymbolModal, isSymbolActionsOptionsMenuOpen, setIsSymbolActionsOptionsMenuOpen]);
+    }, [handleCloseUpdateSymbolModal, isSymbolActionsOptionsMenuOpen, setIsSymbolActionsOptionsMenuOpen]);
   
     if (!isSymbolActionsOptionsMenuOpen) return null;
 
   return (
     <div className="symbol-actions-options-menu" ref={popupRef}>
       <ul>
-        <li onClick={handleOpenEditSymbolModal} key='edit-symbol'>
+        <li onClick={handleOpenUpdateSymbolModal} key='update-symbol'>
           <img src={EditPen} alt="Editar símbolo" />
           Editar símbolo
         </li>

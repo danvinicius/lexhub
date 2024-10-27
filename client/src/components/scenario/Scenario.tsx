@@ -5,15 +5,17 @@ import { EpisodesList } from "./EpisodesList";
 import { useLexicon } from "../../hooks/useLexicon";
 import KebabVertical from "../../assets/icon/Kebab_Vertical.svg";
 import Plus from "../../assets/icon/Plus.svg";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Modal } from "@mui/material";
 import { CreateResourceForm } from "./resource/CreateResourceForm";
 import { ScenarioActionsOptionsMenu } from "./ScenarioActionsOptionsMenu";
-import EditScenarioForm from "./EditScenarioForm";
+import UpdateScenarioForm from "./UpdateScenarioForm";
 import DeleteScenarioForm from "./DeleteScenarioForm";
 import User from "../../assets/icon/User_Empty.svg";
+import EditPen from "../../assets/icon/Edit.svg";
 import Warning from "../../assets/icon/Triangle_Warning.svg";
 import { CreateRestrictionForm } from "./restriction/CreateRestrictionForm";
+import { ProjectContext } from "../../context/ProjectContext";
 
 interface IScenarioProps {
   scenario: ILexiconScenario;
@@ -22,6 +24,7 @@ interface IScenarioProps {
 const Scenario = ({ scenario }: IScenarioProps) => {
   const { slugify } = useHelpers();
   const { processContent } = useLexicon();
+  const { project } = useContext(ProjectContext);
 
   const [isCreateResourceModalOpen, setIsCreateResourceModalOpen] =
     useState(false);
@@ -67,11 +70,11 @@ const Scenario = ({ scenario }: IScenarioProps) => {
   };
 
   const handleCloseEdiScenarioModal = () => setIsEdiScenarioModalOpen(false);
-  const handleOpenEditScenarioModal = () => {
+  const handleOpenUpdateScenarioModal = () => {
     setIsEdiScenarioModalOpen(true);
     setIsScenarioActionsOptionsMenuOpen(false);
   };
-  const handleCloseEditScenarioModal = () =>
+  const handleCloseUpdateScenarioModal = () =>
     setIsScenarioActionsOptionsMenuOpen(false);
 
   return (
@@ -90,8 +93,8 @@ const Scenario = ({ scenario }: IScenarioProps) => {
         <div className="scenario-options">
           {isScenarioActionsOptionsMenuOpen && (
             <ScenarioActionsOptionsMenu
-              handleOpenEditScenarioModal={handleOpenEditScenarioModal}
-              handleCloseEditScenarioModal={handleCloseEditScenarioModal}
+              handleOpenUpdateScenarioModal={handleOpenUpdateScenarioModal}
+              handleCloseUpdateScenarioModal={handleCloseUpdateScenarioModal}
               setIsScenarioActionsOptionsMenuOpen={
                 setIsScenarioActionsOptionsMenuOpen
               }
@@ -125,7 +128,15 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                     className="add-restriction"
                     onClick={() => handleOpenCreateRestriction()}
                   >
-                    Adicionar restrição <img src={Plus} alt="" />{" "}
+                    {scenario.context.restrictions.length > 0 ? (
+                      <>
+                        Atualizar restrições <img src={EditPen} alt="" />
+                      </>
+                    ) : (
+                      <>
+                        Cadastrar restrições <img src={Plus} alt="" />{" "}
+                      </>
+                    )}
                   </span>
                   {scenario.context.restrictions.length > 0 && (
                     <ul>
@@ -183,7 +194,15 @@ const Scenario = ({ scenario }: IScenarioProps) => {
             className="add-resource"
             onClick={() => setIsCreateResourceModalOpen(true)}
           >
-            Adicionar recurso <img src={Plus} alt="" />{" "}
+            {scenario.resources.length > 0 ? (
+              <>
+                Atualizar recursos <img src={EditPen} alt="" />
+              </>
+            ) : (
+              <>
+                Cadastrar recursos <img src={Plus} alt="" />{" "}
+              </>
+            )}
           </span>
           {scenario.resources.length > 0 && (
             <table className="scenario-resources-details">
@@ -203,9 +222,17 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                             handleOpenCreateRestriction(resource.id)
                           }
                         >
-                          Adicionar restrição <img src={Plus} alt="" />{" "}
+                          {resource.restrictions?.length > 0 ? (
+                            <>
+                              Atualizar restrições <img src={EditPen} alt="" />
+                            </>
+                          ) : (
+                            <>
+                              Cadastrar restrições <img src={Plus} alt="" />{" "}
+                            </>
+                          )}
                         </span>
-                        {resource.restrictions.length > 0 && (
+                        {resource.restrictions?.length > 0 && (
                           <ul>
                             {resource.restrictions?.map((restriction) => {
                               return (
@@ -237,7 +264,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <EditScenarioForm
+        <UpdateScenarioForm
           onClose={handleCloseEdiScenarioModal}
           scenario={scenario ? scenario : ({} as ILexiconScenario)}
           projectId={scenario.projectId}
@@ -276,6 +303,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
           resourceId={restrictionResourceId}
           onClose={handleCloseCreateRestriction}
           scenarioId={scenario.id}
+          projectId={project?.id || ""}
         />
       </Modal>
     </div>

@@ -8,10 +8,10 @@ import {
 import Button from "../forms/Button";
 import Input from "../forms/Input";
 import Form from "../forms/Form";
-import "./EditSymbolForm.scss";
+import "./UpdateSymbolForm.scss";
 import { UserContext } from "../../context/UserContext";
 import Loading from "../helper/Loading";
-import { EDIT_SYMBOL } from "../../api";
+import { UPDATE_SYMBOL } from "../../api";
 import useForm from "../../hooks/useForm";
 import api from "../../lib/axios";
 import Error from "../helper/Error";
@@ -23,7 +23,7 @@ import { AddImpactComboBox } from "./impact/AddImpactComboBox";
 import Select from "../forms/Select";
 import { useSelect } from "../../hooks/useSelect";
 
-export interface EditSymbolRequestDTO {
+export interface UpdateSymbolRequestDTO {
   name: string;
   notion: string;
   classification: string;
@@ -32,17 +32,17 @@ export interface EditSymbolRequestDTO {
   projectId: string;
 }
 
-interface EditSymbolFormProps {
+interface UpdateSymbolFormProps {
   symbol: ISymbol;
   onClose: () => void;
   projectId: string;
 }
 
-const EditSymbolForm = ({
+const UpdateSymbolForm = ({
   symbol,
   onClose,
   projectId,
-}: EditSymbolFormProps) => {
+}: UpdateSymbolFormProps) => {
   const nameEdit = useForm("dontValidateName");
   const notionEdit = useForm("dontValidateNotion");
   const classificationEdit = useSelect();
@@ -64,13 +64,12 @@ const EditSymbolForm = ({
 
   const navigate = useNavigate();
 
-  const editSymbol = async (body: EditSymbolRequestDTO) => {
-    
+  const updateSymbol = async (body: UpdateSymbolRequestDTO) => {
     if (projectId && symbol?.id) {
       setLoading(true);
 
       try {
-        const { url, options } = EDIT_SYMBOL(
+        const { url, options } = UPDATE_SYMBOL(
           projectId,
           symbol.id,
           isAuthenticated().token
@@ -88,7 +87,7 @@ const EditSymbolForm = ({
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (nameEdit.validate() && notionEdit.validate()) {
-      editSymbol({
+      updateSymbol({
         name: nameEdit.value,
         notion: notionEdit.value,
         classification: classificationEdit.value,
@@ -104,8 +103,8 @@ const EditSymbolForm = ({
   };
 
   return (
-    <section className="edit-symbol-form flex column gap-125">
-      <div className="edit-symbol-form-header">
+    <section className="update-symbol-form flex column gap-125">
+      <div className="update-symbol-form-header">
         <h2>Editar símbolo</h2>
         <img
           src={Close}
@@ -166,10 +165,12 @@ const EditSymbolForm = ({
           <AddSynonymComboBox
             synonyms={synonymsEdit}
             setSynonyms={setSynonymsEdit}
+            symbolId={symbol.id}
           />
           <AddImpactComboBox
             impacts={impactsEdit}
             setImpacts={setImpactsEdit}
+            symbolId={symbol.id}
           />
           {loading ? (
             <Loading />
@@ -183,4 +184,4 @@ const EditSymbolForm = ({
   );
 };
 
-export default EditSymbolForm;
+export default UpdateSymbolForm;

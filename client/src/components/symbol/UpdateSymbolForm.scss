@@ -1,4 +1,4 @@
-.edit-scenario-form {
+.update-symbol-form {
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -17,7 +17,7 @@
       max-height: 85vh;
       width: 100%;
     }
-    .edit-scenario-form-header {
+    .update-symbol-form-header {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
@@ -25,6 +25,13 @@
       img {
         cursor: pointer;
       }
+    }
+
+    .synonyms,
+    .impacts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
   
     form {

@@ -1,28 +1,38 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import { ProjectContext } from "../../../context/ProjectContext";
-import { ISymbol } from "../../../shared/interfaces";
 
 interface AddImpactComboBoxProps {
+  symbolId?: string;
   impacts: string[];
   setImpacts: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const AddImpactComboBox = ({
+  symbolId,
   impacts,
   setImpacts,
 }: AddImpactComboBoxProps) => {
   const projectContext = useContext(ProjectContext);
 
-  const [localOptions, setLocalOptions] = useState([
-    ...new Set(
-      projectContext.project?.symbols
-        ?.map((symbol: ISymbol) =>
-          symbol.impacts?.map((impact) => impact.description)
-        )
-        .flat()
-    ),
-  ]);
+  const [localOptions, setLocalOptions] = useState<(string | undefined)[]>([]);
+
+  useEffect(() => {
+    const updatedOptions = [
+      ...new Set(
+        projectContext.project?.symbols
+          ?.filter((symbol) => symbol.id !== symbolId)
+          .map((symbol) =>
+            symbol.impacts
+              ?.map((impact) => impact.description)
+              .filter((impactName) => !impacts.includes(impactName))
+          )
+          .flat()
+      ),
+    ];
+
+    setLocalOptions(updatedOptions);
+  }, [impacts, symbolId, projectContext.project?.symbols]);
 
   const handleAddImpact = (newImpacts: string[]) => {
     setImpacts(newImpacts);
@@ -31,9 +41,6 @@ export const AddImpactComboBox = ({
   return (
     <div className="impacts">
       <p>Impactos</p>
-      <br />
-      <br />
-      <br />
       <Autocomplete
         multiple
         freeSolo
@@ -49,7 +56,7 @@ export const AddImpactComboBox = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Impactos"
+            placeholder="Cadastre ou remova impactos ('Enter' para salvar)"
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {

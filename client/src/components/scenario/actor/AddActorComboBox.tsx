@@ -1,30 +1,41 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import { ProjectContext } from "../../../context/ProjectContext";
-import { ILexiconScenario } from "../../../shared/interfaces";
 
 // Supondo que o contexto das opções seja algo como o contexto abaixo:
 
 interface AddActorComboBoxProps {
+  scenarioId?: string;
   actors: string[];
   setActors: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const AddActorComboBox = ({
+  scenarioId,
   actors,
   setActors,
 }: AddActorComboBoxProps) => {
   const projectContext = useContext(ProjectContext);
 
-  const [localOptions, setLocalOptions] = useState([
-    ...new Set(
-      projectContext.project?.scenarios
-        ?.map((scenario: ILexiconScenario) =>
-          scenario.actors.map((actor) => actor.name.content)
-        )
-        .flat()
-    ),
-  ]);
+  const [localOptions, setLocalOptions] = useState<string[]>([]);
+
+  // Atualiza localOptions sempre que actors ou scenarioId mudam
+  useEffect(() => {
+    const updatedOptions = [
+      ...new Set(
+        projectContext.project?.scenarios
+          ?.filter((scenario) => scenario.id !== scenarioId)
+          .map((scenario) =>
+            scenario.actors
+              .map((actor) => actor.name.content)
+              .filter((actorName) => !actors.includes(actorName))
+          )
+          .flat()
+      ),
+    ];
+
+    setLocalOptions(updatedOptions);
+  }, [actors, scenarioId, projectContext.project?.scenarios]);
 
   const handleAddActor = (newActors: string[]) => {
     setActors(newActors);
@@ -33,9 +44,6 @@ export const AddActorComboBox = ({
   return (
     <div className="actors">
       <p>Atores</p>
-      <br />
-      <br />
-      <br />
       <Autocomplete
         multiple
         freeSolo
@@ -51,7 +59,7 @@ export const AddActorComboBox = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Atores"
+            placeholder="Cadastre ou remova atores ('Enter' para salvar)"
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
@@ -63,15 +71,15 @@ export const AddActorComboBox = ({
                 "&.Mui-focused fieldset": {
                   border: "1px solid var(--primary-color)",
                 },
-                '& input': {
-                  padding: '0.5rem 1rem',
+                "& input": {
+                  padding: "0.5rem 1rem",
                 },
               },
-              '& .MuiInputLabel-outlined': {
-                color: 'var(--primary-text-color)',
+              "& .MuiInputLabel-outlined": {
+                color: "var(--primary-text-color)",
               },
-              '& .MuiInputLabel-outlined.Mui-focused': {
-                color: 'var(--primary-text-color)',
+              "& .MuiInputLabel-outlined.Mui-focused": {
+                color: "var(--primary-text-color)",
               },
             }}
           />

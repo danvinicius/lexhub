@@ -6,14 +6,14 @@ import { useEffect, useRef } from "react";
 interface ScenarioActionsOptionsMenuProps {
     isScenarioActionsOptionsMenuOpen: boolean;
     setIsScenarioActionsOptionsMenuOpen:  React.Dispatch<React.SetStateAction<boolean>>;
-  handleOpenEditScenarioModal: () => void;
-  handleCloseEditScenarioModal: () => void;
+  handleOpenUpdateScenarioModal: () => void;
+  handleCloseUpdateScenarioModal: () => void;
   handleOpenDeleteScenarioModal: () => void;
 }
 
 export const ScenarioActionsOptionsMenu = ({
-  handleOpenEditScenarioModal,
-  handleCloseEditScenarioModal,
+  handleOpenUpdateScenarioModal,
+  handleCloseUpdateScenarioModal,
   setIsScenarioActionsOptionsMenuOpen,
   isScenarioActionsOptionsMenuOpen,
   handleOpenDeleteScenarioModal,
@@ -37,14 +37,14 @@ export const ScenarioActionsOptionsMenu = ({
       return () => {
         document.removeEventListener('mousedown', handleClickOutside);
       };
-    }, [handleCloseEditScenarioModal, isScenarioActionsOptionsMenuOpen, setIsScenarioActionsOptionsMenuOpen]);
+    }, [handleCloseUpdateScenarioModal, isScenarioActionsOptionsMenuOpen, setIsScenarioActionsOptionsMenuOpen]);
   
     if (!isScenarioActionsOptionsMenuOpen) return null;
 
   return (
     <div className="scenario-actions-options-menu" ref={popupRef}>
       <ul>
-        <li onClick={handleOpenEditScenarioModal} key='edit-scenario'>
+        <li onClick={handleOpenUpdateScenarioModal} key='update-scenario'>
           <img src={EditPen} alt="Editar cenário" />
           Editar cenário
         </li>

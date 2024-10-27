@@ -8,10 +8,10 @@ import {
 import Button from "../forms/Button";
 import Input from "../forms/Input";
 import Form from "../forms/Form";
-import "./EditScenarioForm.scss";
+import "./UpdateScenarioForm.scss";
 import { UserContext } from "../../context/UserContext";
 import Loading from "../helper/Loading";
-import { EDIT_SCENARIO } from "../../api";
+import { UPDATE_SCENARIO } from "../../api";
 import useForm from "../../hooks/useForm";
 import api from "../../lib/axios";
 import Error from "../helper/Error";
@@ -22,7 +22,7 @@ import Textarea from "../forms/Textarea";
 import { AddActorComboBox } from "./actor/AddActorComboBox";
 import { AddExceptionComboBox } from "./exception/AddExceptionComboBox";
 
-export interface EditScenarioRequestDTO {
+export interface UpdateScenarioRequestDTO {
   title: string;
   goal: string;
   context: {
@@ -35,13 +35,13 @@ export interface EditScenarioRequestDTO {
   projectId: string;
 }
 
-interface EditScenarioFormProps {
+interface UpdateScenarioFormProps {
   scenario: ILexiconScenario;
   onClose: () => void;
   projectId: string;
 }
 
-const EditScenarioForm = ({ scenario, onClose, projectId }: EditScenarioFormProps) => {
+const UpdateScenarioForm = ({ scenario, onClose, projectId }: UpdateScenarioFormProps) => {
   const titleEdit = useForm("dontValidateTitle");
   const goalEdit = useForm("dontValidateGoal");
   const geographicLocationEdit = useForm("dontValidateGeographicLocation");
@@ -69,12 +69,12 @@ const EditScenarioForm = ({ scenario, onClose, projectId }: EditScenarioFormProp
 
   const navigate = useNavigate();
 
-  const editScenario = async (body: EditScenarioRequestDTO) => {
+  const updateScenario = async (body: UpdateScenarioRequestDTO) => {
     if (projectId && scenario?.id) {
       setLoading(true);
 
       try {
-        const { url, options } = EDIT_SCENARIO(
+        const { url, options } = UPDATE_SCENARIO(
           projectId,
           scenario.id,
           isAuthenticated().token
@@ -92,7 +92,7 @@ const EditScenarioForm = ({ scenario, onClose, projectId }: EditScenarioFormProp
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (titleEdit.validate() && goalEdit.validate()) {
-      editScenario({
+      updateScenario({
         title: titleEdit.value,
         goal: goalEdit.value,
         context: {
@@ -112,8 +112,8 @@ const EditScenarioForm = ({ scenario, onClose, projectId }: EditScenarioFormProp
   };
 
   return (
-    <section className="edit-scenario-form flex column gap-125">
-      <div className="edit-scenario-form-header">
+    <section className="update-scenario-form flex column gap-125">
+      <div className="update-scenario-form-header">
         <h2>Editar cenário</h2>
         <img
           src={Close}
@@ -148,10 +148,11 @@ const EditScenarioForm = ({ scenario, onClose, projectId }: EditScenarioFormProp
             }}
             {...goalEdit}
           />
-          <AddActorComboBox actors={actorsEdit} setActors={setActorsEdit} />
+          <AddActorComboBox actors={actorsEdit} setActors={setActorsEdit} scenarioId={scenario.id}/>
           <AddExceptionComboBox
             exceptions={exceptionsEdit}
             setExceptions={setExceptionsEdit}
+            scenarioId={scenario.id}
           />
         </Form>
         <Form>
@@ -201,4 +202,4 @@ const EditScenarioForm = ({ scenario, onClose, projectId }: EditScenarioFormProp
   );
 };
 
-export default EditScenarioForm;
+export default UpdateScenarioForm;

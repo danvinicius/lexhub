@@ -1,28 +1,37 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 import { ProjectContext } from "../../../context/ProjectContext";
-import { ISymbol } from "../../../shared/interfaces";
 
 interface AddSynonymComboBoxProps {
+  symbolId?: string;
   synonyms: string[];
   setSynonyms: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const AddSynonymComboBox = ({
+  symbolId,
   synonyms,
   setSynonyms,
 }: AddSynonymComboBoxProps) => {
   const projectContext = useContext(ProjectContext);
 
-  const [localOptions, setLocalOptions] = useState([
-    ...new Set(
-      projectContext.project?.symbols
-        ?.map((symbol: ISymbol) =>
-          symbol.synonyms?.map((synonym) => synonym.name)
-        )
-        .flat()
-    ),
-  ]);
+  const [localOptions, setLocalOptions] = useState<(string | undefined)[]>([]);
+
+  useEffect(() => {
+    const updatedOptions = [
+      ...new Set(
+        projectContext.project?.symbols
+          ?.filter((symbol) => symbol.id !== symbolId)
+          .map((symbol) =>
+            symbol.synonyms?.map((synonym) => synonym.name)
+              .filter((synonymName) => !synonyms.includes(synonymName))
+          )
+          .flat()
+      ),
+    ];
+
+    setLocalOptions(updatedOptions);
+  }, [synonyms, symbolId, projectContext.project?.symbols]);
 
   const handleAddSynonym = (newSynonyms: string[]) => {
     setSynonyms(newSynonyms);
@@ -31,9 +40,6 @@ export const AddSynonymComboBox = ({
   return (
     <div className="synonyms">
       <p>Sinônimos</p>
-      <br />
-      <br />
-      <br />
       <Autocomplete
         multiple
         freeSolo
@@ -49,7 +55,7 @@ export const AddSynonymComboBox = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Sinônimos"
+            placeholder="Cadastre ou remova sinônimos ('Enter' para salvar)"
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {

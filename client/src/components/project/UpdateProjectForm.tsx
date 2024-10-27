@@ -3,10 +3,10 @@ import { FormEvent, useContext, useEffect, useState } from "react";
 import Button from "../forms/Button";
 import Input from "../forms/Input";
 import Form from "../forms/Form";
-import "./EditProjectForm.scss";
+import "./UpdateProjectForm.scss";
 import { UserContext } from "../../context/UserContext";
 import Loading from "../helper/Loading";
-import { EDIT_PROJECT } from "../../api";
+import { UPDATE_PROJECT } from "../../api";
 import useForm from "../../hooks/useForm";
 import api from "../../lib/axios";
 import Error from "../helper/Error";
@@ -14,17 +14,17 @@ import { useNavigate } from "react-router-dom";
 import { IProject } from "../../shared/interfaces";
 import Close from "../../assets/icon/Close_Dark.svg";
 
-export interface EditProjectRequestDTO {
+export interface UpdateProjectRequestDTO {
   name: string;
   description: string;
 }
 
-interface EditProjectFormProps {
+interface UpdateProjectFormProps {
   project: IProject;
   onClose: () => void;
 }
 
-const EditProjectForm = ({ project, onClose }: EditProjectFormProps) => {
+const UpdateProjectForm = ({ project, onClose }: UpdateProjectFormProps) => {
   const nameEdit = useForm("dontValidateName");
   const descriptionEdit = useForm("dontValidateDescription");
 
@@ -40,13 +40,13 @@ const EditProjectForm = ({ project, onClose }: EditProjectFormProps) => {
 
   const navigate = useNavigate();
 
-  const editProject = async (body: EditProjectRequestDTO) => {
+  const updateProject = async (body: UpdateProjectRequestDTO) => {
     
     if (project?.id) {
       setLoading(true);
 
       try {
-        const { url, options } = EDIT_PROJECT(
+        const { url, options } = UPDATE_PROJECT(
           project.id,
           isAuthenticated().token
         );
@@ -63,13 +63,13 @@ const EditProjectForm = ({ project, onClose }: EditProjectFormProps) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (nameEdit.validate() && descriptionEdit.validate()) {
-      editProject({ name: nameEdit.value, description: descriptionEdit.value });
+      updateProject({ name: nameEdit.value, description: descriptionEdit.value });
     }
   };
 
   return (
-    <section className="edit-project-form flex column gap-125">
-      <div className="edit-scenario-form-header">
+    <section className="update-project-form flex column gap-125">
+      <div className="update-scenario-form-header">
         <h2>Editar projeto</h2>
         <img
           src={Close}
@@ -107,4 +107,4 @@ const EditProjectForm = ({ project, onClose }: EditProjectFormProps) => {
   );
 };
 
-export default EditProjectForm;
+export default UpdateProjectForm;

@@ -17,7 +17,7 @@ import { Box, Modal, Tab, Tabs } from "@mui/material";
 import CreateSymbolForm from "../components/symbol/CreateSymbolForm";
 import CreateScenarioForm from "../components/scenario/CreateScenarioForm";
 import { IProject, IUserProject } from "../shared/interfaces";
-import EditProjectForm from "../components/project/EditProjectForm";
+import UpdateProjectForm from "../components/project/UpdateProjectForm";
 import { ProjectActionsOptionsMenu } from "../components/project/ProjectActionsOptionsMenu";
 import DeleteProjectForm from "../components/project/DeleteProjectForm";
 import SymbolsList from "../components/symbol/SymbolsList";
@@ -69,7 +69,7 @@ const Project: FC = () => {
   const [isProjectActionsOptionsMenu, setIsProjectActionsOptionsMenu] =
     useState(false);
 
-  const [isEditProjectModalOpen, setIsEditProjectModalOpen] = useState(false);
+  const [isUpdateProjectModalOpen, setIsUpdateProjectModalOpen] = useState(false);
   const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] =
     useState(false);
   const [isCreateSymbolModalOpen, setIsCreateSymbolModalOpen] = useState(false);
@@ -81,11 +81,11 @@ const Project: FC = () => {
   const handleCloseCreateSymbolModal = () => setIsCreateSymbolModalOpen(false);
   const handleCloseCreateScenarioModal = () =>
     setIsCreateScenarioModalOpen(false);
-  const handleOpenEditProjectModal = () => {
-    setIsEditProjectModalOpen(true);
+  const handleOpenUpdateProjectModal = () => {
+    setIsUpdateProjectModalOpen(true);
     setIsProjectActionsOptionsMenu(false);
   };
-  const handleCloseEditProjectModal = () => setIsEditProjectModalOpen(false);
+  const handleCloseUpdateProjectModal = () => setIsUpdateProjectModalOpen(false);
   const handleCloseDeleteProjectModal = () =>
     setIsDeleteProjectModalOpen(false);
   const handleOpenDeleteProjectModal = () => {
@@ -138,8 +138,8 @@ const Project: FC = () => {
                   />
                   {isProjectActionsOptionsMenu && (
                     <ProjectActionsOptionsMenu
-                      handleOpenEditProjectModal={handleOpenEditProjectModal}
-                      handleCloseEditProjectModal={handleCloseEditProjectModal}
+                      handleOpenUpdateProjectModal={handleOpenUpdateProjectModal}
+                      handleCloseUpdateProjectModal={handleCloseUpdateProjectModal}
                       setIsProjectActionsOptionsMenu={
                         setIsProjectActionsOptionsMenu
                       }
@@ -223,13 +223,13 @@ const Project: FC = () => {
           </div>
         </div>
         <Modal
-          open={isEditProjectModalOpen}
-          onClose={handleCloseEditProjectModal}
+          open={isUpdateProjectModalOpen}
+          onClose={handleCloseUpdateProjectModal}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <EditProjectForm
-            onClose={handleCloseEditProjectModal}
+          <UpdateProjectForm
+            onClose={handleCloseUpdateProjectModal}
             project={project ? project : ({} as IProject)}
           />
         </Modal>
