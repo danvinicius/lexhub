@@ -1,0 +1,25 @@
+.episodes-form-wrapper {
+    padding-top: .5rem;
+    padding-right: .5rem;
+    max-height: 350px;
+    overflow: scroll;
+    margin-bottom: 1rem;
+}
+
+.episode-form-group {
+    display: flex;
+    gap: 16px; /* Espaçamento entre os elementos */
+    margin-bottom: 16px; /* Espaçamento entre os grupos de formulário */
+    align-items: flex-start; /* Alinha os itens no topo */
+  }
+  .episode-position {
+    flex: 1;
+  }
+  
+  .episode-description {
+      flex: 7;
+  }
+  .episode-type {
+    flex: 2;
+  }
+  

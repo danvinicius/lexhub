@@ -5,6 +5,7 @@ import Scenario, {
   IContext,
   IException,
   IResource,
+  IEpisode,
 } from '@/models/Scenario';
 import { ServerError } from '@/utils/errors';
 
@@ -63,6 +64,7 @@ export namespace ScenarioRepository {
     actors?: IActor[];
     exceptions?: IException[];
     resources?: IResource[];
+    episodes: IEpisode[];
   }
 }
 
@@ -149,7 +151,6 @@ export class ScenarioRepository {
     id: string,
     data: ScenarioRepository.UpdateScenarioParams
   ): Promise<IScenario> {
-    console.log(data);
     
     try {
       await Scenario.findByIdAndUpdate(id, {
@@ -159,6 +160,7 @@ export class ScenarioRepository {
         actors: data.actors,
         context: data.context,
         resources: data.resources,
+        episodes: data.episodes,
       });
       return await this.getScenario(id);
     } catch (error) {

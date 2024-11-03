@@ -9,7 +9,6 @@ export interface IGroup {
 
 export interface INonSequentialEpisode extends IEpisode {
   readonly id?: string;
-  group: IGroup;
 }
 
 export interface IException {
@@ -35,7 +34,7 @@ export interface IEpisode {
   position: number;
   description: string;
   type: string;
-  restriction?: IRestriction;
+  restriction?: string;
 }
 
 export interface IResource {

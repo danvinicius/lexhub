@@ -1,7 +1,6 @@
 import "./Scenario.scss";
 import { ILexiconScenario } from "../../shared/interfaces";
 import { useHelpers } from "../../hooks/useHelpers";
-import { EpisodesList } from "./EpisodesList";
 import { useLexicon } from "../../hooks/useLexicon";
 import KebabVertical from "../../assets/icon/Kebab_Vertical.svg";
 import Plus from "../../assets/icon/Plus.svg";
@@ -16,6 +15,7 @@ import EditPen from "../../assets/icon/Edit.svg";
 import Warning from "../../assets/icon/Triangle_Warning.svg";
 import { CreateRestrictionForm } from "./restriction/CreateRestrictionForm";
 import { ProjectContext } from "../../context/ProjectContext";
+import { CreateEpisodesForm } from "./episodes/CreateEpisodesForm";
 
 interface IScenarioProps {
   scenario: ILexiconScenario;
@@ -31,6 +31,16 @@ const Scenario = ({ scenario }: IScenarioProps) => {
 
   const [isCreateRestrictionModalOpen, setIsCreateRestrictionModalOpen] =
     useState(false);
+
+  const [isCreateEpisodesModalOpen, setIsCreateEpisodesModalOpen] =
+    useState(false);
+
+  const handleOpenCreateEpisodesModal = () => {
+    setIsCreateEpisodesModalOpen(true);
+  };
+  const handleCloseCreateEpisodesModal = () => {
+    setIsCreateEpisodesModalOpen(false);
+  };
 
   const handleOpenCreateRestriction = (
     resourceId?: string,
@@ -57,7 +67,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
     setIsScenarioActionsOptionsMenuOpen,
   ] = useState(false);
 
-  const [isEdiScenarioModalOpen, setIsEdiScenarioModalOpen] = useState(false);
+  const [isEditScenarioModalOpen, setIsEdiScenarioModalOpen] = useState(false);
 
   const [isDeleteScenarioModalOpen, setIsDeleteScenarioModalOpen] =
     useState(false);
@@ -69,7 +79,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
     setIsScenarioActionsOptionsMenuOpen(false);
   };
 
-  const handleCloseEdiScenarioModal = () => setIsEdiScenarioModalOpen(false);
+  const handleCloseEditScenarioModal = () => setIsEdiScenarioModalOpen(false);
   const handleOpenUpdateScenarioModal = () => {
     setIsEdiScenarioModalOpen(true);
     setIsScenarioActionsOptionsMenuOpen(false);
@@ -130,7 +140,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                   >
                     {scenario.context.restrictions.length > 0 ? (
                       <>
-                        Atualizar restrições <img src={EditPen} alt="" />
+                        Gerenciar restrições <img src={EditPen} alt="" />
                       </>
                     ) : (
                       <>
@@ -196,7 +206,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
           >
             {scenario.resources.length > 0 ? (
               <>
-                Atualizar recursos <img src={EditPen} alt="" />
+                Gerenciar recursos <img src={EditPen} alt="" />
               </>
             ) : (
               <>
@@ -224,7 +234,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                         >
                           {resource.restrictions?.length > 0 ? (
                             <>
-                              Atualizar restrições <img src={EditPen} alt="" />
+                              Gerenciar restrições <img src={EditPen} alt="" />
                             </>
                           ) : (
                             <>
@@ -252,20 +262,50 @@ const Scenario = ({ scenario }: IScenarioProps) => {
           )}
         </div>
         <h3>Episódios</h3>
-        {scenario.episodes?.length || scenario.groups.length ? (
-          <EpisodesList scenario={scenario}></EpisodesList>
-        ) : (
-          <p>N/A</p>
-        )}
+        <div className="scenario-episodes">
+          <span className="add-episode" onClick={handleOpenCreateEpisodesModal}>
+            {scenario.episodes.length > 0 ? (
+              <>
+                Gerenciar episódios <img src={EditPen} alt="" />
+              </>
+            ) : (
+              <>
+                Cadastrar episódios <img src={Plus} alt="" />{" "}
+              </>
+            )}
+          </span>
+          {scenario.episodes.length > 0 && (
+            <table className="scenario-episodes-details">
+              <tbody>
+                <tr>
+                  <th>Posição</th>
+                  <th>Descrição</th>
+                  <th>Tipo</th>
+                  <th>Restrição</th>
+                </tr>
+                {scenario.episodes?.map((episode) => {
+                  return (
+                    <tr key={episode.position}>
+                      <td>{episode.position}</td>
+                      <td>{processContent(episode?.description)}</td>
+                      <td>{episode.type}</td>
+                      <td>{processContent(episode?.restriction)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
       <Modal
-        open={isEdiScenarioModalOpen}
-        onClose={handleCloseEdiScenarioModal}
+        open={isEditScenarioModalOpen}
+        onClose={handleCloseEditScenarioModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <UpdateScenarioForm
-          onClose={handleCloseEdiScenarioModal}
+          onClose={handleCloseEditScenarioModal}
           scenario={scenario ? scenario : ({} as ILexiconScenario)}
           projectId={scenario.projectId}
         />
@@ -304,6 +344,24 @@ const Scenario = ({ scenario }: IScenarioProps) => {
           onClose={handleCloseCreateRestriction}
           scenarioId={scenario.id}
           projectId={project?.id || ""}
+        />
+      </Modal>
+      <Modal
+        open={isCreateEpisodesModalOpen}
+        onClose={handleCloseCreateEpisodesModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <CreateEpisodesForm
+          onClose={handleCloseCreateEpisodesModal}
+          scenarioId={scenario.id}
+          initialEpisodes={scenario.episodes.map(e => ({
+            id: e.id,
+            description: e.description.content,
+            type: e.type,
+            position: e.position,
+            restriction: e.restriction.content
+          }))}
         />
       </Modal>
     </div>

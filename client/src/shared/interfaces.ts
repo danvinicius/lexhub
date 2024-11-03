@@ -74,7 +74,7 @@ export interface IEpisode {
   position: number;
   description: string;
   type: string;
-  restriction?: IRestriction;
+  restriction?: string;
 }
 
 export interface IRestriction {
@@ -120,6 +120,14 @@ export interface Lexicon {
   foundLexicons: LexiconInfo[];
 }
 
+export interface ILexiconEpisode {
+  id: string;
+  position: number;
+  description: Lexicon;
+  type: string;
+  restriction: Lexicon;
+}
+
 export interface ILexiconScenario {
   id: string;
   title: Lexicon;
@@ -147,14 +155,7 @@ export interface ILexiconScenario {
       description: Lexicon;
     }[];
   }[];
-  episodes: {
-    position: number;
-    restriction: {
-      id: string;
-      description: Lexicon
-    };
-    description: Lexicon;
-  }[];
+  episodes: ILexiconEpisode[];
   groups: {
     position: number;
     nonSequentialEpisodes: {

@@ -90,10 +90,8 @@ export interface ILexiconScenario {
   episodes: {
     position: number;
     restriction: {
-      description: {
         content: string;
         foundLexicons: Lexicon[];
-      };
     };
     description: {
       content: string;
@@ -103,7 +101,10 @@ export interface ILexiconScenario {
   groups: {
     position: number;
     nonSequentialEpisodes: {
-      restriction: IRestriction;
+      restriction: {
+        content: string;
+        foundLexicons: Lexicon[];
+    };
       description: {
         content: string;
         foundLexicons: Lexicon[];
@@ -217,11 +218,13 @@ export class ScenarioService {
           })
         ),
       })),
-      episodes: episodes?.map((episode: IEpisode) => ({
+      episodes: episodes?.sort((a, b) => {
+        if (a.position > b.position) return 1;
+        return -1;
+      }).map((episode: IEpisode) => ({
         position: episode.position,
-        restriction: {
-          description: processedLexicon(episode.restriction.description, true),
-        },
+        type: episode.type,
+        restriction:  processedLexicon(episode.restriction, true),
         description: processedLexicon(episode.description, false),
       })),
       groups: groups.map((group: IGroup) => ({
@@ -230,7 +233,7 @@ export class ScenarioService {
         nonSequentialEpisodes: group.nonSequentialEpisodes.map(
           (nonSequentialEpisode: INonSequentialEpisode) => ({
             id: nonSequentialEpisode.id,
-            restriction: nonSequentialEpisode.restriction,
+            restriction: processedLexicon(nonSequentialEpisode.restriction, false),
             description: processedLexicon(
               nonSequentialEpisode.description,
               false

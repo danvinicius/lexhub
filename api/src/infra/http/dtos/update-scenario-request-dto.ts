@@ -1,4 +1,4 @@
-import { IContext, IActor, IException, IResource } from '@/models';
+import { IContext, IActor, IException, IResource, IEpisode } from '@/models';
 import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateScenarioRequestDTO {
@@ -18,6 +18,9 @@ export class UpdateScenarioRequestDTO {
   exceptions: IException[];
 
   @IsOptional()
+  episodes: IEpisode[];
+
+  @IsOptional()
   resources: IResource[];
 
   @IsString()
@@ -30,6 +33,7 @@ export class UpdateScenarioRequestDTO {
     this.projectId = data.projectId;
     this.actors = data.actors;
     this.resources = data.resources;
+    this.episodes = data.episodes;
     this.exceptions = data.exceptions;
   }
 }

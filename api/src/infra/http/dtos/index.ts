@@ -1,7 +1,5 @@
 export * from './create-many-scenarios-request-dto';
 export * from './create-project-request-dto';
-export * from './create-resource-request-dto';
-export * from './create-restriction-request-dto';
 export * from './create-scenario-request-dto';
 export * from './create-symbol-request-dto';
 export * from './update-project-request-dto';

@@ -60,7 +60,7 @@
       border: none;
     }
 
-    .add-restriction, .add-resource {
+    .add-restriction, .add-resource, .add-episode {
       text-decoration: underline;
       cursor: pointer;
       color: var(--primary-text-color);
@@ -89,7 +89,7 @@
       }
     }
 
-    .scenario-resources {
+    .scenario-resources, .scenario-episodes {
       display: flex;
       flex-direction: column;
       gap: 1rem;
