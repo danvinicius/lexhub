@@ -7,9 +7,7 @@ export interface IGroup {
   nonSequentialEpisodes: INonSequentialEpisode[];
 }
 
-export interface INonSequentialEpisode extends IEpisode {
-  readonly id?: string;
-}
+export interface INonSequentialEpisode extends Omit<IEpisode, 'position'> {}
 
 export interface IException {
   description: string;
@@ -31,6 +29,7 @@ export interface IContext {
 }
 
 export interface IEpisode {
+  readonly id?: string;
   position: number;
   description: string;
   type: string;
@@ -52,8 +51,7 @@ export interface IScenario {
   resources?: IResource[];
   actors?: IActor[];
   context?: IContext;
-  episodes?: IEpisode[];
-  groups?: IGroup[];
+  episodes?: (IEpisode | IGroup)[];
   project: IProject;
 }
 
@@ -65,8 +63,7 @@ const scenarioSchema = new Schema<IScenario>(
     actors: [] as IActor[],
     resources: [] as IResource[],
     context: {} as IContext,
-    episodes: [] as IEpisode[],
-    groups: [] as IGroup[],
+    episodes: [] as (IEpisode | IGroup)[],
     project: { type: Schema.Types.ObjectId, ref: 'Project' }
   },
   {

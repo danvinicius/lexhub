@@ -87,7 +87,7 @@ export interface ILexiconScenario {
       };
     }[];
   }[];
-  episodes: {
+  episodes: ({
     position: number;
     restriction: {
         content: string;
@@ -97,8 +97,7 @@ export interface ILexiconScenario {
       content: string;
       foundLexicons: Lexicon[];
     };
-  }[];
-  groups: {
+  } | {
     position: number;
     nonSequentialEpisodes: {
       restriction: {
@@ -110,7 +109,7 @@ export interface ILexiconScenario {
         foundLexicons: Lexicon[];
       };
     }[];
-  }[];
+  })[];
   projectId: string;
 }
 
@@ -186,7 +185,6 @@ export class ScenarioService {
       actors = [],
       resources = [],
       episodes = [],
-      groups = [],
     } = scenario;
 
     const processedLexicon = (content: string, searchOtherScenarios: boolean) =>
@@ -221,26 +219,30 @@ export class ScenarioService {
       episodes: episodes?.sort((a, b) => {
         if (a.position > b.position) return 1;
         return -1;
-      }).map((episode: IEpisode) => ({
-        position: episode.position,
-        type: episode.type,
-        restriction:  processedLexicon(episode.restriction, true),
-        description: processedLexicon(episode.description, false),
-      })),
-      groups: groups.map((group: IGroup) => ({
-        id: group.id,
-        position: group.position,
-        nonSequentialEpisodes: group.nonSequentialEpisodes.map(
-          (nonSequentialEpisode: INonSequentialEpisode) => ({
-            id: nonSequentialEpisode.id,
-            restriction: processedLexicon(nonSequentialEpisode.restriction, false),
-            description: processedLexicon(
-              nonSequentialEpisode.description,
-              false
+      }).map((episode: IEpisode & IGroup) => {
+        if (episode.nonSequentialEpisodes) {
+          return {
+            id: episode.id,
+            position: episode.position,
+            nonSequentialEpisodes: episode.nonSequentialEpisodes.map(
+              (nonSequentialEpisode: INonSequentialEpisode) => ({
+                id: nonSequentialEpisode.id,
+                restriction: processedLexicon(nonSequentialEpisode.restriction, false),
+                description: processedLexicon(
+                  nonSequentialEpisode.description,
+                  false
+                ),
+              })
             ),
-          })
-        ),
-      })),
+          }
+        }
+        return {
+          position: episode.position,
+          type: episode.type,
+          restriction:  processedLexicon(episode.restriction, true),
+          description: processedLexicon(episode.description, false),
+        }
+      }),
       projectId,
     };
   }
