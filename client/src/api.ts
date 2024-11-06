@@ -221,3 +221,16 @@ export const CREATE_RESTRICTION = (projectId: string, scenarioId: string, token:
     },
   };
 };
+
+export const ADD_USER_TO_PROJECT = (projectId: string, token: string): RequestFormat => {  
+  return {
+    url: `/user/add/${projectId}`,
+    options: {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+    },
+  };
+};

@@ -23,15 +23,16 @@ This platform helps software engineers and requirements engineers managing scena
 - [x] Ver recursos existentes ao adicionar novo recurso
 - [x] Checar viabilidade PG -> MongoDB
 - [x] Criar e ordenar episódios
+- [x] Adicionar usuários ao projeto e implementar permissões
+- [ ] Permitir criar projetos públicos/privados
 - [ ] Criar e ordenar grupos de episódios não sequenciais
 - [ ] Passar todos os inputs para MUi
 - [ ] Testar layout de página única com menu lateral na esquerda
 - [ ] Melhorar UX (não recarregar página ao atualizar informações, poder salvar sem digitar 'Enter' nos ComboBox, etc)
-- [ ] Adicionar usuários ao projeto e implementar permissões
 - [ ] Visualizar e rastrear alterações (responsável, data/hora, conteúdo, motivo)
 - [ ] Adicionar ferramentas de edição e texto aos campos textarea
 - [ ] Checar responsividade
-- [ ] Chegar eslint e reaproveitamento de classes, componentes e hooks
+- [ ] Checar eslint e reaproveitamento de classes, componentes e hooks
 - [ ] Importar arquivo próprio para criar projetos, cenários e símbolos
 - [ ] Exportar arquivos para BDD e TDD
 - [ ] Autenticação com Google / Facebook

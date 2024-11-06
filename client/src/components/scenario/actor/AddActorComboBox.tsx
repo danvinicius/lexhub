@@ -59,7 +59,7 @@ export const AddActorComboBox = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder="Cadastre ou remova atores ('Enter' para salvar)"
+            placeholder="Cadastre ou remova atores ('Enter' para adicionar outro)"
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {

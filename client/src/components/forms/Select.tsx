@@ -9,13 +9,15 @@ interface Option {
 
 interface SelectProps {
   name: string;
-  label: string;
+  label?: string;
   options: Option[];
   value: string;
   error?: string | null;
   required?: boolean;
+  style?: React.CSSProperties;
+  defaultOption?: string;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
-  onBlur: (e: ChangeEvent<HTMLSelectElement>) => void;
+  onBlur?: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const Select: FC<SelectProps> = ({
@@ -24,6 +26,8 @@ const Select: FC<SelectProps> = ({
   options,
   value,
   error,
+  style,
+  defaultOption = 'Selecione uma opção',
   onChange,
   onBlur,
   required = false,
@@ -38,9 +42,10 @@ const Select: FC<SelectProps> = ({
         onChange={onChange}
         onBlur={onBlur}
         required={required}
+        style={style}
       >
         <option value="" disabled>
-          Selecione uma opção
+          {defaultOption}
         </option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>

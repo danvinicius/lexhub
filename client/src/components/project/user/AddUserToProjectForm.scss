@@ -1,0 +1,71 @@
+.add-user-form {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    @media screen and (min-width: 998px) {
+      margin: 7.5% auto;
+      width: 700px;
+      padding: 2rem;
+    }
+  
+  
+    .add-user-form-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+  
+      img {
+        cursor: pointer;
+      }
+    }
+  
+    .loading {
+      margin: 0 auto;
+    }
+  
+    .synonyms,
+    .impacts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+  
+        li {
+          padding: 0.25rem 0.75rem;
+          background: var(--primary-text-color);
+          color: #fff;
+          border-radius: 20px;
+          align-self: flex-start;
+          display: flex;
+          gap: .5rem;
+          align-items: center;
+  
+          img {
+            cursor: pointer;
+          }
+        }
+        .add-impact,
+        .add-synonym {
+          padding: 0.25rem 0.75rem;
+          background: var(--helper-color);
+          color: var(--primary-text-color);
+          width: max-content;
+          cursor: pointer;
+        }
+      }
+      button {
+        background: var(--helper-color);
+        color: var(--primary-text-color);
+        width: max-content;
+        cursor: pointer;
+      }
+    }
+  }
+  

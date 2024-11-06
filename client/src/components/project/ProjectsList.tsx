@@ -22,7 +22,7 @@ const ProjectsList = () => {
     setLoading(true);
     try {
       const { url, options } = GET_PROJECTS(
-        isAuthenticated ? isAuthenticated().token : ""
+        isAuthenticated()?.token || ""
       );
       const response = await api[options.method](url, options);
       setProjects(response.data);

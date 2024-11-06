@@ -77,7 +77,7 @@ const UpdateScenarioForm = ({ scenario, onClose, projectId }: UpdateScenarioForm
         const { url, options } = UPDATE_SCENARIO(
           projectId,
           scenario.id,
-          isAuthenticated().token
+          isAuthenticated()?.token || ""
         );
         await api[options.method](url, body, options);
         navigate(0);

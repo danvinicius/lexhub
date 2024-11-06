@@ -61,7 +61,7 @@ const CreateScenarioForm = ({ onClose }: CreateScenarioFormProps) => {
       try {
         const { url, options } = CREATE_SCENARIO(
           projectContext.project.id,
-          isAuthenticated().token
+          isAuthenticated()?.token || ""
         );
         await api[options.method](url, body, options);
         navigate(0);

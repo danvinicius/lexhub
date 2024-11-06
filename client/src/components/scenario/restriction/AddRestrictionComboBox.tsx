@@ -63,7 +63,7 @@ export const AddRestrictionComboBox = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder="Cadastre ou remova restrições ('Enter' para salvar)"
+            placeholder="Cadastre ou remova restrições ('Enter' para adicionar outro)"
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {

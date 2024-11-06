@@ -56,7 +56,7 @@ export const AddImpactComboBox = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder="Cadastre ou remova impactos ('Enter' para salvar)"
+            placeholder="Cadastre ou remova impactos ('Enter' para adicionar outro)"
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {

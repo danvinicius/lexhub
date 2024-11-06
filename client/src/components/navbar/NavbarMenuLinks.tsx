@@ -35,7 +35,7 @@ export const NavbarMenuLinks: FC<NavbarMenuLinksProps> = ({
   };
 
   const handleLogout = () => {
-    if (isAuthenticated().token) {
+    if (isAuthenticated()?.token) {
       if (logout) logout();
     }
   };
@@ -93,7 +93,7 @@ export const NavbarMenuLinks: FC<NavbarMenuLinksProps> = ({
       <li>
         <Button
           theme="primary"
-          text={isAuthenticated().token ? "Sair" : "Fazer login"}
+          text={isAuthenticated()?.token ? "Sair" : "Fazer login"}
           onClick={handleLogout}
         ></Button>
       </li>

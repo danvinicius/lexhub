@@ -40,7 +40,7 @@ const DeleteSymbolForm = ({ symbol, projectId, onClose }: DeleteSymbolFormProps)
         const { url, options } = DELETE_SYMBOL(
             projectId,
           symbol.id,
-          isAuthenticated().token
+          isAuthenticated()?.token || ""
         );
         await api[options.method](url, options);
         navigate(0);

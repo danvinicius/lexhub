@@ -1,11 +1,13 @@
-import { CSSProperties, useState } from "react";
-import { ISynonym, IImpact, ISymbol } from "../../shared/interfaces";
+import { CSSProperties, useContext, useEffect, useState } from "react";
+import { ISynonym, IImpact, ISymbol, IUserRole } from "../../shared/interfaces";
 import "./SymbolDetails.scss";
 import KebabVertical from "../../assets/icon/Kebab_Vertical.svg";
 import { SymbolActionsOptionsMenu } from "./SymbolActionsOptionsMenu";
 import { Modal } from "@mui/material";
 import UpdateSymbolForm from "./UpdateSymbolForm";
 import DeleteSymbolForm from "./DeleteSymbolForm";
+import { UserContext } from "../../context/UserContext";
+import { ProjectContext } from "../../context/ProjectContext";
 
 interface SymbolDetailsProps {
   symbol: ISymbol;
@@ -13,6 +15,21 @@ interface SymbolDetailsProps {
 }
 
 const SymbolDetails = ({ symbol, style }: SymbolDetailsProps) => {
+  const { isAuthenticated } = useContext(UserContext) || {};
+  const [isCollaborator, setIsCollaborator] = useState(false);
+  const { project } = useContext(ProjectContext);
+
+  useEffect(() => {
+    const role = isAuthenticated()?.projects.find(
+      (someProject) => someProject.project == project?.id
+    )?.role;
+    setIsCollaborator(
+      role == IUserRole.OWNER ||
+        role == IUserRole.ADMIN ||
+        role == IUserRole.COLLABORATOR
+    );
+  }, [isAuthenticated, project?.id]);
+
   const [isSymbolActionsOptionsMenuOpen, setIsSymbolActionsOptionsMenuOpen] =
     useState(false);
   const [isUpdateSymbolModalOpen, setIsUpdateSymbolModalOpen] = useState(false);
@@ -29,25 +46,31 @@ const SymbolDetails = ({ symbol, style }: SymbolDetailsProps) => {
           <div className="classification">
             <p>{symbol?.classification}</p>
           </div>
-          <img
-            src={KebabVertical}
-            alt=""
-            className="symbol-options-button"
-            onClick={() => setIsSymbolActionsOptionsMenuOpen(true)}
-          />
-          <div className="symbol-options">
-            {isSymbolActionsOptionsMenuOpen && (
-              <SymbolActionsOptionsMenu
-                handleOpenUpdateSymbolModal={handleOpenUpdateSymbolModal}
-                handleCloseUpdateSymbolModal={handleCloseUpdateSymbolModal}
-                setIsSymbolActionsOptionsMenuOpen={
-                  setIsSymbolActionsOptionsMenuOpen
-                }
-                isSymbolActionsOptionsMenuOpen={isSymbolActionsOptionsMenuOpen}
-                handleOpenDeleteSymbolModal={handleOpenDeleteSymbolModal}
+          {isCollaborator && (
+            <>
+              <img
+                src={KebabVertical}
+                alt=""
+                className="symbol-options-button"
+                onClick={() => setIsSymbolActionsOptionsMenuOpen(true)}
               />
-            )}
-          </div>
+              <div className="symbol-options">
+                {isSymbolActionsOptionsMenuOpen && (
+                  <SymbolActionsOptionsMenu
+                    handleOpenUpdateSymbolModal={handleOpenUpdateSymbolModal}
+                    handleCloseUpdateSymbolModal={handleCloseUpdateSymbolModal}
+                    setIsSymbolActionsOptionsMenuOpen={
+                      setIsSymbolActionsOptionsMenuOpen
+                    }
+                    isSymbolActionsOptionsMenuOpen={
+                      isSymbolActionsOptionsMenuOpen
+                    }
+                    handleOpenDeleteSymbolModal={handleOpenDeleteSymbolModal}
+                  />
+                )}
+              </div>
+            </>
+          )}
         </div>
         <p>{symbol?.notion}</p>
       </div>
@@ -56,7 +79,7 @@ const SymbolDetails = ({ symbol, style }: SymbolDetailsProps) => {
         {symbol?.synonyms?.length ? (
           <ul>
             {symbol.synonyms?.map((synonym: ISynonym) => {
-              return <li key={synonym.id}>{synonym.name}</li>;
+              return <li key={synonym.name}>{synonym.name}</li>;
             })}
           </ul>
         ) : (
@@ -68,7 +91,7 @@ const SymbolDetails = ({ symbol, style }: SymbolDetailsProps) => {
         {symbol?.impacts?.length ? (
           <ul>
             {symbol.impacts?.map((impact: IImpact) => {
-              return <li key={impact.id}>{impact.description}</li>;
+              return <li key={impact.description}>{impact.description}</li>;
             })}
           </ul>
         ) : (
@@ -84,7 +107,7 @@ const SymbolDetails = ({ symbol, style }: SymbolDetailsProps) => {
         <UpdateSymbolForm
           onClose={handleCloseUpdateSymbolModal}
           symbol={symbol ? symbol : ({} as ISymbol)}
-          projectId={symbol.project || ''}
+          projectId={symbol.project || ""}
         />
       </Modal>
       <Modal

@@ -1,10 +1,10 @@
 import "./Scenario.scss";
-import { ILexiconScenario } from "../../shared/interfaces";
+import { ILexiconScenario, IUserRole } from "../../shared/interfaces";
 import { useHelpers } from "../../hooks/useHelpers";
 import { useLexicon } from "../../hooks/useLexicon";
 import KebabVertical from "../../assets/icon/Kebab_Vertical.svg";
 import Plus from "../../assets/icon/Plus.svg";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Modal } from "@mui/material";
 import { CreateResourceForm } from "./resource/CreateResourceForm";
 import { ScenarioActionsOptionsMenu } from "./ScenarioActionsOptionsMenu";
@@ -16,6 +16,7 @@ import Warning from "../../assets/icon/Triangle_Warning.svg";
 import { CreateRestrictionForm } from "./restriction/CreateRestrictionForm";
 import { ProjectContext } from "../../context/ProjectContext";
 import { CreateEpisodesForm } from "./episodes/CreateEpisodesForm";
+import { UserContext } from "../../context/UserContext";
 
 interface IScenarioProps {
   scenario: ILexiconScenario;
@@ -25,6 +26,20 @@ const Scenario = ({ scenario }: IScenarioProps) => {
   const { slugify } = useHelpers();
   const { processContent } = useLexicon();
   const { project } = useContext(ProjectContext);
+
+  const { isAuthenticated } = useContext(UserContext) || {};
+  const [isCollaborator, setIsCollaborator] = useState(false);
+
+  useEffect(() => {
+    const role = isAuthenticated()?.projects.find(
+      (someProject) => someProject.project == project?.id
+    )?.role;
+    setIsCollaborator(
+      role == IUserRole.OWNER ||
+        role == IUserRole.ADMIN ||
+        role == IUserRole.COLLABORATOR
+    );
+  }, [isAuthenticated, project?.id]);
 
   const [isCreateResourceModalOpen, setIsCreateResourceModalOpen] =
     useState(false);
@@ -94,27 +109,33 @@ const Scenario = ({ scenario }: IScenarioProps) => {
     >
       <div className="scenario-header">
         <h2>{processContent(scenario.title)}</h2>
-        <img
-          src={KebabVertical}
-          alt=""
-          className="scenario-options-button"
-          onClick={() => setIsScenarioActionsOptionsMenuOpen(true)}
-        />
-        <div className="scenario-options">
-          {isScenarioActionsOptionsMenuOpen && (
-            <ScenarioActionsOptionsMenu
-              handleOpenUpdateScenarioModal={handleOpenUpdateScenarioModal}
-              handleCloseUpdateScenarioModal={handleCloseUpdateScenarioModal}
-              setIsScenarioActionsOptionsMenuOpen={
-                setIsScenarioActionsOptionsMenuOpen
-              }
-              isScenarioActionsOptionsMenuOpen={
-                isScenarioActionsOptionsMenuOpen
-              }
-              handleOpenDeleteScenarioModal={handleOpenDeleteScenarioModal}
+        {isCollaborator && (
+          <>
+            <img
+              src={KebabVertical}
+              alt=""
+              className="scenario-options-button"
+              onClick={() => setIsScenarioActionsOptionsMenuOpen(true)}
             />
-          )}
-        </div>
+            <div className="scenario-options">
+              {isScenarioActionsOptionsMenuOpen && (
+                <ScenarioActionsOptionsMenu
+                  handleOpenUpdateScenarioModal={handleOpenUpdateScenarioModal}
+                  handleCloseUpdateScenarioModal={
+                    handleCloseUpdateScenarioModal
+                  }
+                  setIsScenarioActionsOptionsMenuOpen={
+                    setIsScenarioActionsOptionsMenuOpen
+                  }
+                  isScenarioActionsOptionsMenuOpen={
+                    isScenarioActionsOptionsMenuOpen
+                  }
+                  handleOpenDeleteScenarioModal={handleOpenDeleteScenarioModal}
+                />
+              )}
+            </div>
+          </>
+        )}
       </div>
       <div className="scenario-details">
         <h3>Objetivo</h3>
@@ -134,7 +155,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                 <td>{processContent(scenario.context?.geographicLocation)}</td>
                 <td>{processContent(scenario.context?.temporalLocation)}</td>
                 <td className="restrictions">
-                  <span
+                  {isCollaborator && <span
                     className="add-restriction"
                     onClick={() => handleOpenCreateRestriction()}
                   >
@@ -147,7 +168,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                         Cadastrar restrições <img src={Plus} alt="" />{" "}
                       </>
                     )}
-                  </span>
+                  </span>}
                   {scenario.context.restrictions.length > 0 && (
                     <ul>
                       {scenario.context?.restrictions?.map((restriction) => {
@@ -200,7 +221,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
         </div>
         <h3>Recursos</h3>
         <div className="scenario-resources">
-          <span
+          {isCollaborator && <span
             className="add-resource"
             onClick={() => setIsCreateResourceModalOpen(true)}
           >
@@ -213,7 +234,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                 Cadastrar recursos <img src={Plus} alt="" />{" "}
               </>
             )}
-          </span>
+          </span>}
           {scenario.resources.length > 0 && (
             <table className="scenario-resources-details">
               <tbody>
@@ -226,7 +247,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                     <tr key={resource.name.content}>
                       <td>{processContent(resource.name)}</td>
                       <td className="restrictions">
-                        <span
+                       {isCollaborator && <span
                           className="add-restriction"
                           onClick={() =>
                             handleOpenCreateRestriction(resource.id)
@@ -241,7 +262,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                               Cadastrar restrições <img src={Plus} alt="" />{" "}
                             </>
                           )}
-                        </span>
+                        </span>}
                         {resource.restrictions?.length > 0 && (
                           <ul>
                             {resource.restrictions?.map((restriction) => {
@@ -263,7 +284,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
         </div>
         <h3>Episódios</h3>
         <div className="scenario-episodes">
-          <span className="add-episode" onClick={handleOpenCreateEpisodesModal}>
+          {isCollaborator && <span className="add-episode" onClick={handleOpenCreateEpisodesModal}>
             {scenario.episodes.length > 0 ? (
               <>
                 Gerenciar episódios <img src={EditPen} alt="" />
@@ -273,7 +294,7 @@ const Scenario = ({ scenario }: IScenarioProps) => {
                 Cadastrar episódios <img src={Plus} alt="" />{" "}
               </>
             )}
-          </span>
+          </span>}
           {scenario.episodes.length > 0 && (
             <table className="scenario-episodes-details">
               <tbody>
@@ -355,12 +376,12 @@ const Scenario = ({ scenario }: IScenarioProps) => {
         <CreateEpisodesForm
           onClose={handleCloseCreateEpisodesModal}
           scenarioId={scenario.id}
-          initialEpisodes={scenario.episodes.map(e => ({
+          initialEpisodes={scenario.episodes.map((e) => ({
             id: e.id,
             description: e.description.content,
             type: e.type,
             position: e.position,
-            restriction: e.restriction.content
+            restriction: e.restriction.content,
           }))}
         />
       </Modal>

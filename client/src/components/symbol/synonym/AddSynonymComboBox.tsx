@@ -55,7 +55,7 @@ export const AddSynonymComboBox = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder="Cadastre ou remova sinônimos ('Enter' para salvar)"
+            placeholder="Cadastre ou remova sinônimos ('Enter' para adicionar outro)"
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {

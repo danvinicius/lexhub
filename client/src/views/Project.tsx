@@ -16,11 +16,12 @@ import Kebab from "../assets/icon/Kebab_Vertical.svg";
 import { Box, Modal, Tab, Tabs } from "@mui/material";
 import CreateSymbolForm from "../components/symbol/CreateSymbolForm";
 import CreateScenarioForm from "../components/scenario/CreateScenarioForm";
-import { IProject, IUserProject } from "../shared/interfaces";
+import { IProject, IUserProject, IUserRole } from "../shared/interfaces";
 import UpdateProjectForm from "../components/project/UpdateProjectForm";
 import { ProjectActionsOptionsMenu } from "../components/project/ProjectActionsOptionsMenu";
 import DeleteProjectForm from "../components/project/DeleteProjectForm";
 import SymbolsList from "../components/symbol/SymbolsList";
+import AddUserToProjectForm from "../components/project/user/AddUserToProjectForm";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -66,44 +67,73 @@ const Project: FC = () => {
   const owner = project?.users.find(
     (userProject: IUserProject) => userProject.role == "OWNER"
   )?.user;
+
+  const [isCollaborator, setIsCollaborator] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+
+  // project actions options modal control
   const [isProjectActionsOptionsMenu, setIsProjectActionsOptionsMenu] =
     useState(false);
+  const handleOpenProjectActionsOptionsMenu = () =>
+    setIsProjectActionsOptionsMenu(true);
+  const handleCloseProjectActionsOptionsMenu = () =>
+    setIsProjectActionsOptionsMenu(false);
 
-  const [isUpdateProjectModalOpen, setIsUpdateProjectModalOpen] = useState(false);
-  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] =
+  // update project modal control
+  const [isUpdateProjectModalOpen, setIsUpdateProjectModalOpen] =
     useState(false);
-  const [isCreateSymbolModalOpen, setIsCreateSymbolModalOpen] = useState(false);
-  const [isCreateScenarioModalOpen, setIsCreateScenarioModalOpen] =
-    useState(false);
-  const handleOpenCreateSymbolModal = () => setIsCreateSymbolModalOpen(true);
-  const handleOpenCreateScenarioModal = () =>
-    setIsCreateScenarioModalOpen(true);
-  const handleCloseCreateSymbolModal = () => setIsCreateSymbolModalOpen(false);
-  const handleCloseCreateScenarioModal = () =>
-    setIsCreateScenarioModalOpen(false);
+  const handleCloseUpdateProjectModal = () =>
+    setIsUpdateProjectModalOpen(false);
   const handleOpenUpdateProjectModal = () => {
     setIsUpdateProjectModalOpen(true);
-    setIsProjectActionsOptionsMenu(false);
+    handleCloseProjectActionsOptionsMenu();
   };
-  const handleCloseUpdateProjectModal = () => setIsUpdateProjectModalOpen(false);
-  const handleCloseDeleteProjectModal = () =>
-    setIsDeleteProjectModalOpen(false);
+
+  // delete project modal control
+  const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] =
+    useState(false);
   const handleOpenDeleteProjectModal = () => {
     setIsDeleteProjectModalOpen(true);
-    setIsProjectActionsOptionsMenu(false);
+    handleCloseProjectActionsOptionsMenu();
   };
+  const handleCloseDeleteProjectModal = () =>
+    setIsDeleteProjectModalOpen(false);
+
+  // create symbol modal control
+  const [isCreateSymbolModalOpen, setIsCreateSymbolModalOpen] = useState(false);
+  const handleOpenCreateSymbolModal = () => setIsCreateSymbolModalOpen(true);
+  const handleCloseCreateSymbolModal = () => setIsCreateSymbolModalOpen(false);
+
+  // create scenario modal control
+  const [isCreateScenarioModalOpen, setIsCreateScenarioModalOpen] =
+    useState(false);
+  const handleOpenCreateScenarioModal = () =>
+    setIsCreateScenarioModalOpen(true);
+  const handleCloseCreateScenarioModal = () =>
+    setIsCreateScenarioModalOpen(false);
+
+  // add user to project modal control
+  const [isAddUserToProjectModalOpen, setIsAddUserToProjectModalOpen] =
+    useState(false);
+
+  const handleOpenAddUserToProjectModal = () =>
+    setIsAddUserToProjectModalOpen(true);
+  const handleCloseAddUserToProjectModal = () =>
+    setIsAddUserToProjectModalOpen(false);
+
   const params = useParams();
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const getProjects = useCallback(async () => {
+  const getProject = useCallback(async () => {
     setLoading(true);
     if (params?.id) {
       try {
         const { url, options } = GET_PROJECT(
           params.id,
-          isAuthenticated ? isAuthenticated().token : ""
+          isAuthenticated()?.token || ""
         );
         const response = await api[options.method](url, options);
         setProject(response.data);
@@ -116,8 +146,20 @@ const Project: FC = () => {
   }, [isAuthenticated, params.id, setProject]);
 
   useEffect(() => {
-    getProjects();
-  }, [getProjects]);
+    getProject();
+    console.log(isAuthenticated());
+    
+    const role = isAuthenticated()?.projects.find(
+      (someProject) => someProject.project == project?.id
+    )?.role;
+    setIsCollaborator(
+      role == IUserRole.OWNER ||
+        role == IUserRole.ADMIN ||
+        role == IUserRole.COLLABORATOR
+    );
+    setIsAdmin(role == IUserRole.OWNER || role == IUserRole.ADMIN);
+    setIsOwner(role == IUserRole.OWNER);
+  }, [getProject, isAuthenticated, project?.id]);
   return (
     <>
       <Navbar navBg={true} />
@@ -129,39 +171,52 @@ const Project: FC = () => {
             <div className="project-info">
               <div className="project-header">
                 <h1 className="project-name">{project?.name}</h1>
-                <div className="project-options">
-                  <img src={UserAdd} alt="Compartilhar projeto" />
-                  <img
-                    src={Kebab}
-                    alt="Abrir opções do projeto"
-                    onClick={() => setIsProjectActionsOptionsMenu(true)}
-                  />
-                  {isProjectActionsOptionsMenu && (
-                    <ProjectActionsOptionsMenu
-                      handleOpenUpdateProjectModal={handleOpenUpdateProjectModal}
-                      handleCloseUpdateProjectModal={handleCloseUpdateProjectModal}
-                      setIsProjectActionsOptionsMenu={
-                        setIsProjectActionsOptionsMenu
-                      }
-                      isProjectActionsOptionsMenu={isProjectActionsOptionsMenu}
-                      handleOpenDeleteProjectModal={
-                        handleOpenDeleteProjectModal
-                      }
+                {isAdmin && (
+                  <div className="project-options">
+                    <img
+                      src={UserAdd}
+                      alt="Compartilhar projeto"
+                      onClick={handleOpenAddUserToProjectModal}
                     />
-                  )}
-                </div>
-                <div className="buttons-container">
-                  <Button
-                    onClick={handleOpenCreateScenarioModal}
-                    theme="primary"
-                    text="Novo cenário"
-                  ></Button>
-                  <Button
-                    onClick={handleOpenCreateSymbolModal}
-                    theme="secondary"
-                    text="Novo símbolo"
-                  ></Button>
-                </div>
+
+                    <img
+                      src={Kebab}
+                      alt="Abrir opções do projeto"
+                      onClick={handleOpenProjectActionsOptionsMenu}
+                    />
+                    {isProjectActionsOptionsMenu && (
+                      <ProjectActionsOptionsMenu
+                      isOwner={isOwner}
+                        isProjectActionsOptionsMenu={
+                          isProjectActionsOptionsMenu
+                        }
+                        handleCloseProjectActionsOptionsMenu={
+                          handleCloseProjectActionsOptionsMenu
+                        }
+                        handleOpenUpdateProjectModal={
+                          handleOpenUpdateProjectModal
+                        }
+                        handleOpenDeleteProjectModal={
+                          handleOpenDeleteProjectModal
+                        }
+                      />
+                    )}
+                  </div>
+                )}
+                {isCollaborator && (
+                  <div className="buttons-container">
+                    <Button
+                      onClick={handleOpenCreateScenarioModal}
+                      theme="primary"
+                      text="Novo cenário"
+                    ></Button>
+                    <Button
+                      onClick={handleOpenCreateSymbolModal}
+                      theme="secondary"
+                      text="Novo símbolo"
+                    ></Button>
+                  </div>
+                )}
               </div>
               <p className="project-description">{project?.description}</p>
               {owner && (
@@ -222,6 +277,14 @@ const Project: FC = () => {
             </Box>
           </div>
         </div>
+        <Modal
+          open={isAddUserToProjectModalOpen}
+          onClose={handleCloseAddUserToProjectModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <AddUserToProjectForm onClose={handleCloseAddUserToProjectModal} />
+        </Modal>
         <Modal
           open={isUpdateProjectModalOpen}
           onClose={handleCloseUpdateProjectModal}

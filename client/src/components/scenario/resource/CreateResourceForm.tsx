@@ -67,7 +67,7 @@ export const CreateResourceForm = ({
         const { url, options } = UPDATE_SCENARIO(
           projectContext.project.id,
           scenarioId,
-          isAuthenticated().token
+          isAuthenticated()?.token || ""
         );
         await api[options.method](url, body, options);
         navigate(0);
@@ -83,7 +83,7 @@ export const CreateResourceForm = ({
     const { url, options } = GET_SCENARIO(
       projectContext.project?.id || "",
       scenarioId,
-      isAuthenticated().token
+      isAuthenticated()?.token || ""
     );
     const response = await api[options.method](url, options);
     const originalScenario: IScenario = response.data;

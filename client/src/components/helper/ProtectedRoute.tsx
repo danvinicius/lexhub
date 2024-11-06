@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated } = useContext(UserContext) || {};
-  return isAuthenticated().token ? children : <Navigate to="/login" />;
+  return isAuthenticated()?.token ? children : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;

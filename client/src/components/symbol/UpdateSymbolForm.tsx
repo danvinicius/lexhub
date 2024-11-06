@@ -72,7 +72,7 @@ const UpdateSymbolForm = ({
         const { url, options } = UPDATE_SYMBOL(
           projectId,
           symbol.id,
-          isAuthenticated().token
+          isAuthenticated()?.token || ""
         );
         await api[options.method](url, body, options);
         navigate(0);

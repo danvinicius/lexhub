@@ -23,10 +23,12 @@ export class UserService {
     data: AddUserToProjectRequestDTO,
     inviterId: string
   ): Promise<null | IUserProject> {
-    const inviter = await userRepository.getUser({ id: inviterId });
+    
+    const inviter = await userRepository.getUser({ _id: inviterId });
+    
     if (
       inviter.projects.find((p: IUserProject) => p.project.id == data.projectId)
-        .role == UserRole.ADMIN &&
+        ?.role == UserRole.ADMIN &&
       (data.role == UserRole.ADMIN || data.role == UserRole.OWNER)
     ) {
       throw new UnauthorizedError(
@@ -43,8 +45,10 @@ export class UserService {
     }
 
     const user = await userRepository.getUser({ email: data.email });
+    console.log(user);
+    
     if (!user) {
-      throw new BadRequestError('Este usuário não existe');
+      throw new BadRequestError(`O usuário com e-mail ${data.email} não existe`);
     }
 
     const userProject = await userRepository.addUserToProject({

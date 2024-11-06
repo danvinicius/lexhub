@@ -56,7 +56,7 @@ export const AddExceptionComboBox = ({
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder="Cadastre ou remova exceções ('Enter' para salvar)"
+            placeholder="Cadastre ou remova exceções ('Enter' para adicionar outro)"
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {

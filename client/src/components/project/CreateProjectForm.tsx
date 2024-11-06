@@ -20,7 +20,7 @@ const CreateProjectForm = () => {
   const name = useForm("dontValidateName");
   const description = useForm("dontValidateDescription");
 
-  const { isAuthenticated } = useContext(UserContext) || {};
+  const { isAuthenticated, refreshUser } = useContext(UserContext) || {};
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,8 +31,9 @@ const CreateProjectForm = () => {
     setLoading(true);
 
     try {
-      const { url, options } = CREATE_PROJECT(isAuthenticated().token);
+      const { url, options } = CREATE_PROJECT(isAuthenticated()?.token || "");
       const { data } = await api[options.method](url, body, options);
+      await refreshUser();
       navigate(`/projeto/${data.id}`);
     } catch (error: any) {
       setError(error.response.data.error);

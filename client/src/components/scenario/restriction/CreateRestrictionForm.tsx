@@ -87,7 +87,7 @@ export const CreateRestrictionForm = ({
         const { url, options } = UPDATE_SCENARIO(
           projectId,
           scenarioId,
-          isAuthenticated().token
+          isAuthenticated()?.token || ""
         );
         await api[options.method](url, body, options);
         navigate(0);
@@ -103,7 +103,7 @@ export const CreateRestrictionForm = ({
     const { url, options } = GET_SCENARIO(
       projectId,
       scenarioId,
-      isAuthenticated().token
+      isAuthenticated()?.token || ""
     );
     const response = await api[options.method](url, options);
     const originalScenario: IScenario = response.data;

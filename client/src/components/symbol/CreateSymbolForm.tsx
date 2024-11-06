@@ -58,7 +58,7 @@ const CreateSymbolForm = ({ onClose }: CreateSymbolFormProps) => {
       try {
         const { url, options } = CREATE_SYMBOL(
           projectContext.project.id,
-          isAuthenticated().token
+          isAuthenticated()?.token || ""
         );
         await api[options.method](url, body, options);
         navigate(0);

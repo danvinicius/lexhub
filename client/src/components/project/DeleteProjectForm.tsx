@@ -41,7 +41,7 @@ const DeleteProjectForm = ({ project, onClose }: DeleteProjectFormProps) => {
       try {
         const { url, options } = DELETE_PROJECT(
           project.id,
-          isAuthenticated().token
+          isAuthenticated()?.token || ""
         );
         await api[options.method](url, options);
         navigate('/');

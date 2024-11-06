@@ -40,7 +40,7 @@ const DeleteScenarioForm = ({ scenario, projectId, onClose }: DeleteScenarioForm
         const { url, options } = DELETE_SCENARIO(
             projectId,
           scenario.id,
-          isAuthenticated().token
+          isAuthenticated()?.token || ""
         );
         await api[options.method](url, options);
         navigate(0);
