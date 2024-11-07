@@ -9,19 +9,16 @@ services:
     depends_on:
       - db
     volumes:
-    - .:/usr/src/app
+      - .:/usr/src/app
 
   db:
-    container_name: postgres
+    container_name: mongo
     restart: "no"
-    image: postgres
+    image: mongo
     ports:
-      - '5433:${DB_PORT}'
+      - '27017:27017'
     volumes:
       - data:/data/db
-    environment:
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
 
 volumes: 
- data: {}
+  data: {}

@@ -1,7 +1,8 @@
 import mongoose, { Mongoose } from 'mongoose';
 
-// docker run -p 27017:27017 -d mongo
+const {DB_HOST, DB_NAME, DB_PORT} = process.env;
+
 export const connect = async (): Promise<Mongoose> =>
-  await mongoose.connect('mongodb://localhost:27017/cel');
+  await mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`);
 
 export const close = (): Promise<void> => mongoose.connection.close();

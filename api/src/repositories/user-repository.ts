@@ -2,7 +2,6 @@
 import { ServerError } from '@/utils/errors';
 import User, { IUser, IUserProject, UserRole } from '@/models/User';
 import Project from '@/models/Project';
-import {Types} from 'mongoose'
 
 export namespace UserRepository {
   export interface CreateUserParams {
