@@ -1,30 +1,39 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, Dispatch, SetStateAction } from 'react';
 
-export const useSelect = (type?: string) => {
-  const [value, setValue] = useState<string>("");
-  const [error, setError] = useState<string | null>("");
+interface UseSelectReturn {
+    value: string;
+    setValue: Dispatch<SetStateAction<string>>;
+    onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
+    error: string | null;
+    validate: () => boolean;
+    onBlur: () => boolean;
+}
 
-  const validate = (value: string): boolean => {
-    if (!type) return true;
-    if (value.length === 0) {
-      setError("Selecione uma opção.");
-      return false;
-    }
-    setError(null);
-    return true;
-  };
+export const useSelect = (type?: string): UseSelectReturn => {
+	const [value, setValue] = useState<string>('');
+	const [error, setError] = useState<string | null>('');
 
-  const onChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setError("");
-    setValue(event.target.value);
-  };
+	const validate = (value: string): boolean => {
+		if (!type) return true;
+		if (value.length === 0) {
+			setError('Selecione uma opção.');
+			return false;
+		}
+		setError(null);
+		return true;
+	};
 
-  return {
-    value,
-    setValue,
-    onChange,
-    error,
-    validate: () => validate(value),
-    onBlur: () => validate(value),
-  };
+	const onChange = (event: ChangeEvent<HTMLSelectElement>) => {
+		setError('');
+		setValue(event.target.value);
+	};
+
+	return {
+		value,
+		setValue,
+		onChange,
+		error,
+		validate: () => validate(value),
+		onBlur: () => validate(value),
+	};
 };

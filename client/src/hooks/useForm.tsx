@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 
 interface ValidationRule {
   regex: RegExp;
@@ -6,15 +6,15 @@ interface ValidationRule {
 }
 
 const types: Record<string, ValidationRule> = {
-  email: {
-    regex:
+	email: {
+		regex:
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    message: "Preencha um e-mail válido.",
-  },
-  password: {
-    regex: /.{6,}/,
-    message: "A senha deve conter pelo menos 6 caracteres.",
-  },
+		message: 'Preencha um e-mail válido.',
+	},
+	password: {
+		regex: /.{6,}/,
+		message: 'A senha deve conter pelo menos 6 caracteres.',
+	},
 };
 
 type UseFormReturn = {
@@ -28,37 +28,37 @@ type UseFormReturn = {
 };
 
 const useForm = (type?: string): UseFormReturn => {
-  const [value, setValue] = useState<string>("");
-  const [error, setError] = useState<string | null>("");
+	const [value, setValue] = useState<string>('');
+	const [error, setError] = useState<string | null>('');
 
-  const validate = (value: string): boolean => {
-    if (!type) return true;
-    if (value.length === 0) {
-      setError("Preencha um valor.");
-      return false;
-    }
-    if (type && types[type] && !types[type].regex.test(value)) {
-      setError(types[type].message);
-      return false;
-    }
-    setError(null);
-    return true;
-  };
+	const validate = (value: string): boolean => {
+		if (!type) return true;
+		if (value.length === 0) {
+			setError('Preencha um valor.');
+			return false;
+		}
+		if (type && types[type] && !types[type].regex.test(value)) {
+			setError(types[type].message);
+			return false;
+		}
+		setError(null);
+		return true;
+	};
 
-  const onChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setError('')
-    setValue(event.target.value);
-  };
+	const onChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		setError('');
+		setValue(event.target.value);
+	};
 
-  return {
-    value,
-    setValue,
-    onChange,
-    error,
-    setError,
-    validate: () => validate(value),
-    onBlur: () => value.length > 0 && validate(value),
-  };
+	return {
+		value,
+		setValue,
+		onChange,
+		error,
+		setError,
+		validate: () => validate(value),
+		onBlur: () => value.length > 0 && validate(value),
+	};
 };
 
 export default useForm;

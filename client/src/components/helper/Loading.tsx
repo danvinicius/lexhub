@@ -1,9 +1,10 @@
-import './Loading.scss'
+import { ReactNode } from 'react';
+import './Loading.scss';
 
-const Loading = () => {
-    return (
-        <div className="loading"></div>
-    )
-}
+const Loading = (): ReactNode => {
+	return (
+		<div className="loading"></div>
+	);
+};
 
 export default Loading;

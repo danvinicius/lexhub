@@ -1,10 +1,10 @@
+import { FC, ReactNode } from 'react';
 interface ErrorProps {
     error?: string | null;
 }
 
-const Error = ({ error }: ErrorProps) => {
-  if (!error) return null;
-  return <p className="error">{error}</p>;
+const Error: FC<ErrorProps> = ({ error }: ErrorProps): ReactNode => {
+	return error && <p className="error">{error}</p>;
 };
 
 

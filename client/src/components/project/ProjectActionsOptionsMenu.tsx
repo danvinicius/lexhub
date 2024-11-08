@@ -1,7 +1,7 @@
-import EditPen from "../../assets/icon/Edit.svg";
-import Bin from "../../assets/icon/Bin_Empty.svg";
-import "./ProjectActionsOptionsMenu.scss";
-import { useEffect, useRef } from "react";
+import EditPen from '../../assets/icon/Edit.svg';
+import Bin from '../../assets/icon/Bin_Empty.svg';
+import './ProjectActionsOptionsMenu.scss';
+import { FC, ReactNode, useEffect, useRef } from 'react';
 
 interface ProjectActionsOptionsMenuProps {
   isOwner: boolean;
@@ -11,53 +11,53 @@ interface ProjectActionsOptionsMenuProps {
   handleCloseProjectActionsOptionsMenu: () => void;
 }
 
-export const ProjectActionsOptionsMenu = ({
-  handleOpenUpdateProjectModal,
-  isOwner,
-  isProjectActionsOptionsMenu,
-  handleOpenDeleteProjectModal,
-  handleCloseProjectActionsOptionsMenu,
-}: ProjectActionsOptionsMenuProps) => {
-  const popupRef = useRef<HTMLDivElement>(null);
+export const ProjectActionsOptionsMenu: FC<ProjectActionsOptionsMenuProps> = ({
+	handleOpenUpdateProjectModal,
+	isOwner,
+	isProjectActionsOptionsMenu,
+	handleOpenDeleteProjectModal,
+	handleCloseProjectActionsOptionsMenu,
+}: ProjectActionsOptionsMenuProps): ReactNode => {
+	const popupRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      // Verifica se o clique foi fora do popup
-      if (
-        popupRef.current &&
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			// Verifica se o clique foi fora do popup
+			if (
+				popupRef.current &&
         !popupRef.current.contains(event.target as Node)
-      ) {
-        handleCloseProjectActionsOptionsMenu();
-      }
-    };
+			) {
+				handleCloseProjectActionsOptionsMenu();
+			}
+		};
 
-    // Adiciona o event listener quando o popup estiver aberto
-    if (isProjectActionsOptionsMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
+		// Adiciona o event listener quando o popup estiver aberto
+		if (isProjectActionsOptionsMenu) {
+			document.addEventListener('mousedown', handleClickOutside);
+		}
 
-    // Remove o event listener quando o popup fecha
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [handleCloseProjectActionsOptionsMenu, isProjectActionsOptionsMenu]);
+		// Remove o event listener quando o popup fecha
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [handleCloseProjectActionsOptionsMenu, isProjectActionsOptionsMenu]);
 
-  if (!isProjectActionsOptionsMenu) return null;
+	if (!isProjectActionsOptionsMenu) return null;
 
-  return (
-    <div className="project-actions-options-menu" ref={popupRef}>
-      <ul>
-        <li onClick={handleOpenUpdateProjectModal} key="update-project">
-          <img src={EditPen} alt="Editar projeto" />
+	return (
+		<div className="project-actions-options-menu" ref={popupRef}>
+			<ul>
+				<li onClick={handleOpenUpdateProjectModal} key="update-project">
+					<img src={EditPen} alt="Editar projeto" />
           Editar projeto
-        </li>
-        {isOwner && (
-          <li className="delete-project" onClick={handleOpenDeleteProjectModal}>
-            <img src={Bin} alt="Excluir projeto" key="delete-project" />
+				</li>
+				{isOwner && (
+					<li className="delete-project" onClick={handleOpenDeleteProjectModal}>
+						<img src={Bin} alt="Excluir projeto" key="delete-project" />
             Excluir projeto
-          </li>
-        )}
-      </ul>
-    </div>
-  );
+					</li>
+				)}
+			</ul>
+		</div>
+	);
 };

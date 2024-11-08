@@ -1,5 +1,5 @@
-import { CSSProperties, FC, FormEvent } from 'react'
-import './Button.scss'
+import { CSSProperties, FC, FormEvent } from 'react';
+import './Button.scss';
 
 interface ButtonProps {
     text: string
@@ -9,11 +9,11 @@ interface ButtonProps {
 }
 
 const Button: FC<ButtonProps> = ({text, theme, style, onClick}: ButtonProps) => {
-    return (
-        <button className={`button ${theme}`} onClick={onClick ? onClick : () => {}} style={style}>
-            {text}
-        </button>
-    )
-}
+	return (
+		<button className={`button ${theme}`} onClick={onClick ? onClick : () => null} style={style}>
+			{text}
+		</button>
+	);
+};
 
 export default Button;

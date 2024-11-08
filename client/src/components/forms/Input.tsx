@@ -1,6 +1,6 @@
-import { ChangeEvent, CSSProperties, FC, KeyboardEvent } from "react";
-import "./Input.scss";
-import Error from "../helper/Error";
+import { ChangeEvent, CSSProperties, FC, KeyboardEvent } from 'react';
+import './Input.scss';
+import Error from '../helper/Error';
 
 interface InputProps {
   type: string;
@@ -27,40 +27,40 @@ interface InputProps {
 }
 
 const Input: FC<InputProps> = ({
-  type,
-  name,
-  placeholder,
-  value,
-  label,
-  error,
-  style,
-  autoFocus,
-  onChange,
-  onInput,
-  onBlur,
-  onKeyDown,
-  required = false,
+	type,
+	name,
+	placeholder,
+	value,
+	label,
+	error,
+	style,
+	autoFocus,
+	onChange,
+	onInput,
+	onBlur,
+	onKeyDown,
+	required = false,
 }: InputProps) => {
-  return (
-    <label htmlFor={name} className={error ? 'error' : ''}>
-      {label}
-      <input
-        type={type}
-        name={name}
-        id={name}
-        placeholder={placeholder}
-        value={value}
-        style={style}
-        onChange={onChange}
-        onInput={onInput}
-        onBlur={onBlur}
-        onKeyDown={onKeyDown}
-        required={required}
-        autoFocus={autoFocus}
-      />
-      <Error error={error}/>
-    </label>
-  );
+	return (
+		<label htmlFor={name} className={error ? 'error' : ''}>
+			{label}
+			<input
+				type={type}
+				name={name}
+				id={name}
+				placeholder={placeholder}
+				value={value}
+				style={style}
+				onChange={onChange}
+				onInput={onInput}
+				onBlur={onBlur}
+				onKeyDown={onKeyDown}
+				required={required}
+				autoFocus={autoFocus}
+			/>
+			<Error error={error}/>
+		</label>
+	);
 };
 
 export default Input;

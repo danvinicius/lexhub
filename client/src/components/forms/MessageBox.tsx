@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import './MessageBox.scss'
+import './MessageBox.scss';
 
 export enum MessageBoxTheme {
     SUCCESS,
@@ -12,11 +12,11 @@ interface MessageBoxProps {
 }
 
 const MessageBox: FC<MessageBoxProps> = ({ message, theme }: MessageBoxProps) => {
-  return (
-    <div className={`messageBox ${theme == MessageBoxTheme.SUCCESS ? 'success' : 'error'}`} >
-        <p>{message}</p>
-    </div>
-  );
+	return (
+		<div className={`messageBox ${theme == MessageBoxTheme.SUCCESS ? 'success' : 'error'}`} >
+			<p>{message}</p>
+		</div>
+	);
 };
 
 export default MessageBox;

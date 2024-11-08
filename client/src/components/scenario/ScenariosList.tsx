@@ -1,42 +1,43 @@
-import "./ScenariosList.scss";
-import { ILexiconScenario } from "../../shared/interfaces";
-import Scenario from "./Scenario";
-import { Element } from "react-scroll";
-import { useHelpers } from "../../hooks/useHelpers";
+import './ScenariosList.scss';
+import { ILexiconScenario } from '../../shared/interfaces';
+import Scenario from './Scenario';
+import { Element } from 'react-scroll';
+import { useHelpers } from '../../hooks/useHelpers';
+import { FC, ReactNode } from 'react';
 
 interface IScenariosListProps {
   scenarios: ILexiconScenario[];
 }
 
-const ScenariosList = ({ scenarios }: IScenariosListProps) => {
-  const { slugify } = useHelpers();
-  return (
-    <section className="scenarios-list-container" id="scenarios-list">
-      <div className="scenarios-list slide-right">
-        {!!scenarios?.length && (
-          <ul>
-            {scenarios.map((scenario: ILexiconScenario) => {
-              return (
-                <li key={`${scenario.id}-${slugify(scenario.title.content)}`}>
-                  <Element
-                    key={`${scenario.id}-${slugify(scenario.title.content)}`}
-                    name={`${scenario.id}-${slugify(scenario.title.content)}`}
-                  >
-                    <Scenario scenario={scenario} />
-                  </Element>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-        {!scenarios.length && (
-          <span className="no-scenarios">
+const ScenariosList: FC<IScenariosListProps> = ({ scenarios }: IScenariosListProps): ReactNode => {
+	const { slugify } = useHelpers();
+	return (
+		<section className="scenarios-list-container" id="scenarios-list">
+			<div className="scenarios-list slide-right">
+				{!!scenarios?.length && (
+					<ul>
+						{scenarios.map((scenario: ILexiconScenario) => {
+							return (
+								<li key={`${scenario.id}-${slugify(scenario.title.content)}`}>
+									<Element
+										key={`${scenario.id}-${slugify(scenario.title.content)}`}
+										name={`${scenario.id}-${slugify(scenario.title.content)}`}
+									>
+										<Scenario scenario={scenario} />
+									</Element>
+								</li>
+							);
+						})}
+					</ul>
+				)}
+				{!scenarios.length && (
+					<span className="no-scenarios">
             Ainda não há cenários nesse projeto
-          </span>
-        )}
-      </div>
-    </section>
-  );
+					</span>
+				)}
+			</div>
+		</section>
+	);
 };
 
 export default ScenariosList;

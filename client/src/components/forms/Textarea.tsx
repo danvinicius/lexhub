@@ -1,5 +1,5 @@
-import { ChangeEvent, FC, KeyboardEvent } from "react";
-import "./Textarea.scss";
+import { ChangeEvent, FC, KeyboardEvent } from 'react';
+import './Textarea.scss';
 
 interface TextareaProps {
   rows: number;
@@ -15,32 +15,32 @@ interface TextareaProps {
 }
 
 const Textarea: FC<TextareaProps> = ({
-  placeholder,
-  name,
-  value,
-  label,
-  error,
-  rows,
-  onChange,
-  onInput,
-  onKeyDown,
-  required = false,
+	placeholder,
+	name,
+	value,
+	label,
+	error,
+	rows,
+	onChange,
+	onInput,
+	onKeyDown,
+	required = false,
 }: TextareaProps) => {
-  return (
-    <label htmlFor={name} className={error ? "error" : ""}>
-      {label}
-      <textarea
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        onInput={onInput}
-        onKeyDown={onKeyDown}
-        required={required}
-        rows={rows}
-      ></textarea>
-    </label>
-  );
+	return (
+		<label htmlFor={name} className={error ? 'error' : ''}>
+			{label}
+			<textarea
+				name={name}
+				placeholder={placeholder}
+				value={value}
+				onChange={onChange}
+				onInput={onInput}
+				onKeyDown={onKeyDown}
+				required={required}
+				rows={rows}
+			></textarea>
+		</label>
+	);
 };
 
 export default Textarea;

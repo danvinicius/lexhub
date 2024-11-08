@@ -75,7 +75,6 @@ export class UserController {
     try {
       const data = new DTO.AddUserToProjectRequestDTO({ ...req.body, projectId: req.params.projectId });
       await validate(data);
-      console.log(req.userId);
       
       const userProject = await userService.addUserToProject(data, req.userId);
       return ok(userProject);

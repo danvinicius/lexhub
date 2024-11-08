@@ -1,28 +1,24 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback } from 'react';
 import {
-	FormControl,
-	InputLabel,
-	MenuItem,
-	Select,
-	TextField,
 	Button,
-} from "@mui/material";
-import { IEpisode } from "../../../shared/interfaces";
-import "./EpisodeInputGroup.scss";
+} from '@mui/material';
+import { IEpisode } from '../../../shared/interfaces';
+import './EpisodeInputGroup.scss';
+import { EpisodeFormGroup } from './EpisodeFormGroup';
 
 interface EpisodeInputGroupProps {
   episodes: IEpisode[];
-  setEpisodes: React.Dispatch<React.SetStateAction<IEpisode[]>>;
+  setEpisodes: Dispatch<SetStateAction<IEpisode[]>>;
 }
 
-const EpisodeInputGroup: React.FC<EpisodeInputGroupProps> = ({
+const EpisodeInputGroup: FC<EpisodeInputGroupProps> = ({
 	episodes,
 	setEpisodes,
 }) => {
 	const scrollRef = useRef<HTMLDivElement>(null);
 
 	const handleEpisodeChange = useCallback(
-		(index: number, field: keyof IEpisode, value: any) => {
+		(index: number, field: keyof IEpisode, value: string | number) => {
 			setEpisodes((prevEpisodes) =>
 				prevEpisodes.map((episode, i) =>
 					i === index ? { ...episode, [field]: value } : episode
@@ -34,18 +30,18 @@ const EpisodeInputGroup: React.FC<EpisodeInputGroupProps> = ({
 
 	const handleAddEpisode = () => {
 		const newEpisode: IEpisode = {
-			id: "",
+			id: '',
 			position: episodes.length + 1,
-			description: "",
-			type: "",
-			restriction: "",
+			description: '',
+			type: '',
+			restriction: '',
 		};
 		setEpisodes((prevEpisodes) => [...prevEpisodes, newEpisode]);
 
 		if (scrollRef.current) {
 			scrollRef.current.scrollTo({
 				top: scrollRef.current.scrollHeight,
-				behavior: "smooth",
+				behavior: 'smooth',
 			});
 		}
 	};
@@ -74,80 +70,5 @@ const EpisodeInputGroup: React.FC<EpisodeInputGroupProps> = ({
 		</div>
 	);
 };
-
-interface EpisodeFormGroupProps {
-  episode: IEpisode;
-  index: number;
-  onEpisodeChange: (index: number, field: keyof IEpisode, value: any) => void;
-  episodesLength: number;
-}
-
-// Usando React.memo para evitar re-renderizações desnecessárias
-const EpisodeFormGroup: React.FC<EpisodeFormGroupProps> = React.memo(
-	({ episode, index, onEpisodeChange, episodesLength }) => {
-		return (
-			<div className="episode-form-group">
-				<div className="episode-position">
-					<FormControl fullWidth>
-						<InputLabel>Posição</InputLabel>
-						<Select
-							value={episode.position}
-							label="Posição"
-							onChange={(e) =>
-								onEpisodeChange(index, "position", e.target.value)
-							}
-						>
-							{[...Array(episodesLength)].map((_, i) => (
-								<MenuItem key={i} value={i + 1}>
-									{i + 1}
-								</MenuItem>
-							))}
-						</Select>
-					</FormControl>
-				</div>
-
-				<div className="episode-description">
-					<TextField
-						label="Descrição"
-						placeholder="Digite a descrição"
-						multiline
-						fullWidth
-						value={episode.description}
-						onChange={(e) =>
-							onEpisodeChange(index, "description", e.target.value)
-						}
-					/>
-				</div>
-
-				<div className="episode-type">
-					<FormControl fullWidth>
-						<InputLabel>Tipo</InputLabel>
-						<Select
-							value={episode.type}
-							label="Tipo"
-							onChange={(e) => onEpisodeChange(index, "type", e.target.value)}
-						>
-							<MenuItem value="condicional">Condicional</MenuItem>
-							<MenuItem value="opcional">Opcional</MenuItem>
-						</Select>
-					</FormControl>
-				</div>
-
-				<div className="episode-restriction">
-					<TextField
-						label="Restrição"
-						placeholder="Digite a restrição"
-						multiline
-						fullWidth
-						value={episode.restriction}
-						onChange={(e) =>
-							onEpisodeChange(index, "restriction", e.target.value)
-						}
-					/>
-				</div>
-			</div>
-		);
-	}
-);
 
 export default EpisodeInputGroup;

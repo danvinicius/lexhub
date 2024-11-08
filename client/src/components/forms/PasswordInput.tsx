@@ -1,8 +1,8 @@
-import Input from "./Input";
-import Eye from "../../assets/icon/Eye.svg";
-import EyeOff from "../../assets/icon/Eye_Off.svg";
-import { ChangeEvent, FC, useState } from "react";
-import './PasswordInput.scss'
+import Input from './Input';
+import Eye from '../../assets/icon/Eye.svg';
+import EyeOff from '../../assets/icon/Eye_Off.svg';
+import { ChangeEvent, FC, useState } from 'react';
+import './PasswordInput.scss';
 
 interface PasswordInputProps {
   onChange: ( e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -21,57 +21,57 @@ interface PasswordInputProps {
 }
 
 const PasswordInput: FC<PasswordInputProps> = ({
-  onChange,
-  onInput,
-  onBlur,
-  setCurrentScreen,
-  enableForgotPassword,
-  value,
-  placeholder,
-  label,
-  error,
+	onChange,
+	onInput,
+	onBlur,
+	setCurrentScreen,
+	enableForgotPassword,
+	value,
+	placeholder,
+	label,
+	error,
 }: PasswordInputProps) => {
-  const [type, setType] = useState("password");
-  return (
-    <div className="password-input-wrapper">
-      {enableForgotPassword && (
-        <small
-          className="secondary-text-color pointer"
-          onClick={() => setCurrentScreen('forgot')}
-        >
+	const [type, setType] = useState('password');
+	return (
+		<div className="password-input-wrapper">
+			{enableForgotPassword && (
+				<small
+					className="secondary-text-color pointer"
+					onClick={() => setCurrentScreen('forgot')}
+				>
           Esqueceu sua senha?
-        </small>
-      )}
+				</small>
+			)}
 
-      <Input
-        type={type}
-        name="password"
-        placeholder={placeholder}
-        label={label}
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
-        onInput={onInput}
-        error={error}
-      />
-      {type == "password" && (
-        <img
-          className="pointer"
-          src={Eye}
-          alt="Turn password visible"
-          onClick={() => setType("text")}
-        />
-      )}
-      {type == "text" && (
-        <img
-          className="pointer"
-          src={EyeOff}
-          alt="Turn password invisible"
-          onClick={() => setType("password")}
-        />
-      )}
-    </div>
-  );
+			<Input
+				type={type}
+				name="password"
+				placeholder={placeholder}
+				label={label}
+				value={value}
+				onChange={onChange}
+				onBlur={onBlur}
+				onInput={onInput}
+				error={error}
+			/>
+			{type == 'password' && (
+				<img
+					className="pointer"
+					src={Eye}
+					alt="Turn password visible"
+					onClick={() => setType('text')}
+				/>
+			)}
+			{type == 'text' && (
+				<img
+					className="pointer"
+					src={EyeOff}
+					alt="Turn password invisible"
+					onClick={() => setType('password')}
+				/>
+			)}
+		</div>
+	);
 };
 
 export default PasswordInput;
