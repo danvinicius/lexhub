@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { ErrorResponse, IProject } from '../../shared/interfaces';
 import Close from '../../assets/icon/Close_Dark.svg';
 import { AxiosError } from 'axios';
+import { RichTextEditor } from '../forms/RichTextEditor';
 
 export interface UpdateProjectRequestDTO {
   name: string;
@@ -26,11 +27,15 @@ interface UpdateProjectFormProps {
 
 const UpdateProjectForm: FC<UpdateProjectFormProps> = ({ project, onClose }: UpdateProjectFormProps): ReactNode => {
 	const nameEdit = useForm('dontValidateName');
-	const descriptionEdit = useForm('dontValidateDescription');
+
+	const [description, setDescription] = useState('');
+    const handleProcedureContentChange = (content: any) => {
+        setDescription(content);
+    };
 
 	useEffect(() => {
 		nameEdit.setValue(project.name);
-		descriptionEdit.setValue(project.description);
+		setDescription(project.description);
 	}, []);
 
 	const { isAuthenticated } = useContext(UserContext) || {};
@@ -63,8 +68,8 @@ const UpdateProjectForm: FC<UpdateProjectFormProps> = ({ project, onClose }: Upd
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-		if (nameEdit.validate() && descriptionEdit.validate()) {
-			updateProject({ name: nameEdit.value, description: descriptionEdit.value });
+		if (nameEdit.validate()) {
+			updateProject({ name: nameEdit.value, description });
 		}
 	};
 
@@ -89,14 +94,7 @@ const UpdateProjectForm: FC<UpdateProjectFormProps> = ({ project, onClose }: Upd
 					{...nameEdit}
 					onInput={() => setError('')}
 				/>
-				<Input
-					type="text"
-					name="description"
-					placeholder="Um projeto focado no desenvolvimento de uma plataforma de petróleo sustentável."
-					label="Descrição"
-					{...descriptionEdit}
-					onInput={() => setError('')}
-				/>
+				<RichTextEditor label='Descrição' value={description} handleProcedureContentChange={handleProcedureContentChange}/>
 				{loading ? (
 					<Loading />
 				) : (

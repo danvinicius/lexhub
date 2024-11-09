@@ -11,12 +11,23 @@
       margin-bottom: .5rem;
     }
 
-    .project-header,
-    .project-description {
+    .project-header{
       display: flex;
       gap: 4rem;
       align-items: center;
       position: relative;
+    }
+
+    .project-description {
+      ol, ul {
+        padding-left: 1.3rem;
+      }
+      .ql-align-center {
+        text-align: center;
+      }
+      .ql-align-right {
+        text-align: right;
+      }
     }
     .project-options {
       display: flex;

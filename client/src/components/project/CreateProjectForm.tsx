@@ -12,6 +12,7 @@ import Error from '../helper/Error';
 import { useNavigate } from 'react-router-dom';
 import { ErrorResponse } from '../../shared/interfaces';
 import { AxiosError } from 'axios';
+import { RichTextEditor } from '../forms/RichTextEditor';
 
 export interface CreateProjectRequestDTO {
   name: string;
@@ -20,7 +21,11 @@ export interface CreateProjectRequestDTO {
 
 const CreateProjectForm = (): ReactNode => {
 	const name = useForm('dontValidateName');
-	const description = useForm('dontValidateDescription');
+
+	const [description, setDescription] = useState('');
+    const handleProcedureContentChange = (content: any) => {
+        setDescription(content);
+    };
 
 	const { isAuthenticated, refreshUser } = useContext(UserContext) || {};
 
@@ -47,8 +52,8 @@ const CreateProjectForm = (): ReactNode => {
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-		if (name.validate() && description.validate()) {
-			createProject({ name: name.value, description: description.value });
+		if (name.validate()) {
+			createProject({ name: name.value, description });
 		}
 	};
 
@@ -64,14 +69,7 @@ const CreateProjectForm = (): ReactNode => {
 					{...name}
 					onInput={() => setError('')}
 				/>
-				<Input
-					type="text"
-					name="description"
-					placeholder="Um projeto focado no desenvolvimento de uma plataforma de petróleo sustentável."
-					label="Descrição"
-					{...description}
-					onInput={() => setError('')}
-				/>
+				<RichTextEditor label='Descrição' value={description} handleProcedureContentChange={handleProcedureContentChange}/>
 				{loading ? (
 					<Loading />
 				) : (

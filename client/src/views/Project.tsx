@@ -169,7 +169,7 @@ const Project: FC = () => {
 									</div>
 								)}
 							</div>
-							<p className='project-description'>{project?.description}</p>
+							<div className="project-description" dangerouslySetInnerHTML={{ __html: project?.description || '' }}></div>
 							{owner && (
 								<small className='project-owner'>
                   Criado por {owner.name} em {new Date(project?.createdAt).toLocaleDateString('pt-br')} às{' '}
