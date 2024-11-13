@@ -23,6 +23,7 @@ import DeleteProjectForm from '../components/project/DeleteProjectForm';
 import SymbolsList from '../components/symbol/SymbolsList';
 import AddUserToProjectForm from '../components/project/user/AddUserToProjectForm';
 import { AxiosError } from 'axios';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -53,7 +54,11 @@ function a11yProps(index: number) {
 	};
 }
 
-const Project: FC = () => {
+interface ProjectProps {
+	projectId: string;
+}
+
+const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 	const { isAuthenticated } = useContext(UserContext) || {};
 	const { setProject, project, setSymbol } = useContext(ProjectContext || {});
 	const [currentTab, setCurrentTab] = useState(0);
@@ -112,10 +117,12 @@ const Project: FC = () => {
 	const [loading, setLoading] = useState(false);
 
 	const getProject = useCallback(async () => {
+		console.log(projectId);
+		
 		setLoading(true);
-		if (params?.id) {
+		if (projectId) {
 			try {
-				const { url, options } = GET_PROJECT(params.id, isAuthenticated()?.token || '');
+				const { url, options } = GET_PROJECT(projectId, isAuthenticated()?.token || '');
 				const response = await api[options.method](url, options);
 				setProject(response.data);
 			} catch (error) {
@@ -125,7 +132,7 @@ const Project: FC = () => {
 				setLoading(false);
 			}
 		}
-	}, [isAuthenticated, params.id, setProject]);
+	}, [isAuthenticated, projectId, setProject]);
 
 	useEffect(() => {
 		getProject();
@@ -137,91 +144,89 @@ const Project: FC = () => {
 	}, [getProject, isAuthenticated, project?.id]);
 	return (
 		<>
-			<Navbar navBg={true} />
 			<div className='project' id='project'>
-				<div className='container'>
-					{loading && <Loading />}
-					{error && <Error error={error} />}
-					{!loading && !error && (
-						<div className='project-info'>
-							<div className='project-header'>
-								<h1 className='project-name'>{project?.name}</h1>
-								{isAdmin && (
-									<div className='project-options'>
-										<img src={UserAdd} alt='Compartilhar projeto' onClick={handleOpenAddUserToProjectModal} />
+				{loading && <Loading />}
+				{error && <Error error={error} />}
+				{!loading && !error && (
+					<div className='project-info'>
+						<div className='project-header'>
+							<h1 className='project-name'>{project?.name}</h1>
+							{isAdmin && (
+								<div className='project-options'>
+									<div className="pointer flex align-center">
+										<PersonAddIcon onClick={handleOpenAddUserToProjectModal}/>
+									</div>
 
-										<img src={Kebab} alt='Abrir opções do projeto' onClick={handleOpenProjectActionsOptionsMenu} />
-										{isProjectActionsOptionsMenu && (
-											<ProjectActionsOptionsMenu
-												isOwner={isOwner}
-												isProjectActionsOptionsMenu={isProjectActionsOptionsMenu}
-												handleCloseProjectActionsOptionsMenu={handleCloseProjectActionsOptionsMenu}
-												handleOpenUpdateProjectModal={handleOpenUpdateProjectModal}
-												handleOpenDeleteProjectModal={handleOpenDeleteProjectModal}
-											/>
-										)}
-									</div>
-								)}
-								{isCollaborator && (
-									<div className='buttons-container'>
-										<Button onClick={handleOpenCreateScenarioModal} theme='primary' text='Novo cenário'></Button>
-										<Button onClick={handleOpenCreateSymbolModal} theme='secondary' text='Novo símbolo'></Button>
-									</div>
-								)}
-							</div>
-							<div className="project-description" dangerouslySetInnerHTML={{ __html: project?.description || '' }}></div>
-							{owner && (
-								<small className='project-owner'>
-                  Criado por {owner.name} em {new Date(project?.createdAt).toLocaleDateString('pt-br')} às{' '}
-									{new Date(project?.createdAt).toLocaleTimeString('pt-br')}
-								</small>
+									<img src={Kebab} alt='Abrir opções do projeto' onClick={handleOpenProjectActionsOptionsMenu} />
+									{isProjectActionsOptionsMenu && (
+										<ProjectActionsOptionsMenu
+											isOwner={isOwner}
+											isProjectActionsOptionsMenu={isProjectActionsOptionsMenu}
+											handleCloseProjectActionsOptionsMenu={handleCloseProjectActionsOptionsMenu}
+											handleOpenUpdateProjectModal={handleOpenUpdateProjectModal}
+											handleOpenDeleteProjectModal={handleOpenDeleteProjectModal}
+										/>
+									)}
+								</div>
+							)}
+							{isCollaborator && (
+								<div className='buttons-container'>
+									<Button onClick={handleOpenCreateScenarioModal} theme='primary' text='Novo cenário'></Button>
+									<Button onClick={handleOpenCreateSymbolModal} theme='secondary' text='Novo símbolo'></Button>
+								</div>
 							)}
 						</div>
-					)}
-					<div className='scenarios-container'>
-						<Box sx={{ width: '100%', padding: 0 }}>
-							<Box
+						<div className="project-description" dangerouslySetInnerHTML={{ __html: project?.description || '' }}></div>
+						{owner && (
+							<small className='project-owner'>
+                  Criado por {owner.name} em {new Date(project?.createdAt).toLocaleDateString('pt-br')} às{' '}
+								{new Date(project?.createdAt).toLocaleTimeString('pt-br')}
+							</small>
+						)}
+					</div>
+				)}
+				<div className='scenarios-container'>
+					<Box sx={{ width: '100%', padding: 0 }}>
+						<Box
+							sx={{
+								borderBottom: 1,
+								borderColor: 'divider',
+								padding: 0,
+								width: '100%',
+							}}
+						>
+							<Tabs
+								value={currentTab}
+								onChange={handleChange}
+								aria-label='basic tabs example'
 								sx={{
-									borderBottom: 1,
-									borderColor: 'divider',
-									padding: 0,
-									width: '100%',
+									'.Mui-selected': {
+										color: 'var(--primary-color) !important', // Cor da aba ativa
+									},
+									'.MuiTabs-indicator': {
+										backgroundColor: 'var(--primary-color) !important', // Cor da barra abaixo da aba ativa
+									},
 								}}
 							>
-								<Tabs
-									value={currentTab}
-									onChange={handleChange}
-									aria-label='basic tabs example'
-									sx={{
-										'.Mui-selected': {
-											color: 'var(--primary-color) !important', // Cor da aba ativa
-										},
-										'.MuiTabs-indicator': {
-											backgroundColor: 'var(--primary-color) !important', // Cor da barra abaixo da aba ativa
-										},
-									}}
-								>
-									<Tab label='Cenários' {...a11yProps(0)} />
-									<Tab label='Símbolos' {...a11yProps(1)} />
-								</Tabs>
-							</Box>
-							<div className='scenarios-content'>
-								{currentTab == 0 && (
-									<>
-										<SummaryWrapper></SummaryWrapper>
-										<CustomTabPanel value={currentTab} index={0}>
-											{project?.scenarios && <ScenariosList scenarios={project?.scenarios} />}
-										</CustomTabPanel>
-									</>
-								)}
-								{currentTab == 1 && (
-									<CustomTabPanel value={currentTab} index={1}>
-										{project?.symbols && <SymbolsList symbols={project?.symbols} />}
-									</CustomTabPanel>
-								)}
-							</div>
+								<Tab label='Cenários' {...a11yProps(0)} />
+								<Tab label='Símbolos' {...a11yProps(1)} />
+							</Tabs>
 						</Box>
-					</div>
+						<div className='scenarios-content'>
+							{currentTab == 0 && (
+								<>
+									<CustomTabPanel value={currentTab} index={0}>
+										{project?.scenarios && <ScenariosList scenarios={project?.scenarios} />}
+									</CustomTabPanel>
+								</>
+							)}
+							{currentTab == 1 && (
+								<CustomTabPanel value={currentTab} index={1}>
+									{project?.symbols && <SymbolsList symbols={project?.symbols} />}
+								</CustomTabPanel>
+							)}
+						</div>
+					</Box>
 				</div>
 				<Modal
 					open={isAddUserToProjectModalOpen}

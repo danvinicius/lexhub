@@ -6,6 +6,14 @@ interface ValidationRule {
 }
 
 const types: Record<string, ValidationRule> = {
+	projectName: {
+		regex: /^.{0,100}$/,
+		message: 'O nome do projeto não pode ter mais de 100 caracteres'
+	},
+	projectDescription: {
+		regex: /^.{0,1000}$/,
+		message: 'A descrição do projeto não pode ter mais de 1000 caracteres'
+	},
 	email: {
 		regex:
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,

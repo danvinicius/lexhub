@@ -2,7 +2,6 @@ import { FC, MouseEventHandler, ReactNode, useContext } from 'react';
 import './LexiconSpan.scss';
 import { ProjectContext } from '../../context/ProjectContext';
 import { ISymbol } from '../../shared/interfaces';
-import { Link } from 'react-scroll';
 import { useHelpers } from '../../hooks/useHelpers';
 
 interface LexiconSpanProps {
@@ -26,6 +25,11 @@ const LexiconSpan: FC<LexiconSpanProps> = ({ id, name, type, children }: Lexicon
 		}
 	};
 
+	const goToScenario = () => {
+		setSymbol(null);
+		window.location.href = `/projeto/${project?.id}#${id}-${slugify(name)}`;
+	};
+
 	return type == 'símbolo' ? (
 		<span
 			title={`${type}: ${name}`}
@@ -35,17 +39,13 @@ const LexiconSpan: FC<LexiconSpanProps> = ({ id, name, type, children }: Lexicon
 			{children}
 		</span>
 	) : (
-		<Link
+		<span
+			title={`${type}: ${name}`}
 			className="lexicon-span"
-			to={`${id}-${slugify(name)}`}
-			spy={true}
-			hashSpy={true}
-			smooth={true}
-			duration={800}
-			onClick={() => setSymbol(null)}
+			onClick={goToScenario}
 		>
 			{name}
-		</Link>
+		</span>
 	);
 };
 

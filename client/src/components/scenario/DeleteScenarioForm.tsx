@@ -43,7 +43,7 @@ const DeleteScenarioForm: FC<DeleteScenarioFormProps> = ({ scenario, projectId, 
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, options);
-				navigate(0);
+				window.location.href = '/home';
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');

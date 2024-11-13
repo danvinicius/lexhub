@@ -23,7 +23,7 @@ const SymbolsList: FC<ISymbolsListProps> = ({ symbols }: ISymbolsListProps): Rea
 										key={`${symbol.id}-${slugify(symbol.name)}`}
 										name={`${symbol.id}-${slugify(symbol.name)}`}
 									>
-										<SymbolDetails symbol={symbol} style={{background: '#fff', padding: '2rem'}}/>
+										<SymbolDetails symbol={symbol} style={{padding: '2rem'}}/>
 									</Element>
 								</li>
 							);

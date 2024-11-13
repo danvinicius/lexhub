@@ -43,7 +43,7 @@ const DeleteSymbolForm: FC<DeleteSymbolFormProps> = ({ symbol, projectId, onClos
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, options);
-				navigate(0);
+				window.location.href = `/projeto/${projectId}`;
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');

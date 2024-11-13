@@ -1,15 +1,12 @@
 .summary-wrapper-container {
   border-radius: 5px;
   padding: 2rem;
-  background: #fff;
   box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
     rgba(17, 17, 26, 0.1) 0px 0px 8px;
   overflow: hidden;
   height: max-content;
-  position: absolute;
   top: 1rem;
   left: 0;
-  width: calc(26.5% - 1.5rem);
 
   .summary-wrapper {
     color: var(--secondary-text-color);

@@ -10,13 +10,25 @@ import { CreateResourceForm } from './resource/CreateResourceForm';
 import { ScenarioActionsOptionsMenu } from './ScenarioActionsOptionsMenu';
 import UpdateScenarioForm from './UpdateScenarioForm';
 import DeleteScenarioForm from './DeleteScenarioForm';
-import User from '../../assets/icon/User_Empty.svg';
 import EditPen from '../../assets/icon/Edit.svg';
-import Warning from '../../assets/icon/Triangle_Warning.svg';
 import { CreateRestrictionForm } from './restriction/CreateRestrictionForm';
 import { ProjectContext } from '../../context/ProjectContext';
 import { CreateEpisodesForm } from './episodes/CreateEpisodesForm';
 import { UserContext } from '../../context/UserContext';
+import PersonIcon from '@mui/icons-material/Person';
+import ErrorIcon from '@mui/icons-material/Error';
+import LockIcon from '@mui/icons-material/Lock';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import RoomIcon from '@mui/icons-material/Room';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
+import FlagIcon from '@mui/icons-material/Flag';
+import LanguageIcon from '@mui/icons-material/Language';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import ChecklistIcon from '@mui/icons-material/Checklist';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import DescriptionIcon from '@mui/icons-material/Description';
+import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 
 interface IScenarioProps {
   scenario: ILexiconScenario;
@@ -138,22 +150,62 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 				)}
 			</div>
 			<div className="scenario-details">
-				<h3>Objetivo</h3>
+				<div className="flex gap-5 border-none">
+					<FlagIcon/>
+					<h3>Objetivo</h3>
+				</div>
 				<p>{processContent(scenario.goal)}</p>
-				<h3>Contexto</h3>
+				<div className="flex gap-5 border-none">
+					<LanguageIcon/>
+					<h3>
+						Contexto
+					</h3>
+				</div>
 				<div className="scenario-context">
 					<table className="scenario-context-details">
 						<tbody>
 							<tr>
-								<th>Pré-condição</th>
-								<th>Localização geográfica</th>
-								<th>Localização temporal</th>
-								<th>Restrições</th>
+								<th>
+									<div className="flex gap-5 border-none">
+										<CheckBoxIcon/>
+										<p>
+											Pré-condição
+										</p>
+									</div>
+								</th>
+								<th>
+									<div className="flex gap-5 border-none">
+										<RoomIcon/>
+										<p>
+										Localização geográfica
+										</p>
+									</div>
+								</th>
+								<th>
+									<div className="flex gap-5 border-none">
+										<CalendarMonthIcon/>
+										<p>
+									Localização temporal
+										</p>
+									</div>
+								</th>
+								<th>
+									<div className="flex gap-5 border-none">
+										<LockIcon/>
+										<p>
+										Restrições
+										</p>
+									</div>
+								</th>
 							</tr>
 							<tr>
 								<td>{processContent(scenario.context?.preCondition)}</td>
-								<td>{processContent(scenario.context?.geographicLocation)}</td>
-								<td>{processContent(scenario.context?.temporalLocation)}</td>
+								<td>
+									{processContent(scenario.context?.geographicLocation)}
+								</td>
+								<td>
+									{processContent(scenario.context?.temporalLocation)}
+								</td>
 								<td className="restrictions">
 									{isCollaborator && <span
 										className="add-restriction"
@@ -185,14 +237,16 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 						</tbody>
 					</table>
 				</div>
-				<h3>Atores</h3>
+				<div className="flex gap-5 border-none">
+					<PeopleAltIcon/>	
+					<h3>Atores</h3>
+				</div>
 				<div className="scenario-actors">
 					{scenario.actors?.length ? (
 						<ul>
 							{scenario.actors?.map((actor) => {
 								return (
 									<li key={actor.name.content}>
-										<img src={User} alt="" />
 										{processContent(actor.name)}
 									</li>
 								);
@@ -202,14 +256,16 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 						<p>N/A</p>
 					)}
 				</div>
-				<h3>Exceções</h3>
+				<div className="flex gap-5 border-none">
+					<ErrorIcon/>
+					<h3>Exceções</h3>
+				</div>
 				<div className="scenario-exceptions">
 					{scenario.exceptions?.length ? (
 						<ul>
 							{scenario.exceptions?.map((exception) => {
 								return (
 									<li key={exception.description.content}>
-										<img src={Warning} alt="" />
 										{processContent(exception.description)}
 									</li>
 								);
@@ -219,7 +275,10 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 						<p>N/A</p>
 					)}
 				</div>
-				<h3>Recursos</h3>
+				<div className="flex gap-5 border-none">
+					<HomeRepairServiceIcon/>
+					<h3>Recursos</h3>
+				</div>
 				<div className="scenario-resources">
 					{isCollaborator && <span
 						className="add-resource"
@@ -239,8 +298,22 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 						<table className="scenario-resources-details">
 							<tbody>
 								<tr>
-									<th>Nome</th>
-									<th>Restrições</th>
+									<th>
+										<div className="flex gap-5 border-none">
+											<HomeRepairServiceIcon/>
+											<p>
+												Recurso
+											</p>
+										</div>
+									</th>
+									<th>
+										<div className="flex gap-5 border-none">
+											<LockIcon/>
+											<p>
+										Restrições
+											</p>
+										</div>
+									</th>
 								</tr>
 								{scenario.resources?.map((resource) => {
 									return (
@@ -282,7 +355,10 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 						</table>
 					)}
 				</div>
-				<h3>Episódios</h3>
+				<div className="flex gap-5 border-none">
+					<ChecklistIcon/>
+					<h3>Episódios</h3>
+				</div>
 				<div className="scenario-episodes">
 					{isCollaborator && <span className="add-episode" onClick={handleOpenCreateEpisodesModal}>
 						{scenario.episodes.length > 0 ? (
@@ -299,10 +375,38 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 						<table className="scenario-episodes-details">
 							<tbody>
 								<tr>
-									<th>Posição</th>
-									<th>Descrição</th>
-									<th>Tipo</th>
-									<th>Restrição</th>
+									<th>
+										<div className="flex gap-5 border-none">
+											<FormatListNumberedIcon/>
+											<p>
+												Posição
+											</p>
+										</div>
+									</th>
+									<th>
+										<div className="flex gap-5 border-none">
+											<DescriptionIcon/>
+											<p>
+												Descrição
+											</p>
+										</div>
+									</th>
+									<th>
+										<div className="flex gap-5 border-none">
+											<LocalOfferIcon/>
+											<p>	
+											Tipo
+											</p>
+										</div>
+									</th>
+									<th>
+										<div className="flex gap-5 border-none">
+											<LockIcon/>
+											<p>
+												Restrição
+											</p>
+										</div>
+									</th>
 								</tr>
 								{scenario.episodes?.map((episode) => {
 									return (

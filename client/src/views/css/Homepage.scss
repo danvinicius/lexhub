@@ -1,0 +1,7 @@
+nav {
+    padding: 0.5rem;
+
+    & > ul.MuiList-root {
+        margin-bottom: 0;
+    }
+}

@@ -20,12 +20,8 @@ export interface CreateProjectRequestDTO {
 }
 
 const CreateProjectForm = (): ReactNode => {
-	const name = useForm('dontValidateName');
-
-	const [description, setDescription] = useState('');
-    const handleProcedureContentChange = (content: any) => {
-        setDescription(content);
-    };
+	const name = useForm('projectName');
+	const description = useForm('projectDescription');
 
 	const { isAuthenticated, refreshUser } = useContext(UserContext) || {};
 
@@ -41,7 +37,7 @@ const CreateProjectForm = (): ReactNode => {
 			const { url, options } = CREATE_PROJECT(isAuthenticated()?.token || '');
 			const { data } = await api[options.method](url, body, options);
 			await refreshUser();
-			navigate(`/projeto/${data.id}`);
+			window.location.href = `/projeto/${data.id}`;
 		} catch (error) {
 			const err = error as AxiosError<ErrorResponse>;
 			setError(err?.response?.data?.error || 'Erro inesperado');
@@ -52,8 +48,8 @@ const CreateProjectForm = (): ReactNode => {
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-		if (name.validate()) {
-			createProject({ name: name.value, description });
+		if (name.validate() && description.validate()) {
+			createProject({ name: name.value, description: description.value });
 		}
 	};
 
@@ -69,7 +65,7 @@ const CreateProjectForm = (): ReactNode => {
 					{...name}
 					onInput={() => setError('')}
 				/>
-				<RichTextEditor label='Descrição' value={description} handleProcedureContentChange={handleProcedureContentChange}/>
+				<RichTextEditor label='Descrição' {...description}/>
 				{loading ? (
 					<Loading />
 				) : (

@@ -1,0 +1,9 @@
+.overview {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    & > button {
+        margin-left: auto;
+    }
+}

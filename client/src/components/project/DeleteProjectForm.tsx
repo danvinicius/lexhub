@@ -37,14 +37,13 @@ const DeleteProjectForm: FC<DeleteProjectFormProps> = ({ project, onClose }: Del
 	const deleteProject = async () => {
 		if (project?.id) {
 			setLoading(true);
-
 			try {
 				const { url, options } = DELETE_PROJECT(
 					project.id,
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, options);
-				navigate('/');
+				window.location.href = '/home';
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');
@@ -56,6 +55,7 @@ const DeleteProjectForm: FC<DeleteProjectFormProps> = ({ project, onClose }: Del
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
+		
 		if (nameDelete.value != project.name) {
 			nameDelete.setError('Nome inválido');
 			return;

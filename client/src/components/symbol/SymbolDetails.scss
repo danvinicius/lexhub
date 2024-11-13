@@ -4,6 +4,8 @@
   flex-direction: column;
   font-size: 1rem;
   border-radius: 5px;
+  padding: 1.25rem;
+  margin-bottom: auto;
 
   .symbol-details-notion {
     display: flex;
@@ -12,8 +14,9 @@
     h3 {
       color: var(--primary-text-color);
     }
-    p {
+    p.notion {
       font-size: 1.15rem;
+      margin-top: 1rem;
     }
 
     .symbol-name {
@@ -34,6 +37,7 @@
           border-radius: 20px;
         }
       }
+
 
       img.symbol-options-button {
         position: absolute;
@@ -61,7 +65,7 @@
       li {
         padding: 0.5rem 1rem;
         background: var(--primary-text-color);
-        color: #fff;
+        color: var(--helper-color);
         border-radius: 20px;
       }
     }

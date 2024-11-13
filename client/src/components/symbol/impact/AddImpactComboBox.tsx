@@ -58,10 +58,12 @@ export const AddImpactComboBox: FC<AddImpactComboBoxProps> = ({
 						sx={{
 							'& .MuiOutlinedInput-root': {
 								'& fieldset': {
-									border: '1px solid var(--secondary-text-color)',
+									border: '1px solid #ccc',
+									color: 'var(--secondary-text-color)'
 								},
 								'&:hover fieldset': {
-									border: '1px solid var(--secondary-text-color)',
+									border: '1px solid #ccc',
+									color: 'var(--secondary-text-color)'
 								},
 								'&.Mui-focused fieldset': {
 									border: '1px solid var(--primary-color)',

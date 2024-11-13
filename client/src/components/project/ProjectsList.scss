@@ -84,6 +84,7 @@
         p.project-description {
           transition: .1s linear;
           color: var(--secondary-text-color);
+          word-break: break-all;
         }
       }
     }

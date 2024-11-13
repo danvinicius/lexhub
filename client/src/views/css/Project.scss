@@ -7,15 +7,21 @@
     padding: 2rem 0 3rem;
 
     .project-description {
+      padding-top: 1rem;
       font-size: 1.25rem;
       margin-bottom: .5rem;
+      max-width: 800px;
     }
 
     .project-header{
       display: flex;
       gap: 4rem;
-      align-items: center;
+      align-items: flex-start;
       position: relative;
+
+      .project-name {
+        max-width: 700px;
+      }
     }
 
     .project-description {
@@ -39,6 +45,7 @@
       }
     }
     .buttons-container {
+      min-width: max-content;
       margin-left: auto;
       display: flex;
       gap: 1rem;

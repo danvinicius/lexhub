@@ -28,14 +28,11 @@ interface UpdateProjectFormProps {
 const UpdateProjectForm: FC<UpdateProjectFormProps> = ({ project, onClose }: UpdateProjectFormProps): ReactNode => {
 	const nameEdit = useForm('dontValidateName');
 
-	const [description, setDescription] = useState('');
-    const handleProcedureContentChange = (content: any) => {
-        setDescription(content);
-    };
+	const descriptionEdit = useForm('projectDescription');
 
 	useEffect(() => {
 		nameEdit.setValue(project.name);
-		setDescription(project.description);
+		descriptionEdit.setValue(project.description);
 	}, []);
 
 	const { isAuthenticated } = useContext(UserContext) || {};
@@ -56,7 +53,7 @@ const UpdateProjectForm: FC<UpdateProjectFormProps> = ({ project, onClose }: Upd
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, body, options);
-				navigate(0);
+				window.location.href = `/projeto/${project.id}`;
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');
@@ -68,8 +65,8 @@ const UpdateProjectForm: FC<UpdateProjectFormProps> = ({ project, onClose }: Upd
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-		if (nameEdit.validate()) {
-			updateProject({ name: nameEdit.value, description });
+		if (nameEdit.validate() && descriptionEdit.validate()) {
+			updateProject({ name: nameEdit.value, description: descriptionEdit.value });
 		}
 	};
 
@@ -94,7 +91,7 @@ const UpdateProjectForm: FC<UpdateProjectFormProps> = ({ project, onClose }: Upd
 					{...nameEdit}
 					onInput={() => setError('')}
 				/>
-				<RichTextEditor label='Descrição' value={description} handleProcedureContentChange={handleProcedureContentChange}/>
+				<RichTextEditor label='Descrição' {...descriptionEdit}/>
 				{loading ? (
 					<Loading />
 				) : (

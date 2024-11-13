@@ -8,21 +8,21 @@
     
     &.primary {
         background: var(--primary-color);
-        color: #fff;
+        color: var(--fixed-helper-color);
         border: 2px solid var(--primary-color);
     }
     &.secondary {
-        color: #fff;
+        color: var(--helper-color);
         background: var(--primary-text-color);
         border: 2px solid var(--primary-text-color);
     }
     &.danger {
-        color: #fff;
+        color: var(--helper-color);
         background: var(--error-color);
         border: 2px solid var(--error-color);
     }
     &.helper {
-        color: #fff;
+        color: var(--helper-color);
         background: var(--secondary-text-color);
         border: 2px solid var(--secondary-text-color);
     }

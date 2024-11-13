@@ -83,7 +83,7 @@ const UpdateScenarioForm: FC<UpdateScenarioFormProps> = ({ scenario, onClose, pr
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, body, options);
-				navigate(0);
+				window.location.href = `/projeto/${projectId}`;
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');

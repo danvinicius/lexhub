@@ -72,7 +72,7 @@ export const CreateResourceForm: FC<CreateResourceFormProps> = ({
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, body, options);
-				navigate(0);
+				window.location.href = `/projeto/${projectContext.project.id}`;
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');

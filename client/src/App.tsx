@@ -3,10 +3,11 @@ import { UserStorage } from './context/UserContext';
 import CreateProject from './views/CreateProject';
 import Home from './views/Home';
 import Login from './views/Login';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Project from './views/Project';
 import { ProjectStorage } from './context/ProjectContext';
 import { FC } from 'react';
+import { Homepage } from './views/Homepage';
 
 const App: FC = () => {
 	return (
@@ -14,11 +15,12 @@ const App: FC = () => {
 			<UserStorage>
 				<ProjectStorage>
 					<Routes>
+						<Route path="/" element={<Navigate to="/home" />} />
 						<Route
-							path="/"
+							path="/home"
 							element={
 								<ProtectedRoute>
-									<Home />
+									<Homepage />
 								</ProtectedRoute>
 							}
 						/>
@@ -26,7 +28,7 @@ const App: FC = () => {
 							path="/projeto/:id"
 							element={
 								<ProtectedRoute>
-									<Project />
+									<Homepage />
 								</ProtectedRoute>
 							}
 						/>

@@ -7,11 +7,15 @@
 
   @media screen and (min-width: 998px) {
     margin: auto;
-    width: 70%;
     padding: 0 7.5%;
   }
 
   .loading {
     margin: 0 auto;
+  }
+
+  button {
+    width: 200px;
+    margin-left: auto;
   }
 }
