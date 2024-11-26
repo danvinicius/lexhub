@@ -6,7 +6,6 @@ import Scenario, {
   IException,
   IResource,
   IEpisode,
-  IGroup,
 } from '@/models/Scenario';
 import { ServerError } from '@/utils/errors';
 
@@ -65,7 +64,7 @@ export namespace ScenarioRepository {
     actors?: IActor[];
     exceptions?: IException[];
     resources?: IResource[];
-    episodes: (IEpisode | IGroup)[];
+    episodes: IEpisode[];
   }
 }
 

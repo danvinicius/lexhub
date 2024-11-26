@@ -15,6 +15,7 @@ import { AddUserEmailComboBox } from './AddUserEmailComboBox';
 import { Snackbar, SnackbarCloseReason } from '@mui/material';
 import { ErrorResponse } from '../../../shared/interfaces';
 import { AxiosError } from 'axios';
+import { ProfilePicture } from '../../user/ProfilePicture';
 
 interface AddUserToProjectRequestDTO {
   email: string;
@@ -184,15 +185,16 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose }: AddUse
 					<ul className="flex column gap-15">
 						{projectContext.project?.users.map((user) => {
 							return (
-								<li key={user.id} className="flex space-between align-center">
-									<div className="flex column gap-25">
+								<li key={user.id} className="flex align-center gap-1">
+									<ProfilePicture user={user.user}/>
+									<div className="flex column">
 										<span>
 											{user.user.name}{' '}
 											{user.user.name == isAuthenticated()?.name && '(você)'}
 										</span>
 										<small>{user.user.email}</small>
 									</div>
-									<h4>{formatRoles[user.role]}</h4>
+									<h4 style={{marginLeft: 'auto'}}>{formatRoles[user.role]}</h4>
 								</li>
 							);
 						})}

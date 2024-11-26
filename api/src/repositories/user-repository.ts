@@ -15,6 +15,11 @@ export namespace UserRepository {
     projectId: string;
     userId: string;
   }
+
+  export interface UpdateUserParams {
+    name: string;
+    password: string;
+  }
 }
 
 export class UserRepository {
@@ -94,6 +99,15 @@ export class UserRepository {
 
       await newUser.save();
       return newUser.toJSON();
+    } catch (error: any) {
+      throw new ServerError(error.message);
+    }
+  }
+
+  async updateUser(id: string, data: UserRepository.UpdateUserParams): Promise<IUser> {
+    try {
+      await User.findByIdAndUpdate(id, data);
+      return await this.getUserById(id);
     } catch (error: any) {
       throw new ServerError(error.message);
     }

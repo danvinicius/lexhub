@@ -1,37 +1,42 @@
 import { FormControl, InputLabel, Select, MenuItem, TextField } from '@mui/material';
 import { IEpisode } from '../../../shared/interfaces';
 import { FC, memo } from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface EpisodeFormGroupProps {
-    episode: IEpisode;
+    episode: Partial<IEpisode>;
     index: number;
     onEpisodeChange: (index: number, field: keyof IEpisode, value: string | number) => void;
     episodesLength: number;
+	onDeleteEpisode: (index: number, nestedIndex?: number) => void;
   }
 
 // Usando memo para evitar re-renderizações desnecessárias
 const EpisodeFormGroup: FC<EpisodeFormGroupProps> = memo(
-	({ episode, index, onEpisodeChange, episodesLength }: EpisodeFormGroupProps) => {
+	({ episode, index, onEpisodeChange, episodesLength, onDeleteEpisode }: EpisodeFormGroupProps) => {
 		return (
 			<div className="episode-form-group">
-				<div className="episode-position">
-					<FormControl fullWidth>
-						<InputLabel>Posição</InputLabel>
-						<Select
-							value={episode.position}
-							label="Posição"
-							onChange={(e) =>
-								onEpisodeChange(index, 'position', e.target.value)
-							}
-						>
-							{[...Array(episodesLength)].map((_, i) => (
-								<MenuItem key={i} value={i + 1}>
-									{i + 1}
-								</MenuItem>
-							))}
-						</Select>
-					</FormControl>
-				</div>
+				{
+					episode?.position && (
+						<div className="episode-position">
+							<FormControl fullWidth>
+								<InputLabel>Posição</InputLabel>
+								<Select
+									value={episode.position}
+									label="Posição"
+									onChange={(e) =>
+										onEpisodeChange(index, 'position', e.target.value)
+									}
+								>
+									{[...Array(episodesLength)].map((_, i) => (
+										<MenuItem key={i} value={i + 1}>
+											{i + 1}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
+						</div>)
+				}
 
 				<div className="episode-description">
 					<TextField
@@ -42,6 +47,19 @@ const EpisodeFormGroup: FC<EpisodeFormGroupProps> = memo(
 						value={episode.description}
 						onChange={(e) =>
 							onEpisodeChange(index, 'description', e.target.value)
+						}
+					/>
+				</div>
+
+				<div className="episode-restriction">
+					<TextField
+						label="Restrição"
+						placeholder="Digite a restrição"
+						multiline
+						fullWidth
+						value={episode.restriction}
+						onChange={(e) =>
+							onEpisodeChange(index, 'restriction', e.target.value)
 						}
 					/>
 				</div>
@@ -60,17 +78,8 @@ const EpisodeFormGroup: FC<EpisodeFormGroupProps> = memo(
 					</FormControl>
 				</div>
 
-				<div className="episode-restriction">
-					<TextField
-						label="Restrição"
-						placeholder="Digite a restrição"
-						multiline
-						fullWidth
-						value={episode.restriction}
-						onChange={(e) =>
-							onEpisodeChange(index, 'restriction', e.target.value)
-						}
-					/>
+				<div className="delete-episode" onClick={() => onDeleteEpisode(index)}>
+					<DeleteIcon/>
 				</div>
 			</div>
 		);

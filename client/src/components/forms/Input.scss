@@ -28,5 +28,9 @@ label {
     &::placeholder {
       font-size: 14px;
     }
+
+    &:disabled {
+      color: #aaa;
+    }
   }
 }

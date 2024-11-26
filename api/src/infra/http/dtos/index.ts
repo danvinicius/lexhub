@@ -9,3 +9,4 @@ export * from './create-user-request-dto';
 export * from './authenticate-user-request-dto';
 export * from './authenticate-user-response-dto';
 export * from './add-user-to-project-request-dto';
+export * from './update-user-request-dto';

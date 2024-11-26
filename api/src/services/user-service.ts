@@ -4,6 +4,7 @@ import {
   AuthenticateUserResponseDTO,
   CreateUserRequestDTO,
 } from '@/infra/http/dtos';
+import { UpdateUserRequestDTO } from '@/infra/http/dtos/update-user-request-dto';
 import { BcryptService, JwtService } from '@/infra/security';
 import { IUserProject, UserRole, IUser } from '@/models';
 import { ProjectRepository, UserRepository } from '@/repositories';
@@ -45,8 +46,6 @@ export class UserService {
     }
 
     const user = await userRepository.getUser({ email: data.email });
-    console.log(user);
-    
     if (!user) {
       throw new BadRequestError(`O usuário com e-mail ${data.email} não existe`);
     }
@@ -128,5 +127,32 @@ export class UserService {
       throw new BadRequestError('Este usuário não existe');
     }
     return user;
+  }
+
+  async updateUser(
+    id: string,
+    data: UpdateUserRequestDTO
+  ): Promise<IUser> {
+    const userExists = await userRepository.getUser({_id: id});
+    if (!userExists) {
+      throw new BadRequestError('Usuário inválido ou inexistente');
+    }
+    let hash: string;
+    if (data.currentPassword.length && data.newPassword.length) {
+      await this.checkPassword(data.currentPassword, userExists.password);
+      hash = await hasher.hash(data.newPassword);
+    }
+    
+    return userRepository.updateUser(id, {
+      ...data,
+      password: data.currentPassword ? hash : userExists.password
+    });
+  }
+
+  private async checkPassword(checkPassword: string, userPassword: string) {
+    const isPasswordCorrect = await hasher.compare(checkPassword, userPassword);
+    if (!isPasswordCorrect) {
+      throw new ForbiddenError('Senha incorreta');
+    }
   }
 }

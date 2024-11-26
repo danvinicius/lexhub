@@ -90,4 +90,20 @@ export class UserController {
       return serverError(error.message);
     }
   };
+
+  public updateUser = async (req: Request) => {
+    try {
+      const user = new DTO.UpdateUserRequestDTO(req.body);
+      await validate(user);
+      await userService.updateUser(req.userId, user);
+      return ok({ message: 'User updated' });
+    } catch (error: any) {
+      if (
+        error instanceof BadRequestError
+      ) {
+        return badRequest(error.message);
+      }
+      return serverError(error.message);
+    }
+  };
 }

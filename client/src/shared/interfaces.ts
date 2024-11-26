@@ -11,7 +11,6 @@ export interface IScenario {
     actors?: IActor[];
     context?: IContext;
     episodes?: IEpisode[];
-    groups?: IGroup[];
     project: string;
 }
 
@@ -19,6 +18,7 @@ export interface IUser {
     readonly id?: string;
     name: string;
     email: string;
+    imageUrl?: string;
     password: string;
     validated: boolean;
     projects?: IUserProject[];
@@ -67,18 +67,18 @@ export interface IImpact {
     description: string;
 }
 
-export interface IGroup {
-    readonly id?: string;
-    position: number;
-    nonSequentialEpisodes: INonSequentialEpisode[];
-}
-
 export interface IEpisode {
-    readonly id?: string;
+    readonly id: string;
     position: number;
-    description: string;
-    type: string;
+    description?: string;
+    type?: string;
     restriction?: string;
+    nonSequentialEpisodes?: {
+        id: string;
+        type: string;
+        description: string;
+        restriction: string;
+    }[];
 }
 
 export interface IRestriction {
@@ -90,11 +90,6 @@ export interface IContext {
     temporalLocation?: string;
     preCondition?: string;
     restrictions?: IRestriction[];
-}
-
-export interface INonSequentialEpisode extends IEpisode {
-    readonly id?: string;
-    group: IGroup;
 }
 
 export interface IActor {
@@ -130,6 +125,12 @@ export interface ILexiconEpisode {
     description: Lexicon;
     type: string;
     restriction: Lexicon;
+    nonSequentialEpisodes?: {
+        id: string;
+        type: string;
+        description: Lexicon;
+        restriction: Lexicon;
+    }[];
 }
 
 export interface ILexiconScenario {
@@ -141,8 +142,8 @@ export interface ILexiconScenario {
         temporalLocation: Lexicon;
         preCondition: Lexicon;
         restrictions: {
-        id: string;
-        description: Lexicon;
+            id: string;
+            description: Lexicon;
         }[];
     };
     exceptions: {
@@ -155,16 +156,16 @@ export interface ILexiconScenario {
         id: string;
         name: Lexicon;
         restrictions: {
-        id: string;
-        description: Lexicon;
+            id: string;
+            description: Lexicon;
         }[];
     }[];
     episodes: ILexiconEpisode[];
     groups: {
         position: number;
         nonSequentialEpisodes: {
-        restriction: IRestriction;
-        description: Lexicon;
+            restriction: IRestriction;
+            description: Lexicon;
         }[];
     }[];
     projectId: string;

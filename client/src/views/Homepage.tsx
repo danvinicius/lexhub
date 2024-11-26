@@ -18,6 +18,10 @@ import { OverView } from './Overview';
 import './css/Homepage.scss';
 import SymbolDetails from '../components/symbol/SymbolDetails';
 import { ProjectContext } from '../context/ProjectContext';
+import { Configurations } from './Configurations';
+import Button from '../components/forms/Button';
+import { LogoutButton } from '../components/login/LogoutButton';
+import { AccountCircle } from '@mui/icons-material';
 
 const demoTheme = extendTheme({
 	colorSchemes: { light: true, dark: true },
@@ -64,7 +68,7 @@ function useDemoRouter(): Router {
   
 
 
-export const Homepage = (props: any) => {
+export const Homepage = () => {
 	const router = useDemoRouter();
 	const {symbol} = React.useContext(ProjectContext);
 	
@@ -91,9 +95,6 @@ export const Homepage = (props: any) => {
 	}, [isAuthenticated]);
 
 	React.useEffect(() => {
-		const { pathname } = router;
-		console.log(pathname);
-		
 		getProjects();
 	}, [getProjects]);
 
@@ -122,6 +123,14 @@ export const Homepage = (props: any) => {
 			segment: 'configuracoes',
 			title: 'Configurações',
 			icon: <SettingsIcon />,
+			children: [
+				{
+					segment: '',
+					title: 'Informações da conta',
+					icon: <AccountCircle/>
+				},
+				
+			]
 		},
 		{
 			kind: 'divider',
@@ -153,11 +162,12 @@ export const Homepage = (props: any) => {
 			}}
 		>
 			<DashboardLayout
-				slots={{ sidebarFooter: renderSymbolDetails }}
+				slots={{ sidebarFooter: symbol ? renderSymbolDetails : LogoutButton }}
 				sidebarExpandedWidth={400}>
 				<PageContainer breadcrumbs={[{title: '', path: ''}]} title='' sx={{padding: 0, width: 1500}}>
 					{ router.pathname == '/home' && <OverView/>}
 					{ router.pathname.startsWith('/projeto/') && <Project projectId={projectId} />}
+					{ router.pathname == '/configuracoes' && <Configurations/>}
 				</PageContainer>
 			</DashboardLayout>
 		</AppProvider>

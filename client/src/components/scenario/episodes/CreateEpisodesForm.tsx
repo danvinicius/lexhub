@@ -13,10 +13,9 @@ import {
 import Button from '../../forms/Button';
 import Close from '../../../assets/icon/Close_Dark.svg';
 import './CreateEpisodesForm.scss';
-import EpisodeInputGroups from './EpisodeInputGroup';
+import EpisodeInputGroup from './EpisodeInputGroup';
 import { GET_SCENARIO, UPDATE_SCENARIO } from '../../../api';
 import { ProjectContext } from '../../../context/ProjectContext';
-import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../../context/UserContext';
 import api from '../../../lib/axios';
 import { AxiosError } from 'axios';
@@ -44,7 +43,6 @@ export const CreateEpisodesForm: FC<CreateEpisodesFormProps> = ({ onClose, scena
 
 	const [, setError] = useState('');
 	const [, setLoading] = useState(false);
-	const navigate = useNavigate();
 	const [episodes, setEpisodes] = useState<IEpisode[]>(() => {
 		return initialEpisodes.length > 0
 			? initialEpisodes
@@ -94,12 +92,9 @@ export const CreateEpisodesForm: FC<CreateEpisodesFormProps> = ({ onClose, scena
 			context: originalScenario.context || {},
 			projectId: projectContext.project?.id || '',
 			resources: originalScenario.resources || [],
-			episodes: episodes.filter(episode => episode.description).map(episode => ({
+			episodes: episodes.map(episode => ({
+				...episode,
 				id: uuidv4(),
-				position: episode.position,
-				description: episode.description,
-				type: episode.type,
-				restriction: episode.restriction, 
 			})),
 		});
 	};
@@ -117,7 +112,7 @@ export const CreateEpisodesForm: FC<CreateEpisodesFormProps> = ({ onClose, scena
 			</div>
 			<p>Adicione episódios a este cenário</p>
 
-			<EpisodeInputGroups episodes={episodes} setEpisodes={setEpisodes} />
+			<EpisodeInputGroup episodes={episodes} setEpisodes={setEpisodes} />
 
 			<Button text="Salvar" theme="secondary" onClick={handleAddEpisodes} />
 		</section>

@@ -4,7 +4,7 @@
   justify-content: center;
 
   .project-info {
-    padding: 2rem 0 3rem;
+    padding: 0 0 3rem;
 
     .project-description {
       padding-top: 1rem;
@@ -51,6 +51,9 @@
       gap: 1rem;
     }
     .project-owner {
+      display: flex;
+      gap: .5rem;
+      align-items: center;
       font-size: 1rem;
       color: var(--primary-color);
     }

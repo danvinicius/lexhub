@@ -17,4 +17,9 @@ export const userRouter = async (
     '/user/add/:projectId', authMiddleware, adminMiddleware,
     responseHandler(controller.addUserToProject)
   );
+  router.patch(
+    '/user',
+    authMiddleware,
+    responseHandler(controller.updateUser)
+  );
 };

@@ -12,6 +12,7 @@ interface InputProps {
   error?: string | null;
   style?: CSSProperties;
   autoFocus?: boolean;
+  disabled?: boolean;
   onChange: (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
@@ -35,6 +36,7 @@ const Input: FC<InputProps> = ({
 	error,
 	style,
 	autoFocus,
+	disabled,
 	onChange,
 	onInput,
 	onBlur,
@@ -57,6 +59,7 @@ const Input: FC<InputProps> = ({
 				onKeyDown={onKeyDown}
 				required={required}
 				autoFocus={autoFocus}
+				disabled={disabled}
 			/>
 			<Error error={error}/>
 		</label>

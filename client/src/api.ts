@@ -237,3 +237,16 @@ export const ADD_USER_TO_PROJECT = (projectId: string, token: string): RequestFo
 		},
 	};
 };
+
+export const UPDATE_USER = (token: string): RequestFormat => {  
+	return {
+		url: '/user',
+		options: {
+			method: 'patch',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${token}`
+			},
+		},
+	};
+};

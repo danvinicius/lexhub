@@ -24,6 +24,7 @@ import SymbolsList from '../components/symbol/SymbolsList';
 import AddUserToProjectForm from '../components/project/user/AddUserToProjectForm';
 import { AxiosError } from 'axios';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { ProfilePicture } from '../components/user/ProfilePicture';
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -111,14 +112,10 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 	const handleOpenAddUserToProjectModal = () => setIsAddUserToProjectModalOpen(true);
 	const handleCloseAddUserToProjectModal = () => setIsAddUserToProjectModalOpen(false);
 
-	const params = useParams();
-
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 
 	const getProject = useCallback(async () => {
-		console.log(projectId);
-		
 		setLoading(true);
 		if (projectId) {
 			try {
@@ -179,6 +176,7 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 						<div className="project-description" dangerouslySetInnerHTML={{ __html: project?.description || '' }}></div>
 						{owner && (
 							<small className='project-owner'>
+								<ProfilePicture user={owner}/>
                   Criado por {owner.name} em {new Date(project?.createdAt).toLocaleDateString('pt-br')} às{' '}
 								{new Date(project?.createdAt).toLocaleTimeString('pt-br')}
 							</small>

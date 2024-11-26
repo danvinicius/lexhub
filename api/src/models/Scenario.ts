@@ -1,14 +1,6 @@
 import { IProject } from './Project';
 import { model, Schema } from 'mongoose';
 
-export interface IGroup {
-  readonly id?: string;
-  position: number;
-  nonSequentialEpisodes: INonSequentialEpisode[];
-}
-
-export interface INonSequentialEpisode extends Omit<IEpisode, 'position'> {}
-
 export interface IException {
   description: string;
 }
@@ -31,9 +23,15 @@ export interface IContext {
 export interface IEpisode {
   readonly id?: string;
   position: number;
-  description: string;
-  type: string;
+  description?: string;
+  type?: string;
   restriction?: string;
+  nonSequentialEpisodes?: {
+      id: string;
+      type: string;
+      description: string;
+      restriction: string;
+  }[];
 }
 
 export interface IResource {
@@ -51,7 +49,7 @@ export interface IScenario {
   resources?: IResource[];
   actors?: IActor[];
   context?: IContext;
-  episodes?: (IEpisode | IGroup)[];
+  episodes?: IEpisode[];
   project: IProject;
 }
 
@@ -63,7 +61,7 @@ const scenarioSchema = new Schema<IScenario>(
     actors: [] as IActor[],
     resources: [] as IResource[],
     context: {} as IContext,
-    episodes: [] as (IEpisode | IGroup)[],
+    episodes: [] as IEpisode[],
     project: { type: Schema.Types.ObjectId, ref: 'Project' }
   },
   {

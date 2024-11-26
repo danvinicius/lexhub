@@ -12,8 +12,6 @@ import {
   IActor,
   IProject,
   ISymbol,
-  IGroup,
-  INonSequentialEpisode,
 } from '@/models';
 import {
   ScenarioRepository,
@@ -189,6 +187,7 @@ export class ScenarioService {
 
     const processedLexicon = (content: string, searchOtherScenarios: boolean) =>
       this.processLexicon(content, symbols, scenarios, searchOtherScenarios);
+    
     return {
       id: scenario.id,
       title: processedLexicon(title, false),
@@ -219,15 +218,16 @@ export class ScenarioService {
       episodes: episodes?.sort((a, b) => {
         if (a.position > b.position) return 1;
         return -1;
-      }).map((episode: IEpisode & IGroup) => {
+      }).map((episode: IEpisode) => {
         if (episode.nonSequentialEpisodes) {
           return {
             id: episode.id,
             position: episode.position,
             nonSequentialEpisodes: episode.nonSequentialEpisodes.map(
-              (nonSequentialEpisode: INonSequentialEpisode) => ({
+              (nonSequentialEpisode) => ({
                 id: nonSequentialEpisode.id,
-                restriction: processedLexicon(nonSequentialEpisode.restriction, false),
+                type: nonSequentialEpisode.type,
+                restriction: processedLexicon(nonSequentialEpisode.restriction, true),
                 description: processedLexicon(
                   nonSequentialEpisode.description,
                   false

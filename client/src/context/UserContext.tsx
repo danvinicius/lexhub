@@ -119,7 +119,6 @@ export const UserStorage: FC<UserStorageProps> = ({ children }: UserStorageProps
 
 
 	useEffect(() => {
-    
 		if (user) {
 			localStorage.setItem('user', JSON.stringify(user));
 			if (location.pathname == '/login') navigate('/');

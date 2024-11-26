@@ -40,8 +40,6 @@ const UpdateProjectForm: FC<UpdateProjectFormProps> = ({ project, onClose }: Upd
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 
-	const navigate = useNavigate();
-
 	const updateProject = async (body: UpdateProjectRequestDTO) => {
     
 		if (project?.id) {

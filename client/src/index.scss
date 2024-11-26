@@ -181,21 +181,20 @@ a {
 .relative {
   position: relative;
 }
-table {
-  max-width: 100%;
-}
 
 table,
 tr,
 td,
 th {
-  border: 1px solid var(--secondary-text-color);
+  border: 1px solid #ddd;
   border-collapse: collapse;
 }
 
 td,
 th {
   padding: 1rem;
+  border: 1px solid #ddd;
+  text-align: left;
   line-height: 1.25;
 }
 
