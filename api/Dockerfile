@@ -6,13 +6,17 @@ FROM node:18-alpine
 WORKDIR /usr/src/app
 
 # Copies package.json, package-lock.json, tsconfig.json, .env to the root of WORKDIR
-COPY ["package.json", "yarn.lock", ".env", "./"]
+COPY ["package.json", "package-lock.json", ".env", "./"]
 
 # Copies everything in the src directory to WORKDIR/src
+
+RUN npm install
+
 COPY . .
 
 # Installs all packages
-RUN yarn build
+RUN npm run build
 
-# Runs the dev yarn script to build & start the server
-CMD ["yarn", "start"]
+# Runs the dev npm run script to build & start the server
+CMD ["npm", "run", "start"]
+

@@ -6,10 +6,12 @@ WORKDIR /app
 
 COPY ["package.json", "yarn.lock", "tsconfig.json", "vite.config.ts", "tsconfig.app.json", "tsconfig.node.json", "src", "public", ".env", "./"]
 
-COPY . .
 
 # Instale as dependências e construa o projeto
 RUN yarn install
+
+COPY . .
+
 RUN yarn build
 
 # Etapa 2: Servir com Node.js
