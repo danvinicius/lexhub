@@ -1,5 +1,4 @@
 import { FC, ReactNode, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { UPDATE_SCENARIO, GET_SCENARIO } from '../../../api';
 import api from '../../../lib/axios';
 import {
@@ -78,7 +77,6 @@ export const CreateRestrictionForm: FC<CreateRestrictionFormProps> = ({
 
 	const [, setError] = useState('');
 	const [, setLoading] = useState(false);
-	const navigate = useNavigate();
 
 	const updateScenarioWithRestriction = async (
 		body: EditScenarioRequestDTO

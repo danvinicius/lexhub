@@ -9,7 +9,6 @@ import { DELETE_PROJECT } from '../../api';
 import useForm from '../../hooks/useForm';
 import api from '../../lib/axios';
 import Error from '../helper/Error';
-import { useNavigate } from 'react-router-dom';
 import { ErrorResponse, IProject } from '../../shared/interfaces';
 import Close from '../../assets/icon/Close_Dark.svg';
 import { AxiosError } from 'axios';
@@ -31,8 +30,6 @@ const DeleteProjectForm: FC<DeleteProjectFormProps> = ({ project, onClose }: Del
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-
-	const navigate = useNavigate();
 
 	const deleteProject = async () => {
 		if (project?.id) {

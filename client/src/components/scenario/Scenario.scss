@@ -36,9 +36,9 @@
   }
   
   .scenario-details {
-    display: grid;
-    grid-template-columns: 20% 80%;
-    row-gap: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
     position: relative;
     
     h3 {
@@ -101,7 +101,7 @@
       gap: 1rem;
     }
 
-    .scenario-episodes-details, .scenario-context-details {
+    .scenario-episodes-details, .scenario-context-details, .scenario-resources-details {
       margin-top: -1rem;
     }
   }

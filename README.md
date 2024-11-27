@@ -13,6 +13,7 @@ This platform helps software engineers and requirements engineers managing scena
 
 ## To do
 
+### V1:
 - [x] Adicionar cenários
 - [x] Editar símbolos
 - [x] Editar nome/descrição do projeto
@@ -27,6 +28,8 @@ This platform helps software engineers and requirements engineers managing scena
 - [x] Criar e ordenar grupos de episódios não sequenciais
 - [x] Testar layout de página única com menu lateral na esquerda
 - [x] Adicionar ferramentas de edição e texto aos campos textarea
+
+### V2:
 - [ ] Permitir criar projetos públicos/privados
 - [ ] Passar todos os inputs para MUi
 - [ ] Melhorar UX (não recarregar página ao atualizar informações, poder salvar sem digitar 'Enter' nos ComboBox, etc)

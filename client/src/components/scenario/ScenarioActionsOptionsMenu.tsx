@@ -1,7 +1,7 @@
 import EditPen from '../../assets/icon/Edit.svg';
 import Bin from '../../assets/icon/Bin_Empty.svg';
 import './ScenarioActionsOptionsMenu.scss';
-import { FC, ReactNode, useEffect, useRef } from 'react';
+import { Dispatch, FC, ReactNode, SetStateAction, useEffect, useRef } from 'react';
 
 interface ScenarioActionsOptionsMenuProps {
     isScenarioActionsOptionsMenuOpen: boolean;

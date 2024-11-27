@@ -1,7 +1,6 @@
 import { FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { useNavigate } from 'react-router-dom';
 import { GET_SCENARIO, UPDATE_SCENARIO } from '../../../api';
 import api from '../../../lib/axios';
 import {
@@ -60,7 +59,6 @@ export const CreateResourceForm: FC<CreateResourceFormProps> = ({
 
 	const [, setError] = useState('');
 	const [, setLoading] = useState(false);
-	const navigate = useNavigate();
 
 	const updateScenarioWithResources = async (body: EditScenarioRequestDTO) => {
 		setLoading(true);

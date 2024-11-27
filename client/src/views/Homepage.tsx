@@ -19,12 +19,11 @@ import './css/Homepage.scss';
 import SymbolDetails from '../components/symbol/SymbolDetails';
 import { ProjectContext } from '../context/ProjectContext';
 import { Configurations } from './Configurations';
-import Button from '../components/forms/Button';
 import { LogoutButton } from '../components/login/LogoutButton';
 import { AccountCircle } from '@mui/icons-material';
 
 const demoTheme = extendTheme({
-	colorSchemes: { light: true, dark: true },
+	colorSchemes: { light: true },
 	colorSchemeSelector: 'class',
 	breakpoints: {
 		values: {

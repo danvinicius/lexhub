@@ -1,7 +1,6 @@
 import { FC, FormEvent, KeyboardEvent, ReactNode, useContext, useState } from 'react';
 import Input from '../forms/Input';
 import useForm from '../../hooks/useForm';
-import { useNavigate } from 'react-router-dom';
 import Form from '../forms/Form';
 import Loading from '../helper/Loading';
 import Button from '../forms/Button';
@@ -46,8 +45,6 @@ const CreateSymbolForm: FC<CreateSymbolFormProps> = ({ onClose }: CreateSymbolFo
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-
-	const navigate = useNavigate();
 
 	const [impacts, setImpacts] = useState<string[]>([]);
 	const [synonyms, setSynonyms] = useState<string[]>([]);

@@ -1,5 +1,4 @@
 import { FC, FormEvent, ReactNode, SyntheticEvent, useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
 import Button from '../../forms/Button';
@@ -51,8 +50,6 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose }: AddUse
 
 		setOpenSnackbar(false);
 	};
-
-	const navigate = useNavigate();
 
 	const [emails, setEmails] = useState<string[]>([]);
 	const [roles, setRoles] = useState<Record<string, string>>({});

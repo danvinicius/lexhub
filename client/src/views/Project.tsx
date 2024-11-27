@@ -1,17 +1,13 @@
 import { FC, ReactNode, SyntheticEvent, useCallback, useContext, useEffect, useState } from 'react';
 import './css/Project.scss';
-import { Navbar } from '../components/navbar/Navbar';
 import { UserContext } from '../context/UserContext';
 import { GET_PROJECT } from '../api';
 import api from '../lib/axios';
-import { useParams } from 'react-router-dom';
 import Loading from '../components/helper/Loading';
 import Error from '../components/helper/Error';
 import ScenariosList from '../components/scenario/ScenariosList';
 import Button from '../components/forms/Button';
 import { ProjectContext } from '../context/ProjectContext';
-import SummaryWrapper from '../components/scenario/SummaryWrapper';
-import UserAdd from '../assets/icon/User_Add.svg';
 import Kebab from '../assets/icon/Kebab_Vertical.svg';
 import { Box, Modal, Tab, Tabs } from '@mui/material';
 import CreateSymbolForm from '../components/symbol/CreateSymbolForm';

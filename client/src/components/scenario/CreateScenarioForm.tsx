@@ -1,7 +1,6 @@
 import { FC, FormEvent, KeyboardEvent, ReactNode, useContext, useState } from 'react';
 import Input from '../forms/Input';
 import useForm from '../../hooks/useForm';
-import { useNavigate } from 'react-router-dom';
 import Form from '../forms/Form';
 import Loading from '../helper/Loading';
 import Button from '../forms/Button';
@@ -51,8 +50,6 @@ const CreateScenarioForm: FC<CreateScenarioFormProps> = ({ onClose }: CreateScen
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-
-	const navigate = useNavigate();
 
 	const [exceptions, setExceptions] = useState<string[]>([]);
 	const [actors, setActors] = useState<string[]>([]);

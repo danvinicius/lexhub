@@ -58,11 +58,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({
 					placeholder="seu@email.com"
 					label="E-mail"
 					value={formData.email}
-					onChange={handleChange} onInput={function (e: ChangeEvent<HTMLInputElement>): void {
-						throw new Error('Function not implemented.');
-					} } onBlur={function (e: ChangeEvent<HTMLInputElement>): void {
-						throw new Error('Function not implemented.');
-					} }				/>
+					onChange={handleChange} onInput={() => null} onBlur={() => null }				/>
 				<Button theme="primary" text="Enviar e-mail de recuperação" onClick={handleSubmit} />
 			</Form>
 		</section>

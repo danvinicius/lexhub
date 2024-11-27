@@ -120,271 +120,287 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 					</>
 				)}
 			</div>
-			<div className='scenario-details'>
-				<div className='flex gap-5 border-none'>
-					<FlagIcon />
-					<h3>Objetivo</h3>
+			<section className='scenario-details'>
+				<div className='flex column gap-5'>
+					<div className='flex gap-5 border-none'>
+						<FlagIcon />
+						<h3>Objetivo</h3>
+					</div>
+					<p>{processContent(scenario.goal)}</p>
 				</div>
-				<p>{processContent(scenario.goal)}</p>
-				<div className='flex gap-5 border-none'>
-					<LanguageIcon />
-					<h3>Contexto</h3>
-				</div>
-				<div></div>
-				<div className='scenario-context'>
-					<div style={{maxWidth: 1200}}>
-						<table className='scenario-context-details'>
-							<tbody>
-								<tr>
-									<th>
-										<div className='flex gap-5 border-none'>
-											<CheckBoxIcon />
-											<p>Pré-condição</p>
-										</div>
-									</th>
-									<th>
-										<div className='flex gap-5 border-none'>
-											<RoomIcon />
-											<p>Localização geográfica</p>
-										</div>
-									</th>
-									<th>
-										<div className='flex gap-5 border-none'>
-											<CalendarMonthIcon />
-											<p>Localização temporal</p>
-										</div>
-									</th>
-									<th>
-										<div className='flex gap-5 border-none'>
-											<LockIcon />
-											<p>Restrições</p>
-										</div>
-									</th>
-								</tr>
-								<tr>
-									<td>{processContent(scenario.context?.preCondition)}</td>
-									<td>{processContent(scenario.context?.geographicLocation)}</td>
-									<td>{processContent(scenario.context?.temporalLocation)}</td>
-									<td className='restrictions'>
-										{isCollaborator && (
-											<span className='add-restriction' onClick={() => handleOpenCreateRestriction()}>
-												{scenario.context.restrictions.length > 0 ? (
-													<>
+				<div className='flex column gap-2'>
+					<div className='flex gap-5 border-none'>
+						<LanguageIcon />
+						<h3>Contexto</h3>
+					</div>
+					<div className='scenario-context'>
+						<div style={{maxWidth: 1200}}>
+							<table className='scenario-context-details'>
+								<tbody>
+									<tr>
+										<th>
+											<div className='flex gap-5 border-none'>
+												<CheckBoxIcon />
+												<p>Pré-condição</p>
+											</div>
+										</th>
+										<th>
+											<div className='flex gap-5 border-none'>
+												<RoomIcon />
+												<p>Localização geográfica</p>
+											</div>
+										</th>
+										<th>
+											<div className='flex gap-5 border-none'>
+												<CalendarMonthIcon />
+												<p>Localização temporal</p>
+											</div>
+										</th>
+										<th>
+											<div className='flex gap-5 border-none'>
+												<LockIcon />
+												<p>Restrições</p>
+											</div>
+										</th>
+									</tr>
+									<tr>
+										<td>{processContent(scenario.context?.preCondition)}</td>
+										<td>{processContent(scenario.context?.geographicLocation)}</td>
+										<td>{processContent(scenario.context?.temporalLocation)}</td>
+										<td className='restrictions'>
+											{isCollaborator && (
+												<span className='add-restriction' onClick={() => handleOpenCreateRestriction()}>
+													{scenario.context.restrictions.length > 0 ? (
+														<>
                                                     Gerenciar restrições <img src={EditPen} alt='' />
-													</>
-												) : (
-													<>
+														</>
+													) : (
+														<>
                                                     Cadastrar restrições <img src={Plus} alt='' />{' '}
-													</>
-												)}
-											</span>
-										)}
-										{scenario.context.restrictions.length > 0 && (
-											<ul>
-												{scenario.context?.restrictions?.map((restriction) => {
-													return (
-														<li key={restriction.description.content}>{processContent(restriction.description)}</li>
-													);
-												})}
-											</ul>
-										)}
-									</td>
-								</tr>
-							</tbody>
-						</table>
+														</>
+													)}
+												</span>
+											)}
+											{scenario.context.restrictions.length > 0 && (
+												<ul>
+													{scenario.context?.restrictions?.map((restriction) => {
+														return (
+															<li key={restriction.description.content}>{processContent(restriction.description)}</li>
+														);
+													})}
+												</ul>
+											)}
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
-				<div></div>
-				<div className='flex gap-5 border-none'>
-					<PeopleAltIcon />
-					<h3>Atores</h3>
-				</div>
-				<div className='scenario-actors'>
-					{scenario.actors?.length ? (
-						<ul>
-							{scenario.actors?.map((actor) => {
-								return <li key={actor.name.content}>{processContent(actor.name)}</li>;
-							})}
-						</ul>
-					) : (
-						<p>N/A</p>
-					)}
-				</div>
-				<div className='flex gap-5 border-none'>
-					<ErrorIcon />
-					<h3>Exceções</h3>
-				</div>
-				<div className='scenario-exceptions'>
-					{scenario.exceptions?.length ? (
-						<ul>
-							{scenario.exceptions?.map((exception) => {
-								return <li key={exception.description.content}>{processContent(exception.description)}</li>;
-							})}
-						</ul>
-					) : (
-						<p>N/A</p>
-					)}
-				</div>
-				<div className='flex gap-5 border-none'>
-					<HomeRepairServiceIcon />
-					<h3>Recursos</h3>
-				</div>
-				<div className='scenario-resources'>
-					{isCollaborator && (
-						<span className='add-resource' onClick={() => setIsCreateResourceModalOpen(true)}>
-							{scenario.resources.length > 0 ? (
-								<>
-                                    Gerenciar recursos <img src={EditPen} alt='' />
-								</>
-							) : (
-								<>
-                                    Cadastrar recursos <img src={Plus} alt='' />{' '}
-								</>
-							)}
-						</span>
-					)}
-					{scenario.resources.length > 0 && (
-						<table className='scenario-resources-details'>
-							<tbody>
-								<tr>
-									<th>
-										<div className='flex gap-5 border-none'>
-											<HomeRepairServiceIcon />
-											<p>Recurso</p>
-										</div>
-									</th>
-									<th>
-										<div className='flex gap-5 border-none'>
-											<LockIcon />
-											<p>Restrições</p>
-										</div>
-									</th>
-								</tr>
-								{scenario.resources?.map((resource) => {
-									return (
-										<tr key={resource.name.content}>
-											<td>{processContent(resource.name)}</td>
-											<td className='restrictions'>
-												{isCollaborator && (
-													<span
-														className='add-restriction'
-														onClick={() => handleOpenCreateRestriction(resource.id)}
-													>
-														{resource.restrictions?.length > 0 ? (
-															<>
-                                                                Gerenciar restrições <img src={EditPen} alt='' />
-															</>
-														) : (
-															<>
-                                                                Cadastrar restrições <img src={Plus} alt='' />{' '}
-															</>
-														)}
-													</span>
-												)}
-												{resource.restrictions?.length > 0 && (
-													<ul>
-														{resource.restrictions?.map((restriction) => {
-															return (
-																<li key={restriction.description.content}>
-																	{processContent(restriction.description)}
-																</li>
-															);
-														})}
-													</ul>
-												)}
-											</td>
-										</tr>
-									);
+				<div className='flex column gap-5'>
+					<div className='flex gap-5 border-none'>
+						<PeopleAltIcon />
+						<h3>Atores</h3>
+					</div>
+					<div className='scenario-actors'>
+						{scenario.actors?.length ? (
+							<ul>
+								{scenario.actors?.map((actor) => {
+									return <li key={actor.name.content}>{processContent(actor.name)}</li>;
 								})}
-							</tbody>
-						</table>
-					)}
+							</ul>
+						) : (
+							<p>N/A</p>
+						)}
+					</div>
 				</div>
-				<div className='flex gap-5 border-none'>
-					<ChecklistIcon />
-					<h3>Episódios</h3>
+				<div className='flex column gap-5'>
+					<div className='flex gap-5 border-none'>
+						<ErrorIcon />
+						<h3>Exceções</h3>
+					</div>
+					<div className='scenario-exceptions'>
+						{scenario.exceptions?.length ? (
+							<ul>
+								{scenario.exceptions?.map((exception) => {
+									return <li key={exception.description.content}>{processContent(exception.description)}</li>;
+								})}
+							</ul>
+						) : (
+							<p>N/A</p>
+						)}
+					</div>
 				</div>
-				<div className='scenario-episodes'>
-					{isCollaborator && (
-						<span className='add-episode' onClick={handleOpenCreateEpisodesModal}>
-							{scenario.episodes.length > 0 ? (
-								<>
-                                    Gerenciar episódios <img src={EditPen} alt='' />
-								</>
-							) : (
-								<>
-                                    Cadastrar episódios <img src={Plus} alt='' />{' '}
-								</>
+				<div className='flex column gap-2'>
+					<div className="flex gap-2">
+						<div className='flex gap-5 border-none'>
+							<HomeRepairServiceIcon />
+							<h3>Recursos</h3>
+						</div>
+						<div className='scenario-resources'>
+							{isCollaborator && (
+								<span className='add-resource' onClick={() => setIsCreateResourceModalOpen(true)}>
+									{scenario.resources.length > 0 ? (
+										<>
+                                    Gerenciar recursos <img src={EditPen} alt='' />
+										</>
+									) : (
+										<>
+                                    Cadastrar recursos <img src={Plus} alt='' />{' '}
+										</>
+									)}
+								</span>
 							)}
-						</span>
-					)}
-				</div>
-				{scenario.episodes.length > 0 && (
-					<div style={{maxWidth: 1200}}>
-						<table className='scenario-episodes-details'>
-							<tbody>
-								<tr>
-									<th style={{width: 50}}>
-										<div className='flex gap-5 border-none'>
-											<FormatListNumberedIcon />
-											<p>Posição</p>
-										</div>
-									</th>
-									<th>
-										<div className='flex gap-5 border-none'>
-											<DescriptionIcon />
-											<p>Descrição</p>
-										</div>
-									</th>
-									<th>
-										<div className='flex gap-5 border-none'>
-											<LocalOfferIcon />
-											<p>Tipo</p>
-										</div>
-									</th>
-									<th>
-										<div className='flex gap-5 border-none'>
-											<LockIcon />
-											<p>Restrição</p>
-										</div>
-									</th>
-								</tr>
-								{scenario.episodes?.map((episode) => {
-									return (
-										<tr key={episode.position}>
-											<td>
-												{episode.position} &nbsp;
-												{episode?.nonSequentialEpisodes && <small>(grupo de episódios)</small>}
-											</td>
-											{episode?.nonSequentialEpisodes ? (
-												<td colSpan={4}>
-													<table style={{width: '100%'}}>
-														<tbody>
-															{episode.nonSequentialEpisodes?.map((nse) => {
+						</div>
+					</div>
+					{scenario.resources.length > 0 && (
+						<div style={{maxWidth: 1200}}>
+							<table className='scenario-resources-details'>
+								<tbody>
+									<tr>
+										<th>
+											<div className='flex gap-5 border-none'>
+												<HomeRepairServiceIcon />
+												<p>Recurso</p>
+											</div>
+										</th>
+										<th>
+											<div className='flex gap-5 border-none'>
+												<LockIcon />
+												<p>Restrições</p>
+											</div>
+										</th>
+									</tr>
+									{scenario.resources?.map((resource) => {
+										return (
+											<tr key={resource.name.content}>
+												<td>{processContent(resource.name)}</td>
+												<td className='restrictions'>
+													{isCollaborator && (
+														<span
+															className='add-restriction'
+															onClick={() => handleOpenCreateRestriction(resource.id)}
+														>
+															{resource.restrictions?.length > 0 ? (
+																<>
+                                                                Gerenciar restrições <img src={EditPen} alt='' />
+																</>
+															) : (
+																<>
+                                                                Cadastrar restrições <img src={Plus} alt='' />{' '}
+																</>
+															)}
+														</span>
+													)}
+													{resource.restrictions?.length > 0 && (
+														<ul>
+															{resource.restrictions?.map((restriction) => {
 																return (
-																	<tr key={nse.id} style={{border: 'none'}}>
-																		<td>{processContent(nse.description)}</td>
-																		<td>{processContent(nse.restriction)}</td>
-																		<td style={{width: '13%'}}>{nse.type}</td>
-																	</tr>
+																	<li key={restriction.description.content}>
+																		{processContent(restriction.description)}
+																	</li>
 																);
 															})}
-														</tbody>
-													</table>
+														</ul>
+													)}
 												</td>
-											) : (
-												<td>{processContent(episode.description)}</td>
-											)}
-											{episode?.restriction && <td>{processContent(episode.restriction)}</td>}
-											{episode?.type && <td>{episode.type}</td>}
-										</tr>
-									);
-								})}
-							</tbody>
-						</table>
+											</tr>
+										);
+									})}
+								</tbody>
+							</table>
+						</div>
+					)}
+				</div>
+				<div className='flex column gap-2'>
+					<div className="flex gap-2">
+						<div className='flex gap-5 border-none'>
+							<ChecklistIcon />
+							<h3>Episódios</h3>
+						</div>
+						<div className='scenario-episodes'>
+							{isCollaborator && (
+								<span className='add-episode' onClick={handleOpenCreateEpisodesModal}>
+									{scenario.episodes.length > 0 ? (
+										<>
+                                    Gerenciar episódios <img src={EditPen} alt='' />
+										</>
+									) : (
+										<>
+                                    Cadastrar episódios <img src={Plus} alt='' />{' '}
+										</>
+									)}
+								</span>
+							)}
+						</div>
 					</div>
-				)}
-			</div>
+					{scenario.episodes.length > 0 && (
+						<div style={{maxWidth: 1200}}>
+							<table className='scenario-episodes-details'>
+								<tbody>
+									<tr>
+										<th style={{width: 50}}>
+											<div className='flex gap-5 border-none'>
+												<FormatListNumberedIcon />
+												<p>Posição</p>
+											</div>
+										</th>
+										<th>
+											<div className='flex gap-5 border-none'>
+												<DescriptionIcon />
+												<p>Descrição</p>
+											</div>
+										</th>
+										<th>
+											<div className='flex gap-5 border-none'>
+												<LockIcon />
+												<p>Restrição</p>
+											</div>
+										</th>
+										<th>
+											<div className='flex gap-5 border-none'>
+												<LocalOfferIcon />
+												<p>Tipo</p>
+											</div>
+										</th>
+									</tr>
+									{scenario.episodes?.map((episode) => {
+										return (
+											<tr key={episode.position}>
+												<td>
+													{episode.position} &nbsp;
+													{episode?.nonSequentialEpisodes && <small>(grupo de episódios)</small>}
+												</td>
+												{episode?.nonSequentialEpisodes ? (
+													<td colSpan={4}>
+														<table style={{width: '100%'}}>
+															<tbody>
+																{episode.nonSequentialEpisodes?.map((nse) => {
+																	return (
+																		<tr key={nse.id} style={{border: 'none'}}>
+																			<td style={{maxWidth: 500}}>{processContent(nse.description)}</td>
+																			<td>{processContent(nse.restriction)}</td>
+																			<td >{nse.type}</td>
+																		</tr>
+																	);
+																})}
+															</tbody>
+														</table>
+													</td>
+												) : (
+													<td>{processContent(episode.description)}</td>
+												)}
+												{episode?.restriction && <td>{processContent(episode.restriction)}</td>}
+												{episode?.type && <td>{episode.type}</td>}
+											</tr>
+										);
+									})}
+								</tbody>
+							</table>
+						</div>
+					)}
+				</div>
+			</section>
 			<Modal
 				open={isEditScenarioModalOpen}
 				onClose={handleCloseEditScenarioModal}

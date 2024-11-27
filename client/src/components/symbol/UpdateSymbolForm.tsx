@@ -17,7 +17,6 @@ import { UPDATE_SYMBOL } from '../../api';
 import useForm from '../../hooks/useForm';
 import api from '../../lib/axios';
 import Error from '../helper/Error';
-import { useNavigate } from 'react-router-dom';
 import { ISynonym, ISymbol, IImpact, ErrorResponse } from '../../shared/interfaces';
 import Close from '../../assets/icon/Close_Dark.svg';
 import { AddSynonymComboBox } from './synonym/AddSynonymComboBox';
@@ -64,8 +63,6 @@ const UpdateSymbolForm: FC<UpdateSymbolFormProps> = ({
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-
-	const navigate = useNavigate();
 
 	const updateSymbol = async (body: UpdateSymbolRequestDTO) => {
 		if (projectId && symbol?.id) {

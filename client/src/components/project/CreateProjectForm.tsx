@@ -9,7 +9,6 @@ import { CREATE_PROJECT } from '../../api';
 import useForm from '../../hooks/useForm';
 import api from '../../lib/axios';
 import Error from '../helper/Error';
-import { useNavigate } from 'react-router-dom';
 import { ErrorResponse } from '../../shared/interfaces';
 import { AxiosError } from 'axios';
 import { RichTextEditor } from '../forms/RichTextEditor';
@@ -27,8 +26,6 @@ const CreateProjectForm = (): ReactNode => {
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-
-	const navigate = useNavigate();
 
 	const createProject = async (body: CreateProjectRequestDTO) => {
 		setLoading(true);

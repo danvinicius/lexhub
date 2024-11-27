@@ -73,7 +73,7 @@ const LoginForm: FC<LoginFormProps> = ({
 					placeholder="*********"
 					label="Senha"
 					setCurrentScreen={setCurrentScreen}
-					enableForgotPassword={true}
+					enableForgotPassword={false}
 					{...password}
 					onInput={() => {setError('');}}
 				/>

@@ -1,11 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
-import fs from 'fs';
-import YAML from 'yaml';
-import path from 'path';
 import helmet from 'helmet';
-import swaggerUi from 'swagger-ui-express';
 import { Logger } from './utils/logger/logger';
 import { scenarioRouter } from '@/infra/http/routers/scenario-router';
 import express, { Application, Request, Response, Router } from 'express';
@@ -27,7 +23,6 @@ export class Server {
     this.config();
     this.databaseSetup();
     this.setupControllers();
-    this.setupDocumentation();
     this.server.listen(PORT, () => Logger.info(`Server running on port ${PORT}`));
   }
 
@@ -85,18 +80,5 @@ export class Server {
   
   public async close(): Promise<void> {
     await close();
-  }
-
-  private setupDocumentation() {
-    const file = fs.readFileSync(
-      path.resolve(__dirname, '..', 'swagger.yaml'),
-      'utf8'
-    );
-    const swaggerDocument = YAML.parse(file);
-    this.server.use(
-      '/api/docs',
-      swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument)
-    );
   }
 }

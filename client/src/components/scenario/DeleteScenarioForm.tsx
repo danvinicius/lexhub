@@ -7,7 +7,6 @@ import Loading from '../helper/Loading';
 import { DELETE_SCENARIO } from '../../api';
 import api from '../../lib/axios';
 import Error from '../helper/Error';
-import { useNavigate } from 'react-router-dom';
 import { ErrorResponse, ILexiconScenario } from '../../shared/interfaces';
 import Close from '../../assets/icon/Close_Dark.svg';
 import { AxiosError } from 'axios';
@@ -29,8 +28,6 @@ const DeleteScenarioForm: FC<DeleteScenarioFormProps> = ({ scenario, projectId, 
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
-
-	const navigate = useNavigate();
 
 	const deleteScenario = async () => {
 		if (scenario?.id) {

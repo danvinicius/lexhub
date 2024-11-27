@@ -1,0 +1,36 @@
+.underDevelopment {
+    background: #fff;
+    position: relative; /* Permite posicionar o elemento interno */
+    height: 600px;
+    max-height: 100%;
+    width: 100%;
+    overflow: hidden; /* Evita que o conteúdo saia do container */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    span {
+        font-size: 5rem;
+    }
+
+    p {
+        font-size: 2rem;
+        text-align: center;
+    }
+}
+
+.underDevelopment::before {
+    content: '';
+    background: #fff;
+    background-image: url('../../assets/img/capybara-ai-generated-image_362642-1991.png');
+    background-repeat: no-repeat;
+    background-position: center 0;
+    height: 600px;
+    max-height: 100%;
+    width: 100%;
+    opacity: .1;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
