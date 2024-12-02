@@ -7,11 +7,13 @@ export namespace ProjectRepository {
   export interface CreateProjectParams {
     name: string;
     description: string;
+    private: boolean;
     user: IUser;
   }
   export interface UpdateProjectParams {
     name: string;
     description: string;
+    private: boolean;
   }
 }
 
@@ -21,7 +23,10 @@ export class ProjectRepository {
       const project = await Project.findById(id)
         .populate('symbols')
         .populate('scenarios')
-        .populate('users.user');
+        .populate({
+          path: 'users.user',
+          select: '-password',
+        });
 
       if (!project) return null;
       return project?.toJSON();
@@ -37,7 +42,10 @@ export class ProjectRepository {
       })
         .populate('symbols')
         .populate('scenarios')
-        .populate('users');
+        .populate({
+          path: 'users.user',
+          select: '-password',
+        });
         
       return projects.map(project => project.toJSON());
     } catch (error: any) {
@@ -53,6 +61,7 @@ export class ProjectRepository {
       const project = new Project({
         name: data.name,
         description: data.description,
+        private: data.private,
         users: [{ user: data.user.id, role: UserRole.OWNER }],
       });
 

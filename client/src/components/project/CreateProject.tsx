@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import './css/CreateProject.scss';
-import CreateProjectForm from '../components/project/CreateProjectForm';
+import './CreateProject.scss';
+import CreateProjectForm from '../../components/project/CreateProjectForm';
 
 const CreateProject: FC = () => {
 	return (

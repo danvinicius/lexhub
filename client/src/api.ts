@@ -4,7 +4,7 @@ interface RequestFormat {
   url: string;
   options: {
     method: Method,
-    headers: {
+    headers?: {
         'Content-Type'?: string;
         'Authorization'?: string;
     },
@@ -59,7 +59,7 @@ export const GET_PROJECTS = (token: string): RequestFormat => {
 	};
 };
 
-export const GET_PROJECT = (id: string, token: string): RequestFormat => {
+export const GET_PROJECT = (id: string, token?: string): RequestFormat => {
 	return {
 		url: `/project/${id}`,
 		options: {
@@ -67,6 +67,15 @@ export const GET_PROJECT = (id: string, token: string): RequestFormat => {
 			headers: {
 				'Authorization': `Bearer ${token}`
 			}
+		},
+	};
+};
+
+export const IS_PROJECT_PRIVATE = (id: string): RequestFormat => {
+	return {
+		url: `/project/check-privacy/${id}`,
+		options: {
+			method: 'get',
 		},
 	};
 };

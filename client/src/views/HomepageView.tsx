@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { extendTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FolderIcon from '@mui/icons-material/Folder';
@@ -13,14 +12,15 @@ import api from '../lib/axios';
 import { ErrorResponse, IProject } from '../shared/interfaces';
 import { AxiosError } from 'axios';
 import { UserContext } from '../context/UserContext';
-import Project from './Project';
-import { OverView } from './Overview';
+import Project from '../components/project/Project';
+import { OverView } from '../components/homepage/Overview';
 import './css/Homepage.scss';
 import SymbolDetails from '../components/symbol/SymbolDetails';
 import { ProjectContext } from '../context/ProjectContext';
-import { Configurations } from './Configurations';
+import { Configurations } from '../components/homepage/Configurations';
 import { LogoutButton } from '../components/login/LogoutButton';
 import { AccountCircle } from '@mui/icons-material';
+import { useState, useContext, useEffect, useMemo, useCallback } from 'react';
 
 const demoTheme = extendTheme({
 	colorSchemes: { light: true },
@@ -37,16 +37,18 @@ const demoTheme = extendTheme({
 });
 
 function useDemoRouter(): Router {
-	const [pathname, setPathname] = React.useState(window.location.pathname);
+	const [pathname, setPathname] = useState(window.location.pathname);
+	const { refreshUser } = useContext(UserContext) || {};
 	
-	React.useEffect(() => {
+	useEffect(() => {
 		// Atualiza a URL do navegador sempre que o pathname mudar
 		if (window.location.pathname !== pathname) {
 			window.history.pushState(null, '', pathname);
 		}
 	}, [pathname]);
   
-	React.useEffect(() => {
+	useEffect(() => {
+		refreshUser();
 		// Ouve as mudanças no histórico (ex.: botões de voltar/avançar do navegador)
 		const handlePopState = () => setPathname(window.location.pathname);
 		
@@ -54,7 +56,7 @@ function useDemoRouter(): Router {
 		return () => window.removeEventListener('popstate', handlePopState);
 	}, []);
 	
-	const router = React.useMemo(() => {
+	const router = useMemo(() => {
 		return {
 			pathname,
 			searchParams: new URLSearchParams(),
@@ -69,15 +71,15 @@ function useDemoRouter(): Router {
 
 export const Homepage = () => {
 	const router = useDemoRouter();
-	const {symbol} = React.useContext(ProjectContext);
+	const {symbol} = useContext(ProjectContext);
 	
-	const { isAuthenticated } = React.useContext(UserContext) || {};
+	const { isAuthenticated } = useContext(UserContext) || {};
 
-	const [projects, setProjects] = React.useState<IProject[]>([]);
-	const [, setError] = React.useState('');
-	const [, setLoading] = React.useState(false);
+	const [projects, setProjects] = useState<IProject[]>([]);
+	const [, setError] = useState('');
+	const [, setLoading] = useState(false);
 
-	const getProjects = React.useCallback(async () => {
+	const getProjects = useCallback(async () => {
 		setLoading(true);
 		try {
 			const { url, options } = GET_PROJECTS(
@@ -93,7 +95,7 @@ export const Homepage = () => {
 		}
 	}, [isAuthenticated]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		getProjects();
 	}, [getProjects]);
 
@@ -136,8 +138,8 @@ export const Homepage = () => {
 		},
 	];
 
-	const [projectId, setProjectId] = React.useState('');
-	React.useEffect(() => {
+	const [projectId, setProjectId] = useState('');
+	useEffect(() => {
 		if (router.pathname.startsWith('/projeto/')) {
 			const id = router.pathname.split('/').pop();
 			if (id) {

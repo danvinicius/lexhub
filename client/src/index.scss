@@ -214,7 +214,7 @@ p {
   line-height: 1.2;
 }
 
-p.error {
+p.error, span.error {
   color: var(--error-color);
 }
 

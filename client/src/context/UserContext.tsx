@@ -113,6 +113,7 @@ export const UserStorage: FC<UserStorageProps> = ({ children }: UserStorageProps
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				console.log(err?.response?.data?.error || 'Erro inesperado');
+				logout();
 			}
 		}
 	}, [isAuthenticated]);

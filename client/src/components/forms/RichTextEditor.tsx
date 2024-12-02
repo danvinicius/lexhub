@@ -4,6 +4,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import './RichTextEditor.scss';
 import Error from '../helper/Error';
+import { useHelpers } from '../../hooks/useHelpers';
 
 interface RichTextEditorProps {
     label: string;
@@ -15,7 +16,8 @@ interface RichTextEditorProps {
 }
 
 export const RichTextEditor: FC<RichTextEditorProps> = ({ label, value, setValue, error, setError, onBlur }: RichTextEditorProps) => {
-	const myColors = ['#000000', '#785412', '#452632', '#856325', '#963254', '#254563', 'transparent'];
+	const { getRawText } = useHelpers();
+	const myColors = ['#3d3d3d', '#785412', '#452632', '#856325', '#963254', '#254563', 'transparent'];
 	const modules = {
 		toolbar: [
 			[{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -31,7 +33,7 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({ label, value, setValue
 
 	return (
 		<div className={`rich-text-editor ${error ? 'error' : ''}`}>
-			<p>{label}</p>
+			<p>{label}<span className={getRawText(value).length > 5000 ? 'error' : ''}>{getRawText(value).length}/5000</span></p>
 			<ReactQuill
 				theme='snow'
 				modules={modules}

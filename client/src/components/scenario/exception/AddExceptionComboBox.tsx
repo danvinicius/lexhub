@@ -39,7 +39,7 @@ export const AddExceptionComboBox: FC<AddExceptionComboBoxProps> = ({
 	};
 
 	return (
-		<div className="exceptions">
+		<div className="exceptions" style={{maxWidth: 452}}>
 			<p>Exceções</p>
 			<Autocomplete
 				multiple

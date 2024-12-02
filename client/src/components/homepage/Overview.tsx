@@ -1,8 +1,8 @@
 import { ReactNode, useState } from 'react';
-import Button from '../components/forms/Button';
-import './css/Overview.scss';
-import CreateProject from './CreateProject';
-import { UnderDevelopment } from './UnderDevelopment';
+import Button from '../forms/Button';
+import './Overview.scss';
+import { UnderDevelopment } from '../project/UnderDevelopment';
+import CreateProject from '../project/CreateProject';
 
 export const OverView = (): ReactNode => {
 	const [isCreateProject, setIsCreateProject] = useState(false);

@@ -1,26 +1,36 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { useHelpers } from './useHelpers';
 
 interface ValidationRule {
-  regex: RegExp;
+  validator: (value: string) => boolean;
   message: string;
 }
 
+const {getRawText} = useHelpers();
+
 const types: Record<string, ValidationRule> = {
 	projectName: {
-		regex: /^.{0,100}$/,
-		message: 'O nome do projeto não pode ter mais de 100 caracteres'
+		validator: (value: string) => {
+			return /^.{0,100}$/.test(value);
+		},
+		message: 'O nome do projeto não pode conter mais de 100 caracteres'
 	},
 	projectDescription: {
-		regex: /^.{0,1000}$/,
-		message: 'A descrição do projeto não pode ter mais de 1000 caracteres'
+		validator: (value: string) => {
+			return getRawText(value).length <= 5000;
+		},
+		message: 'A descrição do projeto não pode conter mais de 5000 caracteres'
 	},
 	email: {
-		regex:
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+		validator: (value: string) => {
+			return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
+		},
 		message: 'Preencha um e-mail válido.',
 	},
 	password: {
-		regex: /.{6,}/,
+		validator: (value: string) => {
+			return /.{6,}/.test(value);
+		},
 		message: 'A senha deve conter pelo menos 6 caracteres.',
 	},
 };
@@ -45,7 +55,7 @@ const useForm = (type?: string): UseFormReturn => {
 			setError('Preencha um valor.');
 			return false;
 		}
-		if (type && types[type] && !types[type].regex.test(value)) {
+		if (type && types[type] && !types[type].validator(value)) {
 			setError(types[type].message);
 			return false;
 		}

@@ -42,7 +42,7 @@ export const AddActorComboBox: FC<AddActorComboBoxProps> = ({
 	};
 
 	return (
-		<div className="actors">
+		<div className="actors" style={{maxWidth: 452}}>
 			<p>Atores</p>
 			<Autocomplete
 				multiple

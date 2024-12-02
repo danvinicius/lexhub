@@ -145,7 +145,7 @@ const EpisodeInputGroup: FC<EpisodeInputGroupProps> = ({ episodes, setEpisodes }
 				<Button onClick={handleAddEpisode} variant='outlined' color='primary'>
                     Adicionar episódio
 				</Button>
-				<Button onClick={handleAddNonSequentialEpisodesGroup} variant='outlined' color='primary'>
+				<Button onClick={handleAddNonSequentialEpisodesGroup} variant='outlined' color='success'>
                     Adicionar grupo de episódios não sequenciais
 				</Button>
 			</div>

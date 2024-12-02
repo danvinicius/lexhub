@@ -28,9 +28,11 @@ export class ProjectController {
   };
 
   public getProject = async (req: Request) => {
+    
     try {
       const { projectId } = req.params;
       const project = await projectService.getProject(projectId);
+      
       return ok(project);
     } catch (error: any) {
       if (error instanceof NotFoundError) {
@@ -39,6 +41,20 @@ export class ProjectController {
       return serverError(error.message);
     }
   };
+
+  public isProjectPrivate = async (req: Request) => {
+    try {
+      const { projectId } = req.params;
+      const project = await projectService.isProjectPrivate(projectId);
+      return ok(project);
+    } catch (error: any) {
+      if (error instanceof NotFoundError) {
+        return notFound(error.message);
+      }
+      return serverError(error.message);
+    }
+  };
+
   public createProject = async (req: Request) => {
     try {
       const data = new DTO.CreateProjectRequestDTO(req.body);

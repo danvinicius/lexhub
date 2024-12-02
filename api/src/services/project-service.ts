@@ -45,6 +45,14 @@ export class ProjectService {
     };
   }
 
+  async isProjectPrivate(projectId: string): Promise<boolean> {
+    const project = await projectRepository.getProject(projectId);
+    if (project) {
+      return project.private;
+    }
+    return false;
+  }
+
   async getCleanProject(id: string): Promise<null | IProject> {
     const project = await projectRepository.getProject(id);
     

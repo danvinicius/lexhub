@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import './css/UnderDevelopment.scss';
+import './UnderDevelopment.scss';
 
 export const UnderDevelopment = (): ReactNode => {
 	return (

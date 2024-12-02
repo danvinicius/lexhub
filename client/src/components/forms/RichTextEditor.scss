@@ -23,4 +23,14 @@
   .ql-container {
     height: 300px;
   }
+
+  & > p {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    span:not(.error) {
+      color: #b5b5b5;
+    }
+  }
 }

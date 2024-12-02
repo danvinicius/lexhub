@@ -1,10 +1,10 @@
 import ProtectedRoute from './components/helper/ProtectedRoute';
 import { UserStorage } from './context/UserContext';
-import Login from './views/Login';
+import Login from './views/LoginView';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ProjectStorage } from './context/ProjectContext';
 import { FC } from 'react';
-import { Homepage } from './views/Homepage';
+import { Homepage } from './views/HomepageView';
 
 const App: FC = () => {
 	return (

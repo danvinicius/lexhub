@@ -8,6 +8,7 @@ export interface IProject {
   readonly id?: string;
   name: string;
   description: string;
+  private: boolean;
   scenarios?: IScenario[];
   symbols?: ISymbol[];
   users: IUserProject[];
@@ -17,6 +18,10 @@ const projectSchema = new Schema<IProject>(
   {
     name: String,
     description: String,
+    private: {
+      type: Boolean,
+      default: true
+    },
     scenarios: [
       { type: Schema.Types.ObjectId, ref: 'Scenario', required: true },
     ],

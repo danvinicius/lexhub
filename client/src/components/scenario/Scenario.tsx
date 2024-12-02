@@ -367,19 +367,19 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 									{scenario.episodes?.map((episode) => {
 										return (
 											<tr key={episode.position}>
-												<td>
+												<td style={{width: '6%'}}>
 													{episode.position} &nbsp;
 													{episode?.nonSequentialEpisodes && <small>(grupo de episódios)</small>}
 												</td>
 												{episode?.nonSequentialEpisodes ? (
-													<td colSpan={4}>
+													<td colSpan={4} style={{width: '45%'}}>
 														<table style={{width: '100%'}}>
 															<tbody>
 																{episode.nonSequentialEpisodes?.map((nse) => {
 																	return (
 																		<tr key={nse.id} style={{border: 'none'}}>
-																			<td style={{maxWidth: 500}}>{processContent(nse.description)}</td>
-																			<td>{processContent(nse.restriction)}</td>
+																			<td style={{width: '49.5%'}}>{processContent(nse.description)}</td>
+																			<td style={{width: '39.75%'}}>{processContent(nse.restriction)}</td>
 																			<td >{nse.type}</td>
 																		</tr>
 																	);
@@ -388,9 +388,9 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 														</table>
 													</td>
 												) : (
-													<td>{processContent(episode.description)}</td>
+													<td style={{width: '45%'}}>{processContent(episode.description)}</td>
 												)}
-												{episode?.restriction && <td>{processContent(episode.restriction)}</td>}
+												{episode?.restriction && <td style={{width: '35%'}}>{processContent(episode.restriction)}</td>}
 												{episode?.type && <td>{episode.type}</td>}
 											</tr>
 										);
