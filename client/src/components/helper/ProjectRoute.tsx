@@ -11,8 +11,8 @@ const ProjectRoute: FC = (): ReactNode => {
 	const { projectId } = useParams();
 	const [isProjectPrivate, setIsProjectPrivate] = useState();
 	const { isAuthenticated } = useContext(UserContext) || {};
-	const [error, setError] = useState('');
-	const [loading, setLoading] = useState(false);
+	const [, setError] = useState('');
+	const [, setLoading] = useState(false);
 	
 	const verifyProjectPrivacy = useCallback(async () => {
 		setLoading(true);
