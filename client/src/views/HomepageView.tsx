@@ -165,7 +165,7 @@ export const Homepage = () => {
 			<DashboardLayout
 				slots={{ sidebarFooter: symbol ? renderSymbolDetails : LogoutButton }}
 				sidebarExpandedWidth={400}>
-				<PageContainer breadcrumbs={[{title: '', path: ''}]} title='' sx={{padding: 0, width: 1500}}>
+				<PageContainer breadcrumbs={[{title: '', path: ''}]} title='' sx={{padding: 0}}>
 					{ router.pathname == '/home' && <OverView/>}
 					{ router.pathname.startsWith('/projeto/') && <Project projectId={projectId} />}
 					{ router.pathname == '/configuracoes' && <Configurations/>}
