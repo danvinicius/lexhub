@@ -41,6 +41,8 @@ export const CreateResourceForm: FC<CreateResourceFormProps> = ({
 	const projectContext = useContext(ProjectContext);
 	const [resources, setResources] = useState<string[]>([]);
 
+	const [currentResource, setCurrentResource] = useState('');
+
 	useEffect(() => {
 		if (projectContext?.project && scenarioId) {
 			const scenario = projectContext.project.scenarios?.find(
@@ -96,7 +98,7 @@ export const CreateResourceForm: FC<CreateResourceFormProps> = ({
 			exceptions: originalScenario.exceptions || [],
 			context: originalScenario.context || {},
 			projectId: projectContext.project?.id || '',
-			resources: resources.map((resource) => ({
+			resources: [...resources, currentResource.length ? currentResource : null].filter(resource => resource != null).map((resource) => ({
 				id:  uuidv4(),
 				name: resource,
 				restrictions: originalScenario.resources?.find(r => r.name == resource)?.restrictions
@@ -119,6 +121,7 @@ export const CreateResourceForm: FC<CreateResourceFormProps> = ({
 				resources={resources}
 				setResources={setResources}
 				scenarioId={scenarioId}
+				setCurrentResource={setCurrentResource}
 			/>
 			<Button
 				text="Salvar"

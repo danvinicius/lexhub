@@ -6,12 +6,14 @@ interface AddResourceComboBoxProps {
   scenarioId: string;
   resources: string[];
   setResources: Dispatch<SetStateAction<string[]>>;
+  setCurrentResource: Dispatch<SetStateAction<string>>;
 }
 
 export const AddResourceComboBox: FC<AddResourceComboBoxProps> = ({
 	scenarioId,
 	resources,
 	setResources,
+	setCurrentResource,
 }: AddResourceComboBoxProps): ReactNode => {
 	const projectContext = useContext(ProjectContext);
 
@@ -36,6 +38,7 @@ export const AddResourceComboBox: FC<AddResourceComboBoxProps> = ({
 
 	const handleAddResource = (newResources: string[]) => {
 		setResources(newResources);
+		setCurrentResource('');
 	};
 
 	return (
@@ -51,6 +54,9 @@ export const AddResourceComboBox: FC<AddResourceComboBoxProps> = ({
 						(value: string) => !localOptions.includes(value)
 					);
 					setLocalOptions([...localOptions, ...newOptions]);
+				}}
+				onInputChange={(_, newInputValue) => {
+					setCurrentResource(newInputValue);
 				}}
 				renderInput={(params) => (
 					<TextField

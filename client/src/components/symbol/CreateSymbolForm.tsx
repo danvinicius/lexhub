@@ -48,6 +48,9 @@ const CreateSymbolForm: FC<CreateSymbolFormProps> = ({ onClose }: CreateSymbolFo
 
 	const [impacts, setImpacts] = useState<string[]>([]);
 	const [synonyms, setSynonyms] = useState<string[]>([]);
+	
+	const [currentImpact, setCurrentImpact] = useState('');
+	const [currentSynonym, setCurrentSynonym] = useState('');
 
 	const projectContext = useContext(ProjectContext);
 
@@ -79,10 +82,10 @@ const CreateSymbolForm: FC<CreateSymbolFormProps> = ({ onClose }: CreateSymbolFo
 					notion: notion.value,
 					classification: classification.value,
 					projectId: projectContext.project.id,
-					impacts: impacts.map((impact: string) => ({
+					impacts: [...impacts, currentImpact.length ? currentImpact : null].filter(impact => impact != null).map((impact: string) => ({
 						description: impact,
 					})),
-					synonyms: synonyms.map((synonym: string) => ({
+					synonyms: [...synonyms, currentSynonym.length ? currentSynonym : null].filter(synonym => synonym != null).map((synonym: string) => ({
 						name: synonym,
 					})),
 				});
@@ -149,8 +152,8 @@ const CreateSymbolForm: FC<CreateSymbolFormProps> = ({ onClose }: CreateSymbolFo
 					]}
 					{...classification}
 				></Select>
-				<AddSynonymComboBox synonyms={synonyms} setSynonyms={setSynonyms} />
-				<AddImpactComboBox impacts={impacts} setImpacts={setImpacts} />
+				<AddSynonymComboBox synonyms={synonyms} setSynonyms={setSynonyms} setCurrentSynonym={setCurrentSynonym}/>
+				<AddImpactComboBox impacts={impacts} setImpacts={setImpacts} setCurrentImpact={setCurrentImpact}/>
 				{loading ? (
 					<Loading />
 				) : (

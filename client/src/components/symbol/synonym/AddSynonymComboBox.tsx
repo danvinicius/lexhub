@@ -6,12 +6,14 @@ interface AddSynonymComboBoxProps {
   symbolId?: string;
   synonyms: string[];
   setSynonyms: Dispatch<SetStateAction<string[]>>;
+  setCurrentSynonym: Dispatch<SetStateAction<string>>;
 }
 
 export const AddSynonymComboBox: FC<AddSynonymComboBoxProps> = ({
 	symbolId,
 	synonyms,
 	setSynonyms,
+	setCurrentSynonym,
 }: AddSynonymComboBoxProps): ReactNode => {
 	const projectContext = useContext(ProjectContext);
 
@@ -35,6 +37,7 @@ export const AddSynonymComboBox: FC<AddSynonymComboBoxProps> = ({
 
 	const handleAddSynonym = (newSynonyms: string[]) => {
 		setSynonyms(newSynonyms);
+		setCurrentSynonym('');
 	};
 
 	return (
@@ -49,6 +52,9 @@ export const AddSynonymComboBox: FC<AddSynonymComboBoxProps> = ({
 					handleAddSynonym(newValue as string[]);
 					const newOptions = (newValue as (string | undefined)[]).filter((value): value is string => value !== undefined && !localOptions.includes(value));
 					setLocalOptions([...localOptions, ...newOptions]);
+				}}
+				onInputChange={(_, newInputValue) => {
+					setCurrentSynonym(newInputValue);
 				}}
 				renderInput={(params) => (
 					<TextField

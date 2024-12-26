@@ -8,12 +8,14 @@ interface AddActorComboBoxProps {
   scenarioId?: string;
   actors: string[];
   setActors: Dispatch<SetStateAction<string[]>>;
+  setCurrentActor: Dispatch<SetStateAction<string>>;
 }
 
 export const AddActorComboBox: FC<AddActorComboBoxProps> = ({
 	scenarioId,
 	actors,
 	setActors,
+	setCurrentActor,
 }: AddActorComboBoxProps): ReactNode => {
 	const projectContext = useContext(ProjectContext);
 
@@ -39,6 +41,7 @@ export const AddActorComboBox: FC<AddActorComboBoxProps> = ({
 
 	const handleAddActor = (newActors: string[]) => {
 		setActors(newActors);
+		setCurrentActor('');
 	};
 
 	return (
@@ -55,6 +58,9 @@ export const AddActorComboBox: FC<AddActorComboBoxProps> = ({
 						(value: string) => !localOptions.includes(value)
 					);
 					setLocalOptions([...localOptions, ...newOptions]);
+				}}
+				onInputChange={(_, newInputValue) => {
+					setCurrentActor(newInputValue);
 				}}
 				renderInput={(params) => (
 					<TextField

@@ -54,6 +54,9 @@ const CreateScenarioForm: FC<CreateScenarioFormProps> = ({ onClose }: CreateScen
 	const [exceptions, setExceptions] = useState<string[]>([]);
 	const [actors, setActors] = useState<string[]>([]);
 
+	const [currentActor, setCurrentActor] = useState('');
+	const [currentException, setCurrentException] = useState('');
+
 	const createScenario = async (body: CreateScenarioRequestDTO) => {
 		setLoading(true);
 		if (projectContext.project?.id) {
@@ -91,10 +94,10 @@ const CreateScenarioForm: FC<CreateScenarioFormProps> = ({ onClose }: CreateScen
 						temporalLocation: temporalLocation.value,
 						preCondition: preCondition.value,
 					},
-					exceptions: exceptions.map((exception: string) => ({
+					exceptions: [...exceptions, currentException.length ? currentException : null].filter(exception => exception != null).map((exception: string) => ({
 						description: exception,
 					})),
-					actors: actors.map((actor: string) => ({
+					actors: [...actors, currentActor.length ? currentActor : null].filter(actor => actor != null).map((actor: string) => ({
 						name: actor,
 					})),
 					projectId: projectContext.project.id,
@@ -140,10 +143,11 @@ const CreateScenarioForm: FC<CreateScenarioFormProps> = ({ onClose }: CreateScen
 						}}
 						{...goal}
 					/>
-					<AddActorComboBox actors={actors} setActors={setActors}/>
+					<AddActorComboBox actors={actors} setActors={setActors} setCurrentActor={setCurrentActor}/>
 					<AddExceptionComboBox
 						exceptions={exceptions}
 						setExceptions={setExceptions}
+						setCurrentException={setCurrentException}
 					/>
 				</Form>
 				<Form>

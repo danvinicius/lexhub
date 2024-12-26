@@ -5,15 +5,18 @@ interface AddUserEmailComboBoxProps {
   symbolId?: string;
   emails: string[];
   setEmails: Dispatch<SetStateAction<string[]>>;
+  setCurrentEmail: Dispatch<SetStateAction<string>>;
 }
 
 export const AddUserEmailComboBox: FC<AddUserEmailComboBoxProps> = ({
 	emails,
 	setEmails,
+	setCurrentEmail,
 }: AddUserEmailComboBoxProps): ReactNode => {
 
 	const handleAddUserEmails = (newEmails: string[]) => {
 		setEmails(newEmails);
+		setCurrentEmail('');
 	};
 
 	return (
@@ -25,6 +28,9 @@ export const AddUserEmailComboBox: FC<AddUserEmailComboBoxProps> = ({
 				value={emails}
 				onChange={(_, newValue) => {
 					handleAddUserEmails(newValue as string[]);
+				}}
+				onInputChange={(_, newInputValue) => {
+					setCurrentEmail(newInputValue);
 				}}
 				renderInput={(params) => (
 					<TextField

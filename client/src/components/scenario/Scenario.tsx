@@ -210,7 +210,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 								})}
 							</ul>
 						) : (
-							<p>N/A</p>
+							<p>Nenhum ator cadastrado</p>
 						)}
 					</div>
 				</div>
@@ -227,7 +227,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 								})}
 							</ul>
 						) : (
-							<p>N/A</p>
+							<p>Nenhuma exceção cadastrada</p>
 						)}
 					</div>
 				</div>

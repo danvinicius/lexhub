@@ -6,12 +6,14 @@ interface AddExceptionComboBoxProps {
   scenarioId?: string;
   exceptions: string[];
   setExceptions: Dispatch<SetStateAction<string[]>>;
+  setCurrentException: Dispatch<SetStateAction<string>>;
 }
 
 export const AddExceptionComboBox: FC<AddExceptionComboBoxProps> = ({
 	scenarioId,
 	exceptions,
 	setExceptions,
+	setCurrentException,
 }: AddExceptionComboBoxProps): ReactNode => {
 	const projectContext = useContext(ProjectContext);
 
@@ -36,6 +38,7 @@ export const AddExceptionComboBox: FC<AddExceptionComboBoxProps> = ({
 
 	const handleAddException = (newExceptions: string[]) => {
 		setExceptions(newExceptions);
+		setCurrentException('');
 	};
 
 	return (
@@ -52,6 +55,9 @@ export const AddExceptionComboBox: FC<AddExceptionComboBoxProps> = ({
 						(value: string) => !localOptions.includes(value)
 					);
 					setLocalOptions([...localOptions, ...newOptions]);
+				}}
+				onInputChange={(_, newInputValue) => {
+					setCurrentException(newInputValue);
 				}}
 				renderInput={(params) => (
 					<TextField

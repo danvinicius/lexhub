@@ -6,12 +6,14 @@ interface AddRestrictionComboBoxProps {
   scenarioId: string;
   restrictions: string[];
   setRestrictions: Dispatch<SetStateAction<string[]>>;
+  setCurrentRestriction: Dispatch<SetStateAction<string>>;
 }
 
 export const AddRestrictionComboBox: FC<AddRestrictionComboBoxProps> = ({
 	scenarioId,
 	restrictions,
 	setRestrictions,
+	setCurrentRestriction,
 }: AddRestrictionComboBoxProps): ReactNode => {
 	const projectContext = useContext(ProjectContext);
 
@@ -44,6 +46,7 @@ export const AddRestrictionComboBox: FC<AddRestrictionComboBoxProps> = ({
 
 	const handleAddRestriction = (newRestrictions: string[]) => {
 		setRestrictions(newRestrictions);
+		setCurrentRestriction('');
 	};
 
 	return (
@@ -59,6 +62,9 @@ export const AddRestrictionComboBox: FC<AddRestrictionComboBoxProps> = ({
 						(value: string) => !localOptions.includes(value)
 					);
 					setLocalOptions([...localOptions, ...newOptions]);
+				}}
+				onInputChange={(_, newInputValue) => {
+					setCurrentRestriction(newInputValue);
 				}}
 				renderInput={(params) => (
 					<TextField

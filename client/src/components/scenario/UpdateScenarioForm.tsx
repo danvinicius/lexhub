@@ -52,6 +52,9 @@ const UpdateScenarioForm: FC<UpdateScenarioFormProps> = ({ scenario, onClose, pr
 	const [actorsEdit, setActorsEdit] = useState<string[]>([]);
 	const [exceptionsEdit, setExceptionsEdit] = useState<string[]>([]);
 
+	const [currentActor, setCurrentActor] = useState('');
+	const [currentException, setCurrentException] = useState('');
+
 	useEffect(() => {
 		titleEdit.setValue(scenario.title.content);
 		goalEdit.setValue(scenario.goal.content);
@@ -101,10 +104,10 @@ const UpdateScenarioForm: FC<UpdateScenarioFormProps> = ({ scenario, onClose, pr
 					temporalLocation: temporalLocationEdit.value,
 					preCondition: preConditionEdit.value,
 				},
-				exceptions: exceptionsEdit.map((exception: string) => ({
+				exceptions: [...exceptionsEdit, currentException.length ? currentException : null].filter(exception => exception != null).map((exception: string) => ({
 					description: exception,
 				})),
-				actors: actorsEdit.map((actor: string) => ({
+				actors: [...actorsEdit, currentActor.length ? currentActor : null].filter(actor => actor != null).map((actor: string) => ({
 					name: actor,
 				})),
 				projectId,
@@ -149,10 +152,11 @@ const UpdateScenarioForm: FC<UpdateScenarioFormProps> = ({ scenario, onClose, pr
 						}}
 						{...goalEdit}
 					/>
-					<AddActorComboBox actors={actorsEdit} setActors={setActorsEdit} scenarioId={scenario.id}/>
+					<AddActorComboBox actors={actorsEdit} setActors={setActorsEdit} setCurrentActor={setCurrentActor} scenarioId={scenario.id}/>
 					<AddExceptionComboBox
 						exceptions={exceptionsEdit}
 						setExceptions={setExceptionsEdit}
+						setCurrentException={setCurrentException}
 						scenarioId={scenario.id}
 					/>
 				</Form>

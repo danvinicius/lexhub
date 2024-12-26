@@ -51,6 +51,9 @@ const UpdateSymbolForm: FC<UpdateSymbolFormProps> = ({
 	const [synonymsEdit, setSynonymsEdit] = useState<string[]>([]);
 	const [impactsEdit, setImpactsEdit] = useState<string[]>([]);
 
+	const [currentImpact, setCurrentImpact] = useState('');
+	const [currentSynonym, setCurrentSynonym] = useState('');
+
 	useEffect(() => {
 		nameEdit.setValue(symbol.name);
 		notionEdit.setValue(symbol.notion || '');
@@ -92,10 +95,10 @@ const UpdateSymbolForm: FC<UpdateSymbolFormProps> = ({
 				name: nameEdit.value,
 				notion: notionEdit.value,
 				classification: classificationEdit.value,
-				impacts: impactsEdit.map((impact: string) => ({
+				impacts: [...impactsEdit, currentImpact.length ? currentImpact : null].filter(impact => impact != null).map((impact: string) => ({
 					description: impact,
 				})),
-				synonyms: synonymsEdit.map((synonym: string) => ({
+				synonyms: [...synonymsEdit, currentSynonym.length ? currentSynonym : null].filter(synonym => synonym != null).map((synonym: string) => ({
 					name: synonym,
 				})),
 				projectId,
@@ -167,11 +170,13 @@ const UpdateSymbolForm: FC<UpdateSymbolFormProps> = ({
 						synonyms={synonymsEdit}
 						setSynonyms={setSynonymsEdit}
 						symbolId={symbol.id}
+						setCurrentSynonym={setCurrentSynonym}
 					/>
 					<AddImpactComboBox
 						impacts={impactsEdit}
 						setImpacts={setImpactsEdit}
 						symbolId={symbol.id}
+						setCurrentImpact={setCurrentImpact}
 					/>
 					{loading ? (
 						<Loading />

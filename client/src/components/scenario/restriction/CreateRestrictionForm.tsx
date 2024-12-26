@@ -43,6 +43,8 @@ export const CreateRestrictionForm: FC<CreateRestrictionFormProps> = ({
 	const projectContext = useContext(ProjectContext);
 	const [restrictions, setRestrictions] = useState<string[]>([]);
 	const { isAuthenticated } = useContext(UserContext || {});
+	
+	const [currentRestriction, setCurrentRestriction] = useState('');
 
 	useEffect(() => {
 		if (projectContext?.project && scenarioId) {
@@ -113,7 +115,7 @@ export const CreateRestrictionForm: FC<CreateRestrictionFormProps> = ({
 				if (resource.id == resourceId) {
 					return {
 						...resource,
-						restrictions: [...restrictions.map((restriction) => ({
+						restrictions: [...[...restrictions, currentRestriction.length ? currentRestriction : null].filter(restriction => restriction != null).map((restriction) => ({
 							description: restriction,
 						}))],
 					};
@@ -130,7 +132,7 @@ export const CreateRestrictionForm: FC<CreateRestrictionFormProps> = ({
 		}
 		const updatedContext = {
 			...originalScenario.context,
-			restrictions: restrictions.map((restriction) => ({
+			restrictions: [...restrictions, currentRestriction.length ? currentRestriction : null].filter(restriction => restriction != null).map((restriction) => ({
 				description: restriction,
 			})),
 		};
@@ -157,6 +159,7 @@ export const CreateRestrictionForm: FC<CreateRestrictionFormProps> = ({
 				scenarioId={scenarioId}
 				restrictions={restrictions}
 				setRestrictions={setRestrictions}
+				setCurrentRestriction={setCurrentRestriction}
 			/>
 			<Button text="Salvar" theme="secondary" onClick={handleAddRestrictions} />
 		</section>

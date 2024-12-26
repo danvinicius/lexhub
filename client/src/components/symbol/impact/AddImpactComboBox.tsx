@@ -6,12 +6,14 @@ interface AddImpactComboBoxProps {
   symbolId?: string;
   impacts: string[];
   setImpacts: Dispatch<SetStateAction<string[]>>;
+  setCurrentImpact: Dispatch<SetStateAction<string>>;
 }
 
 export const AddImpactComboBox: FC<AddImpactComboBoxProps> = ({
 	symbolId,
 	impacts,
 	setImpacts,
+	setCurrentImpact,
 }: AddImpactComboBoxProps): ReactNode => {
 	const projectContext = useContext(ProjectContext);
 
@@ -36,6 +38,7 @@ export const AddImpactComboBox: FC<AddImpactComboBoxProps> = ({
 
 	const handleAddImpact = (newImpacts: string[]) => {
 		setImpacts(newImpacts);
+		setCurrentImpact('');
 	};
 
 	return (
@@ -50,6 +53,9 @@ export const AddImpactComboBox: FC<AddImpactComboBoxProps> = ({
 					handleAddImpact(newValue as string[]);
 					const newOptions = (newValue as (string | undefined)[]).filter((value): value is string => value !== undefined && !localOptions.includes(value));
 					setLocalOptions([...localOptions, ...newOptions]);
+				}}
+				onInputChange={(_, newInputValue) => {
+					setCurrentImpact(newInputValue);
 				}}
 				renderInput={(params) => (
 					<TextField

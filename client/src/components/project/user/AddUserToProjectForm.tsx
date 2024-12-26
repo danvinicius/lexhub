@@ -40,6 +40,8 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose }: AddUse
 	const [loading, setLoading] = useState(false);
 	const [openSnackbar, setOpenSnackbar] = useState(false);
 
+	const [currentEmail, setCurrentEmail] = useState('');
+
 	const handleCloseSnackbar = (
 		_event: SyntheticEvent | Event,
 		reason?: SnackbarCloseReason
@@ -109,7 +111,7 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose }: AddUse
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 		if (projectContext.project?.id) {
-			for (const email of emails) {
+			for (const email of [...emails, currentEmail.length ? currentEmail : null].filter(email => email != null)) {
 				AddUserToProject({
 					email,
 					role: roles[email],
@@ -133,14 +135,14 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose }: AddUse
 				/>
 			</div>
 			<Form>
-				<AddUserEmailComboBox emails={emails} setEmails={setEmails} />
+				<AddUserEmailComboBox emails={emails} setEmails={setEmails} setCurrentEmail={setCurrentEmail}/>
 
-				{emails.length > 0 && (
+				{[...emails, currentEmail.length ? currentEmail : null].filter(email => email != null).length > 0 && (
 					<div className="pessoas-convidadas">
 						<h3>Compartilhar com:</h3>
 						<br />
 						<ul className="flex column gap-5">
-							{emails.map((email) => {
+							{[...emails, currentEmail.length ? currentEmail : null].filter(email => email != null).map((email) => {
 								return (
 									<li key={email} className="flex space-between align-center">
 										<span>{email}</span>
