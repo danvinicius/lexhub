@@ -57,8 +57,7 @@ interface ProjectProps {
 
 const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 	const { isAuthenticated } = useContext(UserContext) || {};
-	const { setProject, project, setSymbol } = useContext(ProjectContext || {});
-	const [currentTab, setCurrentTab] = useState(0);
+	const { setProject, project, setSymbol, currentTab, setCurrentTab } = useContext(ProjectContext || {});
 
 	const handleChange = (_: SyntheticEvent, newValue: number) => {
 		setSymbol(null);

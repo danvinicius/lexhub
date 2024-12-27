@@ -25,7 +25,7 @@ export const AddSynonymComboBox: FC<AddSynonymComboBoxProps> = ({
 				projectContext.project?.symbols
 					?.filter((symbol) => symbol.id !== symbolId)
 					.map((symbol) =>
-						symbol.synonyms?.map((synonym) => synonym.name)
+						symbol.synonyms?.map((synonym) => synonym.name.content)
 							.filter((synonymName) => !synonyms.includes(synonymName))
 					)
 					.flat()

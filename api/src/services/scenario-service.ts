@@ -10,26 +10,14 @@ import {
   IRestriction,
   IException,
   IActor,
-  IProject,
-  ISymbol,
 } from '@/models';
-import {
-  ScenarioRepository,
-  SymbolRepository,
-} from '@/repositories';
+import { ScenarioRepository, SymbolRepository } from '@/repositories';
 import { BadRequestError, NotFoundError } from '@/utils/errors';
-import { normalize } from '@/utils/string/normalize';
+import { Lexicon, LexiconService } from './lexicon-service';
 
 const symbolRepository = new SymbolRepository();
 const scenarioRepository = new ScenarioRepository();
-
-export interface Lexicon {
-  resource: string;
-  name: string;
-  starts: number;
-  ends: number;
-  type: string;
-}
+const lexiconService = new LexiconService();
 
 export interface ILexiconScenario {
   id: string;
@@ -85,29 +73,32 @@ export interface ILexiconScenario {
       };
     }[];
   }[];
-  episodes: ({
-    position: number;
-    restriction: {
-        content: string;
-        foundLexicons: Lexicon[];
-    };
-    description: {
-      content: string;
-      foundLexicons: Lexicon[];
-    };
-  } | {
-    position: number;
-    nonSequentialEpisodes: {
-      restriction: {
-        content: string;
-        foundLexicons: Lexicon[];
-    };
-      description: {
-        content: string;
-        foundLexicons: Lexicon[];
-      };
-    }[];
-  })[];
+  episodes: (
+    | {
+        position: number;
+        restriction: {
+          content: string;
+          foundLexicons: Lexicon[];
+        };
+        description: {
+          content: string;
+          foundLexicons: Lexicon[];
+        };
+      }
+    | {
+        position: number;
+        nonSequentialEpisodes: {
+          restriction: {
+            content: string;
+            foundLexicons: Lexicon[];
+          };
+          description: {
+            content: string;
+            foundLexicons: Lexicon[];
+          };
+        }[];
+      }
+  )[];
   projectId: string;
 }
 
@@ -186,8 +177,13 @@ export class ScenarioService {
     } = scenario;
 
     const processedLexicon = (content: string, searchOtherScenarios: boolean) =>
-      this.processLexicon(content, symbols, scenarios, searchOtherScenarios);
-    
+      lexiconService.processLexicon(
+        content,
+        symbols,
+        scenarios,
+        searchOtherScenarios
+      );
+
     return {
       id: scenario.id,
       title: processedLexicon(title, false),
@@ -215,145 +211,42 @@ export class ScenarioService {
           })
         ),
       })),
-      episodes: episodes?.sort((a, b) => {
-        if (a.position > b.position) return 1;
-        return -1;
-      }).map((episode: IEpisode) => {
-        if (episode.nonSequentialEpisodes) {
-          return {
-            id: episode.id,
-            position: episode.position,
-            nonSequentialEpisodes: episode.nonSequentialEpisodes.map(
-              (nonSequentialEpisode) => ({
-                id: nonSequentialEpisode.id,
-                type: nonSequentialEpisode.type,
-                restriction: processedLexicon(nonSequentialEpisode.restriction, true),
-                description: processedLexicon(
-                  nonSequentialEpisode.description,
-                  false
-                ),
-              })
-            ),
+      episodes: episodes
+        ?.sort((a, b) => {
+          if (a.position > b.position) return 1;
+          return -1;
+        })
+        .map((episode: IEpisode) => {
+          if (episode.nonSequentialEpisodes) {
+            return {
+              id: episode.id,
+              position: episode.position,
+              nonSequentialEpisodes: episode.nonSequentialEpisodes.map(
+                (nonSequentialEpisode) => ({
+                  id: nonSequentialEpisode.id,
+                  type: nonSequentialEpisode.type,
+                  restriction: processedLexicon(
+                    nonSequentialEpisode.restriction,
+                    true
+                  ),
+                  description: processedLexicon(
+                    nonSequentialEpisode.description,
+                    false
+                  ),
+                })
+              ),
+            };
           }
-        }
-        return {
-          position: episode.position,
-          type: episode.type,
-          restriction:  processedLexicon(episode.restriction, true),
-          description: processedLexicon(episode.description, false),
-        }
-      }),
+          return {
+            position: episode.position,
+            type: episode.type,
+            restriction: processedLexicon(episode.restriction, true),
+            description: processedLexicon(episode.description, false),
+          };
+        }),
       projectId,
     };
   }
-
-  private findPossibleLexicon = <
-    T extends { name?: string; title?: string; id?: string; project: IProject },
-  >(
-    text: string,
-    termos: T[]
-  ) => {
-    const possibleLexicon: Lexicon[] = [];
-
-    for (const termo of termos) {
-      const lexiconName = termo.name || termo.title || '';
-      let starts = -1;
-      while (true) {
-        starts = normalize(text).indexOf(normalize(lexiconName), starts + 1);
-        if (starts == -1) {
-          break;
-        }
-        const ends = starts + lexiconName.length;
-        const { id } = termo;
-        if (id) {
-          possibleLexicon.push({
-            resource: termo.title
-              ? `/api/project/${termo.project.id}/scenario/${id}`
-              : `/api/project/${termo.project.id}/symbol/${id}`,
-            name: lexiconName,
-            starts,
-            ends,
-            type: termo.title ? 'cenário' : 'símbolo',
-          });
-        }
-      }
-    }
-
-    return possibleLexicon;
-  };
-
-  //   　　　　/)─―ヘ
-  // 　　　＿／　　　　＼
-  // 　 ／　　　　●　　　●丶
-  // 　｜　　　　　　　▼　|
-  // 　｜　　　　　　　▽ノ
-  // 　 U￣U￣￣￣￣U￣U
-  // aqui que a mágica acontece
-
-  private processLexicon = (
-    content: string,
-    symbols: ISymbol[],
-    scenarios: IScenario[],
-    searchOtherScenarios: boolean
-  ) => {
-    const foundLexicons: Lexicon[] = [];
-
-    const possibleSymbols = this.findPossibleLexicon(content, symbols);
-    let possibleScenarios: Lexicon[] = [];
-    if (searchOtherScenarios) {
-      possibleScenarios = this.findPossibleLexicon(content, scenarios);
-    }
-
-    // primeiro, o cenário compete com outros cenários dentro do text
-    const scenariosFilter = (candidate: Lexicon) => {
-      return !possibleScenarios.some((scenario) => {
-        return (
-          scenario !== candidate &&
-          scenario.starts <= candidate.starts &&
-          scenario.ends >= candidate.ends
-        );
-      });
-    };
-
-    // depois, o símbolo compete com cenários (cenários tem prioridade) e depois com outros símbolos
-    const symbolsFilter = (candidate: Lexicon) => {
-      return (
-        !possibleScenarios.some((scenario) => {
-          return (
-            scenario.starts <= candidate.starts &&
-            scenario.ends >= candidate.ends
-          );
-        }) &&
-        !possibleSymbols.some((outro) => {
-          return (
-            outro !== candidate &&
-            outro.starts <= candidate.starts &&
-            outro.ends >= candidate.ends + 1
-          );
-        })
-      );
-    };
-
-    foundLexicons.push(...possibleScenarios.filter(scenariosFilter));
-    foundLexicons.push(...possibleSymbols.filter(symbolsFilter));
-
-    foundLexicons.sort(this.orderByPosition);
-
-    return {
-      content,
-      foundLexicons,
-    };
-  };
-
-  private orderByPosition = (a: Lexicon, b: Lexicon) => {
-    if (a.starts > b.starts) {
-      return 1;
-    }
-    if (b.starts > a.starts) {
-      return -1;
-    }
-    return 0;
-  };
 
   async updateScenario(
     id: string,

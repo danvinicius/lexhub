@@ -9,7 +9,7 @@ import { PageContainer } from '@toolpad/core/PageContainer';
 import { Logo } from '../components/logo/Logo';
 import { GET_PROJECTS } from '../api';
 import api from '../lib/axios';
-import { ErrorResponse, IProject } from '../shared/interfaces';
+import { ErrorResponse, ILexiconSymbol, IProject } from '../shared/interfaces';
 import { AxiosError } from 'axios';
 import { UserContext } from '../context/UserContext';
 import Project from '../components/project/Project';
@@ -66,8 +66,19 @@ function useDemoRouter(): Router {
 	
 	return router;
 }
-  
 
+interface FooterSidebarProps {
+	symbol: ILexiconSymbol | null;
+}
+  
+export const FooterSidebar = ({symbol}: FooterSidebarProps) => {
+	return (
+		<>
+			{symbol && <SymbolDetails symbol={symbol} />}
+			<LogoutButton></LogoutButton>
+		</>
+	);
+};
 
 export const Homepage = () => {
 	const router = useDemoRouter();
@@ -148,8 +159,8 @@ export const Homepage = () => {
 		}
 	}, [router.pathname]);
 
-	const renderSymbolDetails = () => {
-		return <SymbolDetails symbol={symbol || undefined} />;
+	const renderFooterSidebar = () => {
+		return <FooterSidebar symbol={symbol} />;
 	};
 
 	return (
@@ -163,7 +174,7 @@ export const Homepage = () => {
 			}}
 		>
 			<DashboardLayout
-				slots={{ sidebarFooter: symbol ? renderSymbolDetails : LogoutButton }}
+				slots={{ sidebarFooter: renderFooterSidebar }}
 				sidebarExpandedWidth={400}>
 				<PageContainer breadcrumbs={[{title: '', path: ''}]} title='' sx={{padding: 0}}>
 					{ router.pathname == '/home' && <OverView/>}

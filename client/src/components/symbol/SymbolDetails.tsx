@@ -1,5 +1,5 @@
 import { CSSProperties, FC, ReactNode, useContext, useEffect, useState } from 'react';
-import { ISynonym, IImpact, ISymbol, IUserRole } from '../../shared/interfaces';
+import { IUserRole, ILexiconSymbol } from '../../shared/interfaces';
 import './SymbolDetails.scss';
 import KebabVertical from '../../assets/icon/Kebab_Vertical.svg';
 import { SymbolActionsOptionsMenu } from './SymbolActionsOptionsMenu';
@@ -8,9 +8,10 @@ import UpdateSymbolForm from './UpdateSymbolForm';
 import DeleteSymbolForm from './DeleteSymbolForm';
 import { UserContext } from '../../context/UserContext';
 import { ProjectContext } from '../../context/ProjectContext';
+import { useLexicon } from '../../hooks/useLexicon';
 
 interface SymbolDetailsProps {
-    symbol?: ISymbol;
+    symbol?: ILexiconSymbol;
     style?: CSSProperties;
 }
 
@@ -18,6 +19,7 @@ const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style }: SymbolDetailsP
 	const { isAuthenticated } = useContext(UserContext) || {};
 	const [isCollaborator, setIsCollaborator] = useState(false);
 	const { project } = useContext(ProjectContext);
+	const { processContent } = useLexicon();
 
 	useEffect(() => {
 		const role = isAuthenticated()?.projects.find((someProject) => someProject.project == project?.id)?.role;
@@ -37,7 +39,7 @@ const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style }: SymbolDetailsP
 				<div className='symbol-details' style={style}>
 					<div className='symbol-details-notion'>
 						<div className='symbol-name'>
-							<h3>{symbol?.name}</h3>
+							<h3>{processContent(symbol?.name)}</h3>
 							<div className='classification'>
 								<p>{symbol?.classification}</p>
 							</div>
@@ -63,14 +65,14 @@ const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style }: SymbolDetailsP
 								</>
 							)}
 						</div>
-						<p className='notion'>{symbol?.notion}</p>
+						<p className='notion'>{processContent(symbol?.notion)}</p>
 					</div>
 					<div className='symbol-details-synonyms'>
 						<h4>Sinônimos</h4>
 						{symbol?.synonyms?.length ? (
 							<ul>
-								{symbol.synonyms?.map((synonym: ISynonym) => {
-									return <li key={synonym.name}>{synonym.name}</li>;
+								{symbol.synonyms?.map((synonym) => {
+									return <li key={synonym.name.content}>{processContent(synonym.name)}</li>;
 								})}
 							</ul>
 						) : (
@@ -81,8 +83,8 @@ const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style }: SymbolDetailsP
 						<h4>Impactos</h4>
 						{symbol?.impacts?.length ? (
 							<ul>
-								{symbol.impacts?.map((impact: IImpact) => {
-									return <li key={impact.description}>{impact.description}</li>;
+								{symbol.impacts?.map((impact) => {
+									return <li key={impact.description.content}>{processContent(impact.description)}</li>;
 								})}
 							</ul>
 						) : (
@@ -97,8 +99,8 @@ const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style }: SymbolDetailsP
 					>
 						<UpdateSymbolForm
 							onClose={handleCloseUpdateSymbolModal}
-							symbol={symbol ? symbol : ({} as ISymbol)}
-							projectId={symbol?.project || ''}
+							symbol={symbol ? symbol : ({} as ILexiconSymbol)}
+							projectId={symbol?.projectId || ''}
 						/>
 					</Modal>
 					<Modal
@@ -109,8 +111,8 @@ const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style }: SymbolDetailsP
 					>
 						<DeleteSymbolForm
 							onClose={handleCloseDeleteSymbolModal}
-							symbol={symbol ? symbol : ({} as ISymbol)}
-							projectId={symbol?.project || ''}
+							symbol={symbol ? symbol : ({} as ILexiconSymbol)}
+							projectId={symbol?.projectId || ''}
 						/>
 					</Modal>
 				</div>

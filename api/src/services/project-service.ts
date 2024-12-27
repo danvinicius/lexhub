@@ -6,10 +6,12 @@ import { IProject } from '@/models';
 import { ProjectRepository, UserRepository } from '@/repositories';
 import { NotFoundError } from '@/utils/errors';
 import { ILexiconScenario, ScenarioService } from './scenario-service';
+import { ILexiconSymbol, SymbolService } from './symbol-service';
 
 // Definindo um novo tipo de projeto onde os cenários têm o tipo ILexiconScenario
-export interface IProjectWithLexiconScenarios extends Omit<IProject, 'scenarios'> {
+export interface IProjectWithLexicon extends Omit<Omit<IProject, 'scenarios'>, 'symbols'> {
   scenarios: ILexiconScenario[];
+  symbols: ILexiconSymbol[];
 }
 
 const projectRepository = new ProjectRepository();
@@ -24,7 +26,7 @@ export class ProjectService {
     return await projectRepository.createProject({ ...project, user });
   }
 
-  async getProject(id: string): Promise<null | IProjectWithLexiconScenarios> {
+  async getProject(id: string): Promise<null | IProjectWithLexicon> {
     const project = await projectRepository.getProject(id);
     
     if (!project) {
@@ -32,6 +34,7 @@ export class ProjectService {
     }
 
     const scenarioService = new ScenarioService();
+    const symbolService = new SymbolService();
 
     const scenarios = await Promise.all(
       project.scenarios.map(async (scenario) => {
@@ -39,9 +42,16 @@ export class ProjectService {
       })
     );
 
+    const symbols = await Promise.all(
+      project.symbols.map(async (symbol) => {
+        return await symbolService.getSymbolWithLexicon(symbol.id, project.id);
+      })
+    );
+
     return {
       ...project,
       scenarios,
+      symbols,
     };
   }
 

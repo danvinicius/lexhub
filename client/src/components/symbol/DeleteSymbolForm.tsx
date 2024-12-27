@@ -7,7 +7,7 @@ import Loading from '../helper/Loading';
 import { DELETE_SYMBOL } from '../../api';
 import api from '../../lib/axios';
 import Error from '../helper/Error';
-import { ErrorResponse, ISymbol } from '../../shared/interfaces';
+import { ErrorResponse, ILexiconSymbol } from '../../shared/interfaces';
 import Close from '../../assets/icon/Close_Dark.svg';
 import { AxiosError } from 'axios';
 
@@ -17,7 +17,7 @@ export interface DeleteSymbolRequestDTO {
 }
 
 interface DeleteSymbolFormProps {
-  symbol: ISymbol;
+  symbol: ILexiconSymbol;
   projectId: string;
   onClose: () => void;
 }
@@ -58,7 +58,7 @@ const DeleteSymbolForm: FC<DeleteSymbolFormProps> = ({ symbol, projectId, onClos
 	return (
 		<section className="delete-symbol-form flex column gap-125">
 			<div className="delete-symbol-form-header">
-				<h2>Tem certeza que deseja excluir o símbolo &quot;{symbol.name}&quot;?</h2>
+				<h2>Tem certeza que deseja excluir o símbolo &quot;{symbol.name.content}&quot;?</h2>
 				<img
 					src={Close}
 					alt="Ícone 'X' popup"

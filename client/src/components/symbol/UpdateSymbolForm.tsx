@@ -17,7 +17,7 @@ import { UPDATE_SYMBOL } from '../../api';
 import useForm from '../../hooks/useForm';
 import api from '../../lib/axios';
 import Error from '../helper/Error';
-import { ISynonym, ISymbol, IImpact, ErrorResponse } from '../../shared/interfaces';
+import { ISynonym, IImpact, ErrorResponse, ILexiconSymbol } from '../../shared/interfaces';
 import Close from '../../assets/icon/Close_Dark.svg';
 import { AddSynonymComboBox } from './synonym/AddSynonymComboBox';
 import { AddImpactComboBox } from './impact/AddImpactComboBox';
@@ -35,7 +35,7 @@ export interface UpdateSymbolRequestDTO {
 }
 
 interface UpdateSymbolFormProps {
-  symbol: ISymbol;
+  symbol: ILexiconSymbol;
   onClose: () => void;
   projectId: string;
 }
@@ -55,11 +55,11 @@ const UpdateSymbolForm: FC<UpdateSymbolFormProps> = ({
 	const [currentSynonym, setCurrentSynonym] = useState('');
 
 	useEffect(() => {
-		nameEdit.setValue(symbol.name);
-		notionEdit.setValue(symbol.notion || '');
+		nameEdit.setValue(symbol.name.content);
+		notionEdit.setValue(symbol.notion.content || '');
 		classificationEdit.setValue(symbol.classification || '');
-		setSynonymsEdit(symbol?.synonyms?.map((synonym) => synonym.name) || []);
-		setImpactsEdit(symbol?.impacts?.map((impact) => impact.description) || []);
+		setSynonymsEdit(symbol?.synonyms?.map((synonym) => synonym.name.content) || []);
+		setImpactsEdit(symbol?.impacts?.map((impact) => impact.description.content) || []);
 	}, []);
 
 	const { isAuthenticated } = useContext(UserContext) || {};

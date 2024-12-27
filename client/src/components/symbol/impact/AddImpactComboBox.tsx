@@ -26,7 +26,7 @@ export const AddImpactComboBox: FC<AddImpactComboBoxProps> = ({
 					?.filter((symbol) => symbol.id !== symbolId)
 					.map((symbol) =>
 						symbol.impacts
-							?.map((impact) => impact.description)
+							?.map((impact) => impact.description.content)
 							.filter((impactName) => !impacts.includes(impactName))
 					)
 					.flat()

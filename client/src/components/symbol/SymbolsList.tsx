@@ -1,12 +1,12 @@
 import './SymbolsList.scss';
-import { ISymbol } from '../../shared/interfaces';
+import { ILexiconSymbol } from '../../shared/interfaces';
 import { Element } from 'react-scroll';
 import { useHelpers } from '../../hooks/useHelpers';
 import SymbolDetails from './SymbolDetails';
 import { FC, ReactNode } from 'react';
 
 interface ISymbolsListProps {
-  symbols: ISymbol[];
+  symbols: ILexiconSymbol[];
 }
 
 const SymbolsList: FC<ISymbolsListProps> = ({ symbols }: ISymbolsListProps): ReactNode => {
@@ -16,12 +16,12 @@ const SymbolsList: FC<ISymbolsListProps> = ({ symbols }: ISymbolsListProps): Rea
 			<div className="symbols-list slide-right">
 				{!!symbols?.length && (
 					<ul>
-						{symbols.map((symbol: ISymbol) => {
+						{symbols.map((symbol: ILexiconSymbol) => {
 							return (
-								<li key={`${symbol.id}-${slugify(symbol.name)}`}>
+								<li key={`${symbol.id}-${slugify(symbol.name.content)}`}>
 									<Element
-										key={`${symbol.id}-${slugify(symbol.name)}`}
-										name={`${symbol.id}-${slugify(symbol.name)}`}
+										key={`${symbol.id}-${slugify(symbol.name.content)}`}
+										name={`${symbol.id}-${slugify(symbol.name.content)}`}
 									>
 										<SymbolDetails symbol={symbol} style={{padding: '2rem'}}/>
 									</Element>

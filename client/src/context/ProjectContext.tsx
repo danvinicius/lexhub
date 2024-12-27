@@ -6,17 +6,19 @@ import {
 	SetStateAction,
 	useState,
 } from 'react';
-import { IProject, IScenario, ISymbol } from '../shared/interfaces';
+import { ILexiconSymbol, IProject, IScenario } from '../shared/interfaces';
 
 type ProjectContextType = {
   project: IProject | null;
-  symbol: ISymbol | null;
+  symbol: ILexiconSymbol | null;
   setProject: Dispatch<SetStateAction<IProject | null>>;
-  setSymbol: Dispatch<SetStateAction<ISymbol | null>>;
+  setSymbol: Dispatch<SetStateAction<ILexiconSymbol | null>>;
   chosenType: 'symbol' | 'scenario' | null;
   setChosenType: Dispatch<SetStateAction<'symbol' | 'scenario' | null>>;
   scenario: IScenario | null;
   setScenario: Dispatch<SetStateAction<IScenario | null>>;
+  currentTab: number,
+  setCurrentTab: Dispatch<SetStateAction<number>>;
 };
 
 export const ProjectContext = createContext<ProjectContextType>({
@@ -28,6 +30,8 @@ export const ProjectContext = createContext<ProjectContextType>({
 	setSymbol: () => null,
 	setChosenType: () => null,
 	setScenario: () => null,
+	currentTab: 0,
+	setCurrentTab: () => null
 });
 
 type ProjectStorageProps = {
@@ -36,8 +40,9 @@ type ProjectStorageProps = {
 
 export const ProjectStorage: FC<ProjectStorageProps> = ({ children }: ProjectStorageProps): JSX.Element => {
 	const [project, setProject] = useState<IProject | null>(null);
-	const [symbol, setSymbol] = useState<ISymbol | null>(null);
+	const [symbol, setSymbol] = useState<ILexiconSymbol | null>(null);
 	const [scenario, setScenario] = useState<IScenario | null>(null);
+	const [currentTab, setCurrentTab] = useState(0);
 	const [chosenType, setChosenType] = useState<'symbol' | 'scenario' | null>(
 		null
 	);
@@ -53,6 +58,8 @@ export const ProjectStorage: FC<ProjectStorageProps> = ({ children }: ProjectSto
 				setChosenType,
 				scenario,
 				setScenario,
+				currentTab,
+				setCurrentTab,
 			}}
 		>
 			{children}

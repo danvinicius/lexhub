@@ -44,7 +44,7 @@ export interface IProject {
     name: string;
     description: string;
     scenarios?: ILexiconScenario[];
-    symbols: ISymbol[];
+    symbols: ILexiconSymbol[];
     users: IUserProject[];
     createdAt: string;
 }
@@ -132,6 +132,20 @@ export interface ILexiconEpisode {
         restriction: Lexicon;
     }[];
 }
+
+export interface ILexiconSymbol {
+    id: string;
+    name: Lexicon;
+    notion: Lexicon;
+    classification: string;
+    impacts: {
+      description: Lexicon;
+    }[];
+    synonyms: {
+      name: Lexicon;
+    }[];
+    projectId: string;
+  }
 
 export interface ILexiconScenario {
     id: string;

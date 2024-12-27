@@ -1,7 +1,7 @@
 import { FC, MouseEventHandler, ReactNode, useContext } from 'react';
 import './LexiconSpan.scss';
 import { ProjectContext } from '../../context/ProjectContext';
-import { ISymbol } from '../../shared/interfaces';
+import { ILexiconSymbol } from '../../shared/interfaces';
 import { useHelpers } from '../../hooks/useHelpers';
 
 interface LexiconSpanProps {
@@ -13,12 +13,12 @@ interface LexiconSpanProps {
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
 const LexiconSpan: FC<LexiconSpanProps> = ({ id, name, type, children }: LexiconSpanProps): ReactNode => {
-	const { project, setSymbol } = useContext(ProjectContext || {});
+	const { project, setSymbol, setCurrentTab } = useContext(ProjectContext || {});
 	const { slugify } = useHelpers();
 
 	const setCurrentSymbol = () => {
 		const currentSymbol = project?.symbols.find(
-			(symbol: ISymbol) => symbol.name == name
+			(symbol: ILexiconSymbol) => symbol.name.content == name
 		);
 		if (currentSymbol) {
 			setSymbol(currentSymbol);
@@ -27,7 +27,10 @@ const LexiconSpan: FC<LexiconSpanProps> = ({ id, name, type, children }: Lexicon
 
 	const goToScenario = () => {
 		setSymbol(null);
-		window.location.href = `/projeto/${project?.id}#${id}-${slugify(name)}`;
+		setCurrentTab(0);
+		setTimeout(() => {
+			window.location.href = `/projeto/${project?.id}#${id}-${slugify(name)}`;
+		}, 50);
 	};
 
 	return type == 'símbolo' ? (
