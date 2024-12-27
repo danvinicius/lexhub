@@ -24,6 +24,7 @@ interface AddUserToProjectRequestDTO {
 
 interface AddUserToProjectFormProps {
   onClose: () => void;
+  resetProjectInfo: () => void;
 }
 
 const formatRoles = {
@@ -33,7 +34,7 @@ const formatRoles = {
 	OBSERVER: 'OBSERVADOR',
 };
 
-const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose }: AddUserToProjectFormProps): ReactNode => {
+const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetProjectInfo }: AddUserToProjectFormProps): ReactNode => {
 	const { isAuthenticated } = useContext(UserContext || {});
 
 	const [error, setError] = useState('');
@@ -67,7 +68,7 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose }: AddUse
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, body, options);
-				window.location.href = '/home';
+				resetProjectInfo();
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');
@@ -141,7 +142,7 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose }: AddUse
 					<div className="pessoas-convidadas">
 						<h3>Compartilhar com:</h3>
 						<br />
-						<ul className="flex column gap-5">
+						<ul className="flex column gap-5" style={{maxHeight: '10rem', overflow: 'scroll'}}>
 							{[...emails, currentEmail.length ? currentEmail : null].filter(email => email != null).map((email) => {
 								return (
 									<li key={email} className="flex space-between align-center">
@@ -181,7 +182,7 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose }: AddUse
 				<div className="pessoas-com-acesso">
 					<h3>Pessoas com acesso:</h3>
 					<br />
-					<ul className="flex column gap-15">
+					<ul className="flex column gap-15" style={{maxHeight: '10rem', overflow: 'scroll'}}>
 						{projectContext.project?.users.map((user) => {
 							return (
 								<li key={user.id} className="flex align-center gap-1">

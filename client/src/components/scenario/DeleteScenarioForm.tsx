@@ -20,9 +20,10 @@ interface DeleteScenarioFormProps {
   scenario: ILexiconScenario;
   projectId: string;
   onClose: () => void;
+  resetScenarioInfo: () => void;
 }
 
-const DeleteScenarioForm: FC<DeleteScenarioFormProps> = ({ scenario, projectId, onClose }: DeleteScenarioFormProps): ReactNode => {
+const DeleteScenarioForm: FC<DeleteScenarioFormProps> = ({ scenario, projectId, onClose, resetScenarioInfo }: DeleteScenarioFormProps): ReactNode => {
 
 	const { isAuthenticated } = useContext(UserContext) || {};
 
@@ -40,7 +41,7 @@ const DeleteScenarioForm: FC<DeleteScenarioFormProps> = ({ scenario, projectId, 
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, options);
-				window.location.href = '/home';
+				resetScenarioInfo();
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');

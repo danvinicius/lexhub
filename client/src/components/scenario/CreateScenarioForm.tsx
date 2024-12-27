@@ -36,9 +36,10 @@ interface CreateScenarioRequestDTO {
 
 interface CreateScenarioFormProps {
   onClose: () => void;
+  resetProjectInfo: () => void;
 }
 
-const CreateScenarioForm: FC<CreateScenarioFormProps> = ({ onClose }: CreateScenarioFormProps): ReactNode => {
+const CreateScenarioForm: FC<CreateScenarioFormProps> = ({ onClose, resetProjectInfo }: CreateScenarioFormProps): ReactNode => {
 	const { isAuthenticated } = useContext(UserContext || {});
 
 	const title = useForm('dontValidateTitle');
@@ -66,7 +67,7 @@ const CreateScenarioForm: FC<CreateScenarioFormProps> = ({ onClose }: CreateScen
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, body, options);
-				window.location.href = `/projeto/${projectContext.project.id}`;
+				resetProjectInfo();
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');

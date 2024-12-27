@@ -32,6 +32,7 @@ interface CreateRestrictionFormProps {
   scenarioId: string;
   projectId: string;
   resourceId?: string;
+  resetScenarioInfo: () => void;
 }
 
 export const CreateRestrictionForm: FC<CreateRestrictionFormProps> = ({
@@ -39,6 +40,7 @@ export const CreateRestrictionForm: FC<CreateRestrictionFormProps> = ({
 	scenarioId,
 	projectId,
 	resourceId,
+	resetScenarioInfo,
 }: CreateRestrictionFormProps): ReactNode => {
 	const projectContext = useContext(ProjectContext);
 	const [restrictions, setRestrictions] = useState<string[]>([]);
@@ -92,7 +94,7 @@ export const CreateRestrictionForm: FC<CreateRestrictionFormProps> = ({
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, body, options);
-				window.location.href = `/projeto/${projectId}`;
+				resetScenarioInfo();
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');

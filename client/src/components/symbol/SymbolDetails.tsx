@@ -13,13 +13,28 @@ import { useLexicon } from '../../hooks/useLexicon';
 interface SymbolDetailsProps {
     symbol?: ILexiconSymbol;
     style?: CSSProperties;
+	resetProjectInfo?: () => void;
 }
 
-const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style }: SymbolDetailsProps): ReactNode => {
+const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style, resetProjectInfo }: SymbolDetailsProps): ReactNode => {
 	const { isAuthenticated } = useContext(UserContext) || {};
 	const [isCollaborator, setIsCollaborator] = useState(false);
 	const { project } = useContext(ProjectContext);
 	const { processContent } = useLexicon();
+
+	const resetSymbolInfo = () => {
+		if (!resetProjectInfo) {
+			window.location.href = `/projeto/${project?.id}`;
+			return;
+		}
+		resetProjectInfo();
+		closeAllModals();
+	};
+
+	const closeAllModals = () => {
+		handleCloseDeleteSymbolModal();
+		handleCloseUpdateSymbolModal();
+	};
 
 	useEffect(() => {
 		const role = isAuthenticated()?.projects.find((someProject) => someProject.project == project?.id)?.role;
@@ -100,6 +115,7 @@ const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style }: SymbolDetailsP
 						<UpdateSymbolForm
 							onClose={handleCloseUpdateSymbolModal}
 							symbol={symbol ? symbol : ({} as ILexiconSymbol)}
+							resetSymbolInfo={resetSymbolInfo}
 							projectId={symbol?.projectId || ''}
 						/>
 					</Modal>
@@ -112,6 +128,7 @@ const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style }: SymbolDetailsP
 						<DeleteSymbolForm
 							onClose={handleCloseDeleteSymbolModal}
 							symbol={symbol ? symbol : ({} as ILexiconSymbol)}
+							resetSymbolInfo={resetSymbolInfo}
 							projectId={symbol?.projectId || ''}
 						/>
 					</Modal>

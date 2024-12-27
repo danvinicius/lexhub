@@ -34,9 +34,10 @@ interface CreateSymbolRequestDTO {
 
 interface CreateSymbolFormProps {
   onClose: () => void;
+  resetProjectInfo: () => void;
 }
 
-const CreateSymbolForm: FC<CreateSymbolFormProps> = ({ onClose }: CreateSymbolFormProps): ReactNode => {
+const CreateSymbolForm: FC<CreateSymbolFormProps> = ({ onClose, resetProjectInfo }: CreateSymbolFormProps): ReactNode => {
 	const { isAuthenticated } = useContext(UserContext || {});
 
 	const name = useForm('dontValidateName');
@@ -63,7 +64,7 @@ const CreateSymbolForm: FC<CreateSymbolFormProps> = ({ onClose }: CreateSymbolFo
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, body, options);
-				window.location.href = `/projeto/${projectContext.project?.id}`;
+				resetProjectInfo();
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');

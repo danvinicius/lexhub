@@ -40,10 +40,11 @@ export interface UpdateScenarioRequestDTO {
 interface UpdateScenarioFormProps {
   scenario: ILexiconScenario;
   onClose: () => void;
+  resetScenarioInfo: () => void;
   projectId: string;
 }
 
-const UpdateScenarioForm: FC<UpdateScenarioFormProps> = ({ scenario, onClose, projectId }: UpdateScenarioFormProps): ReactNode => {
+const UpdateScenarioForm: FC<UpdateScenarioFormProps> = ({ scenario, onClose, projectId, resetScenarioInfo }: UpdateScenarioFormProps): ReactNode => {
 	const titleEdit = useForm('dontValidateTitle');
 	const goalEdit = useForm('dontValidateGoal');
 	const geographicLocationEdit = useForm('dontValidateGeographicLocation');
@@ -83,7 +84,7 @@ const UpdateScenarioForm: FC<UpdateScenarioFormProps> = ({ scenario, onClose, pr
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, body, options);
-				window.location.href = `/projeto/${projectId}`;
+				resetScenarioInfo();
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');

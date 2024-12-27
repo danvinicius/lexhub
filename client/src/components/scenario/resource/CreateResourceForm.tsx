@@ -32,11 +32,13 @@ export interface EditScenarioRequestDTO {
 interface CreateResourceFormProps {
   onClose: () => void;
   scenarioId: string;
+  resetScenarioInfo: () => void;
 }
 
 export const CreateResourceForm: FC<CreateResourceFormProps> = ({
 	onClose,
 	scenarioId,
+	resetScenarioInfo,
 }: CreateResourceFormProps): ReactNode => {
 	const projectContext = useContext(ProjectContext);
 	const [resources, setResources] = useState<string[]>([]);
@@ -72,7 +74,7 @@ export const CreateResourceForm: FC<CreateResourceFormProps> = ({
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, body, options);
-				window.location.href = `/projeto/${projectContext.project.id}`;
+				resetScenarioInfo();
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');

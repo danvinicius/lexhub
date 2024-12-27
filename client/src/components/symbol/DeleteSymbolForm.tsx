@@ -18,11 +18,12 @@ export interface DeleteSymbolRequestDTO {
 
 interface DeleteSymbolFormProps {
   symbol: ILexiconSymbol;
+  resetSymbolInfo: () => void;
   projectId: string;
   onClose: () => void;
 }
 
-const DeleteSymbolForm: FC<DeleteSymbolFormProps> = ({ symbol, projectId, onClose }: DeleteSymbolFormProps): ReactNode => {
+const DeleteSymbolForm: FC<DeleteSymbolFormProps> = ({ symbol, projectId, onClose, resetSymbolInfo }: DeleteSymbolFormProps): ReactNode => {
 
 	const { isAuthenticated } = useContext(UserContext) || {};
 
@@ -40,7 +41,7 @@ const DeleteSymbolForm: FC<DeleteSymbolFormProps> = ({ symbol, projectId, onClos
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, options);
-				window.location.href = `/projeto/${projectId}`;
+				resetSymbolInfo();
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');

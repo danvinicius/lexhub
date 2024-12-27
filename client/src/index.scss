@@ -260,3 +260,7 @@ span.action {
   }
 }
 
+.MuiFormControl-root, input, textarea {
+  max-height: 8rem;
+  overflow: scroll;
+}

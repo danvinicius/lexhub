@@ -103,9 +103,17 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 
 	// add user to project modal control
 	const [isAddUserToProjectModalOpen, setIsAddUserToProjectModalOpen] = useState(false);
-
 	const handleOpenAddUserToProjectModal = () => setIsAddUserToProjectModalOpen(true);
 	const handleCloseAddUserToProjectModal = () => setIsAddUserToProjectModalOpen(false);
+
+	const closeAllModals = () => {
+		handleCloseAddUserToProjectModal();
+		handleCloseCreateScenarioModal();
+		handleCloseCreateSymbolModal();
+		handleCloseDeleteProjectModal();
+		handleCloseProjectActionsOptionsMenu();
+		handleCloseUpdateProjectModal();
+	};
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -126,13 +134,21 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 		}
 	}, [isAuthenticated, projectId, setProject]);
 
-	useEffect(() => {
-		getProject();
-
+	const setRoles = () => {
 		const role = isAuthenticated()?.projects.find((someProject) => someProject.project == project?.id)?.role;
 		setIsCollaborator(role == IUserRole.OWNER || role == IUserRole.ADMIN || role == IUserRole.COLLABORATOR);
 		setIsAdmin(role == IUserRole.OWNER || role == IUserRole.ADMIN);
 		setIsOwner(role == IUserRole.OWNER);
+	};
+
+	const resetProjectInfo = () => {
+		getProject();
+		setRoles();
+		closeAllModals();
+	};
+
+	useEffect(() => {
+		resetProjectInfo();
 	}, [getProject, isAuthenticated, project?.id]);
 	return (
 		<>
@@ -209,13 +225,13 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 							{currentTab == 0 && (
 								<>
 									<CustomTabPanel value={currentTab} index={0}>
-										{project?.scenarios && <ScenariosList scenarios={project?.scenarios} />}
+										{project?.scenarios && <ScenariosList scenarios={project?.scenarios} resetProjectInfo={resetProjectInfo}/>}
 									</CustomTabPanel>
 								</>
 							)}
 							{currentTab == 1 && (
 								<CustomTabPanel value={currentTab} index={1}>
-									{project?.symbols && <SymbolsList symbols={project?.symbols} />}
+									{project?.symbols && <SymbolsList symbols={project?.symbols} resetProjectInfo={resetProjectInfo}/>}
 								</CustomTabPanel>
 							)}
 						</div>
@@ -227,7 +243,9 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'
 				>
-					<AddUserToProjectForm onClose={handleCloseAddUserToProjectModal} />
+					<AddUserToProjectForm
+						onClose={handleCloseAddUserToProjectModal}
+						resetProjectInfo={resetProjectInfo}/>
 				</Modal>
 				<Modal
 					open={isUpdateProjectModalOpen}
@@ -235,7 +253,11 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'
 				>
-					<UpdateProjectForm onClose={handleCloseUpdateProjectModal} project={project ? project : ({} as IProject)} />
+					<UpdateProjectForm
+						onClose={handleCloseUpdateProjectModal}
+						project={project ? project : ({} as IProject)}
+						resetProjectInfo={resetProjectInfo}
+					/>
 				</Modal>
 				<Modal
 					open={isDeleteProjectModalOpen}
@@ -251,7 +273,7 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'
 				>
-					<CreateScenarioForm onClose={handleCloseCreateScenarioModal} />
+					<CreateScenarioForm onClose={handleCloseCreateScenarioModal} resetProjectInfo={resetProjectInfo}/>
 				</Modal>
 				<Modal
 					open={isCreateSymbolModalOpen}
@@ -259,7 +281,7 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 					aria-labelledby='modal-modal-title'
 					aria-describedby='modal-modal-description'
 				>
-					<CreateSymbolForm onClose={handleCloseCreateSymbolModal} />
+					<CreateSymbolForm onClose={handleCloseCreateSymbolModal} resetProjectInfo={resetProjectInfo}/>
 				</Modal>
 			</div>
 		</>

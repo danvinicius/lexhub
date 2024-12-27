@@ -22,9 +22,10 @@ export interface UpdateProjectRequestDTO {
 interface UpdateProjectFormProps {
   project: IProject;
   onClose: () => void;
+  resetProjectInfo: () => void;
 }
 
-const UpdateProjectForm: FC<UpdateProjectFormProps> = ({ project, onClose }: UpdateProjectFormProps): ReactNode => {
+const UpdateProjectForm: FC<UpdateProjectFormProps> = ({ project, onClose, resetProjectInfo }: UpdateProjectFormProps): ReactNode => {
 	const nameEdit = useForm('dontValidateName');
 
 	const descriptionEdit = useForm('projectDescription');
@@ -50,7 +51,7 @@ const UpdateProjectForm: FC<UpdateProjectFormProps> = ({ project, onClose }: Upd
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, body, options);
-				window.location.href = `/projeto/${project.id}`;
+				resetProjectInfo();
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');

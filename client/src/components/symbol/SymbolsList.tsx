@@ -7,9 +7,10 @@ import { FC, ReactNode } from 'react';
 
 interface ISymbolsListProps {
   symbols: ILexiconSymbol[];
+  resetProjectInfo: () => void;
 }
 
-const SymbolsList: FC<ISymbolsListProps> = ({ symbols }: ISymbolsListProps): ReactNode => {
+const SymbolsList: FC<ISymbolsListProps> = ({ symbols, resetProjectInfo }: ISymbolsListProps): ReactNode => {
 	const { slugify } = useHelpers();
 	return (
 		<section className="symbols-list-container" id="symbols-list">
@@ -23,7 +24,7 @@ const SymbolsList: FC<ISymbolsListProps> = ({ symbols }: ISymbolsListProps): Rea
 										key={`${symbol.id}-${slugify(symbol.name.content)}`}
 										name={`${symbol.id}-${slugify(symbol.name.content)}`}
 									>
-										<SymbolDetails symbol={symbol} style={{padding: '2rem'}}/>
+										<SymbolDetails symbol={symbol} style={{padding: '2rem'}} resetProjectInfo={resetProjectInfo}/>
 									</Element>
 								</li>
 							);

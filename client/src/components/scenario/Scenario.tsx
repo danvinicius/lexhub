@@ -32,9 +32,10 @@ import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 
 interface IScenarioProps {
     scenario: ILexiconScenario;
+	resetProjectInfo: () => void;
 }
 
-const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode => {
+const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioProps): ReactNode => {
 	const { slugify } = useHelpers();
 	const { processContent } = useLexicon();
 	const { project } = useContext(ProjectContext);
@@ -42,57 +43,77 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 	const { isAuthenticated } = useContext(UserContext) || {};
 	const [isCollaborator, setIsCollaborator] = useState(false);
 
+	const resetScenarioInfo = () => {
+		resetProjectInfo();
+		closeAllModals();
+	};
+
+	const closeAllModals = () => {
+		handleCloseCreateEpisodesModal();
+		handleCloseCreateResourceModal();
+		handleCloseCreateRestriction();
+		handleCloseDeleteScenarioModal();
+		handleCloseUpdateScenarioModal();
+	};
+
 	useEffect(() => {
 		const role = isAuthenticated()?.projects.find((someProject) => someProject.project == project?.id)?.role;
 		setIsCollaborator(role == IUserRole.OWNER || role == IUserRole.ADMIN || role == IUserRole.COLLABORATOR);
 	}, [isAuthenticated, project?.id]);
 
+	const [restrictionResourceId, setRestrictionResourceId] = useState<string | undefined>('');
+	const [, setRestrictionEpisodeId] = useState<string | undefined>('');
+
 	const [isCreateResourceModalOpen, setIsCreateResourceModalOpen] = useState(false);
+	const handleOpenCreateResourceModal = () => {
+		setIsCreateResourceModalOpen(true);
+	};
+	const handleCloseCreateResourceModal = () => {
+		setIsCreateResourceModalOpen(false);
+	};
 
-	const [isCreateRestrictionModalOpen, setIsCreateRestrictionModalOpen] = useState(false);
-
+	
+	// episode modal functions
 	const [isCreateEpisodesModalOpen, setIsCreateEpisodesModalOpen] = useState(false);
-
 	const handleOpenCreateEpisodesModal = () => {
 		setIsCreateEpisodesModalOpen(true);
 	};
 	const handleCloseCreateEpisodesModal = () => {
 		setIsCreateEpisodesModalOpen(false);
 	};
-
+	
+	// restriction modal functions
+	const [isCreateRestrictionModalOpen, setIsCreateRestrictionModalOpen] = useState(false);
 	const handleOpenCreateRestriction = (resourceId?: string, episodeId?: string) => {
 		setRestrictionResourceId(resourceId);
 		setRestrictionEpisodeId(episodeId);
 		setIsCreateRestrictionModalOpen(true);
 	};
-
 	const handleCloseCreateRestriction = () => {
 		setRestrictionResourceId('');
 		setRestrictionEpisodeId('');
 		setIsCreateRestrictionModalOpen(false);
 	};
 
-	const [restrictionResourceId, setRestrictionResourceId] = useState<string | undefined>('');
-	const [, setRestrictionEpisodeId] = useState<string | undefined>('');
-
+	// scenario actions options modal functions
 	const [isScenarioActionsOptionsMenuOpen, setIsScenarioActionsOptionsMenuOpen] = useState(false);
-
-	const [isEditScenarioModalOpen, setIsEdiScenarioModalOpen] = useState(false);
-
+	
+	// update scenario modal functions
+	const [isUpdateScenarioModalOpen, setIsUpdateScenarioModalOpen] = useState(false);
+	const handleCloseUpdateScenarioModal = () => setIsUpdateScenarioModalOpen(false);
+	const handleOpenUpdateScenarioModal = () => {
+		setIsUpdateScenarioModalOpen(true);
+		setIsScenarioActionsOptionsMenuOpen(false);
+	};
+	
+	// delete scenario modal functions
 	const [isDeleteScenarioModalOpen, setIsDeleteScenarioModalOpen] = useState(false);
-
 	const handleCloseDeleteScenarioModal = () => setIsDeleteScenarioModalOpen(false);
 	const handleOpenDeleteScenarioModal = () => {
 		setIsDeleteScenarioModalOpen(true);
 		setIsScenarioActionsOptionsMenuOpen(false);
 	};
 
-	const handleCloseEditScenarioModal = () => setIsEdiScenarioModalOpen(false);
-	const handleOpenUpdateScenarioModal = () => {
-		setIsEdiScenarioModalOpen(true);
-		setIsScenarioActionsOptionsMenuOpen(false);
-	};
-	const handleCloseUpdateScenarioModal = () => setIsScenarioActionsOptionsMenuOpen(false);
 
 	return (
 		<div className='scenario' id={`${scenario.id}-${slugify(scenario.title.content)}`}>
@@ -239,7 +260,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 						</div>
 						<div className='scenario-resources'>
 							{isCollaborator && (
-								<span className='add-resource' onClick={() => setIsCreateResourceModalOpen(true)}>
+								<span className='add-resource' onClick={handleOpenCreateResourceModal}>
 									{scenario.resources.length > 0 ? (
 										<>
                                     Gerenciar recursos <img src={EditPen} alt='' />
@@ -402,14 +423,15 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 				</div>
 			</section>
 			<Modal
-				open={isEditScenarioModalOpen}
-				onClose={handleCloseEditScenarioModal}
+				open={isUpdateScenarioModalOpen}
+				onClose={handleCloseUpdateScenarioModal}
 				aria-labelledby='modal-modal-title'
 				aria-describedby='modal-modal-description'
 			>
 				<UpdateScenarioForm
-					onClose={handleCloseEditScenarioModal}
+					onClose={handleCloseUpdateScenarioModal}
 					scenario={scenario ? scenario : ({} as ILexiconScenario)}
+					resetScenarioInfo={resetScenarioInfo}
 					projectId={scenario.projectId}
 				/>
 			</Modal>
@@ -422,16 +444,21 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 				<DeleteScenarioForm
 					onClose={handleCloseDeleteScenarioModal}
 					scenario={scenario ? scenario : ({} as ILexiconScenario)}
+					resetScenarioInfo={resetScenarioInfo}
 					projectId={scenario.projectId}
 				/>
 			</Modal>
 			<Modal
 				open={isCreateResourceModalOpen}
-				onClose={() => setIsCreateResourceModalOpen(false)}
+				onClose={handleCloseCreateResourceModal}
 				aria-labelledby='modal-modal-title'
 				aria-describedby='modal-modal-description'
 			>
-				<CreateResourceForm onClose={() => setIsCreateResourceModalOpen(false)} scenarioId={scenario.id} />
+				<CreateResourceForm
+					onClose={handleCloseCreateResourceModal}
+					resetScenarioInfo={resetScenarioInfo}
+					scenarioId={scenario.id}
+				/>
 			</Modal>
 			<Modal
 				open={isCreateRestrictionModalOpen}
@@ -442,6 +469,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 				<CreateRestrictionForm
 					resourceId={restrictionResourceId}
 					onClose={handleCloseCreateRestriction}
+					resetScenarioInfo={resetScenarioInfo}
 					scenarioId={scenario.id}
 					projectId={project?.id || ''}
 				/>
@@ -454,6 +482,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario }: IScenarioProps): ReactNode =
 			>
 				<CreateEpisodesForm
 					onClose={handleCloseCreateEpisodesModal}
+					resetScenarioInfo={resetScenarioInfo}
 					scenarioId={scenario.id}
 					initialEpisodes={scenario.episodes.map((e) => ({
 						id: e.id || uuidv4(),

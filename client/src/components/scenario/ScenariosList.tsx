@@ -7,9 +7,10 @@ import { FC, ReactNode } from 'react';
 
 interface IScenariosListProps {
   scenarios: ILexiconScenario[];
+  resetProjectInfo: () => void;
 }
 
-const ScenariosList: FC<IScenariosListProps> = ({ scenarios }: IScenariosListProps): ReactNode => {
+const ScenariosList: FC<IScenariosListProps> = ({ scenarios, resetProjectInfo }: IScenariosListProps): ReactNode => {
 	const { slugify } = useHelpers();
 	return (
 		<section className="scenarios-list-container" id="scenarios-list">
@@ -23,7 +24,7 @@ const ScenariosList: FC<IScenariosListProps> = ({ scenarios }: IScenariosListPro
 										key={`${scenario.id}-${slugify(scenario.title.content)}`}
 										name={`${scenario.id}-${slugify(scenario.title.content)}`}
 									>
-										<Scenario scenario={scenario} />
+										<Scenario scenario={scenario} resetProjectInfo={resetProjectInfo}/>
 									</Element>
 								</li>
 							);

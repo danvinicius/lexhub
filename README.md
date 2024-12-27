@@ -20,14 +20,14 @@ Essa plataforma visa auxiliar engenheiros de software e analistas de requisitos 
 - [x] Adicionar ferramentas de edição e texto aos campos textarea
 
 ### V2:
+- [x] Melhorar UX (não recarregar página ao atualizar informações, poder salvar sem digitar 'Enter' nos ComboBox, etc)
 - [ ] Permitir criar projetos públicos/privados (visualização sem cadastro)
 - [ ] Passar todos os inputs para MUi
-- [ ] Melhorar UX (não recarregar página ao atualizar informações, poder salvar sem digitar 'Enter' nos ComboBox, etc)
 - [ ] Visualizar e rastrear alterações (responsável, data/hora, conteúdo, motivo)
 - [ ] Checar responsividade
 - [ ] Checar eslint e reaproveitamento de classes, componentes e hooks
 - [ ] Importar arquivo próprio para criar projetos, cenários e símbolos
-- [ ] Exportar projetos e cenários em .feature
+- [ ] Exportar projetos em PDF, DOCX e .feature
 - [ ] Autenticação com Google / Facebook
 - [ ] Integração com Trello e/ou Jira
 - [ ] Checar SEO e performance

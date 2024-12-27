@@ -35,9 +35,15 @@ interface CreateEpisodesFormProps {
   onClose: () => void;
   scenarioId: string;
   initialEpisodes: IEpisode[];
+  resetScenarioInfo: () => void;
 }
 
-export const CreateEpisodesForm: FC<CreateEpisodesFormProps> = ({ onClose, scenarioId, initialEpisodes }: CreateEpisodesFormProps): ReactNode => {
+export const CreateEpisodesForm: FC<CreateEpisodesFormProps> = ({
+	onClose,
+	scenarioId,
+	initialEpisodes,
+	resetScenarioInfo
+}: CreateEpisodesFormProps): ReactNode => {
 	const projectContext = useContext(ProjectContext);
 	const {isAuthenticated} = useContext(UserContext);
 
@@ -65,7 +71,7 @@ export const CreateEpisodesForm: FC<CreateEpisodesFormProps> = ({ onClose, scena
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, body, options);
-				window.location.href = `/projeto/${projectContext.project.id}`;
+				resetScenarioInfo();
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');

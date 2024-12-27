@@ -1,4 +1,4 @@
-import { FC, FormEvent, useContext, useEffect, useState } from 'react';
+import { FC, FormEvent, SyntheticEvent, useContext, useEffect, useState } from 'react';
 import Button from '../forms/Button';
 import Input from '../forms/Input';
 import Form from '../forms/Form';
@@ -11,7 +11,7 @@ import useForm from '../../hooks/useForm';
 import Error from '../helper/Error';
 import { ErrorResponse } from '../../shared/interfaces';
 import { AxiosError } from 'axios';
-import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { Accordion, AccordionSummary, AccordionDetails, Snackbar, SnackbarCloseReason } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 interface UpdateUserRequestDTO {
@@ -31,6 +31,19 @@ const UpdateUserForm: FC = () => {
 	const newPassword = useForm('password');
 	const confirmPassword = useForm('password');
 
+	const [openSnackbar, setOpenSnackbar] = useState(false);
+
+	const handleCloseSnackbar = (
+		_event: SyntheticEvent | Event,
+		reason?: SnackbarCloseReason
+	) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+
+		setOpenSnackbar(false);
+	};
+
 	useEffect(() => {
 		nameEdit.setValue(isAuthenticated()?.name || '');
 		emailEdit.setValue(isAuthenticated()?.email || '');
@@ -47,7 +60,10 @@ const UpdateUserForm: FC = () => {
 			);
 			await api[options.method](url, body, options);
 			refreshUser();
-			window.location.href = '/configuracoes';
+			setOpenSnackbar(true);
+			currentPassword.setValue('');
+			newPassword.setValue('');
+			confirmPassword.setValue('');
 		} catch (error) {
 			const err = error as AxiosError<ErrorResponse>;
 			setError(err?.response?.data?.error || 'Erro inesperado');
@@ -143,6 +159,13 @@ const UpdateUserForm: FC = () => {
 						</Form>
 					</AccordionDetails>
 				</Accordion>
+
+				<Snackbar
+					open={openSnackbar}
+					autoHideDuration={2500}
+					onClose={handleCloseSnackbar}
+					message="Informações atualizadas com sucesso"
+				/>
 				
 
 				{loading ? (

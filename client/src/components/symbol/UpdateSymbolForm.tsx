@@ -38,11 +38,13 @@ interface UpdateSymbolFormProps {
   symbol: ILexiconSymbol;
   onClose: () => void;
   projectId: string;
+  resetSymbolInfo: () => void;
 }
 
 const UpdateSymbolForm: FC<UpdateSymbolFormProps> = ({
 	symbol,
 	onClose,
+	resetSymbolInfo,
 	projectId,
 }: UpdateSymbolFormProps): ReactNode => {
 	const nameEdit = useForm('dontValidateName');
@@ -78,7 +80,7 @@ const UpdateSymbolForm: FC<UpdateSymbolFormProps> = ({
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, body, options);
-				window.location.href = `/projeto/${projectId}`;
+				resetSymbolInfo();
 			} catch (error) {
 				const err = error as AxiosError<ErrorResponse>;
 				setError(err?.response?.data?.error || 'Erro inesperado');
