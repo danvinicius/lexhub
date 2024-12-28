@@ -12,6 +12,7 @@ export interface IProject {
   scenarios?: IScenario[];
   symbols?: ISymbol[];
   users: IUserProject[];
+  deletedAt: Date,
 }
 
 const projectSchema = new Schema<IProject>(
@@ -36,6 +37,10 @@ const projectSchema = new Schema<IProject>(
         user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
       },
     ],
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     toJSON: {

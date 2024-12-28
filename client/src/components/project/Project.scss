@@ -9,7 +9,7 @@
     .project-description {
       padding-top: 1rem;
       font-size: 1.25rem;
-      margin-bottom: .5rem;
+      margin-bottom: 1rem;
       max-width: 800px;
       word-wrap: break-word;
     }
@@ -17,7 +17,7 @@
     .project-header{
       display: flex;
       gap: 4rem;
-      align-items: flex-start;
+      align-items: center;
       position: relative;
 
       .project-name {
@@ -41,13 +41,13 @@
       gap: 1.5rem;
       align-items: center;
       position: relative;
+      margin-left: auto;
       img {
         cursor: pointer;
       }
     }
     .buttons-container {
       min-width: max-content;
-      margin-left: auto;
       display: flex;
       gap: 1rem;
     }
@@ -56,7 +56,6 @@
       gap: .5rem;
       align-items: center;
       font-size: 1rem;
-      color: var(--primary-color);
     }
   }
 

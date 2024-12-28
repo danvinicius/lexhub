@@ -1,5 +1,4 @@
 .create-project-form {
-  padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
@@ -7,7 +6,6 @@
 
   @media screen and (min-width: 998px) {
     margin: auto;
-    padding: 0 7.5%;
   }
 
   .loading {

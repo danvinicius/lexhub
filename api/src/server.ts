@@ -5,8 +5,9 @@ import helmet from 'helmet';
 import { Logger } from './utils/logger/logger';
 import { scenarioRouter } from '@/infra/http/routers/scenario-router';
 import express, { Application, Request, Response, Router } from 'express';
-import { userRouter, projectRouter, symbolRouter } from '@/infra/http/routers';
+import { userRouter, projectRouter, symbolRouter, changeRouter } from '@/infra/http/routers';
 import {
+  ChangeController,
   ProjectController,
   ScenarioController,
   SymbolController,
@@ -68,10 +69,12 @@ export class Server {
     const symbolController = new SymbolController();
     const userController = new UserController();
     const scenarioController = new ScenarioController();
+    const changeController = new ChangeController();
     projectRouter(this.router, projectController);
     symbolRouter(this.router, symbolController);
     scenarioRouter(this.router, scenarioController);
     userRouter(this.router, userController);
+    changeRouter(this.router, changeController);
   }
 
   private async databaseSetup(): Promise<void> {

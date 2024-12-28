@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react';
 import Button from '../forms/Button';
 import './Overview.scss';
-import { UnderDevelopment } from '../project/UnderDevelopment';
+import { LastChanges } from '../homepage/LastChanges';
 import CreateProject from '../project/CreateProject';
 
 export const OverView = (): ReactNode => {
@@ -11,8 +11,9 @@ export const OverView = (): ReactNode => {
 		<div className="overview">
 			<Button theme="primary" text="Criar projeto" onClick={() => setIsCreateProject(true)}></Button>
 			{isCreateProject && <CreateProject/>}
-			{!isCreateProject && 
-			<UnderDevelopment/>
+			{!isCreateProject && <>
+				<LastChanges/>
+			</>
 			}
 		</div>
 	);

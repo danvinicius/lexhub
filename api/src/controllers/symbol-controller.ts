@@ -44,7 +44,7 @@ export class SymbolController {
         projectId: req.params.projectId,
       });
       await validate(symbol);
-      const symbolCreated = await symbolService.createSymbol(symbol);
+      const symbolCreated = await symbolService.createSymbol(symbol, req.userId);
       return created(symbolCreated);
     } catch (error: any) {
       if (error instanceof BadRequestError) {
@@ -58,7 +58,7 @@ export class SymbolController {
       const { id } = req.params;
       const symbol = new DTO.UpdateSymbolRequestDTO(req.body);
       await validate(symbol);
-      await symbolService.updateSymbol(id, symbol);
+      await symbolService.updateSymbol(id, symbol, req.userId);
       return ok({ message: 'Symbol updated' });
     } catch (error: any) {
       if (
@@ -72,7 +72,7 @@ export class SymbolController {
   public deleteSymbol = async (req: Request) => {
     try {
       const { id } = req.params;
-      await symbolService.deleteSymbol(id);
+      await symbolService.deleteSymbol(id, req.userId);
       return ok({ message: 'Symbol deleted' });
     } catch (error: any) {
       if (error instanceof BadRequestError) {

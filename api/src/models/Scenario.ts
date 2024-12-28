@@ -51,6 +51,7 @@ export interface IScenario {
   context?: IContext;
   episodes?: IEpisode[];
   project: IProject;
+  deletedAt: Date;
 }
 
 const scenarioSchema = new Schema<IScenario>(
@@ -62,7 +63,11 @@ const scenarioSchema = new Schema<IScenario>(
     resources: [] as IResource[],
     context: {} as IContext,
     episodes: [] as IEpisode[],
-    project: { type: Schema.Types.ObjectId, ref: 'Project' }
+    project: { type: Schema.Types.ObjectId, ref: 'Project' },
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     toJSON: {

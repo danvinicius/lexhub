@@ -18,11 +18,22 @@ export namespace ProjectRepository {
 }
 
 export class ProjectRepository {
-  async getProject(id: string): Promise<null | IProject> {
+  async getProject(
+    id: string,
+    excludeDeleted = true
+  ): Promise<null | IProject> {
     try {
-      const project = await Project.findById(id)
-        .populate('symbols')
-        .populate('scenarios')
+      const projectFilter: any = { _id: id };
+      let scenarioFilter: any = {};
+      let symbolFilter: any = {};
+      if (excludeDeleted) {
+        projectFilter.deletedAt = null;
+        scenarioFilter.deletedAt = null;
+        symbolFilter.deletedAt = null;
+      }
+      const project = await Project.findOne(projectFilter)
+      .populate({ path: 'scenarios', match: scenarioFilter })
+        .populate({ path: 'symbols', match: symbolFilter })
         .populate({
           path: 'users.user',
           select: '-password',
@@ -35,19 +46,29 @@ export class ProjectRepository {
     }
   }
 
-  async getAllProjects(userId: string): Promise<IProject[]> {
+  async getAllProjects(
+    userId: string,
+    excludeDeleted = true
+  ): Promise<IProject[]> {
     try {
-      const projects = await Project.find({
-        'users.user': userId,
-      })
-        .populate('symbols')
-        .populate('scenarios')
+      const projectFilter: any = { 'users.user': userId };
+
+      let scenarioFilter: any = {};
+      let symbolFilter: any = {};
+      if (excludeDeleted) {
+        projectFilter.deletedAt = null;
+        scenarioFilter.deletedAt = null;
+        symbolFilter.deletedAt = null;
+      }
+      const projects = await Project.find(projectFilter)
+      .populate({ path: 'scenarios', match: scenarioFilter })
+        .populate({ path: 'symbols', match: symbolFilter })
         .populate({
           path: 'users.user',
           select: '-password',
         });
-        
-      return projects.map(project => project.toJSON());
+
+      return projects.map((project) => project.toJSON());
     } catch (error: any) {
       throw new ServerError(error?.message);
     }
@@ -56,7 +77,6 @@ export class ProjectRepository {
   async createProject(
     data: ProjectRepository.CreateProjectParams
   ): Promise<IProject> {
-    
     try {
       const project = new Project({
         name: data.name,
@@ -83,7 +103,7 @@ export class ProjectRepository {
       return project.toJSON();
     } catch (error: any) {
       console.log(error);
-      
+
       throw new ServerError(error.message);
     }
   }
@@ -102,7 +122,14 @@ export class ProjectRepository {
 
   async deleteProject(id: string): Promise<void> {
     try {
-      await Project.deleteOne({ _id: id });
+      const project = await Project.findById(id);
+
+      if (!project) {
+        throw new ServerError('Projeto não encontrado.');
+      }
+
+      project.deletedAt = new Date();
+      await project.save();
     } catch (error: any) {
       throw new ServerError(error.message);
     }

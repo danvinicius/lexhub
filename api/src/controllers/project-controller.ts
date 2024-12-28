@@ -76,7 +76,7 @@ export class ProjectController {
       const { projectId } = req.params;
       const data = new DTO.UpdateProjectRequestDTO(req.body);
       await validate(data);
-      await projectService.updateProject(projectId, data);
+      await projectService.updateProject(projectId, data, req.userId);
       return ok({ message: 'Project updated' });
     } catch (error: any) {
       if (
@@ -90,7 +90,7 @@ export class ProjectController {
   public deleteProject = async (req: Request) => {
     try {
       const { projectId } = req.params;
-      await projectService.deleteProject(projectId);
+      await projectService.deleteProject(projectId, req.userId);
       return ok({ message: 'Project deleted' });
     } catch (error: any) {
       return serverError(error.message);

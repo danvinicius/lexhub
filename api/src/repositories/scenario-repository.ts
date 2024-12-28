@@ -70,7 +70,7 @@ export namespace ScenarioRepository {
 
 export class ScenarioRepository {
   async getScenario(id: string): Promise<IScenario | null> {
-    const scenario = await Scenario.findById(id)
+    const scenario = await Scenario.findOne({ _id: id, deletedAt: null })
       .populate({
       path: 'resources', // Popula os recursos
       populate: {
@@ -84,7 +84,10 @@ export class ScenarioRepository {
   }
 
   async getAllScenarios(projectId: string): Promise<IScenario[]> {
-    const scenarios = await Scenario.find({ project: projectId })
+    const scenarios = await Scenario.find({
+      project: projectId,
+      deletedAt: null,
+    })
       .populate({
       path: 'resources', // Popula os recursos
       populate: {
@@ -170,7 +173,12 @@ export class ScenarioRepository {
 
   async deleteScenario(id: string): Promise<void> {
     try {
-      await Scenario.findByIdAndDelete(id);
+      const scenario = await Scenario.findById(id);
+      if (!scenario) {
+        throw new ServerError('Cenário não encontrado.');
+      }
+      scenario.deletedAt = new Date();
+      await scenario.save();
     } catch (error) {
       throw new Error(error.message);
     }

@@ -184,3 +184,23 @@ export interface ILexiconScenario {
     }[];
     projectId: string;
 }
+
+export type DifferenceKind = 'N' | 'D' | 'E' | 'A';
+
+export interface IDifference {
+    kind: DifferenceKind;
+    path: string[];
+    lhs?: any;
+    rhs?: any;
+    index?: number;
+    item?: IDifference;
+}
+
+export interface IChange {
+  readonly id?: string;
+  differences: IDifference[];
+  responsible: IUser;
+  entityName: string;
+  project: IProject;
+  createdAt: string;
+}

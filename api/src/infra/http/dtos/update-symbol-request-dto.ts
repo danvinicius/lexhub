@@ -30,6 +30,9 @@ export class UpdateSymbolRequestDTO {
   @Type(() => ImpactDTO)
   impacts: ImpactDTO[];
 
+  @IsString()
+  projectId: string;
+
   // todo: synonyms and impacts validation not working
 
   constructor(data: any) {
@@ -38,5 +41,6 @@ export class UpdateSymbolRequestDTO {
     this.notion = data.notion;
     this.synonyms = data.synonyms;
     this.impacts = data.impacts;
+    this.projectId = data.projectId;
   }
 }

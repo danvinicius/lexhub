@@ -46,7 +46,7 @@ export class ScenarioController {
         projectId: req.params.projectId,
       });
       await validate(scenario);
-      const scenarioCreated = await scenarioService.createScenario(scenario);
+      const scenarioCreated = await scenarioService.createScenario(scenario, req.userId);
       return created(scenarioCreated);
     } catch (error: any) {
       if (error instanceof BadRequestError) {
@@ -77,7 +77,7 @@ export class ScenarioController {
       const { id } = req.params;
       const scenario = new DTO.UpdateScenarioRequestDTO(req.body);
       await validate(scenario);
-      await scenarioService.updateScenario(id, scenario);
+      await scenarioService.updateScenario(id, scenario, req.userId);
       return ok({ message: 'Scenario updated' });
     } catch (error: any) {
       if (error instanceof BadRequestError) {
@@ -89,7 +89,7 @@ export class ScenarioController {
   public deleteScenario = async (req: Request) => {
     try {
       const { id } = req.params;
-      await scenarioService.deleteScenario(id);
+      await scenarioService.deleteScenario(id, req.userId);
       return ok({ message: 'Scenario deleted' });
     } catch (error: any) {
       return serverError(error.message);

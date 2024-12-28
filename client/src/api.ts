@@ -259,3 +259,16 @@ export const UPDATE_USER = (token: string): RequestFormat => {
 		},
 	};
 };
+
+export const GET_CHANGES_BY_USER_PROJECTS = (token: string): RequestFormat => {  
+	return {
+		url: '/change/all',
+		options: {
+			method: 'get',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${token}`
+			},
+		},
+	};
+};

@@ -1,4 +1,4 @@
-.underDevelopment {
+.under-development {
     background: #fff;
     position: relative; /* Permite posicionar o elemento interno */
     height: 600px;
@@ -20,7 +20,7 @@
     }
 }
 
-.underDevelopment::before {
+.under-development::before {
     content: '';
     background: #fff;
     background-image: url('../../assets/img/capybara-ai-generated-image_362642-1991.png');

@@ -34,7 +34,6 @@ const ProjectRoute: FC = (): ReactNode => {
 		verifyProjectPrivacy();
 	});
 	if (!isProjectPrivate && !isAuthenticated()?.token) {
-		console.log('here');
 		return null;
 	}
 	if (isAuthenticated()?.token) {

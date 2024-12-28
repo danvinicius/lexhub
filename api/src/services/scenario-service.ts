@@ -14,10 +14,8 @@ import {
 import { ScenarioRepository, SymbolRepository } from '@/repositories';
 import { BadRequestError, NotFoundError } from '@/utils/errors';
 import { Lexicon, LexiconService } from './lexicon-service';
-
-const symbolRepository = new SymbolRepository();
-const scenarioRepository = new ScenarioRepository();
-const lexiconService = new LexiconService();
+import { ProjectService } from './project-service';
+import { ChangeService } from './change-service';
 
 export interface ILexiconScenario {
   id: string;
@@ -103,31 +101,44 @@ export interface ILexiconScenario {
 }
 
 export class ScenarioService {
+  constructor(
+    private symbolRepository = new SymbolRepository(),
+    private scenarioRepository = new ScenarioRepository(),
+    private projectService = new ProjectService(),
+    private changeService = new ChangeService(),
+  ) {}
   async createManyScenarios(
     data: CreateManyScenariosRequestDTO
   ): Promise<IScenario[]> {
-    return await scenarioRepository.createManyScenarios(data);
+    return await this.scenarioRepository.createManyScenarios(data);
   }
 
-  async createScenario(scenario: CreateScenarioRequestDTO): Promise<IScenario> {
-    return await scenarioRepository.createScenario(scenario);
+  async createScenario(scenario: CreateScenarioRequestDTO, userId: string): Promise<IScenario> {
+    const beforeChange = await this.projectService.getCleanProject(scenario.projectId, false);
+    const created = await this.scenarioRepository.createScenario(scenario);
+    const afterChange = await this.projectService.getCleanProject(scenario.projectId, false);
+    await this.changeService.createChange(beforeChange, afterChange, scenario.projectId, created.title, userId);
+    return created;
   }
 
-  async deleteScenario(id: string): Promise<void> {
-    const scenarioExists = await scenarioRepository.getScenario(id);
+  async deleteScenario(id: string, userId: string): Promise<void> {
+    const scenarioExists = await this.scenarioRepository.getScenario(id);
     if (!scenarioExists) {
       throw new BadRequestError('Cenário inválido ou inexistente');
     }
-    await scenarioRepository.deleteScenario(id);
+    const beforeChange = await this.projectService.getCleanProject(scenarioExists.project.toString(), false);
+    await this.scenarioRepository.deleteScenario(id);
+    const afterChange = await this.projectService.getCleanProject(scenarioExists.project.toString(), false);
+    await this.changeService.createChange(beforeChange, afterChange, scenarioExists.project.toString(), scenarioExists.title, userId);
   }
 
   async getAllScenarios(projectId: string): Promise<IScenario[]> {
-    const scenarios = await scenarioRepository.getAllScenarios(projectId);
+    const scenarios = await this.scenarioRepository.getAllScenarios(projectId);
     return scenarios;
   }
 
   async getScenario(id: string): Promise<null | IScenario> {
-    const scenario = await scenarioRepository.getScenario(id);
+    const scenario = await this.scenarioRepository.getScenario(id);
     if (!scenario) {
       throw new NotFoundError('Cenário inexistente');
     }
@@ -138,11 +149,12 @@ export class ScenarioService {
     scenarioId: string,
     projectId: string
   ): Promise<ILexiconScenario> {
-    const scenario = await scenarioRepository.getScenario(scenarioId);
+    const lexiconService = new LexiconService();
+    const scenario = await this.scenarioRepository.getScenario(scenarioId);
 
     const [symbols, scenarios] = await Promise.all([
-      symbolRepository.getAllSymbols(projectId),
-      scenarioRepository.getAllScenarios(projectId),
+      this.symbolRepository.getAllSymbols(projectId),
+      this.scenarioRepository.getAllScenarios(projectId),
     ]);
 
     // retira o próprio cenário
@@ -250,12 +262,31 @@ export class ScenarioService {
 
   async updateScenario(
     id: string,
-    scenario: UpdateScenarioRequestDTO
+    scenario: UpdateScenarioRequestDTO,
+    userId: string
   ): Promise<IScenario> {
-    const scenarioExists = await scenarioRepository.getScenario(id);
+    const scenarioExists = await this.scenarioRepository.getScenario(id);
     if (!scenarioExists) {
       throw new BadRequestError('Cenário inválido ou inexistente');
     }
-    return await scenarioRepository.updateScenario(id, scenario);
+    
+    const beforeChange = await this.projectService.getCleanProject(
+      scenario.projectId
+    );
+    const updatedScenario = await this.scenarioRepository.updateScenario(
+      id,
+      scenario
+    );
+    const afterChange = await this.projectService.getCleanProject(
+      scenario.projectId
+    );
+    await this.changeService.createChange(
+      beforeChange,
+      afterChange,
+      scenario.projectId,
+      scenario.title,
+      userId
+    );
+    return updatedScenario;
   }
 }
