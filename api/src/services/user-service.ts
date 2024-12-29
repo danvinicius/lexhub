@@ -12,8 +12,7 @@ import { UnauthorizedError, BadRequestError } from '@/utils/errors';
 import { ForbiddenError } from '@/utils/errors/forbidden-error';
 import { ProjectService } from './project-service';
 import { ChangeService } from './change-service';
-
-const { AUTH_SECRET } = process.env;
+import { AUTH_SECRET } from '@/config/env';
 
 export class UserService {
   constructor(

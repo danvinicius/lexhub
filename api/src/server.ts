@@ -14,13 +14,13 @@ import {
   UserController,
 } from '@/controllers';
 import { connect, close } from './infra/db/connection';
+import { PORT } from './config/env';
 
 export class Server {
   private router = Router();
   private server: Application;
 
   public async run() {
-    const PORT = process.env.PORT
     this.config();
     this.databaseSetup();
     this.setupControllers();

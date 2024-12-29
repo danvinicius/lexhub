@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc --project tsconfig.json && tscpaths -p tsconfig.json -s . -o ./dist",
-    "start": "yarn build && node -r tsconfig-paths/register dist/src/index.js",
-    "dev": "tsnd --transpile-only --respawn -r tsconfig-paths/register src/index.ts",
+    "start": "NODE_ENV=production yarn build && node -r tsconfig-paths/register dist/src/index.js",
+    "dev": "NODE_ENV=development tsnd --transpile-only --respawn -r tsconfig-paths/register src/index.ts",
     "test:unit": "jest",
     "test:functional": "jest --projects ./test --runInBand",
     "style:check": "prettier --check 'src/**/*.ts' 'test/**/*.ts'",

@@ -1,3 +1,4 @@
+import { AUTH_SECRET } from '@/config/env';
 import { JwtService } from '@/infra/security';
 import { IUser } from '@/models';
 import { UserService } from '@/services';
@@ -24,7 +25,7 @@ export const authMiddleware = async (
         code: 403,
       });
     }
-    const jwt = new JwtService(process.env.AUTH_SECRET);
+    const jwt = new JwtService(AUTH_SECRET);
     const payload = (await jwt.decrypt(token)) as IUser;
     const id = payload?.id;
     
