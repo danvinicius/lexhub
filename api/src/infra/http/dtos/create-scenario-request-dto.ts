@@ -18,7 +18,7 @@ export class CreateScenarioRequestDTO {
   exceptions: IException[];
 
   @IsString()
-  projectId: string;
+  projectId: String;
 
   constructor(data: any) {
     this.title = data.title;

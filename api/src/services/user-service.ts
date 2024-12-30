@@ -12,11 +12,11 @@ import { UnauthorizedError, BadRequestError } from '@/utils/errors';
 import { ForbiddenError } from '@/utils/errors/forbidden-error';
 import { ProjectService } from './project-service';
 import { ChangeService } from './change-service';
-import { AUTH_SECRET } from '@/config/env';
+import { AUTH_SECRET, HASH_SALT } from '@/config/env';
 
 export class UserService {
   constructor(
-    private hashSalt = 10,
+    private hashSalt = Number(HASH_SALT),
     private userRepository = new UserRepository(),
     private projectRepository = new ProjectRepository(),
     private projectService = new ProjectService(),
@@ -25,7 +25,7 @@ export class UserService {
 
   async addUserToProject(
     data: AddUserToProjectRequestDTO,
-    inviterId: string
+    inviterId: String
   ): Promise<null | IUserProject> {
     const inviter = await this.userRepository.getUser({ _id: inviterId });
 
@@ -132,7 +132,7 @@ export class UserService {
     return null;
   }
 
-  async getMe(id: string): Promise<null | AuthenticateUserResponseDTO> {
+  async getMe(id: String): Promise<null | AuthenticateUserResponseDTO> {
     const user = await this.getUser(id);
     const { name, email, projects } = user;
     const encrypter = new JwtService(AUTH_SECRET);
@@ -145,7 +145,7 @@ export class UserService {
     });
   }
 
-  async getUser(id: string): Promise<null | IUser> {
+  async getUser(id: String): Promise<null | IUser> {
     const user = await this.userRepository.getUserById(id);
     if (!user) {
       throw new BadRequestError('Este usuário não existe');
@@ -153,21 +153,21 @@ export class UserService {
     return user;
   }
 
-  async updateUser(id: string, data: UpdateUserRequestDTO): Promise<IUser> {
-    const userExists = await this.userRepository.getUser({ _id: id });
-    if (!userExists) {
+  async updateUser(id: String, data: UpdateUserRequestDTO): Promise<IUser> {
+    const user = await this.userRepository.getUser({ _id: id });
+    if (!user) {
       throw new BadRequestError('Usuário inválido ou inexistente');
     }
     let hash: string;
     const hasher = new BcryptService(this.hashSalt);
     if (data.currentPassword.length && data.newPassword.length) {
-      await this.checkPassword(data.currentPassword, userExists.password);
+      await this.checkPassword(data.currentPassword, user.password);
       hash = await hasher.hash(data.newPassword);
     }
 
     return this.userRepository.updateUser(id, {
       ...data,
-      password: data.currentPassword ? hash : userExists.password,
+      password: data.currentPassword ? hash : user.password,
     });
   }
 

@@ -1,7 +1,7 @@
-import { IProject, ISymbol, IScenario } from '@/models';
+import { ISymbol, IScenario } from '@/models';
 import { normalize } from '@/utils/string/normalize';
 
-export interface Lexicon {
+export interface LexiconInfo {
   resource: string;
   name: string;
   starts: number;
@@ -9,14 +9,19 @@ export interface Lexicon {
   type: string;
 }
 
+export interface Lexicon {
+  content: string;
+  foundLexicons: LexiconInfo[];
+}
+
 export class LexiconService {
   public findPossibleLexicon = <
-    T extends { name?: string; title?: string; id?: string; project: IProject },
+    T extends { name?: string; title?: string; id?: string; project: String },
   >(
     text: string,
     termos: T[]
   ) => {
-    const possibleLexicon: Lexicon[] = [];
+    const possibleLexicon: LexiconInfo[] = [];
 
     for (const termo of termos) {
       const lexiconName = termo.name || termo.title || '';
@@ -31,8 +36,8 @@ export class LexiconService {
         if (id) {
           possibleLexicon.push({
             resource: termo.title
-              ? `/api/project/${termo.project.id}/scenario/${id}`
-              : `/api/project/${termo.project.id}/symbol/${id}`,
+              ? `/api/project/${termo.project}/scenario/${id}`
+              : `/api/project/${termo.project}/symbol/${id}`,
             name: lexiconName,
             starts,
             ends,
@@ -59,16 +64,16 @@ export class LexiconService {
     scenarios: IScenario[],
     searchOtherScenarios: boolean
   ) => {
-    const foundLexicons: Lexicon[] = [];
+    const foundLexicons: LexiconInfo[] = [];
 
     const possibleSymbols = this.findPossibleLexicon(content, symbols);
-    let possibleScenarios: Lexicon[] = [];
+    let possibleScenarios: LexiconInfo[] = [];
     if (searchOtherScenarios) {
       possibleScenarios = this.findPossibleLexicon(content, scenarios);
     }
 
     // primeiro, o cenário compete com outros cenários dentro do text
-    const scenariosFilter = (candidate: Lexicon) => {
+    const scenariosFilter = (candidate: LexiconInfo) => {
       return !possibleScenarios.some((scenario) => {
         return (
           scenario !== candidate &&
@@ -79,7 +84,7 @@ export class LexiconService {
     };
 
     // depois, o símbolo compete com cenários (cenários tem prioridade) e depois com outros símbolos
-    const symbolsFilter = (candidate: Lexicon) => {
+    const symbolsFilter = (candidate: LexiconInfo) => {
       return (
         !possibleScenarios.some((scenario) => {
           return (
@@ -108,7 +113,7 @@ export class LexiconService {
     };
   };
 
-  public orderByPosition = (a: Lexicon, b: Lexicon) => {
+  public orderByPosition = (a: LexiconInfo, b: LexiconInfo) => {
     if (a.starts > b.starts) {
       return 1;
     }

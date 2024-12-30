@@ -27,7 +27,7 @@ const Textarea: FC<TextareaProps> = ({
 	required = false,
 }: TextareaProps) => {
 	return (
-		<label htmlFor={name} className={error ? 'error' : ''}>
+		<label htmlFor={name} className={`flex column gap-5 ${error ? 'error' : ''}`}>
 			{label}
 			<textarea
 				name={name}
@@ -38,6 +38,7 @@ const Textarea: FC<TextareaProps> = ({
 				onKeyDown={onKeyDown}
 				required={required}
 				rows={rows}
+				className='w-100 border-radius-5 outline-none'
 			></textarea>
 		</label>
 	);

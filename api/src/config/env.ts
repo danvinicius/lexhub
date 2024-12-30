@@ -26,10 +26,12 @@ const CONNECTION_STRING =`mongodb://${authentication}${MONGO_HOST}:${MONGO_PORT}
  * AUTH CONFIG
  */
 const AUTH_SECRET = process.env.AUTH_SECRET
+const HASH_SALT = process.env.AUTH_SECRET
 
 
 export {
     PORT,
     CONNECTION_STRING,
     AUTH_SECRET,
+    HASH_SALT,
 }

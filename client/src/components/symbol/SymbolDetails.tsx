@@ -54,7 +54,7 @@ const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style, resetProjectInfo
 				<div className='symbol-details' style={style}>
 					<div className='symbol-details-notion'>
 						<div className='symbol-name'>
-							<h3>{processContent(symbol?.name)}</h3>
+							<h3>{symbol?.name}</h3>
 							<div className='classification'>
 								<p>{symbol?.classification}</p>
 							</div>

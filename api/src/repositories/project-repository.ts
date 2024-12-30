@@ -19,7 +19,7 @@ export namespace ProjectRepository {
 
 export class ProjectRepository {
   async getProject(
-    id: string,
+    id: String,
     excludeDeleted = true
   ): Promise<null | IProject> {
     try {
@@ -36,7 +36,7 @@ export class ProjectRepository {
         .populate({ path: 'symbols', match: symbolFilter })
         .populate({
           path: 'users.user',
-          select: '-password',
+          select: '-password -projects',
         });
 
       if (!project) return null;
@@ -47,7 +47,7 @@ export class ProjectRepository {
   }
 
   async getAllProjects(
-    userId: string,
+    userId: String,
     excludeDeleted = true
   ): Promise<IProject[]> {
     try {
@@ -65,7 +65,7 @@ export class ProjectRepository {
         .populate({ path: 'symbols', match: symbolFilter })
         .populate({
           path: 'users.user',
-          select: '-password',
+          select: '-password -projects',
         });
 
       return projects.map((project) => project.toJSON());
@@ -109,7 +109,7 @@ export class ProjectRepository {
   }
 
   async updateProject(
-    id: string,
+    id: String,
     data: ProjectRepository.UpdateProjectParams
   ): Promise<IProject> {
     try {
@@ -120,7 +120,7 @@ export class ProjectRepository {
     }
   }
 
-  async deleteProject(id: string): Promise<void> {
+  async deleteProject(id: String): Promise<void> {
     try {
       const project = await Project.findById(id);
 

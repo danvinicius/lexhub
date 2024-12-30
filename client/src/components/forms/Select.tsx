@@ -33,7 +33,7 @@ const Select: FC<SelectProps> = ({
 	required = false,
 }: SelectProps) => {
 	return (
-		<label htmlFor={name} className={error ? 'error' : ''}>
+		<label htmlFor={name} className={`flex column gap-5 ${error ? 'error' : ''}`}>
 			{label}
 			<select
 				name={name}
@@ -43,12 +43,13 @@ const Select: FC<SelectProps> = ({
 				onBlur={onBlur}
 				required={required}
 				style={style}
+				className='pointer w-100 border-radius-5 outline-none'
 			>
-				<option value="" disabled>
+				<option value="" disabled className='pointer'>
 					{defaultOption}
 				</option>
 				{options.map((option) => (
-					<option key={option.value} value={option.value}>
+					<option key={option.value} value={option.value} className='pointer'>
 						{option.label}
 					</option>
 				))}

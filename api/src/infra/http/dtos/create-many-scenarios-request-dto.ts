@@ -8,7 +8,7 @@ export class CreateManyScenariosRequestDTO {
   }[];
 
   @IsString()
-  projectId: string;
+  projectId: String;
 
   constructor(data: any) {
     this.scenarios = data.scenarios;

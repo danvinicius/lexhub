@@ -1,4 +1,3 @@
-import { IProject } from './Project';
 import { model, Schema } from 'mongoose';
 
 export interface IException {
@@ -27,7 +26,7 @@ export interface IEpisode {
   type?: string;
   restriction?: string;
   nonSequentialEpisodes?: {
-      id: string;
+      id: String;
       type: string;
       description: string;
       restriction: string;
@@ -38,7 +37,6 @@ export interface IResource {
   readonly id?: string;
   name: string;
   restrictions?: IRestriction[];
-  scenarios: IScenario[];
 }
 
 export interface IScenario {
@@ -50,7 +48,7 @@ export interface IScenario {
   actors?: IActor[];
   context?: IContext;
   episodes?: IEpisode[];
-  project: IProject;
+  project: String;
   deletedAt: Date;
 }
 

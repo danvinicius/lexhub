@@ -12,8 +12,8 @@ export namespace UserRepository {
 
   export interface AddUserToProjectParams {
     role: UserRole;
-    projectId: string;
-    userId: string;
+    projectId: String;
+    userId: String;
   }
 
   export interface UpdateUserParams {
@@ -75,7 +75,7 @@ export class UserRepository {
     }
   }
 
-  async getUserById(id: string): Promise<null | IUser> {    
+  async getUserById(id: String): Promise<null | IUser> {    
     try {
       const user = await User.findOne({_id: id})
         .select('name email projects password')
@@ -104,7 +104,7 @@ export class UserRepository {
     }
   }
 
-  async updateUser(id: string, data: UserRepository.UpdateUserParams): Promise<IUser> {
+  async updateUser(id: String, data: UserRepository.UpdateUserParams): Promise<IUser> {
     try {
       await User.findByIdAndUpdate(id, data);
       return await this.getUserById(id);
@@ -113,7 +113,7 @@ export class UserRepository {
     }
   }
 
-  async deleteUser(id: string): Promise<void> {
+  async deleteUser(id: String): Promise<void> {
     try {
       await User.findByIdAndDelete(id);
     } catch (error: any) {

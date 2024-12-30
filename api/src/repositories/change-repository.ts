@@ -4,14 +4,14 @@ import Change, { IDifference, IChange } from '@/models/Change';
 export namespace ChangeRepository {
   export interface CreateChangeParams {
     differences: IDifference[];
-    userId: string;
+    userId: String;
     entityName: string;
-    projectId: string;
+    projectId: String;
   }
 }
 
 export class ChangeRepository {
-  async getChange(id: string): Promise<null | IChange> {
+  async getChange(id: String): Promise<null | IChange> {
     try {
       const change = await Change.findById(id)
       .populate('project')  
@@ -27,7 +27,7 @@ export class ChangeRepository {
     }
   }
 
-  async getChangesByProject(projectId: string): Promise<IChange[]> {
+  async getChangesByProject(projectId: String): Promise<IChange[]> {
     try {
       const changes = await Change.find({
         'project': projectId,

@@ -16,46 +16,14 @@ export namespace ScenarioRepository {
     context: IContext;
     actors: IActor[];
     exceptions: IException[];
-    projectId: string;
+    projectId: String;
   }
   export interface CreateManyScenariosParams {
     scenarios: {
       title: string;
       goal: string;
     }[];
-    projectId: string;
-  }
-  export interface CreateExceptionParams {
-    description: string;
-    scenarioId: string;
-  }
-  export interface CreateContextParams {
-    geographicLocation: string;
-    temporalLocation: string;
-    preCondition: string;
-    scenarioId: string;
-  }
-  export interface CreateRestrictionParams {
-    description: string;
-    scenarioId: string;
-    episodeId: string;
-    resourceId: string;
-    contextId: string;
-  }
-  export interface CreateActorParams {
-    name: string;
-    scenarioId: string;
-  }
-  export interface CreateResourceParams {
-    name: string;
-    scenarioId: string;
-  }
-  export interface CreateEpisodeParams {
-    position: number;
-    description: string;
-    type: string;
-    group: number;
-    scenarioId: string;
+    projectId: String;
   }
   export interface UpdateScenarioParams {
     title: string;
@@ -69,34 +37,16 @@ export namespace ScenarioRepository {
 }
 
 export class ScenarioRepository {
-  async getScenario(id: string): Promise<IScenario | null> {
-    const scenario = await Scenario.findOne({ _id: id, deletedAt: null })
-      .populate({
-      path: 'resources', // Popula os recursos
-      populate: {
-        path: 'restrictions', // Popula as restrições dentro de cada recurso
-      },
-    })
-      .populate('context.restrictions')
-      .populate('episodes.restriction')
-      .exec();
+  async getScenario(id: String): Promise<IScenario | null> {
+    const scenario = await Scenario.findOne({ _id: id, deletedAt: null }).exec();
     return scenario?.toJSON();
   }
 
-  async getAllScenarios(projectId: string): Promise<IScenario[]> {
+  async getAllScenarios(projectId: String): Promise<IScenario[]> {
     const scenarios = await Scenario.find({
       project: projectId,
       deletedAt: null,
-    })
-      .populate({
-      path: 'resources', // Popula os recursos
-      populate: {
-        path: 'restrictions', // Popula as restrições dentro de cada recurso
-      },
-    })
-      .populate('context.restrictions')
-      .populate('episodes.restriction')
-      .exec();
+    }).exec();
     return scenarios.map((scenario) => scenario.toJSON());
   }
 
@@ -151,7 +101,7 @@ export class ScenarioRepository {
   }
 
   async updateScenario(
-    id: string,
+    id: String,
     data: ScenarioRepository.UpdateScenarioParams
   ): Promise<IScenario> {
     
@@ -171,7 +121,7 @@ export class ScenarioRepository {
     }
   }
 
-  async deleteScenario(id: string): Promise<void> {
+  async deleteScenario(id: String): Promise<void> {
     try {
       const scenario = await Scenario.findById(id);
       if (!scenario) {

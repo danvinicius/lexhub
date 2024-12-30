@@ -34,28 +34,25 @@ export const LastChanges = (): ReactNode => {
 		getLastChanges();
 	}, []);
 	return (
-		<div className='container flex column gap-1'>
-			<h1>Visão geral</h1>
-			<div className='last-changes'>
-				{changes.length ? (
-					<ul>
-						{changes.map((change: IChange) => {
-							const distance = formatDistance(change.createdAt, new Date(), { addSuffix: true, locale: ptBR });
-							return (
-								<li key={change.id}>
-									<ProfilePicture user={change.responsible} />
-									<div>
-										<p dangerouslySetInnerHTML={{ __html: formatChange(change) }}></p>
-										<small>{distance}</small>
-									</div>
-								</li>
-							);
-						})}
-					</ul>
-				) : (
-					<p>As atualizações dos seus projetos aparecerão aqui.</p>
-				)}
-			</div>
+		<div className='last-changes'>
+			{changes.length ? (
+				<ul className='flex column'>
+					{changes.map((change: IChange) => {
+						const distance = formatDistance(change.createdAt, new Date(), { addSuffix: true, locale: ptBR });
+						return (
+							<li key={change.id} className='flex align-center'>
+								<ProfilePicture user={change.responsible} />
+								<div>
+									<p dangerouslySetInnerHTML={{ __html: formatChange(change) }}></p>
+									<small>{distance}</small>
+								</div>
+							</li>
+						);
+					})}
+				</ul>
+			) : (
+				<p>As atualizações dos seus projetos aparecerão aqui.</p>
+			)}
 		</div>
 	);
 };

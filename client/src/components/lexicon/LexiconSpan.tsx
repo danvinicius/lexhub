@@ -18,7 +18,7 @@ const LexiconSpan: FC<LexiconSpanProps> = ({ id, name, type, children }: Lexicon
 
 	const setCurrentSymbol = () => {
 		const currentSymbol = project?.symbols.find(
-			(symbol: ILexiconSymbol) => symbol.name.content == name
+			(symbol: ILexiconSymbol) => symbol.name == name
 		);
 		if (currentSymbol) {
 			setSymbol(currentSymbol);

@@ -31,7 +31,7 @@ export class UpdateSymbolRequestDTO {
   impacts: ImpactDTO[];
 
   @IsString()
-  projectId: string;
+  projectId: String;
 
   // todo: synonyms and impacts validation not working
 

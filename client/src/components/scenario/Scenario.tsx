@@ -116,7 +116,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 
 
 	return (
-		<div className='scenario' id={`${scenario.id}-${slugify(scenario.title.content)}`}>
+		<div className='scenario flex column gap-2 relative border-radius-5' id={`${scenario.id}-${slugify(scenario.title.content)}`}>
 			<div className='scenario-header'>
 				<h2>{processContent(scenario.title)}</h2>
 				{isCollaborator && (
@@ -124,7 +124,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 						<img
 							src={KebabVertical}
 							alt=''
-							className='scenario-options-button'
+							className='scenario-options-button absolute pointer'
 							onClick={() => setIsScenarioActionsOptionsMenuOpen(true)}
 						/>
 						<div className='scenario-options'>
@@ -141,7 +141,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 					</>
 				)}
 			</div>
-			<section className='scenario-details'>
+			<section className='scenario-details flex column gap-3 relative'>
 				<div className='flex column gap-5'>
 					<div className='flex gap-5 border-none'>
 						<FlagIcon />
@@ -190,7 +190,8 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 										<td>{processContent(scenario.context?.temporalLocation)}</td>
 										<td className='restrictions'>
 											{isCollaborator && (
-												<span className='add-restriction' onClick={() => handleOpenCreateRestriction()}>
+												<span className='add-restriction pointer flex align-center gap-5'
+													onClick={() => handleOpenCreateRestriction()}>
 													{scenario.context.restrictions.length > 0 ? (
 														<>
                                                     Gerenciar restrições <img src={EditPen} alt='' />
@@ -203,7 +204,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 												</span>
 											)}
 											{scenario.context.restrictions.length > 0 && (
-												<ul>
+												<ul className='flex column gap-75'>
 													{scenario.context?.restrictions?.map((restriction) => {
 														return (
 															<li key={restriction.description.content}>{processContent(restriction.description)}</li>
@@ -223,9 +224,9 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 						<PeopleAltIcon />
 						<h3>Atores</h3>
 					</div>
-					<div className='scenario-actors'>
+					<div className='scenario-actors flex align-center'>
 						{scenario.actors?.length ? (
-							<ul>
+							<ul className='flex column gap-1'>
 								{scenario.actors?.map((actor) => {
 									return <li key={actor.name.content}>{processContent(actor.name)}</li>;
 								})}
@@ -240,9 +241,9 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 						<ErrorIcon />
 						<h3>Exceções</h3>
 					</div>
-					<div className='scenario-exceptions'>
+					<div className='scenario-exceptions flex align-center'>
 						{scenario.exceptions?.length ? (
-							<ul>
+							<ul className='flex column gap-1'>
 								{scenario.exceptions?.map((exception) => {
 									return <li key={exception.description.content}>{processContent(exception.description)}</li>;
 								})}
@@ -258,9 +259,9 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 							<HomeRepairServiceIcon />
 							<h3>Recursos</h3>
 						</div>
-						<div className='scenario-resources'>
+						<div className='scenario-resources flex column gap-1'>
 							{isCollaborator && (
-								<span className='add-resource' onClick={handleOpenCreateResourceModal}>
+								<span className='add-resource pointer flex align-center gap-5' onClick={handleOpenCreateResourceModal}>
 									{scenario.resources.length > 0 ? (
 										<>
                                     Gerenciar recursos <img src={EditPen} alt='' />
@@ -296,10 +297,10 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 										return (
 											<tr key={resource.name.content}>
 												<td>{processContent(resource.name)}</td>
-												<td className='restrictions'>
+												<td className='restrictions border-none'>
 													{isCollaborator && (
 														<span
-															className='add-restriction'
+															className='add-restriction pointer flex align-center gap-5'
 															onClick={() => handleOpenCreateRestriction(resource.id)}
 														>
 															{resource.restrictions?.length > 0 ? (
@@ -314,7 +315,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 														</span>
 													)}
 													{resource.restrictions?.length > 0 && (
-														<ul>
+														<ul className='flex column gap-75'>
 															{resource.restrictions?.map((restriction) => {
 																return (
 																	<li key={restriction.description.content}>
@@ -339,9 +340,9 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 							<ChecklistIcon />
 							<h3>Episódios</h3>
 						</div>
-						<div className='scenario-episodes'>
+						<div className='scenario-episodes flex column gap-1'>
 							{isCollaborator && (
-								<span className='add-episode' onClick={handleOpenCreateEpisodesModal}>
+								<span className='add-episode pointer flex align-center gap-5' onClick={handleOpenCreateEpisodesModal}>
 									{scenario.episodes.length > 0 ? (
 										<>
                                     Gerenciar episódios <img src={EditPen} alt='' />

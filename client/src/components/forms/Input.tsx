@@ -44,7 +44,7 @@ const Input: FC<InputProps> = ({
 	required = false,
 }: InputProps) => {
 	return (
-		<label htmlFor={name} className={error ? 'error' : ''}>
+		<label htmlFor={name} className={`flex column gap-5 ${error ? 'error' : ''}`}>
 			{label}
 			<input
 				type={type}
@@ -60,6 +60,7 @@ const Input: FC<InputProps> = ({
 				required={required}
 				autoFocus={autoFocus}
 				disabled={disabled}
+				className='w-100 border-radius-5 outline-none'
 			/>
 			<Error error={error}/>
 		</label>

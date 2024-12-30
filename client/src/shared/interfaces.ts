@@ -135,7 +135,7 @@ export interface ILexiconEpisode {
 
 export interface ILexiconSymbol {
     id: string;
-    name: Lexicon;
+    name: string;
     notion: Lexicon;
     classification: string;
     impacts: {
@@ -190,8 +190,8 @@ export type DifferenceKind = 'N' | 'D' | 'E' | 'A';
 export interface IDifference {
     kind: DifferenceKind;
     path: string[];
-    lhs?: any;
-    rhs?: any;
+    lhs?: string | number | boolean | Date;
+    rhs?: string | number | boolean | Date;
     index?: number;
     item?: IDifference;
 }

@@ -1,7 +1,4 @@
 .rich-text-editor {
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
   &.error {
     .ql-toolbar, .ql-container {
       border: 1px solid var(--error-color);
@@ -25,10 +22,6 @@
   }
 
   & > p {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-
     span:not(.error) {
       color: #b5b5b5;
     }

@@ -152,20 +152,23 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 	}, [getProject, isAuthenticated, project?.id]);
 	return (
 		<>
-			<div className='project' id='project'>
+			<div className='project flex column justify-center' id='project'>
 				{loading && <Loading />}
 				{error && <Error error={error} />}
 				{!loading && !error && (
 					<div className='project-info'>
-						<div className='project-header'>
+						<div className='project-header flex align-center gap-4 relative'>
 							<h1 className='project-name'>{project?.name}</h1>
 							{isAdmin && (
-								<div className='project-options'>
+								<div className='project-options flex align-center relative gap-15'>
 									<div className="pointer flex align-center">
 										<PersonAddIcon onClick={handleOpenAddUserToProjectModal}/>
 									</div>
 
-									<img src={Kebab} alt='Abrir opções do projeto' onClick={handleOpenProjectActionsOptionsMenu} />
+									<img
+										className='pointer'
+										src={Kebab} alt='Abrir opções do projeto'
+										onClick={handleOpenProjectActionsOptionsMenu} />
 									{isProjectActionsOptionsMenu && (
 										<ProjectActionsOptionsMenu
 											isOwner={isOwner}
@@ -178,7 +181,7 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 								</div>
 							)}
 							{isCollaborator && (
-								<div className='buttons-container'>
+								<div className='buttons-container flex gap-1'>
 									<Button onClick={handleOpenCreateScenarioModal} theme='primary' text='Novo cenário'></Button>
 									<Button onClick={handleOpenCreateSymbolModal} theme='secondary' text='Novo símbolo'></Button>
 								</div>
@@ -186,7 +189,7 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 						</div>
 						<div className="project-description" dangerouslySetInnerHTML={{ __html: project?.description || '' }}></div>
 						{owner && (
-							<small className='project-owner'>
+							<small className='project-owner flex align-center gap-5'>
 								<ProfilePicture user={owner}/>
 								Criado por<b>{owner.name}</b>em {new Date(project?.createdAt).toLocaleDateString('pt-br')} às{' '}
 								{new Date(project?.createdAt).toLocaleTimeString('pt-br')}
@@ -194,7 +197,7 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 						)}
 					</div>
 				)}
-				<div className='scenarios-container'>
+				<div className='flex column gap-1 border-radius-5'>
 					<Box sx={{ width: '100%', padding: 0 }}>
 						<Box
 							sx={{
@@ -221,7 +224,7 @@ const Project: FC<ProjectProps> = ({projectId}: ProjectProps) => {
 								<Tab label='Símbolos' {...a11yProps(1)} />
 							</Tabs>
 						</Box>
-						<div className='scenarios-content'>
+						<div className='gap-15 relative'>
 							{currentTab == 0 && (
 								<>
 									<CustomTabPanel value={currentTab} index={0}>

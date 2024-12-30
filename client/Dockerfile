@@ -4,15 +4,15 @@ FROM node:18 AS builder
 # Defina o diretório de trabalho
 WORKDIR /app
 
-COPY ["package.json", "yarn.lock", "tsconfig.json", "vite.config.ts", "tsconfig.app.json", "tsconfig.node.json", "src", "public", ".env", "./"]
+COPY ["package.json", "package-lock.json", "tsconfig.json", "vite.config.ts", "tsconfig.app.json", "tsconfig.node.json", "src", ".env", "./"]
 
 
 # Instale as dependências e construa o projeto
-RUN yarn install
+RUN npm install
 
 COPY . .
 
-RUN yarn build
+RUN npm run build
 
 # Etapa 2: Servir com Node.js
 FROM node:18
@@ -25,7 +25,7 @@ COPY --from=builder /app/dist ./dist
 COPY server.js ./server.js
 
 # Instale apenas o express no ambiente final
-RUN yarn add express
+RUN npm install express
 
 # Exponha a porta 80
 EXPOSE 80

@@ -8,7 +8,7 @@ const changeRepository = new ChangeRepository();
 
 export class ChangeService {
 
-  public async getChange(id: string) {
+  public async getChange(id: String) {
     const change = await changeRepository.getChange(id);
 
     if (!change) {
@@ -18,7 +18,7 @@ export class ChangeService {
     return change;
   }
 
-  public async createChange(oldObj: object, newObj: object, projectId: string, entityName: string, userId: string) {
+  public async createChange(oldObj: object, newObj: object, projectId: String, entityName: string, userId: String) {
     let differences = this.getDifference(oldObj, newObj);
     differences = differences.filter(difference => !difference.path.includes('updatedAt'));
     const change = await changeRepository.createChange({
@@ -34,12 +34,12 @@ export class ChangeService {
     return diff(oldObj, newObj);
   }
 
-  public async getChangesByProject(projectId: string) {
+  public async getChangesByProject(projectId: String) {
     const changes = await changeRepository.getChangesByProject(projectId);
     return changes;
   }
 
-  public async getChangesByUserProjects(userId: string) {
+  public async getChangesByUserProjects(userId: String) {
     const projectService = new ProjectService();
     const userProjects = await projectService.getAllProjects(userId);
     const userProjectsIds = userProjects.map(userProject => userProject.id);

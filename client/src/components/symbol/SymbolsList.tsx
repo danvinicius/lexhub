@@ -19,10 +19,10 @@ const SymbolsList: FC<ISymbolsListProps> = ({ symbols, resetProjectInfo }: ISymb
 					<ul>
 						{symbols.map((symbol: ILexiconSymbol) => {
 							return (
-								<li key={`${symbol.id}-${slugify(symbol.name.content)}`}>
+								<li key={`${symbol.id}-${slugify(symbol.name)}`}>
 									<Element
-										key={`${symbol.id}-${slugify(symbol.name.content)}`}
-										name={`${symbol.id}-${slugify(symbol.name.content)}`}
+										key={`${symbol.id}-${slugify(symbol.name)}`}
+										name={`${symbol.id}-${slugify(symbol.name)}`}
 									>
 										<SymbolDetails symbol={symbol} style={{padding: '2rem'}} resetProjectInfo={resetProjectInfo}/>
 									</Element>

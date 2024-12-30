@@ -24,7 +24,7 @@ export class UpdateScenarioRequestDTO {
   resources: IResource[];
 
   @IsString()
-  projectId: string;
+  projectId: String;
 
   constructor(data: any) {
     this.title = data.title;

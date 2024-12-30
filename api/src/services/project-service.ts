@@ -25,13 +25,13 @@ export class ProjectService {
 
   async createProject(
     project: CreateProjectRequestDTO,
-    userId: string
+    userId: String
   ): Promise<IProject> {
     const user = await this.userRepository.getUserById(userId);
     return await this.projectRepository.createProject({ ...project, user });
   }
 
-  async getProject(id: string): Promise<null | IProjectWithLexicon> {
+  async getProject(id: String): Promise<null | IProjectWithLexicon> {
     const project = await this.projectRepository.getProject(id);
 
     if (!project) {
@@ -63,7 +63,7 @@ export class ProjectService {
     };
   }
 
-  async isProjectPrivate(projectId: string): Promise<boolean> {
+  async isProjectPrivate(projectId: String): Promise<boolean> {
     const project = await this.projectRepository.getProject(projectId);
     if (project) {
       return project.private;
@@ -71,7 +71,7 @@ export class ProjectService {
     return false;
   }
 
-  async getCleanProject(id: string, excludeDeleted = true): Promise<null | IProject> {
+  async getCleanProject(id: String, excludeDeleted = true): Promise<null | IProject> {
     const project = await this.projectRepository.getProject(id, excludeDeleted);
 
     if (!project) {
@@ -81,15 +81,15 @@ export class ProjectService {
     return project;
   }
 
-  async getAllProjects(userId: string, excludeDeleted = true): Promise<IProject[]> {
+  async getAllProjects(userId: String, excludeDeleted = true): Promise<IProject[]> {
     const projects = await this.projectRepository.getAllProjects(userId, excludeDeleted);
     return projects;
   }
 
   async updateProject(
-    id: string,
+    id: String,
     project: UpdateProjectRequestDTO,
-    userId: string
+    userId: String
   ): Promise<IProject> {
     const beforeChange = await this.getCleanProject(id);
     await this.projectRepository.updateProject(id, project);
@@ -98,7 +98,7 @@ export class ProjectService {
     return afterChange;
   }
 
-  async deleteProject(id: string, userId: string): Promise<void> {
+  async deleteProject(id: String, userId: String): Promise<void> {
     const beforeChange = await this.getCleanProject(id, false);
     await this.projectRepository.deleteProject(id);
     const afterChange = await this.getCleanProject(id, false);

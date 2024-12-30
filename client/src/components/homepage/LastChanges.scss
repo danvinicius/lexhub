@@ -1,12 +1,7 @@
 .last-changes {
     ul {
-        display: flex;
-        flex-direction: column;
-
         li {
-            display: flex;
             gap: .75rem;
-            align-items: center;
             padding: 1rem 0;
             border-bottom: 1px solid var(--secondary-helper-color);
             

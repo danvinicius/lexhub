@@ -1,4 +1,3 @@
-import { IProject } from './Project';
 import { model, Schema } from 'mongoose';
 
 export interface IImpact {
@@ -18,7 +17,7 @@ export interface ISymbol {
   notion?: string;
   synonyms?: ISynonym[];
   impacts?: IImpact[];
-  project: IProject;
+  project: String;
   deletedAt: Date;
 }
 

@@ -50,7 +50,7 @@ const LoginForm: FC<LoginFormProps> = ({
 
 	return (
 		<section className="login-form flex column gap-125">
-			<div className="title">
+			<div className="title flex column gap-5">
 				<h1>Login</h1>
 				<p className="signup">
           Não tem uma conta ainda? &nbsp;

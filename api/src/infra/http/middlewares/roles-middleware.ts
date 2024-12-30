@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { isAdmin, isCollaborator, isOwner } from '@/utils/validation/permission';
 import { IUserProject } from '@/models';
 
-const userBelongsToProject = (userProjects: IUserProject[], projectId: string) => {
+const userBelongsToProject = (userProjects: IUserProject[], projectId: String) => {
   
   return userProjects?.find((p: IUserProject) => p.project?.toString() == projectId);
 }

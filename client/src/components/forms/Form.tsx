@@ -1,5 +1,4 @@
 import { CSSProperties, FC, ReactNode } from 'react';
-import './Form.scss';
 
 interface FormProps {
   children: ReactNode
@@ -8,7 +7,7 @@ interface FormProps {
 
 const Form: FC<FormProps> = ({children, style}: FormProps) => {
 	return (
-		<form className="form" style={style} onSubmit={e => { e.preventDefault(); }}>
+		<form className="flex column gap-125" style={style} onSubmit={e => { e.preventDefault(); }}>
 			{children}
 		</form>
 	);

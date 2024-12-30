@@ -12,7 +12,7 @@ export class AddUserToProjectRequestDTO {
   role: UserRole;
 
   @IsNotEmpty()
-  projectId: string;
+  projectId: String;
 
   constructor(data: any) {
     this.email = data.email;

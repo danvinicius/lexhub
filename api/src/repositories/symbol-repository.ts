@@ -9,7 +9,7 @@ export namespace SymbolRepository {
     notion: string;
     synonyms: ISynonym[];
     impacts: IImpact[];
-    projectId: string;
+    projectId: String;
   }
 
   export interface UpdateSymbolParams {
@@ -20,32 +20,21 @@ export namespace SymbolRepository {
 }
 
 export class SymbolRepository {
-  async getSymbol(id: string): Promise<ISymbol | null> {
+  async getSymbol(id: String): Promise<ISymbol | null> {
     try {
-      const symbol = await Symbol.findOne({ _id: id, deletedAt: null })
-        .populate('synonyms')
-        .populate('impacts')
-        .populate({
-          path: 'project',
-          select: '_id'
-        })
-        .exec();
+      const symbol = await Symbol.findOne({ _id: id, deletedAt: null }).exec();
       return symbol?.toJSON();
     } catch (error: any) {
       throw new ServerError(error.message);
     }
   }
 
-  async getAllSymbols(projectId: string): Promise<ISymbol[]> {
+  async getAllSymbols(projectId: String): Promise<ISymbol[]> {
     try {
       const symbols = await Symbol.find({
         project: projectId,
         deletedAt: null
-      })
-        .populate('synonyms')
-        .populate('impacts')
-        .populate('project')
-        .exec();
+      }).exec();
       return symbols.map(symbol => symbol.toJSON());
     } catch (error: any) {
       throw new ServerError(error.message);
@@ -84,7 +73,7 @@ export class SymbolRepository {
     }
   }
 
-  async updateSymbol(id: string, data: SymbolRepository.UpdateSymbolParams): Promise<ISymbol> {
+  async updateSymbol(id: String, data: SymbolRepository.UpdateSymbolParams): Promise<ISymbol> {
     try {
       await Symbol.findByIdAndUpdate(id, data);
       return await this.getSymbol(id);
@@ -93,7 +82,7 @@ export class SymbolRepository {
     }
   }
 
-  async deleteSymbol(id: string): Promise<void> {
+  async deleteSymbol(id: String): Promise<void> {
     try {
       const symbol = await Symbol.findById(id);
   

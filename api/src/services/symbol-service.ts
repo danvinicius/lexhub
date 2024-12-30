@@ -10,30 +10,19 @@ import { Lexicon, LexiconService } from './lexicon-service';
 import { ChangeService } from './change-service';
 import { ProjectService } from './project-service';
 
+
 export interface ILexiconSymbol {
-  id: string;
-  name: {
-    content: string;
-    foundLexicons: Lexicon[];
-  };
-  notion: {
-    content: string;
-    foundLexicons: Lexicon[];
-  };
+  id: String;
+  name: string;
+  notion: Lexicon;
   classification: string;
   impacts: {
-    description: {
-      content: string;
-      foundLexicons: Lexicon[];
-    };
+    description: Lexicon;
   }[];
   synonyms: {
-    name: {
-      content: string;
-      foundLexicons: Lexicon[];
-    };
+    name: Lexicon;
   }[];
-  projectId: string;
+  projectId: String;
 }
 
 export class SymbolService {
@@ -43,35 +32,24 @@ export class SymbolService {
     private projectService = new ProjectService(),
     private changeService = new ChangeService()
   ) {}
-  async createSymbol(symbol: CreateSymbolRequestDTO, userId: string): Promise<ISymbol> {
-    const symbols = await this.getAllSymbols(symbol.projectId);
+  async createSymbol(data: CreateSymbolRequestDTO, userId: String): Promise<ISymbol> {
+    const symbols = await this.getAllSymbols(data.projectId);
     if (
       symbols.some(
-        (existingSymbol: ISymbol) =>
-          normalize(existingSymbol.name) == normalize(symbol.name)
+        (symbol: ISymbol) =>
+          normalize(symbol.name) == normalize(data.name)
       )
     ) {
       throw new BadRequestError('Já existe um símbolo com o mesmo nome');
     }
-    const beforeChange = await this.projectService.getCleanProject(symbol.projectId, false);
-    const created = await this.symbolRepository.createSymbol(symbol);
-    const afterChange = await this.projectService.getCleanProject(symbol.projectId, false);
-    await this.changeService.createChange(beforeChange, afterChange, symbol.projectId, symbol.name, userId);
-    return created;
+    const projectBeforeChange = await this.projectService.getCleanProject(data.projectId, false);
+    const createdSymbol = await this.symbolRepository.createSymbol(data);
+    const projectAfterChange = await this.projectService.getCleanProject(data.projectId, false);
+    await this.changeService.createChange(projectBeforeChange, projectAfterChange, data.projectId, data.name, userId);
+    return createdSymbol;
   }
 
-  async deleteSymbol(id: string, userId: string): Promise<void> {
-    const symbolExists = await this.symbolRepository.getSymbol(id);
-    if (!symbolExists) {
-      throw new BadRequestError('Símbolo inválido ou inexistente');
-    }
-    const beforeChange = await this.projectService.getCleanProject(symbolExists.project.id, false);
-    await this.symbolRepository.deleteSymbol(id);
-    const afterChange = await this.projectService.getCleanProject(symbolExists.project.id, false);
-    await this.changeService.createChange(beforeChange, afterChange, symbolExists.project.id, symbolExists.name, userId);
-  }
-
-  async getSymbol(id: string): Promise<null | ISymbol> {
+  async getSymbol(id: String): Promise<null | ISymbol> {
     const symbol = await this.symbolRepository.getSymbol(id);
     if (!symbol) {
       throw new NotFoundError('Símbolo inexistente');
@@ -80,8 +58,8 @@ export class SymbolService {
   }
 
   async getSymbolWithLexicon(
-    symbolId: string,
-    projectId: string
+    symbolId: String,
+    projectId: String
   ): Promise<ILexiconSymbol> {
     const lexiconService = new LexiconService();
     const symbol = await this.symbolRepository.getSymbol(symbolId);
@@ -116,7 +94,7 @@ export class SymbolService {
 
     return {
       id: symbol.id,
-      name: processedLexicon(name, false),
+      name,
       notion: processedLexicon(notion, true),
       classification,
       impacts: impacts?.map((impact: IImpact) => ({
@@ -129,30 +107,41 @@ export class SymbolService {
     };
   }
 
-  async getAllSymbols(projectId: string): Promise<ISymbol[]> {
+  async getAllSymbols(projectId: String): Promise<ISymbol[]> {
     const symbols = await this.symbolRepository.getAllSymbols(projectId);
     return symbols;
   }
 
   async updateSymbol(
-    id: string,
-    symbol: UpdateSymbolRequestDTO,
-    userId: string
+    id: String,
+    data: UpdateSymbolRequestDTO,
+    userId: String
   ): Promise<ISymbol> {
-    const symbolExists = await this.symbolRepository.getSymbol(id);
-    if (!symbolExists) {
+    const symbol = await this.symbolRepository.getSymbol(id);
+    if (!symbol) {
       throw new BadRequestError('Símbolo inválido ou inexistente');
     }
-    const beforeChange = await this.projectService.getCleanProject(symbol.projectId);
-    const updatedSymbol = this.symbolRepository.updateSymbol(id, symbol);
-    const afterChange = await this.projectService.getCleanProject(symbol.projectId);
+    const projectBeforeChange = await this.projectService.getCleanProject(data.projectId);
+    const updatedSymbol = this.symbolRepository.updateSymbol(id, data);
+    const projectAfterChange = await this.projectService.getCleanProject(data.projectId);
     await this.changeService.createChange(
-      beforeChange,
-      afterChange,
-      symbol.projectId,
-      symbol.name,
+      projectBeforeChange,
+      projectAfterChange,
+      data.projectId,
+      data.name,
       userId
     );
     return updatedSymbol;
+  }
+
+  async deleteSymbol(id: String, userId: String): Promise<void> {
+    const symbol = await this.symbolRepository.getSymbol(id);
+    if (!symbol) {
+      throw new BadRequestError('Símbolo inválido ou inexistente');
+    }
+    const projectBeforeChange = await this.projectService.getCleanProject(symbol.project, false);
+    await this.symbolRepository.deleteSymbol(id);
+    const projectAfterChange = await this.projectService.getCleanProject(symbol.project, false);
+    await this.changeService.createChange(projectBeforeChange, projectAfterChange, symbol.project, symbol.name, userId);
   }
 }

@@ -46,7 +46,7 @@ export class CreateSymbolRequestDTO {
    // todo: synonyms and impacts validation not working
 
   @IsString()
-  projectId: string;
+  projectId: String;
 
   constructor(data: any) {
     this.name = data.name;

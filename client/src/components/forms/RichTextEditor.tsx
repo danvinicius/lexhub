@@ -12,7 +12,7 @@ interface RichTextEditorProps {
     setValue: any;
     error?: string | null;
     setError: Dispatch<string>;
-    onBlur: any;
+    onBlur: () => void;
 }
 
 export const RichTextEditor: FC<RichTextEditorProps> = ({ label, value, setValue, error, setError, onBlur }: RichTextEditorProps) => {
@@ -32,8 +32,9 @@ export const RichTextEditor: FC<RichTextEditorProps> = ({ label, value, setValue
 	const formats = ['header', 'bold', 'italic', 'underline', 'strike', 'list', 'bullet', 'color', 'background', 'align'];
 
 	return (
-		<div className={`rich-text-editor ${error ? 'error' : ''}`}>
-			<p>{label}<span className={getRawText(value).length > 5000 ? 'error' : ''}>{getRawText(value).length}/5000</span></p>
+		<div className={`rich-text-editor flex column gap-5 ${error ? 'error' : ''}`}>
+			<p className='flex w-100 space-between'>
+				{label}<span className={getRawText(value).length > 5000 ? 'error' : ''}>{getRawText(value).length}/5000</span></p>
 			<ReactQuill
 				theme='snow'
 				modules={modules}
