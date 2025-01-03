@@ -55,7 +55,7 @@ const LoginForm: FC<LoginFormProps> = ({
 			<div className="flex column gap-5">
 				<h1>Se inscreva</h1>
 				<p className="signup">
-          Já tem uma conta? &nbsp;
+          Já possui uma conta? &nbsp;
 					<span onClick={() => setCurrentScreen('login')} className="action pointer">
             Faça login
 					</span>

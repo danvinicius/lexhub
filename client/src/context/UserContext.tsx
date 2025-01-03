@@ -86,6 +86,7 @@ export const UserStorage: FC<UserStorageProps> = ({ children }: UserStorageProps
 	}, [navigate]);
 
 	const autoLogin = useCallback(async () => {
+		
 		if (!isAuthenticated()?.token) {
 			const storedData = localStorage.getItem('user');
 			if (storedData) {
@@ -98,8 +99,6 @@ export const UserStorage: FC<UserStorageProps> = ({ children }: UserStorageProps
 					const err = error as AxiosError<ErrorResponse>;
 					console.log(err?.response?.data?.error || 'Erro inesperado');
 				}
-			} else {
-				logout();
 			}
 		}
 	}, [isAuthenticated, logout]);

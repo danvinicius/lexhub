@@ -5,44 +5,38 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ProjectStorage } from './context/ProjectContext';
 import { FC } from 'react';
 import { Homepage } from './views/HomepageView';
+import ProjectRoute from './components/helper/ProjectRoute';
 
 const App: FC = () => {
-	return (
-		<BrowserRouter>
-			<UserStorage>
-				<ProjectStorage>
-					<Routes>
-						<Route path="/" element={<Navigate to="/home" />} />
-						<Route
-							path="/home"
-							element={
-								<ProtectedRoute>
-									<Homepage />
-								</ProtectedRoute>
-							}
-						/>
-						<Route
-							path="/projeto/:id"
-							element={
-								<ProtectedRoute>
-									<Homepage />
-								</ProtectedRoute>
-							}
-						/>
-						<Route
-							path="/configuracoes"
-							element={
-								<ProtectedRoute>
-									<Homepage />
-								</ProtectedRoute>
-							}
-						/>
-						<Route path="/login" element={<Login />} />
-					</Routes>
-				</ProjectStorage>
-			</UserStorage>
-		</BrowserRouter>
-	);
+    return (
+        <BrowserRouter>
+            <UserStorage>
+                <ProjectStorage>
+                    <Routes>
+                        <Route path='/' element={<Navigate to='/home' />} />
+                        <Route
+                            path='/home'
+                            element={
+                                <ProtectedRoute>
+                                    <Homepage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route path='/projeto/:projectId' element={<ProjectRoute />} />
+                        <Route
+                            path='/configuracoes'
+                            element={
+                                <ProtectedRoute>
+                                    <Homepage />
+                                </ProtectedRoute>
+                            }
+                        />
+                        <Route path='/login' element={<Login />} />
+                    </Routes>
+                </ProjectStorage>
+            </UserStorage>
+        </BrowserRouter>
+    );
 };
 
 export default App;

@@ -4,16 +4,14 @@ import { LogoutOutlined } from '@mui/icons-material';
 import './LogoutButton.scss';
 
 export const LogoutButton = () => {
-	const {isAuthenticated, logout} = useContext(UserContext);
+	const { logout} = useContext(UserContext);
 	const handleLogout = () => {
-		if (isAuthenticated()?.token) {
-			if (logout) logout();
-		}
+		if (logout) logout();
 	};
 	return (
-		<div className='logout'>
+		<div className='logout' onClick={handleLogout}>
 			<LogoutOutlined color='error'/>
-			<p onClick={handleLogout} className='error'>Sair da conta</p>
+			<p className='error'>Sair da conta</p>
 		</div>
 	);
 };

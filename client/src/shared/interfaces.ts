@@ -43,6 +43,7 @@ export interface IProject {
     readonly id?: string;
     name: string;
     description: string;
+    private: boolean;
     scenarios?: ILexiconScenario[];
     symbols: ILexiconSymbol[];
     users: IUserProject[];

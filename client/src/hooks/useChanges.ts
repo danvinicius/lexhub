@@ -23,6 +23,7 @@ enum Article {
 export const translations: Translations = {
 	name: {value: 'nome', gender: Article.MALE},
 	description: {value: 'descrição', gender: Article.FEMALE},
+	private: {value: 'visibilidade', gender: Article.FEMALE},
 	scenarios: {value: 'cenário', gender: Article.MALE},
 	symbols: {value: 'símbolo', gender: Article.MALE},
 	users: {value: 'usuário', gender: Article.MALE},

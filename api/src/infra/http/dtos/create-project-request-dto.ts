@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateProjectRequestDTO {
   @IsString()
@@ -10,7 +10,6 @@ export class CreateProjectRequestDTO {
   description: string;
 
   @IsBoolean()
-  @IsOptional()
   private: boolean;
 
   constructor(data: any) {
