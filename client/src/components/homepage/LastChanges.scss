@@ -1,7 +1,12 @@
 .last-changes {
     ul {
         li {
-            margin-bottom: 1rem;
+            padding: .75rem 0;
+            border-bottom: 1px solid var(--secondary-helper-color);
+            
+            &:first-child {
+                border-top: 1px solid var(--secondary-helper-color);
+            }
             .change-summary {
                 gap: .75rem;
                 padding: .5rem 0;

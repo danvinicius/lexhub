@@ -4,13 +4,11 @@ import api from '../../lib/axios';
 import { UserContext } from '../../context/UserContext';
 import { GET_CHANGES_BY_USER_PROJECTS } from '../../api';
 import { AxiosError } from 'axios';
-import { ErrorResponse, IChange, IDifference, IScenario, ISymbol } from '../../shared/interfaces';
-import { translations, useChanges } from '../../hooks/useChanges';
+import { ErrorResponse, IChange, IDifference } from '../../shared/interfaces';
+import { useChanges } from '../../hooks/useChanges';
 import { ProfilePicture } from '../user/ProfilePicture';
 import { formatDistance } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
-import { ChangeDetails } from './ChangeDetails';
 
 export const LastChanges = (): ReactNode => {
     const { isAuthenticated } = useContext(UserContext) || {};
@@ -43,32 +41,28 @@ export const LastChanges = (): ReactNode => {
                         const distance = formatDistance(change.createdAt, new Date(), { addSuffix: true, locale: ptBR });
                         return change.differences.map((difference: IDifference) => {
                             const path = difference.path[difference.path.length - 1];
-                            if (!['id', 'createdAt', 'updatedAt', 'deletedAt', 'project'].includes(path) && !difference.path.includes('nonSequentialEpisodes')) {
+                            if (
+                                !['id', 'createdAt', 'updatedAt', 'deletedAt', 'project'].includes(path) &&
+                                !difference.path.includes('nonSequentialEpisodes')
+                            ) {
                                 return (
                                     <li key={change.id}>
-                                        <Accordion>
-                                            <AccordionSummary>
-                                                <div className='change-summary flex align-center'>
-                                                    <ProfilePicture user={change.responsible} />
-                                                    <div className='flex column'>
-                                                        <p
-                                                            dangerouslySetInnerHTML={{
-                                                                __html: formatChange(
-                                                                    difference,
-                                                                    change.responsible,
-                                                                    change.project,
-                                                                    change.entityName
-                                                                ),
-                                                            }}
-                                                        ></p>
-                                                        <small>{distance}</small>
-                                                    </div>
-                                                </div>
-                                            </AccordionSummary>
-                                            <AccordionDetails>
-                                                <ChangeDetails difference={difference} path={path}/>
-                                            </AccordionDetails>
-                                        </Accordion>
+                                        <div className='change-summary flex align-center'>
+                                            <ProfilePicture user={change.responsible} />
+                                            <div className='flex column'>
+                                                <p
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: formatChange(
+                                                            difference,
+                                                            change.responsible,
+                                                            change.project,
+                                                            change.entityName
+                                                        ),
+                                                    }}
+                                                ></p>
+                                                <small>{distance}</small>
+                                            </div>
+                                        </div>
                                     </li>
                                 );
                             }
