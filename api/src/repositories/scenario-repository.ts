@@ -38,14 +38,13 @@ export namespace ScenarioRepository {
 
 export class ScenarioRepository {
   async getScenario(id: String): Promise<IScenario | null> {
-    const scenario = await Scenario.findOne({ _id: id, deletedAt: null }).exec();
+    const scenario = await Scenario.findOne({ _id: id }).exec();
     return scenario?.toJSON();
   }
 
   async getAllScenarios(projectId: String): Promise<IScenario[]> {
     const scenarios = await Scenario.find({
       project: projectId,
-      deletedAt: null,
     }).exec();
     return scenarios.map((scenario) => scenario.toJSON());
   }
@@ -123,12 +122,7 @@ export class ScenarioRepository {
 
   async deleteScenario(id: String): Promise<void> {
     try {
-      const scenario = await Scenario.findById(id);
-      if (!scenario) {
-        throw new ServerError('Cenário não encontrado.');
-      }
-      scenario.deletedAt = new Date();
-      await scenario.save();
+      await Scenario.findByIdAndDelete(id);
     } catch (error) {
       throw new Error(error.message);
     }

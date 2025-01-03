@@ -57,7 +57,7 @@ const UpdateSymbolForm: FC<UpdateSymbolFormProps> = ({
 	const [currentSynonym, setCurrentSynonym] = useState('');
 
 	useEffect(() => {
-		nameEdit.setValue(symbol.name.content);
+		nameEdit.setValue(symbol.name);
 		notionEdit.setValue(symbol.notion.content || '');
 		classificationEdit.setValue(symbol.classification || '');
 		setSynonymsEdit(symbol?.synonyms?.map((synonym) => synonym.name.content) || []);

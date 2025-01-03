@@ -171,7 +171,7 @@ const UpdateUserForm: FC = () => {
 				{loading ? (
 					<Loading />
 				) : (
-					<Button theme="primary" text="Atualizar" onClick={handleSubmit} />
+					<Button theme="primary" text="Atualizar" onClick={handleSubmit}/>
 				)}
 				<Error error={error} />
 			</Form>

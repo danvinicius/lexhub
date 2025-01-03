@@ -18,7 +18,6 @@ export interface ISymbol {
   synonyms?: ISynonym[];
   impacts?: IImpact[];
   project: String;
-  deletedAt: Date;
 }
 
 const symbolSchema = new Schema<ISymbol>(
@@ -29,10 +28,6 @@ const symbolSchema = new Schema<ISymbol>(
     synonyms: [] as ISynonym[],
     impacts: [] as IImpact[],
     project: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
-    deletedAt: {
-      type: Date,
-      default: null,
-    },
   },
   {
     toJSON: {

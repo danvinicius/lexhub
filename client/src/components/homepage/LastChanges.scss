@@ -1,19 +1,44 @@
 .last-changes {
     ul {
         li {
-            gap: .75rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--secondary-helper-color);
-            
-            &:first-child {
-                border-top: 1px solid var(--secondary-helper-color);
+            margin-bottom: 1rem;
+            .change-summary {
+                gap: .75rem;
+                padding: .5rem 0;
+                font-family: Ubuntu, Avenir, Helvetica, Arial, sans-serif;
+                font-size: 1rem;
             }
+            
+            
+            .differences {
+                .old {
+                    color: var(--error-color);
 
+                    &.line-through {
+                        text-decoration: line-through;
+                    }
+                }
+                .new {
+                    color: var(--success-color);
+                }
+            }
+            
+            
             & > div {
                 small {
                     color: var(--secondary-text-color);
+                    display: block;
                 }
+            }
+
+            pre {
+                background: #fafafa;
+                padding: 1rem;
             }
         }
     }
+}
+
+span.MuiAccordionSummary-content.Mui-expanded {
+    margin: 0 !important;
 }

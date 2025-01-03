@@ -7,7 +7,6 @@ export const Configurations = (): ReactNode => {
 
 		<div className="overview">
 			{<UpdateUserForm/>}
-			
 		</div>
 	);
 };

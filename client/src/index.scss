@@ -13,6 +13,7 @@
   --primary-text-color: #091833;
   --secondary-text-color: #3d3d3d;
   --error-color: #d43f3a;
+  --success-color: #168310;
   --helper-color: #f2f2f2;
   --secondary-helper-color: #cccccc;
   --fixed-helper-color: #f2f2f2;
@@ -249,7 +250,6 @@ p.error, span.error {
 
 span.action {
   color: var(--primary-color);
-  cursor: pointer;
 }
 
 .container {

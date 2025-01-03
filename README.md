@@ -21,7 +21,7 @@ Essa plataforma visa auxiliar engenheiros de software e analistas de requisitos 
 
 ### V2:
 - [x] Melhorar UX (não recarregar página ao atualizar informações, poder salvar sem digitar 'Enter' nos ComboBox, etc)
-- [ ] Visualizar e rastrear alterações (responsável, data/hora, conteúdo, motivo)
+- [x] Visualizar e rastrear alterações (responsável, data/hora, conteúdo, motivo)
 - [ ] Permitir criar projetos públicos/privados (visualização sem cadastro)
 - [ ] Passar todos os inputs para MUi
 - [ ] Permitir remover usuários de um projeto

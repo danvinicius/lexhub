@@ -92,6 +92,7 @@ export class UserService {
     const encrypter = new JwtService(AUTH_SECRET);
     const token = await encrypter.encrypt(user.id);
     return new AuthenticateUserResponseDTO({
+      id: user.id,
       name: user.name,
       email: user.email,
       token,
@@ -138,6 +139,7 @@ export class UserService {
     const encrypter = new JwtService(AUTH_SECRET);
     const token = await encrypter.encrypt(user.id);
     return new AuthenticateUserResponseDTO({
+      id,
       name,
       email,
       token,

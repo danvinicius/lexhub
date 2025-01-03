@@ -59,7 +59,7 @@ const DeleteSymbolForm: FC<DeleteSymbolFormProps> = ({ symbol, projectId, onClos
 	return (
 		<section className="delete-symbol-form flex column gap-125">
 			<div className="delete-symbol-form-header">
-				<h2>Tem certeza que deseja excluir o símbolo &quot;{symbol.name.content}&quot;?</h2>
+				<h2>Tem certeza que deseja excluir o símbolo &quot;{symbol.name}&quot;?</h2>
 				<img
 					src={Close}
 					alt="Ícone 'X' popup"

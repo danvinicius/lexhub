@@ -1,15 +1,14 @@
 .update-user-form {
     background: #fff;
-    padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 1.75rem;
     width: 100%;
+    padding-bottom: 3rem;
     
     @media screen and (min-width: 998px) {
       margin: 0 auto 0 0;
-      width: 50%;
-      padding: 0 7.5%;
+      width: 60%;
     }
 
     .title {
@@ -22,6 +21,17 @@
       font-size: 2rem;
       font-weight: bold;
       color: var(--primary-text-color);
+    }
+
+    .MuiAccordionDetails-root {
+      padding-bottom: 2rem;
+    }
+
+    .flex.column {
+      & > button {
+        width: 200px;
+        margin-left: auto;
+      }
     }
   
     p.update-user {

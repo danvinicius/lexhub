@@ -22,7 +22,7 @@ export namespace SymbolRepository {
 export class SymbolRepository {
   async getSymbol(id: String): Promise<ISymbol | null> {
     try {
-      const symbol = await Symbol.findOne({ _id: id, deletedAt: null }).exec();
+      const symbol = await Symbol.findOne({ _id: id}).exec();
       return symbol?.toJSON();
     } catch (error: any) {
       throw new ServerError(error.message);
@@ -32,8 +32,7 @@ export class SymbolRepository {
   async getAllSymbols(projectId: String): Promise<ISymbol[]> {
     try {
       const symbols = await Symbol.find({
-        project: projectId,
-        deletedAt: null
+        project: projectId
       }).exec();
       return symbols.map(symbol => symbol.toJSON());
     } catch (error: any) {
@@ -84,14 +83,7 @@ export class SymbolRepository {
 
   async deleteSymbol(id: String): Promise<void> {
     try {
-      const symbol = await Symbol.findById(id);
-  
-      if (!symbol) {
-        throw new ServerError('Símbolo não encontrado.');
-      }
-  
-      symbol.deletedAt = new Date();
-      await symbol.save();
+      await Symbol.findByIdAndDelete(id);
     } catch (error: any) {
       throw new ServerError(error.message);
     }

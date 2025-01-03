@@ -35,6 +35,7 @@ export interface AuthUserResponseDTO {
 }
 
 type User = {
+  id: string;
   name: string;
   email: string;
   token: string;

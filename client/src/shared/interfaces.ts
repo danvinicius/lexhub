@@ -190,8 +190,8 @@ export type DifferenceKind = 'N' | 'D' | 'E' | 'A';
 export interface IDifference {
     kind: DifferenceKind;
     path: string[];
-    lhs?: string | number | boolean | Date;
-    rhs?: string | number | boolean | Date;
+    lhs?: string | number | object;
+    rhs?: string | number | object;
     index?: number;
     item?: IDifference;
 }
