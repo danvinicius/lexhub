@@ -20,8 +20,6 @@ export class ChangeService {
 
   public async createChange(oldObj: object, newObj: object, projectId: String, entityName: string, userId: String) {
     let differences = this.getDifference(oldObj, newObj);
-    console.log(oldObj);
-    console.log(newObj);
     
     differences = differences.filter(difference => !difference.path.includes('updatedAt'));
     const change = await changeRepository.createChange({

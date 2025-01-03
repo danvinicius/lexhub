@@ -14,6 +14,6 @@ export const connect = async (): Promise<Mongoose | void> => {
 };
 
 export const close = (): Promise<void> => {
-  console.log('⚠️ Fechando conexão com o banco de dados...');
+  console.log('Fechando conexão com o banco de dados...');
   return mongoose.connection.close();
 };

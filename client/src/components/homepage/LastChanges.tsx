@@ -4,7 +4,7 @@ import api from '../../lib/axios';
 import { UserContext } from '../../context/UserContext';
 import { GET_CHANGES_BY_USER_PROJECTS } from '../../api';
 import { AxiosError } from 'axios';
-import { ErrorResponse, IChange, IDifference } from '../../shared/interfaces';
+import { ErrorResponse, IChange } from '../../shared/interfaces';
 import { useChanges } from '../../hooks/useChanges';
 import { ProfilePicture } from '../user/ProfilePicture';
 import { formatDistance } from 'date-fns';
@@ -39,34 +39,33 @@ export const LastChanges = (): ReactNode => {
                 <ul className='flex column'>
                     {changes.map((change: IChange) => {
                         const distance = formatDistance(change.createdAt, new Date(), { addSuffix: true, locale: ptBR });
-                        return change.differences.map((difference: IDifference) => {
-                            const path = difference.path[difference.path.length - 1];
-                            if (
-                                !['id', 'createdAt', 'updatedAt', 'deletedAt', 'project'].includes(path) &&
-                                !difference.path.includes('nonSequentialEpisodes')
-                            ) {
-                                return (
-                                    <li key={change.id}>
-                                        <div className='change-summary flex align-center'>
-                                            <ProfilePicture user={change.responsible} />
-                                            <div className='flex column'>
-                                                <p
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: formatChange(
-                                                            difference,
-                                                            change.responsible,
-                                                            change.project,
-                                                            change.entityName
-                                                        ),
-                                                    }}
-                                                ></p>
-                                                <small>{distance}</small>
-                                            </div>
+                        const firstDifference = change.differences[0]
+                        const path = firstDifference.path[firstDifference.path.length - 1];
+                        if (
+                            !['id', 'createdAt', 'updatedAt', 'deletedAt', 'project'].includes(path) &&
+                            !firstDifference.path.includes('nonSequentialEpisodes')
+                        ) {
+                            return (
+                                <li key={change.id}>
+                                    <div className='change-summary flex align-center'>
+                                        <ProfilePicture user={change.responsible} />
+                                        <div className='flex column'>
+                                            <p
+                                                dangerouslySetInnerHTML={{
+                                                    __html: formatChange(
+                                                        firstDifference,
+                                                        change.responsible,
+                                                        change.project,
+                                                        change.entityName
+                                                    ),
+                                                }}
+                                            ></p>
+                                            <small>{distance}</small>
                                         </div>
-                                    </li>
-                                );
-                            }
-                        });
+                                    </div>
+                                </li>
+                            );
+                        }
                     })}
                 </ul>
             ) : (
