@@ -18,7 +18,7 @@ import { UserContext } from '../context/UserContext';
 import './css/Homepage.scss';
 import SymbolDetails from '../components/symbol/SymbolDetails';
 import { ProjectContext } from '../context/ProjectContext';
-import { LogoutButton } from '../components/login/LogoutButton';
+import { LoginButton } from '../components/login/LoginButton';
 import { useState, useContext, useEffect, useMemo, useCallback, FC, ReactNode, SyntheticEvent  } from 'react';
 
 interface TabPanelProps {
@@ -216,7 +216,7 @@ export const FooterSidebar = ({symbol}: FooterSidebarProps) => {
 	return (
 		<>
 			{symbol && <SymbolDetails symbol={symbol} />}
-			<LogoutButton></LogoutButton>
+			<LoginButton></LoginButton>
 		</>
 	);
 };
