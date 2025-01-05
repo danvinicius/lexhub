@@ -209,7 +209,7 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                         {owner && (
                             <small className='project-owner flex align-center gap-5'>
                                 <ProfilePicture user={owner} />
-                                Criado por<b>{owner.name}</b>em {new Date(project?.createdAt).toLocaleDateString('pt-br')} às{' '}
+                                Criado por<span>{owner.name}</span>em {new Date(project?.createdAt).toLocaleDateString('pt-br')} às{' '}
                                 {new Date(project?.createdAt).toLocaleTimeString('pt-br')}
                             </small>
                         )}

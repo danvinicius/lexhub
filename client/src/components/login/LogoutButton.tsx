@@ -10,8 +10,8 @@ export const LogoutButton = () => {
 	};
 	return (
 		<div className='logout' onClick={handleLogout}>
-			<LogoutOutlined color='error'/>
-			<p className='error'>Sair da conta</p>
+			<LogoutOutlined/>
+			<p>Sair da conta</p>
 		</div>
 	);
 };

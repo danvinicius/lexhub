@@ -12,11 +12,11 @@
   --primary-color: #6a3fa6;
   --primary-text-color: #091833;
   --secondary-text-color: #3d3d3d;
+  --third-text-color: #777777;
   --error-color: #d43f3a;
   --success-color: #168310;
   --helper-color: #f2f2f2;
   --secondary-helper-color: #cccccc;
-  --fixed-helper-color: #f2f2f2;
 }
 
 html.light {
@@ -130,6 +130,10 @@ a {
 
 .justify-center {
   justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
 }
 
 .w-100 {

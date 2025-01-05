@@ -54,7 +54,7 @@ const CreateProjectForm = (): ReactNode => {
     };
 
     return (
-        <section className='create-project-form flex gap-4'>
+        <section className='create-project-form flex gap-3'>
             <div className='flex column gap-125'>
                 <Form>
                     <Input

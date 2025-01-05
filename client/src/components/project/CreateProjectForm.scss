@@ -1,4 +1,10 @@
 .create-project-form {
+  .flex {
+    flex: 2;
+  }
+  .flex:first-child {
+    flex: 3;
+  }
   .loading {
     margin: 0 auto;
   }
