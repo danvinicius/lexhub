@@ -23,6 +23,7 @@
     .project-header {
       .project-name {
         max-width: 700px;
+        margin-right: auto;
       }
     }
 
@@ -37,13 +38,10 @@
         text-align: right;
       }
     }
-    .project-options {
-      margin-left: auto;
-    }
     .buttons-container {
       min-width: max-content;
     }
-    .project-owner {
+    .project-proprietario {
       font-size: 1rem;
 
       span {

@@ -6,6 +6,7 @@ import { ProjectStorage } from './context/ProjectContext';
 import { FC } from 'react';
 import { Homepage } from './views/HomepageView';
 import ProjectRoute from './components/helper/ProjectRoute';
+import { UnderDevelopment } from './components/project/UnderDevelopment';
 
 const App: FC = () => {
     return (
@@ -34,6 +35,11 @@ const App: FC = () => {
                         <Route path='/login' element={<Login />} />
                     </Routes>
                 </ProjectStorage>
+                <Routes>
+                    <Route path='como-usar' element={<UnderDevelopment />} />
+                    <Route path='sobre' element={<UnderDevelopment />} />
+                    <Route path='blog' element={<UnderDevelopment />} />
+                </Routes>
             </UserStorage>
         </BrowserRouter>
     );

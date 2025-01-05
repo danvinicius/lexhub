@@ -1,0 +1,14 @@
+.authentication {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    cursor: pointer;
+    width: max-content;
+    color: var(--primary-color);
+    &.light {
+        color: #fff;
+    }
+    &.logout {
+        color: var(--error-color);
+    }
+}

@@ -1,6 +1,6 @@
 import { ServerError } from '@/utils/errors';
 import Project, { IProject } from '@/models/Project';
-import { IUser, UserRole } from '@/models';
+import { IUser, IUserRole } from '@/models';
 import User from '@/models/User';
 
 export namespace ProjectRepository {
@@ -82,7 +82,7 @@ export class ProjectRepository {
         name: data.name,
         description: data.description,
         private: data.private,
-        users: [{ user: data.user.id, role: UserRole.OWNER }],
+        users: [{ user: data.user.id, role: IUserRole.PROPRIETARIO }],
       });
 
       await project.save();
@@ -93,7 +93,7 @@ export class ProjectRepository {
           $push: {
             projects: {
               project: project._id,
-              role: UserRole.OWNER,
+              role: IUserRole.PROPRIETARIO,
             },
           },
         },

@@ -18,7 +18,7 @@ interface SymbolDetailsProps {
 
 const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style, resetProjectInfo }: SymbolDetailsProps): ReactNode => {
 	const { isAuthenticated } = useContext(UserContext) || {};
-	const [isCollaborator, setIsCollaborator] = useState(false);
+	const [isColaborador, setIsColaborador] = useState(false);
 	const { project } = useContext(ProjectContext);
 	const { processContent } = useLexicon();
 
@@ -38,7 +38,7 @@ const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style, resetProjectInfo
 
 	useEffect(() => {
 		const role = isAuthenticated()?.projects.find((someProject) => someProject.project == project?.id)?.role;
-		setIsCollaborator(role == IUserRole.OWNER || role == IUserRole.ADMIN || role == IUserRole.COLLABORATOR);
+		setIsColaborador(role == IUserRole.PROPRIETARIO || role == IUserRole.ADMINISTRADOR || role == IUserRole.COLABORADOR);
 	}, [isAuthenticated, project?.id]);
 
 	const [isSymbolActionsOptionsMenuOpen, setIsSymbolActionsOptionsMenuOpen] = useState(false);
@@ -58,7 +58,7 @@ const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style, resetProjectInfo
 							<div className='classification'>
 								<p>{symbol?.classification}</p>
 							</div>
-							{isCollaborator && (
+							{isColaborador && (
 								<>
 									<img
 										src={KebabVertical}

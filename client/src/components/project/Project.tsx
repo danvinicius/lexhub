@@ -66,11 +66,11 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
         setCurrentTab(newValue);
     };
 
-    const owner = project?.users.find((userProject: IUserProject) => userProject.role == 'OWNER')?.user;
+    const proprietario = project?.users.find((userProject: IUserProject) => userProject.role == 'Proprietario')?.user;
 
-    const [isCollaborator, setIsCollaborator] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [isOwner, setIsOwner] = useState(false);
+    const [isColaborador, setIsColaborador] = useState(false);
+    const [isAdministrador, setIsAdministrador] = useState(false);
+    const [isProprietario, setIsProprietario] = useState(false);
 
     // project actions options modal control
     const [isProjectActionsOptionsMenu, setIsProjectActionsOptionsMenu] = useState(false);
@@ -139,9 +139,9 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
 
     const setRoles = (project: IProject) => {
         const role = isAuthenticated()?.projects.find((someProject) => someProject.project === project?.id)?.role;
-        setIsCollaborator(role === IUserRole.OWNER || role === IUserRole.ADMIN || role === IUserRole.COLLABORATOR);
-        setIsAdmin(role === IUserRole.OWNER || role === IUserRole.ADMIN);
-        setIsOwner(role === IUserRole.OWNER);
+        setIsColaborador(role === IUserRole.PROPRIETARIO || role === IUserRole.ADMINISTRADOR || role === IUserRole.COLABORADOR);
+        setIsAdministrador(role === IUserRole.PROPRIETARIO || role === IUserRole.ADMINISTRADOR);
+        setIsProprietario(role === IUserRole.PROPRIETARIO);
     };
 
     const resetProjectInfo = () => {
@@ -161,7 +161,7 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                     <div className='project-info'>
                         <div className='project-header flex align-center gap-4 relative'>
                             <h1 className='project-name'>{project?.name}</h1>
-                            {isAdmin && (
+                            {isAdministrador && (
                                 <div className='project-options flex align-center relative gap-15'>
                                     <small className='visiblidade flex align-end gap-25'>
                                         {project?.private ? (
@@ -189,7 +189,7 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                                     />
                                     {isProjectActionsOptionsMenu && (
                                         <ProjectActionsOptionsMenu
-                                            isOwner={isOwner}
+                                            isProprietario={isProprietario}
                                             isProjectActionsOptionsMenu={isProjectActionsOptionsMenu}
                                             handleCloseProjectActionsOptionsMenu={handleCloseProjectActionsOptionsMenu}
                                             handleOpenUpdateProjectModal={handleOpenUpdateProjectModal}
@@ -198,7 +198,7 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                                     )}
                                 </div>
                             )}
-                            {isCollaborator && (
+                            {isColaborador && (
                                 <div className='buttons-container flex gap-1'>
                                     <Button onClick={handleOpenCreateScenarioModal} theme='primary' text='Novo cenário'></Button>
                                     <Button onClick={handleOpenCreateSymbolModal} theme='secondary' text='Novo símbolo'></Button>
@@ -206,10 +206,10 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                             )}
                         </div>
                         <div className='project-description' dangerouslySetInnerHTML={{ __html: project?.description || '' }}></div>
-                        {owner && (
-                            <small className='project-owner flex align-center gap-5'>
-                                <ProfilePicture user={owner} />
-                                Criado por<span>{owner.name}</span>em {new Date(project?.createdAt).toLocaleDateString('pt-br')} às{' '}
+                        {proprietario && (
+                            <small className='project-proprietario flex align-center gap-5'>
+                                <ProfilePicture user={proprietario} />
+                                Criado por<span>{proprietario.name}</span>em {new Date(project?.createdAt).toLocaleDateString('pt-br')} às{' '}
                                 {new Date(project?.createdAt).toLocaleTimeString('pt-br')}
                             </small>
                         )}

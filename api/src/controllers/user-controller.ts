@@ -51,6 +51,26 @@ export class UserController {
     }
   };
 
+  changeUserRole = async (req: Request) => {
+    try {
+      const data = new DTO.ChangeUserRoleRequestDTO({ ...req.body, projectId: req.params.projectId });
+      await validate(data);
+      
+      const userProject = await userService.changeUserRole(data, req.userId);
+      return ok(userProject);
+    } catch (error: any) {
+      if (
+        error instanceof BadRequestError
+      ) {
+        return badRequest(error.message);
+      }
+      if (error instanceof UnauthorizedError) {
+        return unauthorized(error.message);
+      }
+      return serverError(error.message);
+    }
+  };
+
   authenticateUser = async (req: Request) => {
     try {
       const login = new DTO.AuthenticateUserRequestDTO(req.body);
@@ -77,6 +97,26 @@ export class UserController {
       await validate(data);
       
       const userProject = await userService.addUserToProject(data, req.userId);
+      return ok(userProject);
+    } catch (error: any) {
+      if (
+        error instanceof BadRequestError
+      ) {
+        return badRequest(error.message);
+      }
+      if (error instanceof UnauthorizedError) {
+        return unauthorized(error.message);
+      }
+      return serverError(error.message);
+    }
+  };
+
+ removeUserFromProject = async (req: Request) => {
+    try {
+      const data = new DTO.RemoveUserFromProjectRequestDTO({ ...req.body, projectId: req.params.projectId });
+      await validate(data);
+      
+      const userProject = await userService.removeUserFromProject(data, req.userId);
       return ok(userProject);
     } catch (error: any) {
       if (

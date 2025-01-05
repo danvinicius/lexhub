@@ -41,7 +41,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 	const { project } = useContext(ProjectContext);
 
 	const { isAuthenticated } = useContext(UserContext) || {};
-	const [isCollaborator, setIsCollaborator] = useState(false);
+	const [isColaborador, setIsColaborador] = useState(false);
 
 	const resetScenarioInfo = () => {
 		resetProjectInfo();
@@ -58,7 +58,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 
 	useEffect(() => {
 		const role = isAuthenticated()?.projects.find((someProject) => someProject.project == project?.id)?.role;
-		setIsCollaborator(role == IUserRole.OWNER || role == IUserRole.ADMIN || role == IUserRole.COLLABORATOR);
+		setIsColaborador(role == IUserRole.PROPRIETARIO || role == IUserRole.ADMINISTRADOR || role == IUserRole.COLABORADOR);
 	}, [isAuthenticated, project?.id]);
 
 	const [restrictionResourceId, setRestrictionResourceId] = useState<string | undefined>('');
@@ -119,7 +119,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 		<div className='scenario flex column gap-2 relative border-radius-5' id={`${scenario.id}-${slugify(scenario.title.content)}`}>
 			<div className='scenario-header'>
 				<h2>{processContent(scenario.title)}</h2>
-				{isCollaborator && (
+				{isColaborador && (
 					<>
 						<img
 							src={KebabVertical}
@@ -189,7 +189,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 										<td>{processContent(scenario.context?.geographicLocation)}</td>
 										<td>{processContent(scenario.context?.temporalLocation)}</td>
 										<td className='restrictions'>
-											{isCollaborator && (
+											{isColaborador && (
 												<span className='add-restriction pointer flex align-center gap-5'
 													onClick={() => handleOpenCreateRestriction()}>
 													{scenario.context.restrictions.length > 0 ? (
@@ -260,7 +260,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 							<h3>Recursos</h3>
 						</div>
 						<div className='scenario-resources flex column gap-1'>
-							{isCollaborator && (
+							{isColaborador && (
 								<span className='add-resource pointer flex align-center gap-5' onClick={handleOpenCreateResourceModal}>
 									{scenario.resources.length > 0 ? (
 										<>
@@ -298,7 +298,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 											<tr key={resource.name.content}>
 												<td>{processContent(resource.name)}</td>
 												<td className='restrictions border-none'>
-													{isCollaborator && (
+													{isColaborador && (
 														<span
 															className='add-restriction pointer flex align-center gap-5'
 															onClick={() => handleOpenCreateRestriction(resource.id)}
@@ -341,7 +341,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 							<h3>Episódios</h3>
 						</div>
 						<div className='scenario-episodes flex column gap-1'>
-							{isCollaborator && (
+							{isColaborador && (
 								<span className='add-episode pointer flex align-center gap-5' onClick={handleOpenCreateEpisodesModal}>
 									{scenario.episodes.length > 0 ? (
 										<>

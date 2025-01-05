@@ -6,13 +6,15 @@ import {
 } from '@/infra/http/dtos';
 import { UpdateUserRequestDTO } from '@/infra/http/dtos/update-user-request-dto';
 import { BcryptService, JwtService } from '@/infra/security';
-import { IUserProject, UserRole, IUser } from '@/models';
+import { IUserProject, IUserRole, IUser } from '@/models';
 import { ProjectRepository, UserRepository } from '@/repositories';
 import { UnauthorizedError, BadRequestError } from '@/utils/errors';
 import { ForbiddenError } from '@/utils/errors/forbidden-error';
 import { ProjectService } from './project-service';
 import { ChangeService } from './change-service';
 import { AUTH_SECRET, HASH_SALT } from '@/config/env';
+import { ChangeUserRoleRequestDTO } from '@/infra/http/dtos/change-user-role-request-dto';
+import { RemoveUserFromProjectRequestDTO } from '@/infra/http/dtos/remove-user-from-project-request-dto';
 
 export class UserService {
   constructor(
@@ -31,8 +33,8 @@ export class UserService {
 
     if (
       inviter.projects.find((p: IUserProject) => p.project.id == data.projectId)
-        ?.role == UserRole.ADMIN &&
-      (data.role == UserRole.ADMIN || data.role == UserRole.OWNER)
+        ?.role == IUserRole.ADMINISTRADOR &&
+      (data.role == IUserRole.ADMINISTRADOR || data.role == IUserRole.PROPRIETARIO)
     ) {
       throw new UnauthorizedError(
         `Você não tem permissão para realizar esta ação`
@@ -72,9 +74,109 @@ export class UserService {
       user.name,
       inviterId
     );
-
     return userProject;
   }
+
+  async changeUserRole(
+    data: ChangeUserRoleRequestDTO,
+    inviterId: string
+  ): Promise<IUserProject | null> {
+    const inviter = await this.userRepository.getUser({ _id: inviterId });
+
+    if (
+      inviter.projects.find((p: IUserProject) => p.project.id == data.projectId)
+        ?.role == IUserRole.ADMINISTRADOR &&
+      (data.newRole == IUserRole.ADMINISTRADOR || data.newRole == IUserRole.PROPRIETARIO)
+    ) {
+      throw new UnauthorizedError(
+        `Você não tem permissão para realizar esta ação`
+      );
+    }
+  
+    // Buscar o projeto para verificar se o usuário já está associado
+    const project = await this.projectRepository.getProject(data.projectId);
+    const targetUser = project.users.find((u: IUserProject) => u.user.id === data.userId);
+  
+    if (!targetUser) {
+      throw new BadRequestError(`O usuário não faz parte deste projeto.`);
+    }
+  
+    // Obter o estado do projeto antes da alteração
+    const beforeChange = await this.projectService.getCleanProject(data.projectId);
+  
+    // Chamar o repositório para alterar o cargo
+    const updatedUserProject = await this.userRepository.changeUserRole({
+      userId: data.userId,
+      projectId: data.projectId,
+      newRole: data.newRole,
+    });
+  
+    // Obter o estado do projeto após a alteração
+    const afterChange = await this.projectService.getCleanProject(data.projectId);
+  
+    // Registrar a alteração
+    await this.changeService.createChange(
+      beforeChange,
+      afterChange,
+      data.projectId,
+      updatedUserProject?.user.name,
+      inviterId
+    );
+  
+    return updatedUserProject;
+  }
+
+  async removeUserFromProject(
+    data: RemoveUserFromProjectRequestDTO,
+    requesterId: string
+  ): Promise<void> {
+    const requester = await this.userRepository.getUser({ _id: requesterId });
+
+    // Garantir que o solicitante tenha permissão para remover usuários
+    const requesterProjectRole = requester.projects.find(
+      (p: IUserProject) => p.project.toString() === data.projectId
+    )?.role;
+    
+  
+    if (requesterProjectRole !== IUserRole.ADMINISTRADOR && requesterProjectRole !== IUserRole.PROPRIETARIO) {
+      throw new UnauthorizedError(`Você não tem permissão para remover usuários deste projeto.`);
+    }
+  
+    // Impedir que um ADMIN remova um OWNER
+    const project = await this.projectRepository.getProject(data.projectId);
+    const targetUser = project.users.find((u: IUserProject) => u.user.id === data.userId);
+  
+    if (!targetUser) {
+      throw new BadRequestError(`O usuário não faz parte deste projeto.`);
+    }
+  
+    if (targetUser.role === IUserRole.PROPRIETARIO && requesterProjectRole !== IUserRole.PROPRIETARIO) {
+      throw new UnauthorizedError(`Somente o proprietário do projeto pode remover outro proprietário.`);
+    }
+  
+    // Obter o estado do projeto antes da alteração
+    const beforeChange = await this.projectService.getCleanProject(data.projectId);
+  
+    // Chamar o repositório para remover o usuário
+    await this.userRepository.removeUserFromProject({
+      userId: data.userId,
+      projectId: data.projectId,
+    });
+  
+    // Obter o estado do projeto após a alteração
+    const afterChange = await this.projectService.getCleanProject(data.projectId);
+  
+    // Registrar a remoção
+    await this.changeService.createChange(
+      beforeChange,
+      afterChange,
+      data.projectId,
+      targetUser.user.name,
+      requesterId
+    );
+  }
+  
+  
 
   async authenticateUser(
     data: AuthenticateUserRequestDTO

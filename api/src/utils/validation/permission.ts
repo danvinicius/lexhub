@@ -1,15 +1,15 @@
-import { UserRole } from "@/models";
+import { IUserRole } from "@/models";
 
-export const isCollaborator = (role: UserRole) => {
-  return [UserRole.COLLABORATOR, UserRole.ADMIN, UserRole.OWNER].includes(
+export const isColaborador = (role: IUserRole) => {
+  return [IUserRole.COLABORADOR, IUserRole.ADMINISTRADOR, IUserRole.PROPRIETARIO].includes(
     role
   );
 };
 
-export const isAdmin = (role: UserRole) => {
-  return [UserRole.ADMIN, UserRole.OWNER].includes(role);
+export const isAdministrador = (role: IUserRole) => {
+  return [IUserRole.ADMINISTRADOR, IUserRole.PROPRIETARIO].includes(role);
 };
 
-export const isOwner = (role: UserRole) => {
-  return role === UserRole.OWNER;
+export const isProprietario = (role: IUserRole) => {
+  return role === IUserRole.PROPRIETARIO;
 };

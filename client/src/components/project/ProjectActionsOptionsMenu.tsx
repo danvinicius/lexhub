@@ -4,7 +4,7 @@ import './ProjectActionsOptionsMenu.scss';
 import { FC, ReactNode, useEffect, useRef } from 'react';
 
 interface ProjectActionsOptionsMenuProps {
-  isOwner: boolean;
+  isProprietario: boolean;
   isProjectActionsOptionsMenu: boolean;
   handleOpenUpdateProjectModal: () => void;
   handleOpenDeleteProjectModal: () => void;
@@ -13,7 +13,7 @@ interface ProjectActionsOptionsMenuProps {
 
 export const ProjectActionsOptionsMenu: FC<ProjectActionsOptionsMenuProps> = ({
 	handleOpenUpdateProjectModal,
-	isOwner,
+	isProprietario,
 	isProjectActionsOptionsMenu,
 	handleOpenDeleteProjectModal,
 	handleCloseProjectActionsOptionsMenu,
@@ -51,7 +51,7 @@ export const ProjectActionsOptionsMenu: FC<ProjectActionsOptionsMenuProps> = ({
 					<img src={EditPen} alt="Editar projeto" />
           Editar projeto
 				</li>
-				{isOwner && (
+				{isProprietario && (
 					<li className="delete-project" onClick={handleOpenDeleteProjectModal}>
 						<img src={Bin} alt="Excluir projeto" key="delete-project" />
             Excluir projeto

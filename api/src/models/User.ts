@@ -1,15 +1,15 @@
 import { IProject } from './Project';
 import { model, Schema } from 'mongoose';
 
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  OWNER = 'OWNER',
-  COLLABORATOR = 'COLLABORATOR',
-  OBSERVER = 'OBSERVER',
+export enum IUserRole {
+  ADMINISTRADOR = 'Administrador',
+  PROPRIETARIO = 'Proprietario',
+  COLABORADOR = 'Colaborador',
+  OBSERVADOR = 'Observador',
 }
 
 export interface IUserProject {
-  role: UserRole;
+  role: IUserRole;
   user: IUser;
   project: IProject;
 }
@@ -32,8 +32,8 @@ const userSchema = new Schema<IUser>(
       {
         role: {
           type: String,
-          enum: UserRole,
-          default: UserRole.OBSERVER
+          enum: IUserRole,
+          default: IUserRole.OBSERVADOR
         },
         project: {
           type: Schema.Types.ObjectId,

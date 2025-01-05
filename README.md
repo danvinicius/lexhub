@@ -23,13 +23,17 @@ Essa plataforma visa auxiliar engenheiros de software e analistas de requisitos 
 - [x] Melhorar UX (não recarregar página ao atualizar informações, poder salvar sem digitar 'Enter' nos ComboBox, etc)
 - [x] Visualizar e rastrear alterações (responsável, data/hora, conteúdo, motivo)
 - [x] Permitir criar projetos públicos/privados (visualização sem cadastro)
-- [ ] Passar todos os inputs para MUi
-- [ ] Permitir remover usuários de um projeto
+- [x] Permitir remover usuários de um projeto
+- [ ] Permitir abrir calendário, relógio e dias da semana na localização temporal
+- [ ] Permitir adicionar mais de um cenário simultaneamente
+- [ ] Permitir adicionar/alterar foto de perfil
 - [ ] Enviar e-mails para convidar usuários para projetos, confirmação de e-mail e recuperação de conta
-- [ ] Checar responsividade
-- [ ] Checar eslint e reaproveitamento de classes, componentes e hooks
-- [ ] Importar arquivo próprio para criar projetos, cenários e símbolos
 - [ ] Exportar projetos em PDF, DOCX e .feature
+
+### V3:
+- [ ] Checar responsividade
+- [ ] Passar todos os inputs para MUi
+- [ ] Checar eslint e reaproveitamento de classes, componentes e hooks
 - [ ] Autenticação com Google / Facebook
 - [ ] Integração com Trello e/ou Jira
 - [ ] Checar SEO e performance

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { responseHandler } from '@/infra/http/response-handler';
 import { ScenarioController } from '@/controllers';
-import { authMiddleware, collabMiddleware, observerMiddleware } from '@/infra/http/middlewares';
+import { authMiddleware, colabMiddleware, observadorMiddleware } from '@/infra/http/middlewares';
 
 export const scenarioRouter = async (
   router: Router,
@@ -10,37 +10,37 @@ export const scenarioRouter = async (
   router.get(
     '/project/:projectId/scenario',
     authMiddleware,
-    observerMiddleware,
+    observadorMiddleware,
     responseHandler(controller.getAllScenarios)
   );
   router.get(
     '/project/:projectId/scenario/:id',
     authMiddleware,
-    observerMiddleware,
+    observadorMiddleware,
     responseHandler(controller.getScenario)
   );
   router.post(
     '/project/:projectId/scenario',
     authMiddleware,
-    collabMiddleware,
+    colabMiddleware,
     responseHandler(controller.createScenario)
   );
   router.post(
     '/project/:projectId/scenario/many',
     authMiddleware,
-    collabMiddleware,
+    colabMiddleware,
     responseHandler(controller.createManyScenarios)
   );
   router.patch(
     '/project/:projectId/scenario/:id',
     authMiddleware,
-    collabMiddleware,
+    colabMiddleware,
     responseHandler(controller.updateScenario)
   );
   router.delete(
     '/project/:projectId/scenario/:id',
     authMiddleware,
-    collabMiddleware,
+    colabMiddleware,
     responseHandler(controller.deleteScenario)
   );
 };

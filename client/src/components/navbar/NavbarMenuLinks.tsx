@@ -2,9 +2,10 @@ import ChevronRight from '../../assets/icon/ChevronRight.svg';
 import './Navbar.scss';
 import { FC, useContext, useEffect, useState } from 'react';
 import './NavbarMenuLinks.scss';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 import { AuthMenu } from './AuthMenu';
+import { LoginButton } from '../login/LoginButton';
 
 interface NavbarMenuLinksProps {
     toggleMenu?: () => void;
@@ -14,6 +15,8 @@ interface NavbarMenuLinksProps {
 export const NavbarMenuLinks: FC<NavbarMenuLinksProps> = ({ toggleMenu, light }: NavbarMenuLinksProps) => {
     const [width, setWidth] = useState<number>(window.innerWidth);
     const { isAuthenticated } = useContext(UserContext) || {};
+    const location = useLocation();
+    const isLogin = location.pathname == '/login'
 
     function handleWindowSizeChange() {
         setWidth(window.innerWidth);
@@ -63,19 +66,15 @@ export const NavbarMenuLinks: FC<NavbarMenuLinksProps> = ({ toggleMenu, light }:
                 <Link to='/blog' onClick={isMobile ? handleClick : undefined}>
                     {isMobile ? (
                         <div className='arrow-link'>
-                            Nosso blog
+                            Blog
                             <img src={ChevronRight} alt='Ícone seta para direita' title='Ícone seta para direita' />
                         </div>
                     ) : (
-                        'Nosso blog'
+                        'Blog'
                     )}
                 </Link>
             </li>
-            {isAuthenticated()?.email && (
-                <li>
-                    <AuthMenu />
-                </li>
-            )}
+            <li>{isAuthenticated()?.email ? <AuthMenu /> : (!isLogin && <LoginButton light={light}/>)}</li>
         </ul>
     );
 };

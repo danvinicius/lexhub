@@ -19,7 +19,8 @@ import './css/Homepage.scss';
 import SymbolDetails from '../components/symbol/SymbolDetails';
 import { ProjectContext } from '../context/ProjectContext';
 import { LoginButton } from '../components/login/LoginButton';
-import { useState, useContext, useEffect, useMemo, useCallback, FC, ReactNode, SyntheticEvent  } from 'react';
+import { useState, useContext, useEffect, useMemo, useCallback, FC, ReactNode, SyntheticEvent } from 'react';
+import { NavbarMenuLinks } from '../components/navbar/NavbarMenuLinks';
 
 interface TabPanelProps {
     children?: ReactNode;
@@ -54,6 +55,14 @@ interface ProjectProps {
     projectId: string;
 }
 
+const LightNavbarMenuLinks = () => {
+    return (
+        <div style={{ marginRight: '1rem' }}>
+            <NavbarMenuLinks light={true} />
+        </div>
+    );
+};
+
 const PublicProjectView: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
     const { isAuthenticated } = useContext(UserContext) || {};
     const { setProject, project, setSymbol, currentTab, setCurrentTab } = useContext(ProjectContext || {});
@@ -63,7 +72,7 @@ const PublicProjectView: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
         setCurrentTab(newValue);
     };
 
-    const owner = project?.users.find((userProject: IUserProject) => userProject.role == 'OWNER')?.user;
+    const proprietario = project?.users.find((userProject: IUserProject) => userProject.role == 'Proprietario')?.user;
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -103,10 +112,10 @@ const PublicProjectView: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                                 <h1 className='project-name'>{project?.name}</h1>
                             </div>
                             <div className='project-description' dangerouslySetInnerHTML={{ __html: project?.description || '' }}></div>
-                            {owner && (
-                                <small className='project-owner flex align-center gap-5'>
-                                    <ProfilePicture user={owner} />
-                                    Criado por <span>{owner.name}</span>em {new Date(project?.createdAt).toLocaleDateString('pt-br')} às{' '}
+                            {proprietario && (
+                                <small className='project-proprietario flex align-center gap-5'>
+                                    <ProfilePicture user={proprietario} />
+                                    Criado por <span>{proprietario.name}</span>em {new Date(project?.createdAt).toLocaleDateString('pt-br')} às{' '}
                                     {new Date(project?.createdAt).toLocaleTimeString('pt-br')}
                                 </small>
                             )}
@@ -164,93 +173,114 @@ const PublicProjectView: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
 };
 
 const demoTheme = extendTheme({
-	colorSchemes: { light: true },
-	colorSchemeSelector: 'class',
-	breakpoints: {
-		values: {
-			xs: 0,
-			sm: 600,
-			md: 600,
-			lg: 1500,
-			xl: 1536,
-		},
-	},
+    colorSchemes: { light: true },
+    colorSchemeSelector: 'class',
+    breakpoints: {
+        values: {
+            xs: 0,
+            sm: 600,
+            md: 600,
+            lg: 1500,
+            xl: 1536,
+        },
+    },
 });
 
 function useDemoRouter(): Router {
-	const [pathname, setPathname] = useState(window.location.pathname);
-	const { refreshUser } = useContext(UserContext) || {};
-	
-	useEffect(() => {
-		// Atualiza a URL do navegador sempre que o pathname mudar
-		if (window.location.pathname !== pathname) {
-			window.history.pushState(null, '', pathname);
-		}
-	}, [pathname]);
-  
-	useEffect(() => {
-		refreshUser();
-		// Ouve as mudanças no histórico (ex.: botões de voltar/avançar do navegador)
-		const handlePopState = () => setPathname(window.location.pathname);
-		
-		window.addEventListener('popstate', handlePopState);
-		return () => window.removeEventListener('popstate', handlePopState);
-	}, []);
-	
-	const router = useMemo(() => {
-		return {
-			pathname,
-			searchParams: new URLSearchParams(),
-			navigate: (path: string | URL) => setPathname(String(path)),
-		};
-	}, [pathname]);
-	
-	return router;
+    const [pathname, setPathname] = useState(window.location.pathname);
+    const { refreshUser } = useContext(UserContext) || {};
+
+    useEffect(() => {
+        // Atualiza a URL do navegador sempre que o pathname mudar
+        if (window.location.pathname !== pathname) {
+            window.history.pushState(null, '', pathname);
+        }
+    }, [pathname]);
+
+    useEffect(() => {
+        refreshUser();
+        // Ouve as mudanças no histórico (ex.: botões de voltar/avançar do navegador)
+        const handlePopState = () => setPathname(window.location.pathname);
+
+        window.addEventListener('popstate', handlePopState);
+        return () => window.removeEventListener('popstate', handlePopState);
+    }, []);
+
+    const router = useMemo(() => {
+        return {
+            pathname,
+            searchParams: new URLSearchParams(),
+            navigate: (path: string | URL) => setPathname(String(path)),
+        };
+    }, [pathname]);
+
+    return router;
 }
 
 interface FooterSidebarProps {
-	symbol: ILexiconSymbol | null;
+    symbol: ILexiconSymbol | null;
 }
-  
-export const FooterSidebar = ({symbol}: FooterSidebarProps) => {
-	return (
-		<>
-			{symbol && <SymbolDetails symbol={symbol} />}
-			<LoginButton></LoginButton>
-		</>
-	);
+
+export const FooterSidebar = ({ symbol }: FooterSidebarProps) => {
+    return (
+        <>
+            {symbol && <SymbolDetails symbol={symbol} />}
+            <LoginButton></LoginButton>
+        </>
+    );
 };
 
 interface PublicHomepageViewProps {
-	projectId: string;
+    projectId: string;
 }
 
 export const PublicHomepageView = ({ projectId }: PublicHomepageViewProps) => {
-	const router = useDemoRouter();
-	const {symbol} = useContext(ProjectContext);
+    const router = useDemoRouter();
+    const { symbol } = useContext(ProjectContext);
 
-	const renderFooterSidebar = () => {
-		return <FooterSidebar symbol={symbol} />;
-	};
+    const renderFooterSidebar = () => {
+        return <FooterSidebar symbol={symbol} />;
+    };
 
-	return (
-		<AppProvider
-			router={router}
-			theme={demoTheme}
-			branding={{
-				logo: <Logo />,
-				title: '',
-			}}
-		>
-			<DashboardLayout
-				slots={{ sidebarFooter: renderFooterSidebar }}
-				sidebarExpandedWidth={400}>
-				<PageContainer breadcrumbs={[{title: '', path: ''}]} title='' sx={{padding: 0}}>
-					<PublicProjectView projectId={projectId}/>
-				</PageContainer>
-			</DashboardLayout>
-		</AppProvider>
-	);
+    return (
+        <AppProvider
+            router={router}
+            theme={demoTheme}
+            branding={{
+                logo: <Logo light={true}/>,
+                title: '',
+            }}
+        >
+            <DashboardLayout
+                slots={{
+                    sidebarFooter: renderFooterSidebar,
+                    toolbarActions: LightNavbarMenuLinks,
+                }}
+                sidebarExpandedWidth={400}
+                sx={{
+                    '& .MuiStack-root.css-m69qwo-MuiStack-root': {
+                        display: 'flex',
+                        alignItems: 'center',
+                    },
+                    '& header': {
+                        backgroundColor: 'var(--primary-color)',
+                        '.MuiButtonBase-root': {
+                            color: '#fff',
+                        },
+                    },
+                    '.MuiList-root.MuiList-padding': {
+                        '.MuiListSubheader-root': {
+                            paddingTop: '3rem',
+                        }
+                    },
+                }}
+            >
+                <PageContainer breadcrumbs={[{ title: '', path: '' }]} title='' sx={{ padding: 0 }}>
+                    <PublicProjectView projectId={projectId} />
+                </PageContainer>
+            </DashboardLayout>
+        </AppProvider>
+    );
 };
 
 export default PublicHomepageView;

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { UserContext } from '../../context/UserContext';
 import { LogoutOutlined } from '@mui/icons-material';
-import './LogoutButton.scss';
+import './Authentication.scss';
 
 export const LogoutButton = () => {
 	const { logout} = useContext(UserContext);
@@ -9,7 +9,7 @@ export const LogoutButton = () => {
 		if (logout) logout();
 	};
 	return (
-		<div className='logout' onClick={handleLogout}>
+		<div className='authentication logout' onClick={handleLogout}>
 			<LogoutOutlined/>
 			<p>Sair da conta</p>
 		</div>

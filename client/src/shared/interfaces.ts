@@ -15,7 +15,7 @@ export interface IScenario {
 }
 
 export interface IUser {
-    readonly id?: string;
+    readonly id: string;
     name: string;
     email: string;
     imageUrl?: string;
@@ -25,10 +25,10 @@ export interface IUser {
 }
 
 export enum IUserRole {
-    OWNER = 'OWNER',
-    ADMIN = 'ADMIN',
-    COLLABORATOR = 'COLLABORATOR',
-    OBSERVER = 'OBSERVER',
+    PROPRIETARIO = 'Proprietario',
+    ADMINISTRADOR = 'Administrador',
+    COLABORADOR = 'Colaborador',
+    OBSERVADOR = 'Observador',
 }
 
 export interface IUserProject {

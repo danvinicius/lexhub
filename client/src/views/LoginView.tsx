@@ -10,7 +10,7 @@ const Login: FC = () => {
 	const [currentScreen, setCurrentScreen] = useState('login');
 	return (
 		<>
-			<Navbar navBg={true}/>
+			<Navbar/>
 			<div className="login flex">
 				<LoginBanner />
 				{currentScreen === 'login' && (

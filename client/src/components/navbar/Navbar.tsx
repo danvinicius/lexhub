@@ -5,12 +5,7 @@ import Hamburger from '../../assets/icon/Hamburger.svg';
 import Close from '../../assets/icon/Close.svg';
 import { NavbarMenuLinks } from './NavbarMenuLinks';
 
-
-interface NavbarProps {
-  navBg: boolean;
-}
-
-export const Navbar: FC<NavbarProps> = ({ navBg }: NavbarProps) => {
+export const Navbar: FC = () => {
 	const [isMobileMenuActive, setIsMobileMenuActive] = useState(false);
 
 	const toggleMenu = () => {
@@ -18,7 +13,7 @@ export const Navbar: FC<NavbarProps> = ({ navBg }: NavbarProps) => {
 	};
 
 	return (
-		<nav role="navigation" className={`navbar ${navBg ? 'navBg' : ''}`}>
+		<nav role="navigation" className='navbar'>
 			<div className="container">
 				<Logo />
 				<NavbarMenuLinks />

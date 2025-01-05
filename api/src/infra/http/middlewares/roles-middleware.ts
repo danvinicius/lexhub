@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { isAdmin, isCollaborator, isOwner } from '@/utils/validation/permission';
+import { isAdministrador, isColaborador, isProprietario } from '@/utils/validation/permission';
 import { IUserProject } from '@/models';
 
 const userBelongsToProject = (userProjects: IUserProject[], projectId: String) => {
@@ -7,7 +7,7 @@ const userBelongsToProject = (userProjects: IUserProject[], projectId: String) =
   return userProjects?.find((p: IUserProject) => p.project?.toString() == projectId);
 }
 
-export const observerMiddleware = async (
+export const observadorMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -25,7 +25,7 @@ export const observerMiddleware = async (
   next();
 };
 
-export const collabMiddleware = async (
+export const colabMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -38,7 +38,7 @@ export const collabMiddleware = async (
     });
   }
   const userRole = project.role;
-  if (!isCollaborator(userRole)) {
+  if (!isColaborador(userRole)) {
     return res.status(403).json({
       error: "You have no permission.",
       code: 403,
@@ -48,7 +48,7 @@ export const collabMiddleware = async (
   next();
 };
 
-export const adminMiddleware = async (
+export const administradorMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -63,7 +63,7 @@ export const adminMiddleware = async (
   }
   const userRole = project.role;
   
-  if (!isAdmin(userRole)) {
+  if (!isAdministrador(userRole)) {
     return res.status(403).json({
       error: "You have no permission.",
       code: 403,
@@ -73,7 +73,7 @@ export const adminMiddleware = async (
   next();
 };
 
-export const ownerMiddleware = async (
+export const proprietarioMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -86,7 +86,7 @@ export const ownerMiddleware = async (
     });
   }
   const userRole = project.role;
-  if (!isOwner(userRole)) {
+  if (!isProprietario(userRole)) {
     return res.status(403).json({
       error: "You have no permission.",
       code: 403,

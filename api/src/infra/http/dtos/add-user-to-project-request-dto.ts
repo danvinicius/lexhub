@@ -1,4 +1,4 @@
-import { UserRole } from '@/models';
+import { IUserRole } from '@/models';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class AddUserToProjectRequestDTO {
@@ -9,7 +9,7 @@ export class AddUserToProjectRequestDTO {
 
   @IsString()
   @IsNotEmpty()
-  role: UserRole;
+  role: IUserRole;
 
   @IsNotEmpty()
   projectId: String;

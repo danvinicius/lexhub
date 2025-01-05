@@ -4,7 +4,7 @@ import Loading from '../../helper/Loading';
 import Button from '../../forms/Button';
 import Error from '../../helper/Error';
 import api from '../../../lib/axios';
-import { ADD_USER_TO_PROJECT } from '../../../api';
+import { ADD_USER_TO_PROJECT, CHANGE_USER_ROLE, REMOVE_USER } from '../../../api';
 import { UserContext } from '../../../context/UserContext';
 import './AddUserToProjectForm.scss';
 import Select from '../../forms/Select';
@@ -12,9 +12,10 @@ import Close from '../../../assets/icon/Close_Dark.svg';
 import { ProjectContext } from '../../../context/ProjectContext';
 import { AddUserEmailComboBox } from './AddUserEmailComboBox';
 import { Snackbar, SnackbarCloseReason } from '@mui/material';
-import { ErrorResponse } from '../../../shared/interfaces';
+import { ErrorResponse, IUserProject, IUserRole } from '../../../shared/interfaces';
 import { AxiosError } from 'axios';
 import { ProfilePicture } from '../../user/ProfilePicture';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface AddUserToProjectRequestDTO {
     email: string;
@@ -22,17 +23,21 @@ interface AddUserToProjectRequestDTO {
     projectId: string;
 }
 
+interface ChangeUserRoleRequestDTO {
+    userId: string;
+    newRole: string;
+    projectId: string;
+}
+
+interface RemoveUserRequestDTO {
+    userId: string;
+    projectId: string;
+}
+
 interface AddUserToProjectFormProps {
     onClose: () => void;
     resetProjectInfo: () => void;
 }
-
-const formatRoles = {
-    OWNER: 'PROPRIETÁRIO',
-    ADMIN: 'ADMIN',
-    COLLABORATOR: 'COLABORADOR',
-    OBSERVER: 'OBSERVADOR',
-};
 
 const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetProjectInfo }: AddUserToProjectFormProps): ReactNode => {
     const { isAuthenticated } = useContext(UserContext || {});
@@ -42,6 +47,8 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const [currentEmail, setCurrentEmail] = useState('');
+    const [usersToRemove, setUsersToRemove] = useState<string[]>([]);
+
 
     const handleCloseSnackbar = (_event: SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
         if (reason === 'clickaway') {
@@ -56,11 +63,43 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
 
     const projectContext = useContext(ProjectContext);
 
-    const AddUserToProject = async (body: AddUserToProjectRequestDTO) => {
+    const addUserToProject = async (body: AddUserToProjectRequestDTO) => {
         setLoading(true);
         if (projectContext.project?.id) {
             try {
                 const { url, options } = ADD_USER_TO_PROJECT(projectContext.project.id, isAuthenticated()?.token || '');
+                await api[options.method](url, body, options);
+                resetProjectInfo();
+            } catch (error) {
+                const err = error as AxiosError<ErrorResponse>;
+                setError(err?.response?.data?.error || 'Erro inesperado');
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+
+    const changeUserRole = async (body: ChangeUserRoleRequestDTO) => {
+        setLoading(true);
+        if (projectContext.project?.id) {
+            try {
+                const { url, options } = CHANGE_USER_ROLE(projectContext.project.id, isAuthenticated()?.token || '');
+                await api[options.method](url, body, options);
+                resetProjectInfo();
+            } catch (error) {
+                const err = error as AxiosError<ErrorResponse>;
+                setError(err?.response?.data?.error || 'Erro inesperado');
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+
+    const removeUser = async (body: RemoveUserRequestDTO) => {
+        setLoading(true);
+        if (projectContext.project?.id) {
+            try {
+                const { url, options } = REMOVE_USER(projectContext.project.id, isAuthenticated()?.token || '');
                 await api[options.method](url, body, options);
                 resetProjectInfo();
             } catch (error) {
@@ -103,13 +142,42 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
         }
     }
 
+    const handleRemoveUser = (userId: string) => {
+        setUsersToRemove((prev) => [...prev, userId]);
+        if (projectContext.project) {
+            const updatedUsers = projectContext.project.users.filter((user) => user.user.id !== userId);
+            projectContext.project = { ...projectContext.project, users: updatedUsers };
+        }
+    };
+    
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (projectContext.project?.id) {
-            for (const email of [...emails, currentEmail.length ? currentEmail : null].filter((email) => email != null)) {
-                AddUserToProject({
-                    email,
-                    role: roles[email],
+            if (emails.length) {
+                for (const email of [...emails, currentEmail.length ? currentEmail : null].filter((email) => email != null)) {
+                    addUserToProject({
+                        email,
+                        role: roles[email],
+                        projectId: projectContext.project.id,
+                    });
+                }
+            }
+            for (const changedRoleEmail of Object.keys(roles)) {
+                const currentUser = projectContext.project.users.find((user) => user.user.email == changedRoleEmail);
+                if (roles[changedRoleEmail] !== currentUser?.role) {
+                    if (currentUser?.user.id) {
+                        changeUserRole({
+                            userId: currentUser?.user.id,
+                            projectId: projectContext.project.id,
+                            newRole: roles[changedRoleEmail],
+                        });
+                    }
+                }
+            }
+            for (const userId of usersToRemove) {
+                await removeUser({
+                    userId,
                     projectId: projectContext.project.id,
                 });
             }
@@ -142,15 +210,15 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
                                                 name='role'
                                                 options={[
                                                     {
-                                                        value: 'OBSERVER',
+                                                        value: 'Observador',
                                                         label: 'Observador',
                                                     },
                                                     {
-                                                        value: 'COLLABORATOR',
+                                                        value: 'Colaborador',
                                                         label: 'Colaborador',
                                                     },
                                                     {
-                                                        value: 'ADMIN',
+                                                        value: 'Administrador',
                                                         label: 'Administrador',
                                                     },
                                                 ]}
@@ -170,17 +238,44 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
                     <h3>Pessoas com acesso:</h3>
                     <br />
                     <ul className='flex column gap-15' style={{ maxHeight: '10rem', overflow: 'scroll' }}>
-                        {projectContext.project?.users.map((user) => {
+                        {projectContext.project?.users.map((user: IUserProject) => {
                             return (
                                 <li key={user.id} className='flex align-center gap-1'>
                                     <ProfilePicture user={user.user} />
-                                    <div className='flex column'>
+                                    <div className='flex column' style={{ marginRight: 'auto' }}>
                                         <span>
-                                            {user.user.name} {user.user.name == isAuthenticated()?.name && '(você)'}
+                                            {user.user.name} {user.user.email == isAuthenticated()?.email && '(você)'}
                                         </span>
                                         <small>{user.user.email}</small>
                                     </div>
-                                    <h4 style={{ marginLeft: 'auto' }}>{formatRoles[user.role]}</h4>
+                                    {user.role !== IUserRole.PROPRIETARIO && user.user.email !== isAuthenticated()?.email && (
+                                        <div>
+                                            <Select
+                                                style={{ padding: '0.5rem' }}
+                                                defaultOption={user.role}
+                                                name='role'
+                                                options={[
+                                                    {
+                                                        value: 'Observador',
+                                                        label: 'Observador',
+                                                    },
+                                                    {
+                                                        value: 'Colaborador',
+                                                        label: 'Colaborador',
+                                                    },
+                                                    {
+                                                        value: 'Administrador',
+                                                        label: 'Administrador',
+                                                    },
+                                                ]}
+                                                value={roles[user.user.email] || ''}
+                                                onChange={(e) => setRoles({ ...roles, [user.user.email]: e.target.value })}
+                                            ></Select>
+                                        </div>
+                                    )}
+                                    {user.role !== IUserRole.PROPRIETARIO && user.user.email !== isAuthenticated()?.email && user.user.id && (
+                                        <CloseIcon className='pointer' onClick={() => handleRemoveUser(user.user.id)}/>
+                                    )}
                                 </li>
                             );
                         })}
@@ -193,7 +288,7 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
                 ) : (
                     <div className='flex space-between'>
                         <Button theme='helper' text='Copiar link' onClick={copyCurrentUrlToClipboard} />
-                        <Button theme='primary' text='Compartilhar' onClick={handleSubmit} />
+                        <Button theme='primary' text='Salvar e compartilhar' onClick={handleSubmit} />
                     </div>
                 )}
                 <Error error={error} />

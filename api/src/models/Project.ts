@@ -2,7 +2,7 @@ import Symbol, { ISymbol } from './Symbol';
 import Scenario, { IScenario } from './Scenario';
 import { IUserProject } from './User';
 import { model, Schema } from 'mongoose';
-import { UserRole } from './User';
+import { IUserRole } from './User';
 
 export interface IProject {
   readonly id?: string;
@@ -31,8 +31,8 @@ const projectSchema = new Schema<IProject>(
       {
         role: {
           type: String,
-          enum: UserRole,
-          default: UserRole.OBSERVER
+          enum: IUserRole,
+          default: IUserRole.OBSERVADOR
         },
         user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
       },

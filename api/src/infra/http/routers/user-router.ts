@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { responseHandler } from '@/infra/http/response-handler';
 import { UserController } from '@/controllers';
-import { adminMiddleware, authMiddleware } from '../middlewares';
+import { administradorMiddleware, authMiddleware } from '../middlewares';
 
 export const userRouter = async (
   router: Router,
@@ -14,8 +14,20 @@ export const userRouter = async (
     responseHandler(controller.authenticateUser)
   );
   router.post(
-    '/user/add/:projectId', authMiddleware, adminMiddleware,
+    '/user/add/:projectId', authMiddleware, administradorMiddleware,
     responseHandler(controller.addUserToProject)
+  );
+  router.post(
+    '/user/add/:projectId', authMiddleware, administradorMiddleware,
+    responseHandler(controller.addUserToProject)
+  );
+  router.patch(
+    '/user/change-role/:projectId', authMiddleware, administradorMiddleware,
+    responseHandler(controller.changeUserRole)
+  );
+  router.patch(
+    '/user/remove/:projectId', authMiddleware, administradorMiddleware,
+    responseHandler(controller.removeUserFromProject)
   );
   router.patch(
     '/user',

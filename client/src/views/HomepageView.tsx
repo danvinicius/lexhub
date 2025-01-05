@@ -190,6 +190,9 @@ export const Homepage = () => {
                         display: 'flex',
                         alignItems: 'center',
                     },
+                    '& .MuiStack-root.css-a3zuq1-MuiStack-root': {
+                        padding: '.45rem 0',
+                    },
                     '& header': {
                         backgroundColor: 'var(--primary-color)',
                         '.MuiButtonBase-root': {
@@ -197,7 +200,9 @@ export const Homepage = () => {
                         },
                     },
                     '.MuiList-root.MuiList-padding': {
-                        paddingTop: '2rem',
+                        '.MuiListSubheader-root': {
+                            paddingTop: '3rem',
+                        }
                     },
                 }}
             >

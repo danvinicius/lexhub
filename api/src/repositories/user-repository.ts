@@ -1,6 +1,6 @@
 
 import { ServerError } from '@/utils/errors';
-import User, { IUser, IUserProject, UserRole } from '@/models/User';
+import User, { IUser, IUserProject, IUserRole } from '@/models/User';
 import Project from '@/models/Project';
 
 export namespace UserRepository {
@@ -11,14 +11,25 @@ export namespace UserRepository {
   }
 
   export interface AddUserToProjectParams {
-    role: UserRole;
+    role: IUserRole;
     projectId: String;
     userId: String;
+  }
+
+  export interface ChangeUserRoleParams {
+    userId: string;
+    projectId: string;
+    newRole: IUserRole;
   }
 
   export interface UpdateUserParams {
     name: string;
     password: string;
+  }
+
+  export interface RemoveUserFromProjectParams {
+    userId: string;
+    projectId: string;
   }
 }
 
@@ -63,6 +74,73 @@ export class UserRepository {
       throw new ServerError(error.message);
     }
   }
+
+  async changeUserRole(data: UserRepository.ChangeUserRoleParams): Promise<IUserProject> {
+    try {
+      const user = await User.findById(data.userId);
+      const project = await Project.findById(data.projectId);
+  
+      if (!user || !project) {
+        throw new ServerError('User or Project not found');
+      }
+  
+      // Verificar se o usuário já faz parte do projeto
+      const userProjectInUser = user.projects.find(
+        (up: any) => up.project.toString() === data.projectId
+      );
+  
+      const userProjectInProject = project.users.find(
+        (pu: any) => pu.user.toString() === data.userId
+      );
+  
+      if (!userProjectInUser || !userProjectInProject) {
+        throw new ServerError('User is not part of the project');
+      }
+  
+      // Atualizar o cargo do usuário no projeto
+      userProjectInUser.role = data.newRole;
+      userProjectInProject.role = data.newRole;
+  
+      await project.save();
+      await user.save();
+  
+      return {
+        user: user.toJSON(),
+        project: project.toJSON(),
+        role: data.newRole,
+      };
+    } catch (error: any) {
+      throw new ServerError(error.message);
+    }
+  }
+
+  async removeUserFromProject(data: UserRepository.RemoveUserFromProjectParams): Promise<void> {
+    try {
+      const user = await User.findById(data.userId);
+      const project = await Project.findById(data.projectId);
+  
+      if (!user || !project) {
+        throw new ServerError('User or Project not found');
+      }
+  
+      // Remover o usuário da lista de projetos do usuário
+      user.projects = user.projects.filter(
+        (up: any) => up.project.toString() !== data.projectId
+      );
+  
+      // Remover o usuário da lista de usuários do projeto
+      project.users = project.users.filter(
+        (pu: any) => pu.user.toString() !== data.userId
+      );
+  
+      await user.save();
+      await project.save();
+    } catch (error: any) {
+      throw new ServerError(error.message);
+    }
+  }
+  
+  
 
   async getUser(query: any): Promise<null | IUser> {
     try {

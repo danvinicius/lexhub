@@ -247,6 +247,32 @@ export const ADD_USER_TO_PROJECT = (projectId: string, token: string): RequestFo
 	};
 };
 
+export const CHANGE_USER_ROLE = (projectId: string, token: string): RequestFormat => {  
+	return {
+		url: `/user/change-role/${projectId}`,
+		options: {
+			method: 'patch',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${token}`
+			},
+		},
+	};
+};
+
+export const REMOVE_USER = (projectId: string, token: string): RequestFormat => {  
+	return {
+		url: `/user/remove/${projectId}`,
+		options: {
+			method: 'patch',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${token}`
+			},
+		},
+	};
+};
+
 export const UPDATE_USER = (token: string): RequestFormat => {  
 	return {
 		url: '/user',

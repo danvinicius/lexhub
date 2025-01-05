@@ -1,16 +1,20 @@
 import { LoginOutlined } from '@mui/icons-material';
-import './LogoutButton.scss';
+import './Authentication.scss';
 import { useNavigate } from 'react-router-dom';
 
-export const LoginButton = () => {
+interface LoginButtonProps {
+	light?: boolean;
+}
+
+export const LoginButton = ({light}: LoginButtonProps) => {
     const navigate = useNavigate();
 	const handleLogin = () => {
 		navigate('/login')
 	};
 	return (
-		<div className='logout' onClick={handleLogin}>
+		<div className={`authentication ${light ? 'light' : ''}`} onClick={handleLogin}>
 			<LoginOutlined/>
-			<p className='success'>Fazer login</p>
+			<p>Fazer login</p>
 		</div>
 	);
 };
