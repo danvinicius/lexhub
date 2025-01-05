@@ -186,12 +186,12 @@ export const Homepage = () => {
                 }}
                 sidebarExpandedWidth={400}
                 sx={{
-                    '& .MuiStack-root.css-m69qwo-MuiStack-root': {
+                    '& .MuiToolbar-gutters > .MuiStack-root': {
+                        padding: '.45rem 0',
+                    },
+                    '& .MuiToolbar-gutters > .MuiStack-root > .MuiStack-root': {
                         display: 'flex',
                         alignItems: 'center',
-                    },
-                    '& .MuiStack-root.css-a3zuq1-MuiStack-root': {
-                        padding: '.45rem 0',
                     },
                     '& header': {
                         backgroundColor: 'var(--primary-color)',
