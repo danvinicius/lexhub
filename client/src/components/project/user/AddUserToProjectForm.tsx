@@ -155,7 +155,7 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
         e.preventDefault();
         if (projectContext.project?.id) {
             if (emails.length) {
-                for (const email of [...emails, currentEmail.length ? currentEmail : null].filter((email) => email != null)) {
+                for (const email of [...emails, currentEmail.trim().length ? currentEmail : null].filter((email) => email != null)) {
                     addUserToProject({
                         email,
                         role: roles[email],
@@ -193,12 +193,12 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
             <Form>
                 <AddUserEmailComboBox emails={emails} setEmails={setEmails} setCurrentEmail={setCurrentEmail} />
 
-                {[...emails, currentEmail.length ? currentEmail : null].filter((email) => email != null).length > 0 && (
+                {[...emails, currentEmail.trim().length ? currentEmail : null].filter((email) => email != null).length > 0 && (
                     <div className='pessoas-convidadas'>
                         <h3>Compartilhar com:</h3>
                         <br />
                         <ul className='flex column gap-5' style={{ maxHeight: '10rem', overflow: 'scroll' }}>
-                            {[...emails, currentEmail.length ? currentEmail : null]
+                            {[...emails, currentEmail.trim().length ? currentEmail : null]
                                 .filter((email) => email != null)
                                 .map((email) => {
                                     return (

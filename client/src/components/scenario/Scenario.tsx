@@ -185,9 +185,9 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 										</th>
 									</tr>
 									<tr>
-										<td>{processContent(scenario.context?.preCondition)}</td>
-										<td>{processContent(scenario.context?.geographicLocation)}</td>
-										<td>{processContent(scenario.context?.temporalLocation)}</td>
+										<td>{scenario.context?.preCondition.content ? processContent(scenario.context?.preCondition) : <small className='empty'>Nenhuma pré-condição cadastrada</small>}</td>
+										<td>{scenario.context?.geographicLocation?.content ? processContent(scenario.context?.geographicLocation) : <small className='empty'>Nenhuma localização geográfica cadastrada</small>}</td>
+										<td>{scenario.context?.temporalLocation?.content ? processContent(scenario.context?.temporalLocation) : <small className='empty'>Nenhuma localização temporal cadastrada</small>}</td>
 										<td className='restrictions'>
 											{isColaborador && (
 												<span className='add-restriction pointer flex align-center gap-5'
@@ -232,7 +232,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 								})}
 							</ul>
 						) : (
-							<p>Nenhum ator cadastrado</p>
+							<small className='empty'>Nenhum ator cadastrado</small>
 						)}
 					</div>
 				</div>
@@ -249,7 +249,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 								})}
 							</ul>
 						) : (
-							<p>Nenhuma exceção cadastrada</p>
+							<small className='empty'>Nenhuma exceção cadastrada</small>
 						)}
 					</div>
 				</div>

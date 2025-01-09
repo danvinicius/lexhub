@@ -1,4 +1,4 @@
-import { FC, ReactNode, SyntheticEvent, useCallback, useContext, useEffect, useState } from 'react';
+import { FC, ReactNode, SyntheticEvent, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import './Project.scss';
 import { UserContext } from '../../context/UserContext';
 import { GET_PROJECT } from '../../api';
@@ -23,6 +23,7 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { ProfilePicture } from '../user/ProfilePicture';
 import Public from '@mui/icons-material/Public';
 import { Lock } from '@mui/icons-material';
+import { CreateMultipleScenariosForm } from '../scenario/CreateMultipleScenariosForm';
 
 interface TabPanelProps {
     children?: ReactNode;
@@ -98,10 +99,23 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
     const handleOpenCreateSymbolModal = () => setIsCreateSymbolModalOpen(true);
     const handleCloseCreateSymbolModal = () => setIsCreateSymbolModalOpen(false);
 
+    // create scenario(s) options menu
+    const [isCreateScenarioOptionsMenuOpen, setIsCreateScenarioOptionsMenuOpen] = useState(false);
+    const handleOpenCreateScenarioOptionsMenu = () => setIsCreateScenarioOptionsMenuOpen(true);
+    const handleCloseCreateScenarioOptionsMenu = () => setIsCreateScenarioOptionsMenuOpen(false);
+
     // create scenario modal control
     const [isCreateScenarioModalOpen, setIsCreateScenarioModalOpen] = useState(false);
-    const handleOpenCreateScenarioModal = () => setIsCreateScenarioModalOpen(true);
+    const handleOpenCreateScenarioModal = () => {
+        handleCloseCreateScenarioOptionsMenu()
+        setIsCreateScenarioModalOpen(true)
+    };
     const handleCloseCreateScenarioModal = () => setIsCreateScenarioModalOpen(false);
+
+    // create multiple scenarios modal control
+    const [isCreateMultipleScenariosModalOpen, setIsCreateMultipleScenariosModalOpen] = useState(false);
+    const handleOpenCreateMultipleScenariosModal = () => setIsCreateMultipleScenariosModalOpen(true)
+    const handleCloseCreateMultipleScenariosModal = () => setIsCreateMultipleScenariosModalOpen(false);
 
     // add user to project modal control
     const [isAddUserToProjectModalOpen, setIsAddUserToProjectModalOpen] = useState(false);
@@ -111,11 +125,30 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
     const closeAllModals = () => {
         handleCloseAddUserToProjectModal();
         handleCloseCreateScenarioModal();
+        handleCloseCreateMultipleScenariosModal();
         handleCloseCreateSymbolModal();
         handleCloseDeleteProjectModal();
         handleCloseProjectActionsOptionsMenu();
         handleCloseUpdateProjectModal();
     };
+
+    const createScenarioOptionsMenuRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (createScenarioOptionsMenuRef.current && !createScenarioOptionsMenuRef.current.contains(event.target as Node)) {
+                handleCloseCreateScenarioOptionsMenu();
+            }
+        };
+
+        if (isCreateScenarioOptionsMenuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isCreateScenarioOptionsMenuOpen]);
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -169,8 +202,7 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                                                 <Lock />
                                                 Projeto privado
                                             </>
-                                        )
-                                        : (
+                                        ) : (
                                             <>
                                                 <Public />
                                                 Projeto público
@@ -200,8 +232,17 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                             )}
                             {isColaborador && (
                                 <div className='buttons-container flex gap-1'>
-                                    <Button onClick={handleOpenCreateScenarioModal} theme='primary' text='Novo cenário'></Button>
+                                    <Button onClick={handleOpenCreateScenarioOptionsMenu} theme='primary' text='Novo cenário'></Button>
                                     <Button onClick={handleOpenCreateSymbolModal} theme='secondary' text='Novo símbolo'></Button>
+
+                                    {isCreateScenarioOptionsMenuOpen && (
+                                        <section className='create-scenario-options-menu' ref={createScenarioOptionsMenuRef}>
+                                            <div className='flex column user-info'>
+                                                <span className='pointer' onClick={handleOpenCreateScenarioModal}>Criar um único cenário</span>
+                                                <span className='pointer' onClick={handleOpenCreateMultipleScenariosModal}>Criar múltiplos cenários</span>
+                                            </div>
+                                        </section>
+                                    )}
                                 </div>
                             )}
                         </div>
@@ -295,6 +336,14 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                     aria-describedby='modal-modal-description'
                 >
                     <CreateScenarioForm onClose={handleCloseCreateScenarioModal} resetProjectInfo={resetProjectInfo} />
+                </Modal>
+                <Modal
+                    open={isCreateMultipleScenariosModalOpen}
+                    onClose={handleCloseCreateMultipleScenariosModal}
+                    aria-labelledby='modal-modal-title'
+                    aria-describedby='modal-modal-description'
+                >
+                    <CreateMultipleScenariosForm onClose={handleCloseCreateMultipleScenariosModal} resetProjectInfo={resetProjectInfo} />
                 </Modal>
                 <Modal
                     open={isCreateSymbolModalOpen}

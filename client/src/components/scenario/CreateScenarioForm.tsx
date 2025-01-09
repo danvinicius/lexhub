@@ -44,9 +44,9 @@ const CreateScenarioForm: FC<CreateScenarioFormProps> = ({ onClose, resetProject
 
 	const title = useForm('dontValidateTitle');
 	const goal = useForm('dontValidateGoal');
-	const geographicLocation = useForm('dontValidateGeographicLocation');
-	const temporalLocation = useForm('dontValidateGeographicLocation');
-	const preCondition = useForm('dontValidateGeographicLocation');
+	const geographicLocation = useForm('');
+	const temporalLocation = useForm('');
+	const preCondition = useForm('');
 	const projectContext = useContext(ProjectContext);
 
 	const [error, setError] = useState('');

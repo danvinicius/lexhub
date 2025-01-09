@@ -67,8 +67,11 @@ export class ScenarioService {
   ) {}
   async createManyScenarios(
     data: CreateManyScenariosRequestDTO
-  ): Promise<IScenario[]> {
-    return await this.scenarioRepository.createManyScenarios(data);
+  ): Promise<void> {
+    await this.scenarioRepository.createManyScenarios({
+      ...data,
+      scenarios: data.scenarios.filter((scenario) => scenario.title.trim().length && scenario.goal.trim().length),
+    });
   }
 
   async createScenario(data: CreateScenarioRequestDTO, userId: String): Promise<IScenario> {

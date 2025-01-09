@@ -40,6 +40,27 @@
     }
     .buttons-container {
       min-width: max-content;
+      position: relative;
+
+      section.create-scenario-options-menu {
+            background: #fff;
+            position: absolute;
+            top: 120%;
+            right: 55%;
+            width: max-content;
+            border-radius: 5px;
+            filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.32));
+            
+            span {
+              padding: .75rem 1.5rem;
+              transition: 0.2s ease-in-out;
+              
+              &:hover {
+                background: rgba(0,0,0,0.05);
+
+              }
+            }
+      }
     }
     .project-proprietario {
       font-size: 1rem;

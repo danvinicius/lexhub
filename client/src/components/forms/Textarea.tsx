@@ -1,5 +1,6 @@
 import { ChangeEvent, FC, KeyboardEvent } from 'react';
 import './Textarea.scss';
+import Error from '../helper/Error';
 
 interface TextareaProps {
   rows: number;
@@ -40,6 +41,7 @@ const Textarea: FC<TextareaProps> = ({
 				rows={rows}
 				className='w-100 border-radius-5 outline-none'
 			></textarea>
+			<Error error={error}/>
 		</label>
 	);
 };

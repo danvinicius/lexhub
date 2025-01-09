@@ -182,6 +182,19 @@ export const CREATE_SCENARIO = (projectId: string, token: string): RequestFormat
 	};
 };
 
+export const CREATE_MULTIPLE_SCENARIOS = (projectId: string, token: string): RequestFormat => {  
+	return {
+		url: `/project/${projectId}/scenario/many`,
+		options: {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${token}`
+			},
+		},
+	};
+};
+
 export const UPDATE_SCENARIO = (projectId: string, scenarioId: string, token: string): RequestFormat => {  
 	return {
 		url: `/project/${projectId}/scenario/${scenarioId}`,

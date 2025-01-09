@@ -1,10 +1,11 @@
+import { Logger } from '@/utils/logger/logger';
 import dotenv from 'dotenv';
 
 /**
  * SETTING ENV FILE
 */
 
-console.log('environment: ' + process.env.NODE_ENV);
+Logger.info('environment: ' + process.env.NODE_ENV);
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
 /**

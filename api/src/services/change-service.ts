@@ -1,5 +1,4 @@
 import { ChangeRepository } from '@/repositories/change-repository';
-import { NotFoundError } from '@/utils/errors';
 import diff from 'deep-diff';
 import { ProjectService } from './project-service';
 import { IDifference } from '@/models/Change';
@@ -7,16 +6,6 @@ import { IDifference } from '@/models/Change';
 const changeRepository = new ChangeRepository();
 
 export class ChangeService {
-
-  public async getChange(id: String) {
-    const change = await changeRepository.getChange(id);
-
-    if (!change) {
-      throw new NotFoundError('This change does not exist');
-    }
-
-    return change;
-  }
 
   public async createChange(oldObj: object, newObj: object, projectId: String, entityName: string, userId: String) {
     let differences = this.getDifference(oldObj, newObj);

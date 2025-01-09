@@ -35,7 +35,7 @@ export class ProjectService {
     const project = await this.projectRepository.getProject(id);
 
     if (!project) {
-      throw new NotFoundError('This project does not exist');
+      throw new NotFoundError('Este projeto não existe');
     }
 
     const scenarioService = new ScenarioService();
@@ -75,7 +75,7 @@ export class ProjectService {
     const project = await this.projectRepository.getProject(id, excludeDeleted);
 
     if (!project) {
-      throw new NotFoundError('This project does not exist');
+      throw new NotFoundError('Este projeto não existe');
     }
 
     return project;

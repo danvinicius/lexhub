@@ -54,7 +54,7 @@ export class ScenarioRepository {
   ): Promise<IScenario> {
     try {
       const project = await Project.findById(data.projectId);
-      if (!project) throw new ServerError('Project not found');
+      if (!project) throw new ServerError('Projeto não encontrado');
       const scenario = new Scenario({
         title: data.title,
         goal: data.goal,
@@ -83,16 +83,28 @@ export class ScenarioRepository {
 
   async createManyScenarios(
     data: ScenarioRepository.CreateManyScenariosParams
-  ): Promise<IScenario[]> {
+  ): Promise<void> {
     try {
+      const project = await Project.findById(data.projectId);
+      if (!project) throw new ServerError('Projeto não encontrado');
+
       const scenarios = data.scenarios.map((s) => ({
         title: s.title,
         goal: s.goal,
         project: data.projectId,
       }));
       const result = await Scenario.insertMany(scenarios);
-      return (await Scenario.populate(result, { path: 'project' })).map(
-        (scenario) => scenario.toJSON()
+
+      const scenarioIds = result.map((createdScenario) => createdScenario._id);
+
+      await Project.findByIdAndUpdate(
+        project.id,
+        {
+          $push: {
+            scenarios: { $each: scenarioIds },
+          },
+        },
+        { new: true }
       );
     } catch (error) {
       throw new Error(error.message);

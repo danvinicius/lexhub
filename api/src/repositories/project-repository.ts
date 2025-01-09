@@ -2,6 +2,7 @@ import { ServerError } from '@/utils/errors';
 import Project, { IProject } from '@/models/Project';
 import { IUser, IUserRole } from '@/models';
 import User from '@/models/User';
+import { Logger } from '@/utils/logger/logger';
 
 export namespace ProjectRepository {
   export interface CreateProjectParams {
@@ -24,21 +25,17 @@ export class ProjectRepository {
   ): Promise<null | IProject> {
     try {
       const projectFilter: any = { _id: id };
-      let scenarioFilter: any = {};
-      let symbolFilter: any = {};
       if (excludeDeleted) {
         projectFilter.deletedAt = null;
-        scenarioFilter.deletedAt = null;
-        symbolFilter.deletedAt = null;
       }
       const project = await Project.findOne(projectFilter)
-      .populate({ path: 'scenarios', match: scenarioFilter })
-        .populate({ path: 'symbols', match: symbolFilter })
+      .populate({ path: 'scenarios' })
+        .populate({ path: 'symbols' })
         .populate({
           path: 'users.user',
           select: '-password -projects',
         });
-
+        
       if (!project) return null;
       return project?.toJSON();
     } catch (error: any) {
@@ -53,16 +50,12 @@ export class ProjectRepository {
     try {
       const projectFilter: any = { 'users.user': userId };
 
-      let scenarioFilter: any = {};
-      let symbolFilter: any = {};
       if (excludeDeleted) {
         projectFilter.deletedAt = null;
-        scenarioFilter.deletedAt = null;
-        symbolFilter.deletedAt = null;
       }
       const projects = await Project.find(projectFilter)
-      .populate({ path: 'scenarios', match: scenarioFilter })
-        .populate({ path: 'symbols', match: symbolFilter })
+      .populate({ path: 'scenarios' })
+        .populate({ path: 'symbols' })
         .populate({
           path: 'users.user',
           select: '-password -projects',
@@ -102,8 +95,7 @@ export class ProjectRepository {
 
       return project.toJSON();
     } catch (error: any) {
-      console.log(error);
-
+      Logger.error(error);
       throw new ServerError(error.message);
     }
   }

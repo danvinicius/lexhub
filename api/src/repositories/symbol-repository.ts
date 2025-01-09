@@ -43,7 +43,7 @@ export class SymbolRepository {
   async createSymbol(data: SymbolRepository.CreateSymbolParams): Promise<ISymbol> {
     try {
       const project = await Project.findById(data.projectId);
-      if (!project) throw new ServerError('Project not found');
+      if (!project) throw new ServerError('Projeto não encontrado');
 
       const symbol = new Symbol({
         name: data.name,

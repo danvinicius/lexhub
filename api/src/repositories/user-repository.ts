@@ -2,6 +2,7 @@
 import { ServerError } from '@/utils/errors';
 import User, { IUser, IUserProject, IUserRole } from '@/models/User';
 import Project from '@/models/Project';
+import { Logger } from '@/utils/logger/logger';
 
 export namespace UserRepository {
   export interface CreateUserParams {
@@ -41,7 +42,7 @@ export class UserRepository {
       const project = await Project.findById(data.projectId);
 
       if (!user || !project) {
-        throw new ServerError('User or Project not found');
+        throw new ServerError('Usuário ou projeto não encontrado');
       }
 
       const userProject: IUserProject = {
@@ -81,10 +82,9 @@ export class UserRepository {
       const project = await Project.findById(data.projectId);
   
       if (!user || !project) {
-        throw new ServerError('User or Project not found');
+        throw new ServerError('Usuário ou projeto não encontrado');
       }
   
-      // Verificar se o usuário já faz parte do projeto
       const userProjectInUser = user.projects.find(
         (up: any) => up.project.toString() === data.projectId
       );
@@ -94,7 +94,7 @@ export class UserRepository {
       );
   
       if (!userProjectInUser || !userProjectInProject) {
-        throw new ServerError('User is not part of the project');
+        throw new ServerError('O usuário não faz parte deste projeto');
       }
   
       // Atualizar o cargo do usuário no projeto
@@ -120,7 +120,7 @@ export class UserRepository {
       const project = await Project.findById(data.projectId);
   
       if (!user || !project) {
-        throw new ServerError('User or Project not found');
+        throw new ServerError('Usuário ou projeto não encontrado');
       }
   
       // Remover o usuário da lista de projetos do usuário
@@ -160,8 +160,7 @@ export class UserRepository {
       
       return user?.toJSON();
     } catch (error: any) {
-      console.log(error);
-      
+      Logger.error(error);
       throw new ServerError(error.message);
     }
   }

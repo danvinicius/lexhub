@@ -1,5 +1,6 @@
 import { ServerError } from '@/utils/errors';
 import Change, { IDifference, IChange } from '@/models/Change';
+import { Logger } from '@/utils/logger/logger';
 
 export namespace ChangeRepository {
   export interface CreateChangeParams {
@@ -83,8 +84,7 @@ export class ChangeRepository {
 
       return change.toJSON();
     } catch (error: any) {
-      console.log(error);
-      
+      Logger.error(error);
       throw new ServerError(error.message);
     }
   }
