@@ -13,9 +13,9 @@ export interface IActor {
 }
 
 export interface IContext {
-  geographicLocation: string;
-  temporalLocation: string;
-  preCondition: string;
+  geographicLocation?: string;
+  temporalLocation?: string;
+  preCondition?: string;
   restrictions?: IRestriction[];
 }
 
@@ -26,10 +26,10 @@ export interface IEpisode {
   type?: string;
   restriction?: string;
   nonSequentialEpisodes?: {
-      id: String;
+      id?: String;
       type: string;
       description: string;
-      restriction: string;
+      restriction?: string;
   }[];
 }
 

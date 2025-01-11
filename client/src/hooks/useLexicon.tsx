@@ -13,8 +13,8 @@ interface UseLexiconReturn  {
 export const useLexicon = (): UseLexiconReturn => {
 	const { setChosenType } = useContext(ProjectContext || {});
 	function processContent({
-		content,
-		foundLexicons,
+		content = '',
+		foundLexicons = [],
 	}: {
     content: string;
     foundLexicons: LexiconInfo[];

@@ -42,7 +42,7 @@ const CreateSymbolForm: FC<CreateSymbolFormProps> = ({ onClose, resetProjectInfo
 
 	const name = useForm('dontValidateName');
 	const notion = useForm('dontValidateNotion');
-	const classification = useSelect();
+	const classification = useSelect('dontValidateClassification');
 
 	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);

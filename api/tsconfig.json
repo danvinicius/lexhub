@@ -17,6 +17,7 @@
     "resolveJsonModule": true,
     "strictPropertyInitialization": false,
     "baseUrl": "src",
+    "strictNullChecks": true,
     "paths": {
       "@/*": ["*"]
     }

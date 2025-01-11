@@ -12,7 +12,7 @@ export const authMiddleware = async (
 ) => {
   if (!req.headers?.authorization) {
     return res.status(403).json({
-      error: 'Authentication must be provided',
+      error: 'Não autorizado',
       code: 403,
     });
   }
@@ -25,12 +25,26 @@ export const authMiddleware = async (
         code: 403,
       });
     }
-    const jwt = new JwtService(AUTH_SECRET);
+    const jwt = new JwtService(AUTH_SECRET || '');
     const payload = (await jwt.decrypt(token)) as IUser;
     const id = payload?.id;
+
+    if (!id) {
+      return res.status(403).json({
+        error: new ForbiddenError('Senha incorreta ou usuário inexistente').message,
+        code: 403,
+      });
+    }
     
     const userService = new UserService();
     const user = await userService.getUser(id);
+
+    if (!user) {
+      return res.status(403).json({
+        error: new ForbiddenError('Senha incorreta ou usuário inexistente').message,
+        code: 403,
+      });
+    }
     
     req.userId = user.id;
     req.projects = user.projects;

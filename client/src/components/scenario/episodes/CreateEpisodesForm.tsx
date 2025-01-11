@@ -19,6 +19,7 @@ import { ProjectContext } from '../../../context/ProjectContext';
 import { UserContext } from '../../../context/UserContext';
 import api from '../../../lib/axios';
 import { AxiosError } from 'axios';
+import Error from '../../helper/Error';
 
 export interface EditScenarioRequestDTO {
   title: string;
@@ -47,7 +48,7 @@ export const CreateEpisodesForm: FC<CreateEpisodesFormProps> = ({
 	const projectContext = useContext(ProjectContext);
 	const {isAuthenticated} = useContext(UserContext);
 
-	const [, setError] = useState('');
+	const [error, setError] = useState('');
 	const [, setLoading] = useState(false);
 	const [episodes, setEpisodes] = useState<IEpisode[]>(() => {
 		return initialEpisodes.length > 0
@@ -119,6 +120,8 @@ export const CreateEpisodesForm: FC<CreateEpisodesFormProps> = ({
 			<p>Adicione episódios a este cenário</p>
 
 			<EpisodeInputGroup episodes={episodes} setEpisodes={setEpisodes} />
+
+			<Error error={error}/>
 
 			<Button text="Salvar" theme="secondary" onClick={handleAddEpisodes} />
 		</section>

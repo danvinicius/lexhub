@@ -10,7 +10,7 @@ const changeService = new ChangeService();
 export class ChangeController {
   getChangesByUserProjects = async (req: Request) => {
     try {
-      const changes = await changeService.getChangesByUserProjects(req.userId);
+      const changes = await changeService.getChangesByUserProjects(req.userId || '');
       return ok(changes);
     } catch (error: any) {
       return serverError(error.message);

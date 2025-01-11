@@ -1,6 +1,6 @@
-import Symbol, { ISynonym, IImpact, ISymbol } from "@/models/Symbol";
-import Project from "@/models/Project";
-import { ServerError } from "@/utils/errors";
+import Symbol, { ISynonym, IImpact, ISymbol } from '@/models/Symbol';
+import Project from '@/models/Project';
+import { ServerError } from '@/utils/errors';
 
 export namespace SymbolRepository {
   export interface CreateSymbolParams {
@@ -22,7 +22,8 @@ export namespace SymbolRepository {
 export class SymbolRepository {
   async getSymbol(id: String): Promise<ISymbol | null> {
     try {
-      const symbol = await Symbol.findOne({ _id: id}).exec();
+      const symbol = await Symbol.findOne({ _id: id }).exec();
+      if (!symbol) return null;
       return symbol?.toJSON();
     } catch (error: any) {
       throw new ServerError(error.message);
@@ -32,15 +33,17 @@ export class SymbolRepository {
   async getAllSymbols(projectId: String): Promise<ISymbol[]> {
     try {
       const symbols = await Symbol.find({
-        project: projectId
+        project: projectId,
       }).exec();
-      return symbols.map(symbol => symbol.toJSON());
+      return symbols.map((symbol) => symbol.toJSON());
     } catch (error: any) {
       throw new ServerError(error.message);
     }
   }
 
-  async createSymbol(data: SymbolRepository.CreateSymbolParams): Promise<ISymbol> {
+  async createSymbol(
+    data: SymbolRepository.CreateSymbolParams
+  ): Promise<ISymbol | null> {
     try {
       const project = await Project.findById(data.projectId);
       if (!project) throw new ServerError('Projeto não encontrado');
@@ -66,16 +69,23 @@ export class SymbolRepository {
         { new: true }
       );
 
-      return await this.getSymbol(symbol.id);
+      const createdSymbol = await this.getSymbol(symbol.id);
+      if (!createdSymbol) return null;
+      return createdSymbol;
     } catch (error: any) {
       throw new ServerError(error.message);
     }
   }
 
-  async updateSymbol(id: String, data: SymbolRepository.UpdateSymbolParams): Promise<ISymbol> {
+  async updateSymbol(
+    id: String,
+    data: SymbolRepository.UpdateSymbolParams
+  ): Promise<ISymbol | null> {
     try {
       await Symbol.findByIdAndUpdate(id, data);
-      return await this.getSymbol(id);
+      const updatedSymbol = await this.getSymbol(id);
+      if (!updatedSymbol) return null;
+      return updatedSymbol;
     } catch (error: any) {
       throw new ServerError(error.message);
     }

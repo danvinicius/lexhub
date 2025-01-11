@@ -103,7 +103,7 @@ export class ProjectRepository {
   async updateProject(
     id: String,
     data: ProjectRepository.UpdateProjectParams
-  ): Promise<IProject> {
+  ): Promise<IProject | null> {
     try {
       await Project.updateOne({ _id: id }, { $set: data });
       return await this.getProject(id);

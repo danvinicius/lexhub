@@ -13,9 +13,9 @@ export namespace ScenarioRepository {
   export interface CreateScenarioParams {
     title: string;
     goal: string;
-    context: IContext;
-    actors: IActor[];
-    exceptions: IException[];
+    context?: IContext;
+    actors?: IActor[];
+    exceptions?: IException[];
     projectId: String;
   }
   export interface CreateManyScenariosParams {
@@ -32,13 +32,14 @@ export namespace ScenarioRepository {
     actors?: IActor[];
     exceptions?: IException[];
     resources?: IResource[];
-    episodes: IEpisode[];
+    episodes?: IEpisode[];
   }
 }
 
 export class ScenarioRepository {
   async getScenario(id: String): Promise<IScenario | null> {
     const scenario = await Scenario.findOne({ _id: id }).exec();
+    if (!scenario) return null;
     return scenario?.toJSON();
   }
 
@@ -114,7 +115,7 @@ export class ScenarioRepository {
   async updateScenario(
     id: String,
     data: ScenarioRepository.UpdateScenarioParams
-  ): Promise<IScenario> {
+  ): Promise<IScenario | null> {
     
     try {
       await Scenario.findByIdAndUpdate(id, {
@@ -126,7 +127,9 @@ export class ScenarioRepository {
         resources: data.resources,
         episodes: data.episodes,
       });
-      return await this.getScenario(id);
+      const scenario = await this.getScenario(id);
+      if (!scenario) return null;
+      return scenario;
     } catch (error) {
       throw new Error(error.message);
     }

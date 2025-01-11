@@ -7,7 +7,7 @@ const changeRepository = new ChangeRepository();
 
 export class ChangeService {
 
-  public async createChange(oldObj: object, newObj: object, projectId: String, entityName: string, userId: String) {
+  public async createChange(oldObj: object | null, newObj: object | null, projectId: String, entityName: string, userId: String) {
     let differences = this.getDifference(oldObj, newObj);
     
     differences = differences.filter(difference => !difference.path.includes('updatedAt'));
@@ -20,7 +20,7 @@ export class ChangeService {
     return change;
   }
 
-  private getDifference(oldObj: object, newObj: object): IDifference[] {
+  private getDifference(oldObj: object | null, newObj: object | null): IDifference[] {
     return diff(oldObj, newObj);
   }
 
@@ -33,7 +33,8 @@ export class ChangeService {
     const projectService = new ProjectService();
     const userProjects = await projectService.getAllProjects(userId);
     const userProjectsIds = userProjects.map(userProject => userProject.id);
-    const allChanges = await changeRepository.getChangesByUserProjects(userProjectsIds);
+    const filteredUserProjectsIds = userProjectsIds.filter(id => id !== null && id !== undefined);
+    const allChanges = await changeRepository.getChangesByUserProjects(filteredUserProjectsIds);
     return allChanges;
   }
 }

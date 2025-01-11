@@ -10,7 +10,7 @@ export const projectPrivacyMiddleware = async (
   
   if (!projectId) {
     return res.status(400).json({
-      error: 'Project ID is required',
+      error: 'Projeto é obrigatório',
       code: 400,
     });
   }
@@ -21,7 +21,7 @@ export const projectPrivacyMiddleware = async (
     if (isPrivate) {
       return next();
     }
-    req.userId = null;
+    req.userId = '';
     
     return next('route');
   } catch (error) {

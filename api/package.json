@@ -26,7 +26,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.6.3",
     "pg": "^8.11.5",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

@@ -37,21 +37,21 @@ export interface ILexiconScenario {
   }[];
   resources: {
     name: Lexicon;
-    restrictions: {
+    restrictions?: {
       description: Lexicon;
     }[];
   }[];
   episodes: (
     | {
         position: number;
-        restriction: Lexicon;
-        description: Lexicon;
+        restriction: Lexicon | {};
+        description: Lexicon | {};
       }
     | {
         position: number;
         nonSequentialEpisodes: {
-          restriction: Lexicon;
-          description: Lexicon;
+          restriction: Lexicon | {};
+          description: Lexicon | {};
         }[];
       }
   )[];
@@ -63,22 +63,40 @@ export class ScenarioService {
     private symbolRepository = new SymbolRepository(),
     private scenarioRepository = new ScenarioRepository(),
     private projectService = new ProjectService(),
-    private changeService = new ChangeService(),
+    private changeService = new ChangeService()
   ) {}
   async createManyScenarios(
     data: CreateManyScenariosRequestDTO
   ): Promise<void> {
     await this.scenarioRepository.createManyScenarios({
       ...data,
-      scenarios: data.scenarios.filter((scenario) => scenario.title.trim().length && scenario.goal.trim().length),
+      scenarios: data.scenarios.filter(
+        (scenario) =>
+          scenario.title.trim().length && scenario.goal.trim().length
+      ),
     });
   }
 
-  async createScenario(data: CreateScenarioRequestDTO, userId: String): Promise<IScenario> {
-    const projectBeforeChange = await this.projectService.getCleanProject(data.projectId, false);
+  async createScenario(
+    data: CreateScenarioRequestDTO,
+    userId: String
+  ): Promise<IScenario> {
+    const projectBeforeChange = await this.projectService.getCleanProject(
+      data.projectId,
+      false
+    );
     const createdProject = await this.scenarioRepository.createScenario(data);
-    const projectAfterChange = await this.projectService.getCleanProject(data.projectId, false);
-    await this.changeService.createChange(projectBeforeChange, projectAfterChange, data.projectId, createdProject.title, userId);
+    const projectAfterChange = await this.projectService.getCleanProject(
+      data.projectId,
+      false
+    );
+    await this.changeService.createChange(
+      projectBeforeChange,
+      projectAfterChange,
+      data.projectId,
+      createdProject.title,
+      userId
+    );
     return createdProject;
   }
 
@@ -102,6 +120,10 @@ export class ScenarioService {
     const lexiconService = new LexiconService();
     const scenario = await this.scenarioRepository.getScenario(scenarioId);
 
+    if (!scenario) {
+      throw new BadRequestError('Cenário não existe');
+    }
+
     const [symbols, scenarios] = await Promise.all([
       this.symbolRepository.getAllSymbols(projectId),
       this.scenarioRepository.getAllScenarios(projectId),
@@ -114,7 +136,7 @@ export class ScenarioService {
 
     scenarios.splice(scenarioIndex, 1);
 
-    scenario.context = scenario.context
+    scenario.context = scenario?.context
       ? scenario.context
       : {
           geographicLocation: '',
@@ -147,7 +169,7 @@ export class ScenarioService {
       );
 
     return {
-      id: scenario.id,
+      id: scenario?.id || '',
       title: processedLexicon(title, false),
       goal: processedLexicon(goal, false),
       context: {
@@ -187,10 +209,10 @@ export class ScenarioService {
                 (nonSequentialEpisode) => ({
                   id: nonSequentialEpisode.id,
                   type: nonSequentialEpisode.type,
-                  restriction: processedLexicon(
+                  restriction: nonSequentialEpisode.restriction ? processedLexicon(
                     nonSequentialEpisode.restriction,
                     true
-                  ),
+                  ) : {},
                   description: processedLexicon(
                     nonSequentialEpisode.description,
                     false
@@ -202,8 +224,12 @@ export class ScenarioService {
           return {
             position: episode.position,
             type: episode.type,
-            restriction: processedLexicon(episode.restriction, true),
-            description: processedLexicon(episode.description, false),
+            restriction: episode?.restriction
+              ? processedLexicon(episode?.restriction, true)
+              : {},
+            description: episode?.description
+              ? processedLexicon(episode?.description, false)
+              : {},
           };
         }),
       projectId,
@@ -214,12 +240,12 @@ export class ScenarioService {
     id: String,
     data: UpdateScenarioRequestDTO,
     userId: String
-  ): Promise<IScenario> {
+  ): Promise<IScenario | null> {
     const scenario = await this.scenarioRepository.getScenario(id);
     if (!scenario) {
-      throw new BadRequestError('Cenário inválido ou inexistente');
+      return null;
     }
-    
+
     const projectBeforeChange = await this.projectService.getCleanProject(
       data.projectId
     );
@@ -245,9 +271,21 @@ export class ScenarioService {
     if (!scenario) {
       throw new BadRequestError('Cenário inválido ou inexistente');
     }
-    const projectBeforeChange = await this.projectService.getCleanProject(scenario.project, false);
+    const projectBeforeChange = await this.projectService.getCleanProject(
+      scenario.project,
+      false
+    );
     await this.scenarioRepository.deleteScenario(id);
-    const projectAfterChange = await this.projectService.getCleanProject(scenario.project, false);
-    await this.changeService.createChange(projectBeforeChange, projectAfterChange, scenario.project, scenario.title, userId);
+    const projectAfterChange = await this.projectService.getCleanProject(
+      scenario.project,
+      false
+    );
+    await this.changeService.createChange(
+      projectBeforeChange,
+      projectAfterChange,
+      scenario.project,
+      scenario.title,
+      userId
+    );
   }
 }

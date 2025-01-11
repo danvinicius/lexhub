@@ -1,6 +1,5 @@
 import { Request } from 'express';
 import * as DTO from '@/infra/http/dtos';
-import { validate } from '@/utils/validation/validate';
 import {
   badRequest,
   created,
@@ -16,14 +15,14 @@ import {
 } from '@/utils/errors';
 import { UserService } from '@/services';
 import { ForbiddenError } from '@/utils/errors/forbidden-error';
+import { validate } from '@/infra/http/dtos/validate';
 
 const userService = new UserService();
-
 export class UserController {
 
   getMe = async (req: Request) => {
     try {
-      const user = await userService.getMe(req.userId);
+      const user = await userService.getMe(req.userId || '');
       return ok(user);
     } catch (error: any) {
       if (
@@ -37,9 +36,8 @@ export class UserController {
 
   createUser = async (req: Request) => {
     try {
-      const user = new DTO.CreateUserRequestDTO(req.body);
-      await validate(user);
-      const userCreated = await userService.createUser(user);
+      const data = validate(DTO.CreateUserSchema, req.body);
+      const userCreated = await userService.createUser(data);
       return created(userCreated);
     } catch (error: any) {
       if (
@@ -53,15 +51,15 @@ export class UserController {
 
   changeUserRole = async (req: Request) => {
     try {
-      const data = new DTO.ChangeUserRoleRequestDTO({ ...req.body, projectId: req.params.projectId });
-      await validate(data);
-      
-      const userProject = await userService.changeUserRole(data, req.userId);
+      const data = validate(DTO.ChangeUserRoleSchema, {
+        ...req.body,
+        projectId: req.params.projectId,
+      });
+
+      const userProject = await userService.changeUserRole(data, req.userId || '');
       return ok(userProject);
     } catch (error: any) {
-      if (
-        error instanceof BadRequestError
-      ) {
+      if (error instanceof BadRequestError) {
         return badRequest(error.message);
       }
       if (error instanceof UnauthorizedError) {
@@ -73,11 +71,9 @@ export class UserController {
 
   authenticateUser = async (req: Request) => {
     try {
-      const login = new DTO.AuthenticateUserRequestDTO(req.body);
-      await validate(login);
-      const user = await userService.authenticateUser(login);
-      const logged = new DTO.AuthenticateUserResponseDTO(user);
-      return ok(logged);
+      const data = validate(DTO.AuthenticateUserSchema, req.body);
+      const user = await userService.authenticateUser(data);
+      return ok(user);
     } catch (error: any) {
       if (
         error instanceof BadRequestError
@@ -93,10 +89,9 @@ export class UserController {
 
   addUserToProject = async (req: Request) => {
     try {
-      const data = new DTO.AddUserToProjectRequestDTO({ ...req.body, projectId: req.params.projectId });
-      await validate(data);
+      const data = validate(DTO.AddUserToProjectSchema, { ...req.body, projectId: req.params.projectId });
       
-      const userProject = await userService.addUserToProject(data, req.userId);
+      const userProject = await userService.addUserToProject(data, req.userId || '');
       return ok(userProject);
     } catch (error: any) {
       if (
@@ -113,10 +108,9 @@ export class UserController {
 
  removeUserFromProject = async (req: Request) => {
     try {
-      const data = new DTO.RemoveUserFromProjectRequestDTO({ ...req.body, projectId: req.params.projectId });
-      await validate(data);
+      const data = validate(DTO.RemoveUserFromProjectSchema, { ...req.body, projectId: req.params.projectId });
       
-      const userProject = await userService.removeUserFromProject(data, req.userId);
+      const userProject = await userService.removeUserFromProject(data, req.userId || '');
       return ok(userProject);
     } catch (error: any) {
       if (
@@ -133,9 +127,8 @@ export class UserController {
 
   public updateUser = async (req: Request) => {
     try {
-      const user = new DTO.UpdateUserRequestDTO(req.body);
-      await validate(user);
-      await userService.updateUser(req.userId, user);
+      const data = validate(DTO.UpdateUserSchema, req.body);
+      await userService.updateUser(req.userId || '', data);
       return ok({ message: 'User updated' });
     } catch (error: any) {
       if (

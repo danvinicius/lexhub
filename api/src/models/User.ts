@@ -9,7 +9,7 @@ export enum IUserRole {
 }
 
 export interface IUserProject {
-  role: IUserRole;
+  role: string;
   user: IUser;
   project: IProject;
 }

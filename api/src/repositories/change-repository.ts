@@ -47,7 +47,7 @@ export class ChangeRepository {
   }
 
 
-  async getChangesByUserProjects(projectsIds: string[]): Promise<IChange[]> {
+  async getChangesByUserProjects(projectsIds: (string | undefined)[]): Promise<IChange[]> {
     try {
       const changes = await Change.find({
         'project': { $in: projectsIds },

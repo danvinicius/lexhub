@@ -1,6 +1,5 @@
 import { Request } from 'express';
 import { NotFoundError } from '@/utils/errors/not-found-error';
-import { validate } from '@/utils/validation/validate';
 import * as DTO from '@/infra/http/dtos';
 import {
   badRequest,
@@ -11,6 +10,7 @@ import {
 } from '@/infra/http/response';
 import { SymbolService } from '@/services';
 import { BadRequestError } from '@/utils/errors';
+import { validate } from '@/infra/http/dtos/validate';
 
 const symbolService = new SymbolService();
 
@@ -39,12 +39,11 @@ export class SymbolController {
   };
   public createSymbol = async (req: Request) => {
     try {
-      const symbol = new DTO.CreateSymbolRequestDTO({
+      const data = validate(DTO.CreateSymbolSchema, {
         ...req.body,
         projectId: req.params.projectId,
       });
-      await validate(symbol);
-      const symbolCreated = await symbolService.createSymbol(symbol, req.userId);
+      const symbolCreated = await symbolService.createSymbol(data, req.userId || '');
       return created(symbolCreated);
     } catch (error: any) {
       if (error instanceof BadRequestError) {
@@ -56,9 +55,8 @@ export class SymbolController {
   public updateSymbol = async (req: Request) => {
     try {
       const { id } = req.params;
-      const symbol = new DTO.UpdateSymbolRequestDTO(req.body);
-      await validate(symbol);
-      await symbolService.updateSymbol(id, symbol, req.userId);
+      const data = validate(DTO.UpdateSymbolSchema, req.body);
+      await symbolService.updateSymbol(id, data, req.userId || '');
       return ok({ message: 'Symbol updated' });
     } catch (error: any) {
       if (
@@ -72,7 +70,7 @@ export class SymbolController {
   public deleteSymbol = async (req: Request) => {
     try {
       const { id } = req.params;
-      await symbolService.deleteSymbol(id, req.userId);
+      await symbolService.deleteSymbol(id, req.userId || '');
       return ok({ message: 'Symbol deleted' });
     } catch (error: any) {
       if (error instanceof BadRequestError) {

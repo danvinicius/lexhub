@@ -1,6 +1,5 @@
-
 import { ServerError } from '@/utils/errors';
-import User, { IUser, IUserProject, IUserRole } from '@/models/User';
+import User, { IUser, IUserProject } from '@/models/User';
 import Project from '@/models/Project';
 import { Logger } from '@/utils/logger/logger';
 
@@ -12,7 +11,7 @@ export namespace UserRepository {
   }
 
   export interface AddUserToProjectParams {
-    role: IUserRole;
+    role: string;
     projectId: String;
     userId: String;
   }
@@ -20,7 +19,7 @@ export namespace UserRepository {
   export interface ChangeUserRoleParams {
     userId: string;
     projectId: string;
-    newRole: IUserRole;
+    newRole: string;
   }
 
   export interface UpdateUserParams {
@@ -35,8 +34,9 @@ export namespace UserRepository {
 }
 
 export class UserRepository {
-
-  async addUserToProject(data: UserRepository.AddUserToProjectParams): Promise<IUserProject> {
+  async addUserToProject(
+    data: UserRepository.AddUserToProjectParams
+  ): Promise<IUserProject> {
     try {
       const user = await User.findById(data.userId);
       const project = await Project.findById(data.projectId);
@@ -51,16 +51,16 @@ export class UserRepository {
         role: data.role,
       };
 
-      user.projects.push({
+      user.projects?.push({
         ...userProject,
         project: project.id,
-        user: user.id
+        user: user.id,
       });
-  
+
       project.users.push({
         ...userProject,
         project: project.id,
-        user: user.id
+        user: user.id,
       });
 
       await project.save();
@@ -69,41 +69,43 @@ export class UserRepository {
       return {
         ...userProject,
         project: project.toJSON(),
-        user: user.toJSON()
+        user: user.toJSON(),
       };
     } catch (error: any) {
       throw new ServerError(error.message);
     }
   }
 
-  async changeUserRole(data: UserRepository.ChangeUserRoleParams): Promise<IUserProject> {
+  async changeUserRole(
+    data: UserRepository.ChangeUserRoleParams
+  ): Promise<IUserProject> {
     try {
       const user = await User.findById(data.userId);
       const project = await Project.findById(data.projectId);
-  
+
       if (!user || !project) {
         throw new ServerError('Usuário ou projeto não encontrado');
       }
-  
-      const userProjectInUser = user.projects.find(
+
+      const userProjectInUser = user.projects?.find(
         (up: any) => up.project.toString() === data.projectId
       );
-  
+
       const userProjectInProject = project.users.find(
         (pu: any) => pu.user.toString() === data.userId
       );
-  
+
       if (!userProjectInUser || !userProjectInProject) {
         throw new ServerError('O usuário não faz parte deste projeto');
       }
-  
+
       // Atualizar o cargo do usuário no projeto
       userProjectInUser.role = data.newRole;
       userProjectInProject.role = data.newRole;
-  
+
       await project.save();
       await user.save();
-  
+
       return {
         user: user.toJSON(),
         project: project.toJSON(),
@@ -114,51 +116,60 @@ export class UserRepository {
     }
   }
 
-  async removeUserFromProject(data: UserRepository.RemoveUserFromProjectParams): Promise<void> {
+  async removeUserFromProject(
+    data: UserRepository.RemoveUserFromProjectParams
+  ): Promise<void> {
     try {
       const user = await User.findById(data.userId);
       const project = await Project.findById(data.projectId);
-  
+
       if (!user || !project) {
         throw new ServerError('Usuário ou projeto não encontrado');
       }
-  
+
       // Remover o usuário da lista de projetos do usuário
-      user.projects = user.projects.filter(
+      user.projects = user.projects?.filter(
         (up: any) => up.project.toString() !== data.projectId
       );
-  
+
       // Remover o usuário da lista de usuários do projeto
       project.users = project.users.filter(
         (pu: any) => pu.user.toString() !== data.userId
       );
-  
+
       await user.save();
       await project.save();
     } catch (error: any) {
       throw new ServerError(error.message);
     }
   }
-  
-  
 
   async getUser(query: any): Promise<null | IUser> {
     try {
-      const user = await User.findOne(query)
-        .select('id name email projects password')
-
-      return user?.toJSON();
+      const user = await User.findOne(query).select(
+        'id name email projects password'
+      );
+      if (user) {
+        return user.toJSON();
+      }
+      return null;
     } catch (error: any) {
       throw new ServerError(error.message);
     }
   }
 
-  async getUserById(id: String): Promise<null | IUser> {    
+  async getUserById(id: String): Promise<null | IUser> {
     try {
-      const user = await User.findOne({_id: id})
-        .select('name email projects password')
-      
-      return user?.toJSON();
+      const user = await User.findOne({ _id: id }).select(
+        'name email projects password'
+      );
+
+      if (user) {
+        return user.toJSON();
+      }
+
+      return null;
+
     } catch (error: any) {
       Logger.error(error);
       throw new ServerError(error.message);
@@ -181,7 +192,10 @@ export class UserRepository {
     }
   }
 
-  async updateUser(id: String, data: UserRepository.UpdateUserParams): Promise<IUser> {
+  async updateUser(
+    id: String,
+    data: UserRepository.UpdateUserParams
+  ): Promise<IUser | null> {
     try {
       await User.findByIdAndUpdate(id, data);
       return await this.getUserById(id);

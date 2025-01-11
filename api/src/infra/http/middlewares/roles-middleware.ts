@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { isAdministrador, isColaborador, isProprietario } from '@/utils/validation/permission';
-import { IUserProject } from '@/models';
+import { isAdministrador, isColaborador, isProprietario } from '@/utils/authentication/permission';
+import { IUserProject, IUserRole } from '@/models';
 
 const userBelongsToProject = (userProjects: IUserProject[], projectId: String) => {
   
@@ -37,7 +37,7 @@ export const colabMiddleware = async (
       code: 401,
     });
   }
-  const userRole = project.role;
+  const userRole = project.role as IUserRole;
   if (!isColaborador(userRole)) {
     return res.status(403).json({
       error: "You have no permission.",
@@ -61,7 +61,7 @@ export const administradorMiddleware = async (
       code: 401,
     });
   }
-  const userRole = project.role;
+  const userRole = project.role as IUserRole;
   
   if (!isAdministrador(userRole)) {
     return res.status(403).json({
@@ -85,7 +85,7 @@ export const proprietarioMiddleware = async (
       code: 401,
     });
   }
-  const userRole = project.role;
+  const userRole = project.role as IUserRole;
   if (!isProprietario(userRole)) {
     return res.status(403).json({
       error: "You have no permission.",

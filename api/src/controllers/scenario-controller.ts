@@ -3,7 +3,6 @@ import {
   NotFoundError,
   BadRequestError,
 } from '@/utils/errors';
-import { validate } from '../utils/validation/validate';
 import * as DTO from '@/infra/http/dtos';
 import {
   badRequest,
@@ -13,6 +12,7 @@ import {
   serverError,
 } from '@/infra/http/response';
 import { ScenarioService } from '@/services';
+import { validate } from '@/infra/http/dtos/validate';
 
 const scenarioService = new ScenarioService();
 
@@ -41,12 +41,11 @@ export class ScenarioController {
   };
   public createScenario = async (req: Request) => {
     try {
-      const scenario = new DTO.CreateScenarioRequestDTO({
+      const data = validate(DTO.CreateScenarioSchema, {
         ...req.body,
         projectId: req.params.projectId,
-      });
-      await validate(scenario);
-      const scenarioCreated = await scenarioService.createScenario(scenario, req.userId);
+      })
+      const scenarioCreated = await scenarioService.createScenario(data, req.userId || '');
       return created(scenarioCreated);
     } catch (error: any) {
       if (error instanceof BadRequestError) {
@@ -58,11 +57,10 @@ export class ScenarioController {
 
   public createManyScenarios = async (req: Request) => {
     try {
-      const data = new DTO.CreateManyScenariosRequestDTO({
+      const data = validate(DTO.CreateManyScenariosSchema, {
         ...req.body,
         projectId: req.params.projectId,
       });
-      await validate(data);
       const scenariosCreated = await scenarioService.createManyScenarios(data);
       return created(scenariosCreated);
     } catch (error: any) {
@@ -75,9 +73,9 @@ export class ScenarioController {
   public updateScenario = async (req: Request) => {
     try {
       const { id } = req.params;
-      const scenario = new DTO.UpdateScenarioRequestDTO(req.body);
-      await validate(scenario);
-      await scenarioService.updateScenario(id, scenario, req.userId);
+      
+      const scenario = validate(DTO.UpdateScenarioSchema, req.body);
+      await scenarioService.updateScenario(id, scenario, req.userId || '');
       return ok({ message: 'Scenario updated' });
     } catch (error: any) {
       if (error instanceof BadRequestError) {
@@ -89,7 +87,7 @@ export class ScenarioController {
   public deleteScenario = async (req: Request) => {
     try {
       const { id } = req.params;
-      await scenarioService.deleteScenario(id, req.userId);
+      await scenarioService.deleteScenario(id, req.userId || '');
       return ok({ message: 'Scenario deleted' });
     } catch (error: any) {
       return serverError(error.message);
