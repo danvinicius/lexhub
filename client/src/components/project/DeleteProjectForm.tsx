@@ -72,7 +72,7 @@ const DeleteProjectForm: FC<DeleteProjectFormProps> = ({ project, onClose }: Del
 				/>
 			</div>
 			<br />
-			<Form style={{gap: '.5rem', userSelect: 'none'}}>
+			<Form style={{gap: '.5rem'}}>
 				<p>
           Por motivos de segurança, para excluir este projeto digite{' '}
 					<b>{project.name}</b>

@@ -254,6 +254,9 @@ p.error, span.error {
 
 span.action {
   color: var(--primary-color);
+  &.blue {
+    color: #0250bb;
+  }
 }
 
 .container {

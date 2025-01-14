@@ -3,14 +3,12 @@ import { ILexiconScenario, IUserRole } from '../../shared/interfaces';
 import { useHelpers } from '../../hooks/useHelpers';
 import { useLexicon } from '../../hooks/useLexicon';
 import KebabVertical from '../../assets/icon/Kebab_Vertical.svg';
-import Plus from '../../assets/icon/Plus.svg';
 import { FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { Modal } from '@mui/material';
 import { CreateResourceForm } from './resource/CreateResourceForm';
 import { ScenarioActionsOptionsMenu } from './ScenarioActionsOptionsMenu';
 import UpdateScenarioForm from './UpdateScenarioForm';
 import DeleteScenarioForm from './DeleteScenarioForm';
-import EditPen from '../../assets/icon/Edit.svg';
 import { CreateRestrictionForm } from './restriction/CreateRestrictionForm';
 import { ProjectContext } from '../../context/ProjectContext';
 import { CreateEpisodesForm } from './episodes/CreateEpisodesForm';
@@ -193,13 +191,13 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 												<span className='add-restriction pointer flex align-center gap-5'
 													onClick={() => handleOpenCreateRestriction()}>
 													{scenario.context.restrictions.length > 0 ? (
-														<>
-                                                    Gerenciar restrições <img src={EditPen} alt='' />
-														</>
+														<small>
+                                                    Gerenciar restrições
+														</small>
 													) : (
-														<>
-                                                    Cadastrar restrições <img src={Plus} alt='' />{' '}
-														</>
+														<small>
+                                                    Cadastrar restrições
+														</small>
 													)}
 												</span>
 											)}
@@ -253,8 +251,8 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 						)}
 					</div>
 				</div>
-				<div className='flex column gap-2'>
-					<div className="flex gap-2">
+				<div className='scenario-resources flex column gap-2'>
+					<div className="flex gap-2 align-center">
 						<div className='flex gap-5 border-none'>
 							<HomeRepairServiceIcon />
 							<h3>Recursos</h3>
@@ -263,13 +261,13 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 							{isColaborador && (
 								<span className='add-resource pointer flex align-center gap-5' onClick={handleOpenCreateResourceModal}>
 									{scenario.resources.length > 0 ? (
-										<>
-                                    Gerenciar recursos <img src={EditPen} alt='' />
-										</>
+										<small>
+                                    Gerenciar recursos
+										</small>
 									) : (
-										<>
-                                    Cadastrar recursos <img src={Plus} alt='' />{' '}
-										</>
+										<small>
+                                    Cadastrar recursos
+										</small>
 									)}
 								</span>
 							)}
@@ -304,13 +302,13 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 															onClick={() => handleOpenCreateRestriction(resource.id)}
 														>
 															{resource.restrictions?.length > 0 ? (
-																<>
-                                                                Gerenciar restrições <img src={EditPen} alt='' />
-																</>
+																<small>
+                                                                Gerenciar restrições
+																</small>
 															) : (
-																<>
-                                                                Cadastrar restrições <img src={Plus} alt='' />{' '}
-																</>
+																<small>
+                                                                Cadastrar restrições
+																</small>
 															)}
 														</span>
 													)}
@@ -335,7 +333,7 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 					)}
 				</div>
 				<div className='flex column gap-2'>
-					<div className="flex gap-2">
+					<div className="flex gap-2 align-center">
 						<div className='flex gap-5 border-none'>
 							<ChecklistIcon />
 							<h3>Episódios</h3>
@@ -344,13 +342,13 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
 							{isColaborador && (
 								<span className='add-episode pointer flex align-center gap-5' onClick={handleOpenCreateEpisodesModal}>
 									{scenario.episodes.length > 0 ? (
-										<>
-                                    Gerenciar episódios <img src={EditPen} alt='' />
-										</>
+										<small>
+                                    Gerenciar episódios
+										</small>
 									) : (
-										<>
-                                    Cadastrar episódios <img src={Plus} alt='' />{' '}
-										</>
+										<small>
+                                    Cadastrar episódios
+										</small>
 									)}
 								</span>
 							)}

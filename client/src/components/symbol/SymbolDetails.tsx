@@ -14,9 +14,10 @@ interface SymbolDetailsProps {
     symbol?: ILexiconSymbol;
     style?: CSSProperties;
 	resetProjectInfo?: () => void;
+	withOptions?: boolean;
 }
 
-const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style, resetProjectInfo }: SymbolDetailsProps): ReactNode => {
+const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style, resetProjectInfo, withOptions = true }: SymbolDetailsProps): ReactNode => {
 	const { isAuthenticated } = useContext(UserContext) || {};
 	const [isColaborador, setIsColaborador] = useState(false);
 	const { project } = useContext(ProjectContext);
@@ -58,7 +59,7 @@ const SymbolDetails: FC<SymbolDetailsProps> = ({ symbol, style, resetProjectInfo
 							<div className='classification'>
 								<p>{symbol?.classification}</p>
 							</div>
-							{isColaborador && (
+							{isColaborador && withOptions && (
 								<>
 									<img
 										src={KebabVertical}

@@ -54,7 +54,7 @@ const LoginForm: FC<LoginFormProps> = ({
 				<h1>Login</h1>
 				<p className="signup">
           Ainda não possui uma conta? &nbsp;
-					<span onClick={() => setCurrentScreen('signup')} className="action pointer">
+					<span onClick={() => setCurrentScreen('signup')} className="action pointer blue">
             Se inscreva.
 					</span>
 				</p>

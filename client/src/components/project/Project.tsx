@@ -107,14 +107,17 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
     // create scenario modal control
     const [isCreateScenarioModalOpen, setIsCreateScenarioModalOpen] = useState(false);
     const handleOpenCreateScenarioModal = () => {
-        handleCloseCreateScenarioOptionsMenu()
-        setIsCreateScenarioModalOpen(true)
+        handleCloseCreateScenarioOptionsMenu();
+        setIsCreateScenarioModalOpen(true);
     };
     const handleCloseCreateScenarioModal = () => setIsCreateScenarioModalOpen(false);
 
     // create multiple scenarios modal control
     const [isCreateMultipleScenariosModalOpen, setIsCreateMultipleScenariosModalOpen] = useState(false);
-    const handleOpenCreateMultipleScenariosModal = () => setIsCreateMultipleScenariosModalOpen(true)
+    const handleOpenCreateMultipleScenariosModal = () => {
+        handleCloseCreateScenarioOptionsMenu();
+        setIsCreateMultipleScenariosModalOpen(true);
+    }
     const handleCloseCreateMultipleScenariosModal = () => setIsCreateMultipleScenariosModalOpen(false);
 
     // add user to project modal control
@@ -230,21 +233,6 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                                     )}
                                 </div>
                             )}
-                            {isColaborador && (
-                                <div className='buttons-container flex gap-1'>
-                                    <Button onClick={handleOpenCreateScenarioOptionsMenu} theme='primary' text='Novo cenário'></Button>
-                                    <Button onClick={handleOpenCreateSymbolModal} theme='secondary' text='Novo símbolo'></Button>
-
-                                    {isCreateScenarioOptionsMenuOpen && (
-                                        <section className='create-scenario-options-menu' ref={createScenarioOptionsMenuRef}>
-                                            <div className='flex column user-info'>
-                                                <span className='pointer' onClick={handleOpenCreateScenarioModal}>Criar um único cenário</span>
-                                                <span className='pointer' onClick={handleOpenCreateMultipleScenariosModal}>Criar múltiplos cenários</span>
-                                            </div>
-                                        </section>
-                                    )}
-                                </div>
-                            )}
                         </div>
                         <div className='project-description' dangerouslySetInnerHTML={{ __html: project?.description || '' }}></div>
                         {proprietario && (
@@ -256,7 +244,19 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                         )}
                     </div>
                 )}
-                <div className='flex column gap-1 border-radius-5'>
+                <div className='flex column gap-1 border-radius-5 relative'>
+                    {isCreateScenarioOptionsMenuOpen && (
+                        <section className='create-scenario-options-menu' ref={createScenarioOptionsMenuRef}>
+                            <div className='flex column user-info'>
+                                <span className='pointer' onClick={handleOpenCreateScenarioModal}>
+                                    Criar um único cenário
+                                </span>
+                                <span className='pointer' onClick={handleOpenCreateMultipleScenariosModal}>
+                                    Criar múltiplos cenários
+                                </span>
+                            </div>
+                        </section>
+                    )}
                     <Box sx={{ width: '100%', padding: 0 }}>
                         <Box
                             sx={{
@@ -281,6 +281,19 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                             >
                                 <Tab label='Cenários' {...a11yProps(0)} />
                                 <Tab label='Símbolos' {...a11yProps(1)} />
+                                {isColaborador && (
+                                    <div className='buttons-container flex'>
+                                        {currentTab == 0 ? (
+                                            <Button
+                                                onClick={handleOpenCreateScenarioOptionsMenu}
+                                                theme='primary'
+                                                text='Novo cenário'
+                                            ></Button>
+                                        ) : (
+                                            <Button onClick={handleOpenCreateSymbolModal} theme='primary' text='Novo símbolo'></Button>
+                                        )}
+                                    </div>
+                                )}
                             </Tabs>
                         </Box>
                         <div className='gap-15 relative'>

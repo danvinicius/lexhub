@@ -1,73 +1,77 @@
 .project {
-  padding: 0 1rem;
-  .project-info {
-    padding: 0 0 3rem;
+    padding: 0 1rem;
+    .project-info {
+        padding: 0 0 3rem;
 
-    .visiblidade {
-      color: var(--secondary-text-color);
-      font-size: 14px;
-      margin-right: .5rem;
-      svg {
-        max-width: 16px;
-      }
-    }
-
-    .project-description {
-      padding-top: 1rem;
-      font-size: 1.25rem;
-      margin-bottom: 1rem;
-      max-width: 800px;
-      word-wrap: break-word;
-    }
-
-    .project-header {
-      .project-name {
-        max-width: 700px;
-        margin-right: auto;
-      }
-    }
-
-    .project-description {
-      ol, ul {
-        padding-left: 1.3rem;
-      }
-      .ql-align-center {
-        text-align: center;
-      }
-      .ql-align-right {
-        text-align: right;
-      }
-    }
-    .buttons-container {
-      min-width: max-content;
-      position: relative;
-
-      section.create-scenario-options-menu {
-            background: #fff;
-            position: absolute;
-            top: 120%;
-            right: 55%;
-            width: max-content;
-            border-radius: 5px;
-            filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.32));
-            
-            span {
-              padding: .75rem 1.5rem;
-              transition: 0.2s ease-in-out;
-              
-              &:hover {
-                background: rgba(0,0,0,0.05);
-
-              }
+        .visiblidade {
+            color: var(--secondary-text-color);
+            font-size: 14px;
+            margin-right: 0.5rem;
+            svg {
+                max-width: 16px;
             }
-      }
+        }
+
+        .project-description {
+            padding-top: 1rem;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            max-width: 800px;
+            word-wrap: break-word;
+        }
+
+        .project-header {
+            .project-name {
+                max-width: 700px;
+                margin-right: auto;
+            }
+        }
+
+        .project-description {
+            ol,
+            ul {
+                padding-left: 1.3rem;
+            }
+            .ql-align-center {
+                text-align: center;
+            }
+            .ql-align-right {
+                text-align: right;
+            }
+        }
+        .project-proprietario {
+            font-size: 1rem;
+
+            span {
+                font-weight: bold;
+            }
+        }
     }
-    .project-proprietario {
-      font-size: 1rem;
+
+    section.create-scenario-options-menu {
+      background: #fff;
+      position: absolute;
+      top: 2%;
+      right: 5%;
+      width: max-content;
+      z-index: 100;
+      border-radius: 5px;
+      filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.32));
 
       span {
-        font-weight: bold;
+          padding: 0.75rem 1.5rem;
+          transition: 0.2s ease-in-out;
+
+          &:hover {
+              background: rgba(0, 0, 0, 0.05);
+          }
       }
-    }
   }
+
+    .buttons-container {
+        min-width: max-content;
+        position: relative;
+        margin-left: auto;
+        margin-bottom: 0.5rem;
+    }
 }
