@@ -3,17 +3,13 @@
   color: var(--secondary-text-color);
   min-width: 500px;
   box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
-  font-size: 1.15rem;
+  font-size: 1rem;
   svg {
     max-width: 1.25rem;
   }
   img.scenario-options-button {
     top: 2rem;
     right: 2rem;
-  }
-
-  small.empty {
-    color: var(--third-text-color);
   }
 
   p {
@@ -54,13 +50,7 @@
       }
     }
 
-    .restrictions {
-      ul {
-        padding-top: 1rem;
-      }
-    }
-
-    .add-restriction, .add-resource, .add-episode {
+    .add-restriction, .add-resource, .add-episode, .add-actors, .add-exceptions, .add-context {
       text-decoration: underline;
       color: #0250bb;
       width: max-content;

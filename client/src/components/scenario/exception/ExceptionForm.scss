@@ -1,0 +1,42 @@
+.create-exceptions-form {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    width: 100%;
+    background: #fff;
+    border-radius: 5px;
+    overflow: scroll;
+    @media screen and (min-width: 998px) {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 700px;
+      padding: 2rem;
+    }
+
+    .create-exceptions-form-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+
+      img {
+        cursor: pointer;
+      }
+    }
+
+    .exceptions {
+      color: var(--primary-text-color);
+    }
+
+    form {
+      max-height: 85vh;
+      width: 100%;
+    }
+    
+    .loading {
+      margin: 0 auto;
+    }
+  }
+  

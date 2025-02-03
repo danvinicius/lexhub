@@ -3,10 +3,10 @@ import { GET_PROJECT } from '../api';
 import api from '../lib/axios';
 import Loading from '../components/helper/Loading';
 import Error from '../components/helper/Error';
-import ScenariosList from '../components/scenario/ScenariosList';
+import ScenariosList from '../components/scenario/scenario-list/ScenarioList';
 import { Box, Tab, Tabs } from '@mui/material';
-import SymbolsList from '../components/symbol/SymbolsList';
-import { ProfilePicture } from '../components/user/ProfilePicture';
+import SymbolsList from '../components/symbol/symbol-list/SymbolList';
+import { ProfilePicture } from '../components/user/profile-picture/ProfilePicture';
 import { extendTheme } from '@mui/material/styles';
 import { AppProvider, Router } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
@@ -16,11 +16,11 @@ import { ErrorResponse, ILexiconSymbol, IUserProject } from '../shared/interface
 import { AxiosError } from 'axios';
 import { UserContext } from '../context/UserContext';
 import './css/Homepage.scss';
-import SymbolDetails from '../components/symbol/SymbolDetails';
+import SymbolDetails from '../components/symbol/symbol-details/SymbolDetails';
 import { ProjectContext } from '../context/ProjectContext';
-import { LoginButton } from '../components/login/LoginButton';
+import { LoginButton } from '../components/login/buttons/LoginButton';
 import { useState, useContext, useEffect, useMemo, useCallback, FC, ReactNode, SyntheticEvent } from 'react';
-import { NavbarMenuLinks } from '../components/navbar/NavbarMenuLinks';
+import { NavbarMenuLinks } from '../components/navbar/navbar-menu-links/NavbarMenuLinks';
 
 interface TabPanelProps {
     children?: ReactNode;

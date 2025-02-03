@@ -1,0 +1,19 @@
+.scenarios-form-wrapper {
+    padding-top: 0.5rem;
+    padding-right: 0.5rem;
+    max-height: 350px;
+    overflow: scroll;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.scenario-form-group {
+    display: flex;
+    gap: 16px; /* Espaçamento entre os elementos */
+    align-items: flex-start; /* Alinha os itens no topo */
+}
+.delete-scenario-input {
+    cursor: pointer;
+}

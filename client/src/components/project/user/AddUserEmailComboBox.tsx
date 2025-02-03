@@ -56,23 +56,25 @@ export const AddUserEmailComboBox: FC<AddUserEmailComboBoxProps> = ({
                             sx={{
                                 '& .MuiOutlinedInput-root': {
                                     '& fieldset': {
-                                        border: '1px solid var(--secondary-text-color)',
+                                        border: '1px solid #ccc',
+                                        color: 'var(--secondary-text-color)'
                                     },
                                     '&:hover fieldset': {
-                                        border: '1px solid var(--secondary-text-color)',
+                                        border: '1px solid #ccc',
+                                        color: 'var(--secondary-text-color)'
                                     },
                                     '&.Mui-focused fieldset': {
-                                        border: error ? '1px solid var(--error-color)' : '1px solid var(--primary-color)',
+                                        border: '1px solid var(--primary-color)',
                                     },
                                     '& input': {
-										padding: '0.5rem 1rem',
+                                        padding: '0.5rem 1rem',
                                     },
                                 },
                                 '& .MuiInputLabel-outlined': {
-                                    color: 'var(--primary-text-color)',
+                                    color: 'var(--primary-color)',
                                 },
                                 '& .MuiInputLabel-outlined.Mui-focused': {
-                                    color: 'var(--primary-text-color)',
+                                    color: 'var(--primary-color)',
                                 },
                             }}
                         />

@@ -3,7 +3,7 @@ import { Logo } from '../logo/Logo';
 import './Navbar.scss';
 import Hamburger from '../../assets/icon/Hamburger.svg';
 import Close from '../../assets/icon/Close.svg';
-import { NavbarMenuLinks } from './NavbarMenuLinks';
+import { NavbarMenuLinks } from './navbar-menu-links/NavbarMenuLinks';
 
 export const Navbar: FC = () => {
 	const [isMobileMenuActive, setIsMobileMenuActive] = useState(false);

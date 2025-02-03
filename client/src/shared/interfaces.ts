@@ -5,7 +5,7 @@ export interface ErrorResponse {
 export interface IScenario {
     readonly id?: string;
     title: string;
-    goal: string;
+    goal?: string;
     exceptions?: IException[];
     resources?: IResource[];
     actors?: IActor[];
@@ -68,18 +68,20 @@ export interface IImpact {
     description: string;
 }
 
+export interface INonSequentialEpisode {
+    id: string;
+    type: string;
+    description: string;
+    restriction: string;
+}
+
 export interface IEpisode {
     readonly id: string;
     position: number;
     description?: string;
     type?: string;
     restriction?: string;
-    nonSequentialEpisodes?: {
-        id: string;
-        type: string;
-        description: string;
-        restriction: string;
-    }[];
+    nonSequentialEpisodes?: INonSequentialEpisode[];
 }
 
 export interface IRestriction {
@@ -120,18 +122,28 @@ export interface Lexicon {
     foundLexicons: LexiconInfo[];
 }
 
+export interface ILexiconNonSequentialEpisode {
+    id: string;
+    type: string;
+    description: Lexicon;
+    restriction: Lexicon;
+}
+
 export interface ILexiconEpisode {
     id: string;
     position: number;
     description: Lexicon;
     type: string;
     restriction: Lexicon;
-    nonSequentialEpisodes?: {
-        id: string;
-        type: string;
-        description: Lexicon;
-        restriction: Lexicon;
-    }[];
+    nonSequentialEpisodes?: ILexiconNonSequentialEpisode[];
+}
+
+export interface ILexiconImpact {
+    description: Lexicon;
+}
+
+export interface ILexiconSynonym {
+    name: Lexicon;
 }
 
 export interface ILexiconSymbol {
@@ -139,50 +151,46 @@ export interface ILexiconSymbol {
     name: string;
     notion: Lexicon;
     classification: string;
-    impacts: {
-      description: Lexicon;
-    }[];
-    synonyms: {
-      name: Lexicon;
-    }[];
+    impacts: ILexiconImpact[];
+    synonyms: ILexiconSynonym[];
     projectId: string;
-  }
+}
+
+export interface ILexiconContext {
+    geographicLocation: Lexicon;
+    temporalLocation: Lexicon;
+    preCondition: Lexicon;
+    restrictions: ILexiconRestriction[];
+}
+
+export interface ILexiconRestriction {
+    id: string;
+    description: Lexicon;
+}
+
+export interface ILexiconResource {
+    id: string;
+    name: Lexicon;
+    restrictions: ILexiconRestriction[];
+}
+
+export interface ILexiconException {
+    description: Lexicon;
+}
+
+export interface ILexiconActor {
+    name: Lexicon;
+}
 
 export interface ILexiconScenario {
     id: string;
     title: Lexicon;
     goal: Lexicon;
-    context: {
-        geographicLocation: Lexicon;
-        temporalLocation: Lexicon;
-        preCondition: Lexicon;
-        restrictions: {
-            id: string;
-            description: Lexicon;
-        }[];
-    };
-    exceptions: {
-        description: Lexicon;
-    }[];
-    actors: {
-        name: Lexicon;
-    }[];
-    resources: {
-        id: string;
-        name: Lexicon;
-        restrictions: {
-            id: string;
-            description: Lexicon;
-        }[];
-    }[];
+    context: ILexiconContext;
+    exceptions: ILexiconException[];
+    actors: ILexiconActor[];
+    resources: ILexiconResource[];
     episodes: ILexiconEpisode[];
-    groups: {
-        position: number;
-        nonSequentialEpisodes: {
-            restriction: IRestriction;
-            description: Lexicon;
-        }[];
-    }[];
     projectId: string;
 }
 
@@ -198,10 +206,10 @@ export interface IDifference {
 }
 
 export interface IChange {
-  readonly id?: string;
-  differences: IDifference[];
-  responsible: IUser;
-  entityName: string;
-  project: IProject;
-  createdAt: string;
+    readonly id?: string;
+    differences: IDifference[];
+    responsible: IUser;
+    entityName: string;
+    project: IProject;
+    createdAt: string;
 }

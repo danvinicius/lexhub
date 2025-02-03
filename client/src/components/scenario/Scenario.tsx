@@ -2,504 +2,328 @@ import './Scenario.scss';
 import { ILexiconScenario, IUserRole } from '../../shared/interfaces';
 import { useHelpers } from '../../hooks/useHelpers';
 import { useLexicon } from '../../hooks/useLexicon';
-import KebabVertical from '../../assets/icon/Kebab_Vertical.svg';
 import { FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { Modal } from '@mui/material';
-import { CreateResourceForm } from './resource/CreateResourceForm';
-import { ScenarioActionsOptionsMenu } from './ScenarioActionsOptionsMenu';
-import UpdateScenarioForm from './UpdateScenarioForm';
-import DeleteScenarioForm from './DeleteScenarioForm';
-import { CreateRestrictionForm } from './restriction/CreateRestrictionForm';
+import { ResourceForm } from './resource/ResourceForm';
+import DeleteScenarioForm from './delete-scenario/DeleteScenario';
 import { ProjectContext } from '../../context/ProjectContext';
-import { CreateEpisodesForm } from './episodes/CreateEpisodesForm';
+import { EpisodesForm } from './episode/EpisodeForm';
 import { UserContext } from '../../context/UserContext';
-import { v4 as uuidv4 } from 'uuid';
-import ErrorIcon from '@mui/icons-material/Error';
-import LockIcon from '@mui/icons-material/Lock';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import RoomIcon from '@mui/icons-material/Room';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
 import FlagIcon from '@mui/icons-material/Flag';
-import LanguageIcon from '@mui/icons-material/Language';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import ChecklistIcon from '@mui/icons-material/Checklist';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import DescriptionIcon from '@mui/icons-material/Description';
-import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
+import ActorsList from './actor/ActorList';
+import ExceptionsList from './exception/ExceptionList';
+import ResourcesList from './resource/ResourceList';
+import EpisodeList from './episode/EpisodeList';
+import Context from './context/Context';
+import ScenarioHeader from './scenario-header/ScenarioHeader';
+import { ActorsForm } from './actor/ActorForm';
+import { ExceptionsForm } from './exception/ExceptionForm';
+import ContextForm from './context/ContextForm';
+import DeleteEpisode from './episode/delete-episode/DeleteEpisode';
+import DeleteResource from './resource/delete-resource/DeleteResource';
+import ScenarioForm from './scenario-form/ScenarioForm';
 
 interface IScenarioProps {
     scenario: ILexiconScenario;
-	resetProjectInfo: () => void;
+    resetProjectInfo: () => void;
 }
 
 const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioProps): ReactNode => {
-	const { slugify } = useHelpers();
-	const { processContent } = useLexicon();
-	const { project } = useContext(ProjectContext);
+    const { slugify } = useHelpers();
+    const { processContent } = useLexicon();
+    const { project } = useContext(ProjectContext);
 
-	const { isAuthenticated } = useContext(UserContext) || {};
-	const [isColaborador, setIsColaborador] = useState(false);
+    const { isAuthenticated } = useContext(UserContext) || {};
+    const [isColaborador, setIsColaborador] = useState(false);
 
-	const resetScenarioInfo = () => {
-		resetProjectInfo();
-		closeAllModals();
-	};
+    const resetScenarioInfo = () => {
+        resetProjectInfo();
+        closeAllModals();
+    };
 
-	const closeAllModals = () => {
-		handleCloseCreateEpisodesModal();
-		handleCloseCreateResourceModal();
-		handleCloseCreateRestriction();
-		handleCloseDeleteScenarioModal();
-		handleCloseUpdateScenarioModal();
-	};
+    const closeAllModals = () => {
+        handleCloseEpisodesModal();
+        handleCloseResourceModal();
+        handleCloseDeleteScenarioModal();
+        handleCloseScenarioModal();
+        handleCloseActorsModal();
+        handleCloseExceptionsModal();
+        handleCloseContextModal();
+        handleCloseDeleteEpisodeModal();
+        handleCloseDeleteResourceModal();
+    };
 
-	useEffect(() => {
-		const role = isAuthenticated()?.projects.find((someProject) => someProject.project == project?.id)?.role;
-		setIsColaborador(role == IUserRole.PROPRIETARIO || role == IUserRole.ADMINISTRADOR || role == IUserRole.COLABORADOR);
-	}, [isAuthenticated, project?.id]);
+    useEffect(() => {
+        const role = isAuthenticated()?.projects.find((someProject) => someProject.project == project?.id)?.role;
+        setIsColaborador(role == IUserRole.PROPRIETARIO || role == IUserRole.ADMINISTRADOR || role == IUserRole.COLABORADOR);
+    }, [isAuthenticated, project?.id]);
 
-	const [restrictionResourceId, setRestrictionResourceId] = useState<string | undefined>('');
-	const [, setRestrictionEpisodeId] = useState<string | undefined>('');
+    // actors modal function
+    const [isActorsModalOpen, setIsActorsModalOpen] = useState(false);
+    const handleOpenActorsModal = () => {
+        setIsActorsModalOpen(true);
+    };
+    const handleCloseActorsModal = () => {
+        setIsActorsModalOpen(false);
+    };
 
-	const [isCreateResourceModalOpen, setIsCreateResourceModalOpen] = useState(false);
-	const handleOpenCreateResourceModal = () => {
-		setIsCreateResourceModalOpen(true);
-	};
-	const handleCloseCreateResourceModal = () => {
-		setIsCreateResourceModalOpen(false);
-	};
+    // actors modal function
+    const [isExceptionsModalOpen, setIsExceptionsModalOpen] = useState(false);
+    const handleOpenExceptionsModal = () => {
+        setIsExceptionsModalOpen(true);
+    };
+    const handleCloseExceptionsModal = () => {
+        setIsExceptionsModalOpen(false);
+    };
 
-	
-	// episode modal functions
-	const [isCreateEpisodesModalOpen, setIsCreateEpisodesModalOpen] = useState(false);
-	const handleOpenCreateEpisodesModal = () => {
-		setIsCreateEpisodesModalOpen(true);
-	};
-	const handleCloseCreateEpisodesModal = () => {
-		setIsCreateEpisodesModalOpen(false);
-	};
-	
-	// restriction modal functions
-	const [isCreateRestrictionModalOpen, setIsCreateRestrictionModalOpen] = useState(false);
-	const handleOpenCreateRestriction = (resourceId?: string, episodeId?: string) => {
-		setRestrictionResourceId(resourceId);
-		setRestrictionEpisodeId(episodeId);
-		setIsCreateRestrictionModalOpen(true);
-	};
-	const handleCloseCreateRestriction = () => {
-		setRestrictionResourceId('');
-		setRestrictionEpisodeId('');
-		setIsCreateRestrictionModalOpen(false);
-	};
+    // context modal function
+    const [isContextModalOpen, setIsContextModalOpen] = useState(false);
+    const handleOpenContextModal = () => {
+        setIsContextModalOpen(true);
+    };
+    const handleCloseContextModal = () => {
+        setIsContextModalOpen(false);
+    };
 
-	// scenario actions options modal functions
-	const [isScenarioActionsOptionsMenuOpen, setIsScenarioActionsOptionsMenuOpen] = useState(false);
-	
-	// update scenario modal functions
-	const [isUpdateScenarioModalOpen, setIsUpdateScenarioModalOpen] = useState(false);
-	const handleCloseUpdateScenarioModal = () => setIsUpdateScenarioModalOpen(false);
-	const handleOpenUpdateScenarioModal = () => {
-		setIsUpdateScenarioModalOpen(true);
-		setIsScenarioActionsOptionsMenuOpen(false);
-	};
-	
-	// delete scenario modal functions
-	const [isDeleteScenarioModalOpen, setIsDeleteScenarioModalOpen] = useState(false);
-	const handleCloseDeleteScenarioModal = () => setIsDeleteScenarioModalOpen(false);
-	const handleOpenDeleteScenarioModal = () => {
-		setIsDeleteScenarioModalOpen(true);
-		setIsScenarioActionsOptionsMenuOpen(false);
-	};
+    // resources modal function
+    const [currentResourceId, setCurrentResourceId] = useState('');
+    const [isResourceModalOpen, setIsResourceModalOpen] = useState(false);
+    const handleOpenResourceModal = (resourceId?: string) => {
+        if (resourceId) {
+            setCurrentResourceId(resourceId);
+        }
+        setIsResourceModalOpen(true);
+    };
+    const handleCloseResourceModal = () => {
+        setIsResourceModalOpen(false);
+        setCurrentResourceId('');
+    };
 
+    // Delete resource
+    const [isDeleteResourceModalOpen, setIsDeleteResourceModalOpen] = useState(false);
+    const handleOpenDeleteResourceModal = (episodeId?: string) => {
+        if (episodeId) {
+            setCurrentResourceId(episodeId);
+        }
+        setIsDeleteResourceModalOpen(true);
+    };
+    const handleCloseDeleteResourceModal = () => {
+        setIsDeleteResourceModalOpen(false);
+        setCurrentResourceId('');
+    };
 
-	return (
-		<div className='scenario flex column gap-2 relative border-radius-5' id={`${scenario.id}-${slugify(scenario.title.content)}`}>
-			<div className='scenario-header'>
-				<h2>{processContent(scenario.title)}</h2>
-				{isColaborador && (
-					<>
-						<img
-							src={KebabVertical}
-							alt=''
-							className='scenario-options-button absolute pointer'
-							onClick={() => setIsScenarioActionsOptionsMenuOpen(true)}
-						/>
-						<div className='scenario-options'>
-							{isScenarioActionsOptionsMenuOpen && (
-								<ScenarioActionsOptionsMenu
-									handleOpenUpdateScenarioModal={handleOpenUpdateScenarioModal}
-									handleCloseUpdateScenarioModal={handleCloseUpdateScenarioModal}
-									setIsScenarioActionsOptionsMenuOpen={setIsScenarioActionsOptionsMenuOpen}
-									isScenarioActionsOptionsMenuOpen={isScenarioActionsOptionsMenuOpen}
-									handleOpenDeleteScenarioModal={handleOpenDeleteScenarioModal}
-								/>
-							)}
-						</div>
-					</>
-				)}
-			</div>
-			<section className='scenario-details flex column gap-3 relative'>
-				<div className='flex column gap-5'>
-					<div className='flex gap-5 border-none'>
-						<FlagIcon />
-						<h3>Objetivo</h3>
-					</div>
-					<p>{processContent(scenario.goal)}</p>
-				</div>
-				<div className='flex column gap-2'>
-					<div className='flex gap-5 border-none'>
-						<LanguageIcon />
-						<h3>Contexto</h3>
-					</div>
-					<div className='scenario-context'>
-						<div style={{maxWidth: 1200}}>
-							<table className='scenario-context-details'>
-								<tbody>
-									<tr>
-										<th>
-											<div className='flex gap-5 border-none'>
-												<CheckBoxIcon />
-												<p>Pré-condição</p>
-											</div>
-										</th>
-										<th>
-											<div className='flex gap-5 border-none'>
-												<RoomIcon />
-												<p>Localização geográfica</p>
-											</div>
-										</th>
-										<th>
-											<div className='flex gap-5 border-none'>
-												<CalendarMonthIcon />
-												<p>Localização temporal</p>
-											</div>
-										</th>
-										<th>
-											<div className='flex gap-5 border-none'>
-												<LockIcon />
-												<p>Restrições</p>
-											</div>
-										</th>
-									</tr>
-									<tr>
-										<td>{scenario.context?.preCondition.content ? processContent(scenario.context?.preCondition) : <small className='empty'>Nenhuma pré-condição cadastrada</small>}</td>
-										<td>{scenario.context?.geographicLocation?.content ? processContent(scenario.context?.geographicLocation) : <small className='empty'>Nenhuma localização geográfica cadastrada</small>}</td>
-										<td>{scenario.context?.temporalLocation?.content ? processContent(scenario.context?.temporalLocation) : <small className='empty'>Nenhuma localização temporal cadastrada</small>}</td>
-										<td className='restrictions'>
-											{isColaborador && (
-												<span className='add-restriction pointer flex align-center gap-5'
-													onClick={() => handleOpenCreateRestriction()}>
-													{scenario.context.restrictions.length > 0 ? (
-														<small>
-                                                    Gerenciar restrições
-														</small>
-													) : (
-														<small>
-                                                    Cadastrar restrições
-														</small>
-													)}
-												</span>
-											)}
-											{scenario.context.restrictions.length > 0 && (
-												<ul className='flex column gap-75'>
-													{scenario.context?.restrictions?.map((restriction) => {
-														return (
-															<li key={restriction.description.content}>{processContent(restriction.description)}</li>
-														);
-													})}
-												</ul>
-											)}
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-				<div className='flex column gap-5'>
-					<div className='flex gap-5 border-none'>
-						<PeopleAltIcon />
-						<h3>Atores</h3>
-					</div>
-					<div className='scenario-actors flex align-center'>
-						{scenario.actors?.length ? (
-							<ul className='flex column gap-1'>
-								{scenario.actors?.map((actor) => {
-									return <li key={actor.name.content}>{processContent(actor.name)}</li>;
-								})}
-							</ul>
-						) : (
-							<small className='empty'>Nenhum ator cadastrado</small>
-						)}
-					</div>
-				</div>
-				<div className='flex column gap-5'>
-					<div className='flex gap-5 border-none'>
-						<ErrorIcon />
-						<h3>Exceções</h3>
-					</div>
-					<div className='scenario-exceptions flex align-center'>
-						{scenario.exceptions?.length ? (
-							<ul className='flex column gap-1'>
-								{scenario.exceptions?.map((exception) => {
-									return <li key={exception.description.content}>{processContent(exception.description)}</li>;
-								})}
-							</ul>
-						) : (
-							<small className='empty'>Nenhuma exceção cadastrada</small>
-						)}
-					</div>
-				</div>
-				<div className='scenario-resources flex column gap-2'>
-					<div className="flex gap-2 align-center">
-						<div className='flex gap-5 border-none'>
-							<HomeRepairServiceIcon />
-							<h3>Recursos</h3>
-						</div>
-						<div className='scenario-resources flex column gap-1'>
-							{isColaborador && (
-								<span className='add-resource pointer flex align-center gap-5' onClick={handleOpenCreateResourceModal}>
-									{scenario.resources.length > 0 ? (
-										<small>
-                                    Gerenciar recursos
-										</small>
-									) : (
-										<small>
-                                    Cadastrar recursos
-										</small>
-									)}
-								</span>
-							)}
-						</div>
-					</div>
-					{scenario.resources.length > 0 && (
-						<div style={{maxWidth: 1200}}>
-							<table className='scenario-resources-details'>
-								<tbody>
-									<tr>
-										<th>
-											<div className='flex gap-5 border-none'>
-												<HomeRepairServiceIcon />
-												<p>Recurso</p>
-											</div>
-										</th>
-										<th>
-											<div className='flex gap-5 border-none'>
-												<LockIcon />
-												<p>Restrições</p>
-											</div>
-										</th>
-									</tr>
-									{scenario.resources?.map((resource) => {
-										return (
-											<tr key={resource.name.content}>
-												<td>{processContent(resource.name)}</td>
-												<td className='restrictions border-none'>
-													{isColaborador && (
-														<span
-															className='add-restriction pointer flex align-center gap-5'
-															onClick={() => handleOpenCreateRestriction(resource.id)}
-														>
-															{resource.restrictions?.length > 0 ? (
-																<small>
-                                                                Gerenciar restrições
-																</small>
-															) : (
-																<small>
-                                                                Cadastrar restrições
-																</small>
-															)}
-														</span>
-													)}
-													{resource.restrictions?.length > 0 && (
-														<ul className='flex column gap-75'>
-															{resource.restrictions?.map((restriction) => {
-																return (
-																	<li key={restriction.description.content}>
-																		{processContent(restriction.description)}
-																	</li>
-																);
-															})}
-														</ul>
-													)}
-												</td>
-											</tr>
-										);
-									})}
-								</tbody>
-							</table>
-						</div>
-					)}
-				</div>
-				<div className='flex column gap-2'>
-					<div className="flex gap-2 align-center">
-						<div className='flex gap-5 border-none'>
-							<ChecklistIcon />
-							<h3>Episódios</h3>
-						</div>
-						<div className='scenario-episodes flex column gap-1'>
-							{isColaborador && (
-								<span className='add-episode pointer flex align-center gap-5' onClick={handleOpenCreateEpisodesModal}>
-									{scenario.episodes.length > 0 ? (
-										<small>
-                                    Gerenciar episódios
-										</small>
-									) : (
-										<small>
-                                    Cadastrar episódios
-										</small>
-									)}
-								</span>
-							)}
-						</div>
-					</div>
-					{scenario.episodes.length > 0 && (
-						<div style={{maxWidth: 1200}}>
-							<table className='scenario-episodes-details'>
-								<tbody>
-									<tr>
-										<th style={{width: 50}}>
-											<div className='flex gap-5 border-none'>
-												<FormatListNumberedIcon />
-												<p>Posição</p>
-											</div>
-										</th>
-										<th>
-											<div className='flex gap-5 border-none'>
-												<DescriptionIcon />
-												<p>Descrição</p>
-											</div>
-										</th>
-										<th>
-											<div className='flex gap-5 border-none'>
-												<LockIcon />
-												<p>Restrição</p>
-											</div>
-										</th>
-										<th>
-											<div className='flex gap-5 border-none'>
-												<LocalOfferIcon />
-												<p>Tipo</p>
-											</div>
-										</th>
-									</tr>
-									{scenario.episodes?.map((episode) => {
-										return (
-											<tr key={episode.position}>
-												<td style={{width: '6%'}}>
-													{episode.position} &nbsp;
-													{episode?.nonSequentialEpisodes && <small>(grupo de episódios)</small>}
-												</td>
-												{episode?.nonSequentialEpisodes ? (
-													<td colSpan={4} style={{width: '45%'}}>
-														<table style={{width: '100%'}}>
-															<tbody>
-																{episode.nonSequentialEpisodes?.map((nse) => {
-																	return (
-																		<tr key={nse.id} style={{border: 'none'}}>
-																			<td style={{width: '49.5%'}}>{processContent(nse.description)}</td>
-																			<td style={{width: '39.75%'}}>{processContent(nse.restriction)}</td>
-																			<td >{nse.type}</td>
-																		</tr>
-																	);
-																})}
-															</tbody>
-														</table>
-													</td>
-												) : (
-													<td style={{width: '45%'}}>{processContent(episode.description)}</td>
-												)}
-												{episode?.restriction && <td style={{width: '35%'}}>{processContent(episode.restriction)}</td>}
-												{episode?.type && <td>{episode.type}</td>}
-											</tr>
-										);
-									})}
-								</tbody>
-							</table>
-						</div>
-					)}
-				</div>
-			</section>
-			<Modal
-				open={isUpdateScenarioModalOpen}
-				onClose={handleCloseUpdateScenarioModal}
-				aria-labelledby='modal-modal-title'
-				aria-describedby='modal-modal-description'
-			>
-				<UpdateScenarioForm
-					onClose={handleCloseUpdateScenarioModal}
-					scenario={scenario ? scenario : ({} as ILexiconScenario)}
-					resetScenarioInfo={resetScenarioInfo}
-					projectId={scenario.projectId}
-				/>
-			</Modal>
-			<Modal
-				open={isDeleteScenarioModalOpen}
-				onClose={handleCloseDeleteScenarioModal}
-				aria-labelledby='modal-modal-title'
-				aria-describedby='modal-modal-description'
-			>
-				<DeleteScenarioForm
-					onClose={handleCloseDeleteScenarioModal}
-					scenario={scenario ? scenario : ({} as ILexiconScenario)}
-					resetScenarioInfo={resetScenarioInfo}
-					projectId={scenario.projectId}
-				/>
-			</Modal>
-			<Modal
-				open={isCreateResourceModalOpen}
-				onClose={handleCloseCreateResourceModal}
-				aria-labelledby='modal-modal-title'
-				aria-describedby='modal-modal-description'
-			>
-				<CreateResourceForm
-					onClose={handleCloseCreateResourceModal}
-					resetScenarioInfo={resetScenarioInfo}
-					scenarioId={scenario.id}
-				/>
-			</Modal>
-			<Modal
-				open={isCreateRestrictionModalOpen}
-				onClose={handleCloseCreateRestriction}
-				aria-labelledby='modal-modal-title'
-				aria-describedby='modal-modal-description'
-			>
-				<CreateRestrictionForm
-					resourceId={restrictionResourceId}
-					onClose={handleCloseCreateRestriction}
-					resetScenarioInfo={resetScenarioInfo}
-					scenarioId={scenario.id}
-					projectId={project?.id || ''}
-				/>
-			</Modal>
-			<Modal
-				open={isCreateEpisodesModalOpen}
-				onClose={handleCloseCreateEpisodesModal}
-				aria-labelledby='modal-modal-title'
-				aria-describedby='modal-modal-description'
-			>
-				<CreateEpisodesForm
-					onClose={handleCloseCreateEpisodesModal}
-					resetScenarioInfo={resetScenarioInfo}
-					scenarioId={scenario.id}
-					initialEpisodes={scenario.episodes.map((e) => ({
-						id: e.id || uuidv4(),
-						description: e.description?.content,
-						type: e.type,
-						position: e.position,
-						restriction: e.restriction?.content,
-						nonSequentialEpisodes: e.nonSequentialEpisodes?.map(nse => ({
-							id: nse.id || uuidv4(),
-							description: nse.description.content,
-							type: nse.type,
-							restriction: nse.restriction.content
-						}))
-					}))}
-				/>
-			</Modal>
-		</div>
-	);
+    // episode modal functions
+    const [isEpisodesModalOpen, setIsEpisodesModalOpen] = useState(false);
+    const [currentEpisodeId, setCurrentEpisodeId] = useState('');
+    const handleOpenEpisodesModal = (episodeId?: string) => {
+        if (episodeId) {
+            setCurrentEpisodeId(episodeId);
+        }
+        setIsEpisodesModalOpen(true);
+    };
+    const handleCloseEpisodesModal = () => {
+        setIsEpisodesModalOpen(false);
+        setCurrentEpisodeId('');
+    };
+
+    // Delete episode
+    const [isDeleteEpisodeModalOpen, setIsDeleteEpisodeModalOpen] = useState(false);
+    const handleOpenDeleteEpisodeModal = (episodeId?: string) => {
+        if (episodeId) {
+            setCurrentEpisodeId(episodeId);
+        }
+        setIsDeleteEpisodeModalOpen(true);
+    };
+    const handleCloseDeleteEpisodeModal = () => {
+        setIsDeleteEpisodeModalOpen(false);
+        setCurrentEpisodeId('');
+    };
+
+    // scenario actions options modal functions
+    const [isActionsOptionsMenuOpen, setIsActionsOptionsMenuOpen] = useState(false);
+
+    const handleOpenActionsOptionsMenu = () => setIsActionsOptionsMenuOpen(true);
+    const handleCloseActionsOptionsMenu = () => setIsActionsOptionsMenuOpen(false);
+
+    // update scenario modal functions
+    const [isScenarioModalOpen, setIsScenarioModalOpen] = useState(false);
+    const handleCloseScenarioModal = () => setIsScenarioModalOpen(false);
+    const handleOpenScenarioModal = () => {
+        setIsScenarioModalOpen(true);
+        handleCloseActionsOptionsMenu();
+    };
+
+    // delete scenario modal functions
+    const [isDeleteScenarioModalOpen, setIsDeleteScenarioModalOpen] = useState(false);
+    const handleCloseDeleteScenarioModal = () => setIsDeleteScenarioModalOpen(false);
+    const handleOpenDeleteScenarioModal = () => {
+        setIsDeleteScenarioModalOpen(true);
+        handleCloseActionsOptionsMenu();
+    };
+
+    return (
+        <div className='scenario flex column gap-2 relative border-radius-5' id={`${scenario.id}-${slugify(scenario.title.content)}`}>
+            <ScenarioHeader
+                title={scenario.title}
+                isColaborador={isColaborador}
+                handleCloseScenarioModal={handleCloseScenarioModal}
+                handleOpenActionsOptionsMenu={handleOpenActionsOptionsMenu}
+                handleOpenDeleteScenarioModal={handleOpenDeleteScenarioModal}
+                handleOpenScenarioModal={handleOpenScenarioModal}
+                isActionsOptionsMenuOpen={isActionsOptionsMenuOpen}
+                setIsActionsOptionsMenuOpen={setIsActionsOptionsMenuOpen}
+            />
+            <section className='scenario-details flex column gap-3 relative'>
+                <div className='flex column gap-5'>
+                    <div className='flex gap-5 border-none'>
+                        <FlagIcon />
+                        <h3>Objetivo</h3>
+                    </div>
+                    <p>
+                        {scenario.goal.content ? (
+                            processContent(scenario.goal)
+                        ) : (
+                            <small className='empty'>Nenhum objetivo cadastrado</small>
+                        )}
+                    </p>
+                </div>
+                <div className='flex gap-2'>
+                    <ActorsList actors={scenario.actors} isColaborador={isColaborador} handleOpenActorsModal={handleOpenActorsModal} />
+                    <ExceptionsList
+                        exceptions={scenario.exceptions}
+                        isColaborador={isColaborador}
+                        handleOpenExceptionsModal={handleOpenExceptionsModal}
+                    />
+                </div>
+                <Context context={scenario.context} isColaborador={isColaborador} handleOpenContextModal={handleOpenContextModal} />
+                <ResourcesList
+                    resources={scenario.resources}
+                    isColaborador={isColaborador}
+                    handleOpenResourceModal={handleOpenResourceModal}
+                    resetScenarioInfo={resetScenarioInfo}
+                    scenario={scenario}
+                    handleOpenDeleteResourceModal={handleOpenDeleteResourceModal}
+                />
+                <EpisodeList
+                    handleOpenDeleteEpisodeModal={handleOpenDeleteEpisodeModal}
+                    episodes={scenario.episodes}
+                    isColaborador={isColaborador}
+                    handleOpenEpisodesModal={handleOpenEpisodesModal}
+                    scenario={scenario}
+                    resetScenarioInfo={resetProjectInfo}
+                />
+            </section>
+            <Modal
+                open={isScenarioModalOpen}
+                onClose={handleCloseScenarioModal}
+                aria-labelledby='modal-modal-title'
+                aria-describedby='modal-modal-description'
+            >
+                <ScenarioForm
+                    onClose={handleCloseScenarioModal}
+                    scenario={scenario ? scenario : ({} as ILexiconScenario)}
+                    resetInfo={resetScenarioInfo}
+                />
+            </Modal>
+            <Modal
+                open={isDeleteScenarioModalOpen}
+                onClose={handleCloseDeleteScenarioModal}
+                aria-labelledby='modal-modal-title'
+                aria-describedby='modal-modal-description'
+            >
+                <DeleteScenarioForm
+                    onClose={handleCloseDeleteScenarioModal}
+                    scenario={scenario ? scenario : ({} as ILexiconScenario)}
+                    resetScenarioInfo={resetScenarioInfo}
+                    projectId={scenario.projectId}
+                />
+            </Modal>
+            <Modal
+                open={isActorsModalOpen}
+                onClose={handleCloseActorsModal}
+                aria-labelledby='modal-modal-title'
+                aria-describedby='modal-modal-description'
+            >
+                <ActorsForm onClose={handleCloseActorsModal} resetScenarioInfo={resetScenarioInfo} scenarioId={scenario.id} />
+            </Modal>
+            <Modal
+                open={isExceptionsModalOpen}
+                onClose={handleCloseExceptionsModal}
+                aria-labelledby='modal-modal-title'
+                aria-describedby='modal-modal-description'
+            >
+                <ExceptionsForm onClose={handleCloseExceptionsModal} resetScenarioInfo={resetScenarioInfo} scenarioId={scenario.id} />
+            </Modal>
+            <Modal
+                open={isContextModalOpen}
+                onClose={handleCloseContextModal}
+                aria-labelledby='modal-modal-title'
+                aria-describedby='modal-modal-description'
+            >
+                <ContextForm
+                    onClose={handleCloseContextModal}
+                    resetScenarioInfo={resetScenarioInfo}
+                    scenario={scenario}
+                    projectId={project?.id || ''}
+                />
+            </Modal>
+            <Modal
+                open={isResourceModalOpen}
+                onClose={handleCloseResourceModal}
+                aria-labelledby='modal-modal-title'
+                aria-describedby='modal-modal-description'
+            >
+                <ResourceForm
+                    onClose={handleCloseResourceModal}
+                    resetScenarioInfo={resetScenarioInfo}
+                    scenario={scenario}
+                    resourceId={currentResourceId}
+                />
+            </Modal>
+            <Modal
+                open={isEpisodesModalOpen}
+                onClose={handleCloseEpisodesModal}
+                aria-labelledby='modal-modal-title'
+                aria-describedby='modal-modal-description'
+            >
+                <EpisodesForm
+                    onClose={handleCloseEpisodesModal}
+                    resetScenarioInfo={resetScenarioInfo}
+                    scenario={scenario}
+                    nonSequentialEpisodesGroupId={currentEpisodeId}
+                    updatingEpisodeId={currentEpisodeId}
+                />
+            </Modal>
+            <Modal
+                open={isDeleteEpisodeModalOpen}
+                onClose={handleCloseDeleteEpisodeModal}
+                aria-labelledby='modal-modal-title'
+                aria-describedby='modal-modal-description'
+            >
+                <DeleteEpisode
+                    onClose={handleCloseDeleteEpisodeModal}
+                    scenario={scenario ? scenario : ({} as ILexiconScenario)}
+                    resetScenarioInfo={resetScenarioInfo}
+                    projectId={scenario.projectId}
+                    episodeId={currentEpisodeId}
+                />
+            </Modal>
+            <Modal
+                open={isDeleteResourceModalOpen}
+                onClose={handleCloseDeleteResourceModal}
+                aria-labelledby='modal-modal-title'
+                aria-describedby='modal-modal-description'
+            >
+                <DeleteResource
+                    onClose={handleCloseDeleteResourceModal}
+                    scenario={scenario ? scenario : ({} as ILexiconScenario)}
+                    resetScenarioInfo={resetScenarioInfo}
+                    projectId={scenario.projectId}
+                    resourceId={currentResourceId}
+                />
+            </Modal>
+        </div>
+    );
 };
 
 export default Scenario;

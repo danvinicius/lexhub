@@ -1,0 +1,30 @@
+.project-actions-options-menu {
+  position: absolute;
+  top: 120%;
+  left: 0%;
+  background: #fff;
+  width: max-content;
+  border-radius: 5px;
+  padding: 1rem 0;
+  z-index: 2;
+  box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
+  color: var(--mui-primary-color);
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    li {
+      cursor: pointer;
+      gap: 0.5rem;
+      display: flex;
+      align-items: center;
+      padding: 0 3rem 0 1rem;
+
+      &.delete-project-option {
+        color: var(--error-color);
+      }
+    }
+  }
+}

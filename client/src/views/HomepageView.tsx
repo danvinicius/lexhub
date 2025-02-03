@@ -13,14 +13,14 @@ import { ErrorResponse, ILexiconSymbol, IProject } from '../shared/interfaces';
 import { AxiosError } from 'axios';
 import { UserContext } from '../context/UserContext';
 import Project from '../components/project/Project';
-import { OverView } from '../components/homepage/Overview';
+import { OverView } from '../components/homepage/overview/Overview';
 import './css/Homepage.scss';
-import SymbolDetails from '../components/symbol/SymbolDetails';
+import SymbolDetails from '../components/symbol/symbol-details/SymbolDetails';
 import { ProjectContext } from '../context/ProjectContext';
-import { Configurations } from '../components/homepage/Configurations';
+import { Configurations } from '../components/homepage/configurations/Configurations';
 import { AccountCircle } from '@mui/icons-material';
 import { useState, useContext, useEffect, useMemo, useCallback } from 'react';
-import { NavbarMenuLinks } from '../components/navbar/NavbarMenuLinks';
+import { NavbarMenuLinks } from '../components/navbar/navbar-menu-links/NavbarMenuLinks';
 
 const demoTheme = extendTheme({
     colorSchemes: { light: true },

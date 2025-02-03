@@ -1,38 +1,22 @@
 import { FC, FormEvent, ReactNode, SyntheticEvent, useContext, useState } from 'react';
 import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
-import Button from '../../forms/Button';
+import Button from '../../forms/button/Button';
 import Error from '../../helper/Error';
 import api from '../../../lib/axios';
 import { ADD_USER_TO_PROJECT, CHANGE_USER_ROLE, REMOVE_USER } from '../../../api';
 import { UserContext } from '../../../context/UserContext';
 import './AddUserToProjectForm.scss';
-import Select from '../../forms/Select';
+import Select from '../../forms/select/Select';
 import Close from '../../../assets/icon/Close_Dark.svg';
 import { ProjectContext } from '../../../context/ProjectContext';
 import { AddUserEmailComboBox } from './AddUserEmailComboBox';
 import { Snackbar, SnackbarCloseReason } from '@mui/material';
 import { ErrorResponse, IUserProject, IUserRole } from '../../../shared/interfaces';
 import { AxiosError } from 'axios';
-import { ProfilePicture } from '../../user/ProfilePicture';
+import { ProfilePicture } from '../../user/profile-picture/ProfilePicture';
 import CloseIcon from '@mui/icons-material/Close';
-
-interface AddUserToProjectRequestDTO {
-    email: string;
-    role: string;
-    projectId: string;
-}
-
-interface ChangeUserRoleRequestDTO {
-    userId: string;
-    newRole: string;
-    projectId: string;
-}
-
-interface RemoveUserRequestDTO {
-    userId: string;
-    projectId: string;
-}
+import { AddUserRequestDTO, UserRoleRequestDTO, RemoveUserRequestDTO } from '../../../shared/dto';
 
 interface AddUserToProjectFormProps {
     onClose: () => void;
@@ -63,7 +47,7 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
 
     const projectContext = useContext(ProjectContext);
 
-    const addUserToProject = async (body: AddUserToProjectRequestDTO) => {
+    const addUserToProject = async (body: AddUserRequestDTO) => {
         setLoading(true);
         if (projectContext.project?.id) {
             try {
@@ -79,7 +63,7 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
         }
     };
 
-    const changeUserRole = async (body: ChangeUserRoleRequestDTO) => {
+    const changeUserRole = async (body: UserRoleRequestDTO) => {
         setLoading(true);
         if (projectContext.project?.id) {
             try {

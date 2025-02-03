@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
-import LoginForm from '../components/login/LoginForm';
-import SignupForm from '../components/login/SignupForm';
-import LoginBanner from '../components/login/LoginBanner';
-import ForgotPasswordForm from '../components/login/ForgotPasswordForm';
+import LoginForm from '../components/login/login-form/LoginForm';
+import SignupForm from '../components/login/signup-form/SignupForm';
+import LoginBanner from '../components/login/login-banner/LoginBanner';
+import ForgotPasswordForm from '../components/login/forgot-password-form/ForgotPasswordForm';
 import './css/Login.scss';
 import { Navbar } from '../components/navbar/Navbar';
 

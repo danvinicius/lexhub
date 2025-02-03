@@ -5,25 +5,25 @@ import { GET_PROJECT } from '../../api';
 import api from '../../lib/axios';
 import Loading from '../helper/Loading';
 import Error from '../helper/Error';
-import ScenariosList from '../scenario/ScenariosList';
-import Button from '../forms/Button';
+import ScenariosList from '../scenario/scenario-list/ScenarioList';
+import Button from '../forms/button/Button';
 import { ProjectContext } from '../../context/ProjectContext';
 import Kebab from '../../assets/icon/Kebab_Vertical.svg';
 import { Box, Modal, Tab, Tabs } from '@mui/material';
-import CreateSymbolForm from '../symbol/CreateSymbolForm';
-import CreateScenarioForm from '../scenario/CreateScenarioForm';
 import { ErrorResponse, IProject, IUserProject, IUserRole } from '../../shared/interfaces';
-import UpdateProjectForm from './UpdateProjectForm';
-import { ProjectActionsOptionsMenu } from './ProjectActionsOptionsMenu';
-import DeleteProjectForm from './DeleteProjectForm';
-import SymbolsList from '../symbol/SymbolsList';
+import { ProjectActionsOptionsMenu } from './project-actions-options-menu/ProjectActionsOptionsMenu';
+import DeleteProjectForm from './delete-projet/DeleteProject';
+import SymbolsList from '../symbol/symbol-list/SymbolList';
 import AddUserToProjectForm from './user/AddUserToProjectForm';
 import { AxiosError } from 'axios';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { ProfilePicture } from '../user/ProfilePicture';
+import { ProfilePicture } from '../user/profile-picture/ProfilePicture';
 import Public from '@mui/icons-material/Public';
 import { Lock } from '@mui/icons-material';
-import { CreateMultipleScenariosForm } from '../scenario/CreateMultipleScenariosForm';
+import { CreateMultipleScenariosForm } from '../scenario/multiple-scenarios-form/CreateMultipleScenariosForm';
+import ProjectForm from './project-form/ProjectForm';
+import ScenarioForm from '../scenario/scenario-form/ScenarioForm';
+import SymbolForm from '../symbol/symbol-form/SymbolForm';
 
 interface TabPanelProps {
     children?: ReactNode;
@@ -74,9 +74,9 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
     const [isProprietario, setIsProprietario] = useState(false);
 
     // project actions options modal control
-    const [isProjectActionsOptionsMenu, setIsProjectActionsOptionsMenu] = useState(false);
-    const handleOpenProjectActionsOptionsMenu = () => setIsProjectActionsOptionsMenu(true);
-    const handleCloseProjectActionsOptionsMenu = () => setIsProjectActionsOptionsMenu(false);
+    const [isProjectActionsOptionsMenuOpen, setIsProjectActionsOptionsMenuOpen] = useState(false);
+    const handleOpenProjectActionsOptionsMenu = () => setIsProjectActionsOptionsMenuOpen(true);
+    const handleCloseProjectActionsOptionsMenu = () => setIsProjectActionsOptionsMenuOpen(false);
 
     // update project modal control
     const [isUpdateProjectModalOpen, setIsUpdateProjectModalOpen] = useState(false);
@@ -105,19 +105,19 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
     const handleCloseCreateScenarioOptionsMenu = () => setIsCreateScenarioOptionsMenuOpen(false);
 
     // create scenario modal control
-    const [isCreateScenarioModalOpen, setIsCreateScenarioModalOpen] = useState(false);
+    const [isScenarioModalOpen, setIsScenarioModalOpen] = useState(false);
     const handleOpenCreateScenarioModal = () => {
         handleCloseCreateScenarioOptionsMenu();
-        setIsCreateScenarioModalOpen(true);
+        setIsScenarioModalOpen(true);
     };
-    const handleCloseCreateScenarioModal = () => setIsCreateScenarioModalOpen(false);
+    const handleCloseScenarioModal = () => setIsScenarioModalOpen(false);
 
     // create multiple scenarios modal control
     const [isCreateMultipleScenariosModalOpen, setIsCreateMultipleScenariosModalOpen] = useState(false);
     const handleOpenCreateMultipleScenariosModal = () => {
         handleCloseCreateScenarioOptionsMenu();
         setIsCreateMultipleScenariosModalOpen(true);
-    }
+    };
     const handleCloseCreateMultipleScenariosModal = () => setIsCreateMultipleScenariosModalOpen(false);
 
     // add user to project modal control
@@ -127,7 +127,7 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
 
     const closeAllModals = () => {
         handleCloseAddUserToProjectModal();
-        handleCloseCreateScenarioModal();
+        handleCloseScenarioModal();
         handleCloseCreateMultipleScenariosModal();
         handleCloseCreateSymbolModal();
         handleCloseDeleteProjectModal();
@@ -222,10 +222,10 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                                         alt='Abrir opções do projeto'
                                         onClick={handleOpenProjectActionsOptionsMenu}
                                     />
-                                    {isProjectActionsOptionsMenu && (
+                                    {isProjectActionsOptionsMenuOpen && (
                                         <ProjectActionsOptionsMenu
                                             isProprietario={isProprietario}
-                                            isProjectActionsOptionsMenu={isProjectActionsOptionsMenu}
+                                            isProjectActionsOptionsMenuOpen={isProjectActionsOptionsMenuOpen}
                                             handleCloseProjectActionsOptionsMenu={handleCloseProjectActionsOptionsMenu}
                                             handleOpenUpdateProjectModal={handleOpenUpdateProjectModal}
                                             handleOpenDeleteProjectModal={handleOpenDeleteProjectModal}
@@ -328,11 +328,11 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                     aria-labelledby='modal-modal-title'
                     aria-describedby='modal-modal-description'
                 >
-                    <UpdateProjectForm
+                    <ProjectForm
                         onClose={handleCloseUpdateProjectModal}
                         project={project ? project : ({} as IProject)}
                         resetProjectInfo={resetProjectInfo}
-                    />
+                    ></ProjectForm>
                 </Modal>
                 <Modal
                     open={isDeleteProjectModalOpen}
@@ -343,12 +343,12 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                     <DeleteProjectForm onClose={handleCloseDeleteProjectModal} project={project ? project : ({} as IProject)} />
                 </Modal>
                 <Modal
-                    open={isCreateScenarioModalOpen}
-                    onClose={handleCloseCreateScenarioModal}
+                    open={isScenarioModalOpen}
+                    onClose={handleCloseScenarioModal}
                     aria-labelledby='modal-modal-title'
                     aria-describedby='modal-modal-description'
                 >
-                    <CreateScenarioForm onClose={handleCloseCreateScenarioModal} resetProjectInfo={resetProjectInfo} />
+                    <ScenarioForm onClose={handleCloseScenarioModal} resetInfo={resetProjectInfo} />
                 </Modal>
                 <Modal
                     open={isCreateMultipleScenariosModalOpen}
@@ -364,7 +364,7 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                     aria-labelledby='modal-modal-title'
                     aria-describedby='modal-modal-description'
                 >
-                    <CreateSymbolForm onClose={handleCloseCreateSymbolModal} resetProjectInfo={resetProjectInfo} />
+                    <SymbolForm onClose={handleCloseCreateSymbolModal} resetInfo={resetProjectInfo} />
                 </Modal>
             </div>
         </>
