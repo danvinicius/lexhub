@@ -25,15 +25,18 @@ Essa plataforma visa auxiliar engenheiros de software e analistas de requisitos 
 - [x] Permitir criar projetos públicos/privados (visualização sem cadastro)
 - [x] Permitir remover usuários de um projeto
 - [x] Permitir adicionar mais de um cenário simultaneamente
+
+### V3:
+- [ ] Aprimorar sistema de alterações
+- [ ] Paginar alterações e cenários
 - [ ] Permitir abrir calendário, relógio e dias da semana na localização temporal
 - [ ] Permitir adicionar/alterar foto de perfil
 - [ ] Enviar e-mails para convidar usuários para projetos, confirmação de e-mail e recuperação de conta
-- [ ] Exportar projetos em PDF, DOCX e .feature
-
-### V3:
+- [ ] Exportar projetos em PDF e/ou DOCX
+- [ ] Exportar projetos em .feature para casos de teste
 - [ ] Checar responsividade
-- [ ] Passar todos os inputs para MUi
-- [ ] Checar eslint e reaproveitamento de classes, componentes e hooks
+- [ ] Refatoração de código
+- [ ] ESLint no back-end
 - [ ] Autenticação com Google / Facebook
 - [ ] Integração com Trello e/ou Jira
 - [ ] Checar SEO e performance
