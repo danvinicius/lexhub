@@ -83,24 +83,34 @@ export class UserService {
 
   async changeUserRole(
     data: ChangeUserRoleRequestDTO,
-    inviterId: string
+    requesterId: string
   ): Promise<IUserProject | null> {
-    const inviter = await this.userRepository.getUser({ _id: inviterId });
-
-    if (
-      inviter?.projects?.find(
-        (p: IUserProject) => p.project.id == data.projectId
-      )?.role == IUserRole.ADMINISTRADOR &&
-      (data.newRole == IUserRole.ADMINISTRADOR ||
-        data.newRole == IUserRole.PROPRIETARIO)
-    ) {
-      throw new UnauthorizedError(
-        `Você não tem permissão para realizar esta ação`
-      );
+    const requester = await this.userRepository.getUser({ _id: requesterId });
+    const project = await this.projectRepository.getProject(data.projectId);
+    const owner = project?.users.find(
+      (userProject) => userProject.role == IUserRole.PROPRIETARIO
+    );
+    const admins = project?.users.map((userProject) => {
+      if (userProject.role == IUserRole.ADMINISTRADOR)
+        return userProject.user.id;
+    });
+    const requesterProjectRole = requester?.projects?.find(
+      (p: IUserProject) => p.project.toString() === data.projectId
+    )?.role;
+    if (requesterProjectRole == IUserRole.ADMINISTRADOR) {
+      if (
+        data.newRole == IUserRole.ADMINISTRADOR ||
+        data.newRole == IUserRole.PROPRIETARIO ||
+        data.userId == owner?.user.id ||
+        admins?.includes(data.userId)
+      ) {
+        throw new UnauthorizedError(
+          `Você não tem permissão para realizar esta ação`
+        );
+      }
     }
 
     // Buscar o projeto para verificar se o usuário já está associado
-    const project = await this.projectRepository.getProject(data.projectId);
     const targetUser = project?.users.find(
       (u: IUserProject) => u.user.id === data.userId
     );
@@ -133,7 +143,7 @@ export class UserService {
         afterChange,
         data.projectId,
         updatedUserProject?.user.name,
-        inviterId
+        requesterId
       );
     }
 
@@ -151,17 +161,13 @@ export class UserService {
       (p: IUserProject) => p.project.toString() === data.projectId
     )?.role;
 
-    if (
-      requesterProjectRole !== IUserRole.ADMINISTRADOR &&
-      requesterProjectRole !== IUserRole.PROPRIETARIO
-    ) {
-      throw new UnauthorizedError(
-        `Você não tem permissão para remover usuários deste projeto.`
-      );
-    }
+    const project = await this.projectRepository.getProject(data.projectId);
+    const admins = project?.users.map((userProject) => {
+      if (userProject.role == IUserRole.ADMINISTRADOR)
+        return userProject.user.id;
+    });
 
     // Impedir que um ADMIN remova um OWNER
-    const project = await this.projectRepository.getProject(data.projectId);
     const targetUser = project?.users.find(
       (u: IUserProject) => u.user.id === data.userId
     );
@@ -171,11 +177,13 @@ export class UserService {
     }
 
     if (
-      targetUser.role === IUserRole.PROPRIETARIO &&
-      requesterProjectRole !== IUserRole.PROPRIETARIO
+      targetUser.role === IUserRole.PROPRIETARIO && (
+        requesterProjectRole !== IUserRole.PROPRIETARIO ||
+        admins?.includes(data.userId)
+      )
     ) {
       throw new UnauthorizedError(
-        `Somente o proprietário do projeto pode remover outro proprietário.`
+        `Somente o proprietário do projeto pode remover outro proprietário ou administrador.`
       );
     }
 
@@ -289,7 +297,10 @@ export class UserService {
     return user;
   }
 
-  async updateUser(id: String, data: UpdateUserRequestDTO): Promise<IUser | null> {
+  async updateUser(
+    id: String,
+    data: UpdateUserRequestDTO
+  ): Promise<IUser | null> {
     const user = await this.userRepository.getUser({ _id: id });
     if (!user) {
       throw new BadRequestError('Usuário inválido ou inexistente');

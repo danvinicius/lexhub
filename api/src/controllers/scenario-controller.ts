@@ -73,7 +73,6 @@ export class ScenarioController {
   public updateScenario = async (req: Request) => {
     try {
       const { id } = req.params;
-      
       const scenario = validate(DTO.UpdateScenarioSchema, req.body);
       await scenarioService.updateScenario(id, scenario, req.userId || '');
       return ok({ message: 'Scenario updated' });

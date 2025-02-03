@@ -33,25 +33,56 @@ export class SymbolService {
   ) {}
   async createSymbol(
     data: CreateSymbolRequestDTO,
-    userId: String
+    userId: string
   ): Promise<ISymbol | null> {
     const symbols = await this.getAllSymbols(data.projectId);
-    if (
-      symbols.some(
-        (symbol: ISymbol) => normalize(symbol.name) == normalize(data.name)
-      )
-    ) {
-      throw new BadRequestError('Já existe um símbolo com o mesmo nome');
+
+    const isDuplicate = symbols.some((symbol: ISymbol) => {
+      if (normalize(symbol.name) === normalize(data.name)) {
+        return true;
+      }
+      if (
+        symbol.synonyms?.some(
+          (synonym) => normalize(synonym.name) === normalize(data.name)
+        )
+      ) {
+        return true;
+      }
+
+      if (
+        data.synonyms.some(
+          (newSynonym) =>
+            normalize(newSynonym.name) === normalize(symbol.name) ||
+            symbol.synonyms?.some(
+              (existingSynonym) =>
+                normalize(existingSynonym.name) === normalize(newSynonym.name)
+            )
+        )
+      ) {
+        return true;
+      }
+
+      return false;
+    });
+
+    if (isDuplicate) {
+      throw new BadRequestError(
+        'Já existe um símbolo com o mesmo nome ou sinônimo.'
+      );
     }
+
     const projectBeforeChange = await this.projectService.getCleanProject(
       data.projectId,
       false
     );
+
     const createdSymbol = await this.symbolRepository.createSymbol(data);
+
     const projectAfterChange = await this.projectService.getCleanProject(
       data.projectId,
       false
     );
+
     await this.changeService.createChange(
       projectBeforeChange,
       projectAfterChange,
@@ -59,6 +90,7 @@ export class SymbolService {
       data.name,
       userId
     );
+
     return createdSymbol;
   }
 
@@ -136,6 +168,45 @@ export class SymbolService {
     if (!symbol) {
       throw new BadRequestError('Símbolo inválido ou inexistente');
     }
+
+    const existingSymbols = await this.getAllSymbols(data.projectId);
+
+    const isDuplicate = existingSymbols
+      .filter((existingSymbol) => existingSymbol.id !== symbol.id)
+      .some((symbol: ISymbol) => {
+        if (normalize(symbol.name) === normalize(data.name)) {
+          return true;
+        }
+        if (
+          symbol.synonyms?.some(
+            (synonym) => normalize(synonym.name) === normalize(data.name)
+          )
+        ) {
+          return true;
+        }
+
+        if (
+          data.synonyms.some(
+            (newSynonym) =>
+              normalize(newSynonym.name) === normalize(symbol.name) ||
+              symbol.synonyms?.some(
+                (existingSynonym) =>
+                  normalize(existingSynonym.name) === normalize(newSynonym.name)
+              )
+          )
+        ) {
+          return true;
+        }
+
+        return false;
+      });
+
+    if (isDuplicate) {
+      throw new BadRequestError(
+        'Já existe um símbolo com o mesmo nome ou sinônimo.'
+      );
+    }
+
     const projectBeforeChange = await this.projectService.getCleanProject(
       data.projectId
     );

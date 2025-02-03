@@ -1,4 +1,4 @@
-import { ISymbol, IScenario } from '@/models';
+import { ISymbol, IScenario, ISynonym } from '@/models';
 import { normalize } from '@/utils/string/normalize';
 
 export interface LexiconInfo {
@@ -16,7 +16,13 @@ export interface Lexicon {
 
 export class LexiconService {
   public findPossibleLexicon = <
-    T extends { name?: string; title?: string; id?: string; project: String },
+    T extends {
+      name?: string;
+      title?: string;
+      id?: string;
+      project: String;
+      synonyms?: ISynonym[];
+    },
   >(
     text: string,
     termos: T[]
@@ -24,25 +30,32 @@ export class LexiconService {
     const possibleLexicon: LexiconInfo[] = [];
 
     for (const termo of termos) {
-      const lexiconName = termo.name || termo.title || '';
-      let starts = -1;
-      while (true) {
-        starts = normalize(text).indexOf(normalize(lexiconName), starts + 1);
-        if (starts == -1) {
-          break;
-        }
-        const ends = starts + lexiconName.length;
-        const { id } = termo;
-        if (id) {
-          possibleLexicon.push({
-            resource: termo.title
-              ? `/api/project/${termo.project}/scenario/${id}`
-              : `/api/project/${termo.project}/symbol/${id}`,
-            name: lexiconName,
-            starts,
-            ends,
-            type: termo.title ? 'cenário' : 'símbolo',
-          });
+      const lexiconNames = [termo.name || termo.title || ''];
+
+      if (termo.synonyms?.length) {
+        lexiconNames.push(...termo.synonyms.map((synonym) => synonym.name));
+      }
+
+      for (const lexiconName of lexiconNames) {
+        let starts = -1;
+        while (true) {
+          starts = normalize(text).indexOf(normalize(lexiconName), starts + 1);
+          if (starts == -1) {
+            break;
+          }
+          const ends = starts + lexiconName.length;
+          const { id } = termo;
+          if (id) {
+            possibleLexicon.push({
+              resource: termo.title
+                ? `/api/project/${termo.project}/scenario/${id}`
+                : `/api/project/${termo.project}/symbol/${id}`,
+              name: lexiconName,
+              starts,
+              ends,
+              type: termo.title ? 'cenário' : 'símbolo',
+            });
+          }
         }
       }
     }

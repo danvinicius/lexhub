@@ -72,7 +72,7 @@ export class ScenarioService {
       ...data,
       scenarios: data.scenarios.filter(
         (scenario) =>
-          scenario.title.trim().length && scenario.goal.trim().length
+          scenario.title.trim().length
       ),
     });
   }
@@ -222,6 +222,7 @@ export class ScenarioService {
             };
           }
           return {
+            id: episode.id,
             position: episode.position,
             type: episode.type,
             restriction: episode?.restriction
@@ -260,7 +261,7 @@ export class ScenarioService {
       projectBeforeChange,
       projectAfterChange,
       data.projectId,
-      data.title,
+      data.title || scenario.title,
       userId
     );
     return updatedScenario;

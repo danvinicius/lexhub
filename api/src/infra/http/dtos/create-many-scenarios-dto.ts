@@ -2,7 +2,6 @@ import { z } from "zod";
 
 const ScenarioSchema = z.object({
   title: z.string().min(1, 'O título é obrigatório'),
-  goal: z.string().min(1, 'O objetivo é obrigatório'),
 });
 
 export const CreateManyScenariosSchema = z.object({
