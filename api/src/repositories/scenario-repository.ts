@@ -13,9 +13,6 @@ export namespace ScenarioRepository {
   export interface CreateScenarioParams {
     title: string;
     goal?: string;
-    context?: IContext;
-    actors?: IActor[];
-    exceptions?: IException[];
     projectId: String;
   }
   export interface CreateManyScenariosParams {
@@ -56,7 +53,11 @@ export class ScenarioRepository {
     try {
       const project = await Project.findById(data.projectId);
       if (!project) throw new ServerError('Projeto não encontrado');
-      const scenario = new Scenario(data);
+      const scenario = new Scenario({
+        title: data.title,
+        goal: data.goal,
+        project: project._id
+      });
       await scenario.save();
 
       await Project.findByIdAndUpdate(

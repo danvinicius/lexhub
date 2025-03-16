@@ -52,9 +52,9 @@ export class SymbolRepository {
         name: data.name,
         classification: data.classification,
         notion: data.notion,
-        project: project._id,
         impacts: data.impacts,
         synonyms: data.synonyms,
+        project: project._id,
       });
 
       await symbol.save();

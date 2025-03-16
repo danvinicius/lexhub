@@ -1,8 +1,14 @@
 import { useContext } from 'react';
-import LexiconSpan from '../components/lexicon/lexicon-span/LexiconSpan';
 import { ProjectContext } from '../context/ProjectContext';
-import { LexiconInfo } from '../shared/interfaces';
+import LexiconSpan from '../components/lexicon/lexicon-span/LexiconSpan';
 
+export interface LexiconInfo {
+  resource: string;
+  name: string;
+  starts: number;
+  ends: number;
+  type: string;
+}
 interface UseLexiconReturn {
   processContent: (params: {
     content: string;
@@ -12,7 +18,7 @@ interface UseLexiconReturn {
 
 export const useLexicon = (): UseLexiconReturn => {
   const { setChosenType } = useContext(ProjectContext || {});
-  
+
   function processContent({
     content = '',
     foundLexicons = [],
@@ -20,23 +26,18 @@ export const useLexicon = (): UseLexiconReturn => {
     content: string;
     foundLexicons: LexiconInfo[];
   }): (string | JSX.Element)[] {
-    // Ordena os lexicons pelo início
-    foundLexicons.sort((a, b) => a.starts - b.starts);
+    // Ordena primeiro por posição inicial e depois pelo maior nome (evita sobreposição de palavras menores)
+    foundLexicons.sort((a, b) => a.starts - b.starts || b.name.length - a.name.length);
 
     const elements: (string | JSX.Element)[] = [];
     let lastIndex = 0;
-
-    // Rastreia os nomes já processados para evitar duplicados
-    const processedNames = new Set<string>();
+    const occupiedIndexes = new Set<number>(); // Guarda os índices já processados
 
     foundLexicons.forEach((lexicon) => {
-      // Verifica se o nome já foi processado
-      if (processedNames.has(lexicon.name)) {
-        return; // Ignora duplicados
+      // Se qualquer índice da palavra já foi processado, ignoramos esse lexicon para evitar duplicação
+      if ([...Array(lexicon.ends - lexicon.starts).keys()].some(i => occupiedIndexes.has(lexicon.starts + i))) {
+        return;
       }
-
-      // Marca o nome como processado
-      processedNames.add(lexicon.name);
 
       // Adiciona o texto antes do lexicon
       if (lastIndex < lexicon.starts) {
@@ -59,6 +60,11 @@ export const useLexicon = (): UseLexiconReturn => {
           {content.substring(lexicon.starts, lexicon.ends)}
         </LexiconSpan>
       );
+
+      // Marca os índices desse lexicon como ocupados
+      for (let i = lexicon.starts; i < lexicon.ends; i++) {
+        occupiedIndexes.add(i);
+      }
 
       // Atualiza o índice final
       lastIndex = lexicon.ends;

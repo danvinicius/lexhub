@@ -269,6 +269,7 @@ export class ScenarioService {
 
   async deleteScenario(id: String, userId: String): Promise<void> {
     const scenario = await this.scenarioRepository.getScenario(id);
+    
     if (!scenario) {
       throw new BadRequestError('Cenário inválido ou inexistente');
     }

@@ -88,7 +88,6 @@ const SymbolForm: FC<SymbolFormProps> = ({ symbol, onClose, resetInfo }: SymbolF
         <h2>{isEditing ? 'Editar símbolo' : 'Novo símbolo'}</h2>
         <img src={Close} alt="Fechar" title="Fechar" onClick={onClose} />
       </div>
-      <br />
       <Form>
         <Input type="text" name="name" placeholder="Nome" label="Nome" autoFocus {...name} onInput={() => setError('')} />
         <Input type="text" name="notion" placeholder="Noção" label="Noção" {...notion} onInput={() => setError('')} />

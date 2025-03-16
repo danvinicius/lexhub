@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ProjectService } from '@/services';
+import { Types } from 'mongoose';
 
 export const projectPrivacyMiddleware = async (
   req: Request,
@@ -7,6 +8,12 @@ export const projectPrivacyMiddleware = async (
   next: NextFunction
 ) => {
   const projectId = req.params.projectId;
+  if (!Types.ObjectId.isValid(projectId)) {
+    return res.status(404).json({
+      error: "Esse projeto não existe",
+      code: 403,
+    });
+  }
   
   if (!projectId) {
     return res.status(400).json({

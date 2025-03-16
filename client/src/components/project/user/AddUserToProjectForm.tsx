@@ -181,7 +181,7 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
                     <div className='pessoas-convidadas'>
                         <h3>Compartilhar com:</h3>
                         <br />
-                        <ul className='flex column gap-5' style={{ maxHeight: '10rem', overflow: 'scroll' }}>
+                        <ul className='flex column gap-5' style={{ maxHeight: '10rem', overflow: 'auto' }}>
                             {[...emails, currentEmail.trim().length ? currentEmail : null]
                                 .filter((email) => email != null)
                                 .map((email) => {
@@ -221,7 +221,7 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
                 <div className='pessoas-com-acesso'>
                     <h3>Pessoas com acesso:</h3>
                     <br />
-                    <ul className='flex column gap-15' style={{ maxHeight: '10rem', overflow: 'scroll' }}>
+                    <ul className='flex column gap-15' style={{ maxHeight: '10rem'}}>
                         {projectContext.project?.users.map((user: IUserProject) => {
                             return (
                                 <li key={user.id} className='flex align-center gap-1'>

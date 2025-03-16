@@ -3,7 +3,6 @@ import { isAdministrador, isColaborador, isProprietario } from '@/utils/authenti
 import { IUserProject, IUserRole } from '@/models';
 
 const userBelongsToProject = (userProjects: IUserProject[], projectId: String) => {
-  
   return userProjects?.find((p: IUserProject) => p.project?.toString() == projectId);
 }
 

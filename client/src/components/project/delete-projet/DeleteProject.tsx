@@ -66,7 +66,6 @@ const DeleteProject: FC<DeleteProjectProps> = ({ project, onClose }: DeleteProje
 					onClick={onClose}
 				/>
 			</div>
-			<br />
 			<Form style={{gap: '.5rem'}}>
 				<p>
           Por motivos de segurança, para excluir este projeto digite{' '}

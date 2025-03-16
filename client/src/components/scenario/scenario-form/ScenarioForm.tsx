@@ -90,7 +90,6 @@ const ScenarioForm: FC<ScenarioFormProps> = ({ onClose, resetInfo, scenario }: S
                 <h2>{scenario ? 'Editar cenário' : 'Novo cenário'}</h2>
                 <img src={Close} alt="Ícone 'X' popup" title="Ícone 'X' popup" onClick={onClose} />
             </div>
-            <br />
             <Form>
                 <Input
                     type='text'
