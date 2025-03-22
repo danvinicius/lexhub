@@ -2,7 +2,7 @@ import { IUser } from '../../../shared/interfaces';
 import './ProfilePicture.scss';
 
 const getUsernameInitials = (name: string) => {
-	return name.split(' ').map(word => word[0].toUpperCase()).slice(0, 2).join('');
+	return name.split(' ').map(word => word[0]?.toUpperCase()).slice(0, 2).join('');
 };
 
 const getRandomColorFromName = (name: string) => {

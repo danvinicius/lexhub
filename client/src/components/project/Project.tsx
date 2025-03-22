@@ -137,6 +137,8 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
 
     const createScenarioOptionsMenuRef = useRef<HTMLDivElement>(null);
 
+    const [pagination, setPagination] = useState(1);
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (createScenarioOptionsMenuRef.current && !createScenarioOptionsMenuRef.current.contains(event.target as Node)) {
@@ -301,7 +303,12 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                                 <>
                                     <CustomTabPanel value={currentTab} index={0}>
                                         {project?.scenarios && (
-                                            <ScenariosList scenarios={project?.scenarios} resetProjectInfo={resetProjectInfo} />
+                                            <ScenariosList
+                                                scenarios={project?.scenarios}
+                                                resetProjectInfo={resetProjectInfo}
+                                                pagination={pagination} 
+                                                setPagination={setPagination}
+                                            />
                                         )}
                                     </CustomTabPanel>
                                 </>

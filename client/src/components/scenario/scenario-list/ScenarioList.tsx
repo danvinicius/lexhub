@@ -4,20 +4,27 @@ import Scenario from '../Scenario';
 import { Element } from 'react-scroll';
 import { useHelpers } from '../../../hooks/useHelpers';
 import { FC, ReactNode } from 'react';
+import { Pagination } from '@mui/material';
 
 interface IScenariosListProps {
   scenarios: ILexiconScenario[];
   resetProjectInfo: () => void;
+  pagination: number;
+  setPagination: (page: number) => void;
 }
 
-const ScenariosList: FC<IScenariosListProps> = ({ scenarios, resetProjectInfo }: IScenariosListProps): ReactNode => {
+const ITEMS_PER_PAGE = 3;
+
+const ScenariosList: FC<IScenariosListProps> = ({ scenarios, resetProjectInfo, pagination, setPagination }: IScenariosListProps): ReactNode => {
 	const { slugify } = useHelpers();
+	const startIndex = (pagination - 1) * ITEMS_PER_PAGE;
+	const paginatedScenarios = scenarios.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 	return (
 		<section className="scenarios-list-container" id="scenarios-list">
 			<div className="scenarios-list slide-right">
-				{!!scenarios?.length && (
+				{!!paginatedScenarios?.length && (
 					<ul>
-						{scenarios.map((scenario: ILexiconScenario) => {
+						{paginatedScenarios.map((scenario: ILexiconScenario) => {
 							return (
 								<li key={`${scenario.id}-${slugify(scenario.title.content)}`}>
 									<Element
@@ -36,6 +43,13 @@ const ScenariosList: FC<IScenariosListProps> = ({ scenarios, resetProjectInfo }:
             Ainda não há cenários nesse projeto
 					</span>
 				)}
+			</div>
+			<div className="scenarios-list-pagination flex justify-center align-center py-2">
+				<Pagination variant="outlined" size="large"               
+				count={Math.ceil(scenarios.length / ITEMS_PER_PAGE)}
+                page={pagination}
+                onChange={(_, page) => setPagination(page)}
+				/>
 			</div>
 		</section>
 	);
