@@ -41,7 +41,7 @@ export const ResourceSchema = z.object({
 
 export const UpdateScenarioSchema = z.object({
   title: z.string().min(1, 'O título não pode ser vazio').optional(),
-  goal: z.string().min(1, 'O objetivo não pode ser vazio').optional(),
+  goal: z.string().optional(),
   context: ContextSchema.optional(),
   actors: z.array(ActorSchema).optional(),
   exceptions: z.array(ExceptionSchema).optional(),

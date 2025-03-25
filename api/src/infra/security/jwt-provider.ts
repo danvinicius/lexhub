@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-export class JwtService {
+export class JwtProvider {
   constructor(private readonly secret: string) {}
 
   async encrypt(text: string): Promise<string> {

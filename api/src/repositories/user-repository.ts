@@ -23,8 +23,8 @@ export namespace UserRepository {
   }
 
   export interface UpdateUserParams {
-    name: string;
-    password: string;
+    name?: string;
+    password?: string;
   }
 
   export interface RemoveUserFromProjectParams {

@@ -1,4 +1,4 @@
-import { BcryptService, JwtService } from '@/infra/security';
+import { BcryptProvider, JwtProvider } from '@/infra/security';
 import { IUserProject, IUserRole, IUser } from '@/models';
 import { ProjectRepository, UserRepository } from '@/repositories';
 import { UnauthorizedError, BadRequestError } from '@/utils/errors';
@@ -11,10 +11,15 @@ import {
   AuthenticateUserRequestDTO,
   ChangeUserRoleRequestDTO,
   CreateUserRequestDTO,
+  ForgotPassworRequestDTO,
   RemoveUserFromProjectRequestDTO,
+  ResetPasswordRequestDTO,
   UpdateUserRequestDTO,
 } from '@/infra/http/dtos';
 import { AuthenticateUserResponseDTO } from '@/infra/http/dtos/authenticate-user-response-dto';
+import { EmailService } from './email-service';
+import { HandlebarsProvider } from '@/utils/email/handlebars-provider';
+import { CryptoUtil } from '@/utils/authentication/crypto';
 
 export class UserService {
   constructor(
@@ -22,7 +27,9 @@ export class UserService {
     private userRepository = new UserRepository(),
     private projectRepository = new ProjectRepository(),
     private projectService = new ProjectService(),
-    private changeService = new ChangeService()
+    private changeService = new ChangeService(),
+    private emailService = new EmailService(),
+    private templateProvider = new HandlebarsProvider()
   ) {}
 
   async addUserToProject(
@@ -223,12 +230,12 @@ export class UserService {
     if (!user || !user?.id) {
       throw new ForbiddenError('Senha incorreta ou usuário inexistente');
     }
-    const hasher = new BcryptService(this.hashSalt);
+    const hasher = new BcryptProvider(this.hashSalt);
     const isPasswordCorrect = await hasher.compare(password, user.password);
     if (!isPasswordCorrect) {
       throw new ForbiddenError('Senha incorreta ou usuário inexistente');
     }
-    const encrypter = new JwtService(AUTH_SECRET || '');
+    const encrypter = new JwtProvider(AUTH_SECRET || '');
     const token = await encrypter.encrypt(user.id);
     return new AuthenticateUserResponseDTO({
       id: user.id,
@@ -239,10 +246,61 @@ export class UserService {
     });
   }
 
+  async forgotPassword(
+    data: ForgotPassworRequestDTO
+  ): Promise<{ success: boolean }> {
+    const { email } = data;
+    const user = await this.userRepository.getUser({ email });
+    if (!user || !user?.id) {
+      throw new ForbiddenError('Usuário inexistente');
+    }
+    const firstName = user.name.split(' ')?.[0]
+    const token = CryptoUtil.encrypt(`${email}:${user.name}`);
+    const resetUrl = `${process.env.WEB_URL}/reset-password?token=${token}`
+
+    const htmlTemplate = this.templateProvider.compileTemplate('forgot-password', {
+      name: firstName,
+      resetUrl
+    })
+    await this.emailService.send(email, 'Recuperação de senha', htmlTemplate);
+    return {
+      success: true
+    }
+  }
+
+  async resetPassword(
+    data: ResetPasswordRequestDTO
+  ): Promise<{ success: boolean }> {
+    const { token, password } = data;
+    const decrypted = CryptoUtil.decrypt(token);
+    if (!decrypted) {
+      throw new ForbiddenError('Não autorizado.');
+    }
+    const [ email ] = decrypted.split(':');
+    if (!email) {
+      throw new ForbiddenError('Não autorizado.');
+    }
+    const user = await this.userRepository.getUser({ email });
+    if (!user || !user?.id) {
+      throw new ForbiddenError('Usuário inexistente.');
+    }
+
+    const hasher = new BcryptProvider(this.hashSalt);
+    const hash = await hasher.hash(password);
+
+    await this.userRepository.updateUser(user.id, {
+      password: hash
+    });
+
+    return {
+      success: true
+    }
+  }
+
   async createUser(
     data: CreateUserRequestDTO
   ): Promise<null | AuthenticateUserResponseDTO> {
-    const hasher = new BcryptService(this.hashSalt);
+    const hasher = new BcryptProvider(this.hashSalt);
     const hash = await hasher.hash(data.password);
     const alreadyExists = await this.userRepository.getUser({
       email: data.email,
@@ -260,7 +318,7 @@ export class UserService {
 
     if (user && user?.id) {
       const { name, email, projects } = user;
-      const encrypter = new JwtService(AUTH_SECRET || '');
+      const encrypter = new JwtProvider(AUTH_SECRET || '');
       const token = await encrypter.encrypt(user.id);
       return new AuthenticateUserResponseDTO({
         name,
@@ -276,7 +334,7 @@ export class UserService {
     const user = await this.getUser(id);
     if (user && user?.id) {
       const { name, email, projects } = user;
-      const encrypter = new JwtService(AUTH_SECRET || '');
+      const encrypter = new JwtProvider(AUTH_SECRET || '');
       const token = await encrypter.encrypt(user.id);
       return new AuthenticateUserResponseDTO({
         id,
@@ -306,7 +364,7 @@ export class UserService {
       throw new BadRequestError('Usuário inválido ou inexistente');
     }
     let hash: string = '';
-    const hasher = new BcryptService(this.hashSalt);
+    const hasher = new BcryptProvider(this.hashSalt);
     if (data.currentPassword?.length && data.newPassword?.length) {
       await this.checkPassword(data.currentPassword, user.password);
       hash = await hasher.hash(data.newPassword);
@@ -319,7 +377,7 @@ export class UserService {
   }
 
   private async checkPassword(checkPassword: string, userPassword: string) {
-    const hasher = new BcryptService(this.hashSalt);
+    const hasher = new BcryptProvider(this.hashSalt);
     const isPasswordCorrect = await hasher.compare(checkPassword, userPassword);
     if (!isPasswordCorrect) {
       throw new ForbiddenError('Senha incorreta');

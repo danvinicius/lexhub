@@ -87,6 +87,42 @@ export class UserController {
     }
   };
 
+  forgotPassword = async (req: Request) => {
+    try {
+      const data = validate(DTO.ForgotPasswordSchema, req.body);
+      const success = await userService.forgotPassword(data);
+      return ok(success);
+    } catch (error: any) {
+      if (
+        error instanceof BadRequestError
+      ) {
+        return badRequest(error.message);
+      }
+      if (error instanceof ForbiddenError) {
+        return forbidden(error.message);
+      }
+      return serverError(error.message);
+    }
+  };
+
+  resetPassword = async (req: Request) => {
+    try {
+      const data = validate(DTO.ResetPasswordSchema, req.body);
+      const success = await userService.resetPassword(data);
+      return ok(success);
+    } catch (error: any) {
+      if (
+        error instanceof BadRequestError
+      ) {
+        return badRequest(error.message);
+      }
+      if (error instanceof ForbiddenError) {
+        return forbidden(error.message);
+      }
+      return serverError(error.message);
+    }
+  };
+
   addUserToProject = async (req: Request) => {
     try {
       const data = validate(DTO.AddUserToProjectSchema, { ...req.body, projectId: req.params.projectId });

@@ -11,3 +11,5 @@ export * from './authenticate-user-dto';
 export * from './add-user-to-project-dto';
 export * from './update-user-dto';
 export * from './remove-user-from-project-dto';
+export * from './forgot-password-dto';
+export * from './reset-password-dto';

@@ -54,12 +54,11 @@ export class ProjectRepository {
         projectFilter.deletedAt = null;
       }
       const projects = await Project.find(projectFilter)
-      .populate({ path: 'scenarios' })
-        .populate({ path: 'symbols' })
         .populate({
           path: 'users.user',
           select: '-password -projects',
-        });
+        })
+        .select('name description');
 
       return projects.map((project) => project.toJSON());
     } catch (error: any) {

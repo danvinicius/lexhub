@@ -9,6 +9,8 @@ export const userRouter = async (
 ): Promise<void> => {
   router.get('/user/me', authMiddleware, responseHandler(controller.getMe));
   router.post('/user/register', responseHandler(controller.createUser));
+  router.post('/user/forgot-password', responseHandler(controller.forgotPassword));
+  router.post('/user/reset-password', responseHandler(controller.resetPassword));
   router.post(
     '/user/auth',
     responseHandler(controller.authenticateUser)
