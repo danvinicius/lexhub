@@ -1,7 +1,8 @@
+import { ChangeEvent, FC, useState } from 'react';
+
 import Input from './Input';
 import Eye from '../../../assets/icon/Eye.svg';
 import EyeOff from '../../../assets/icon/Eye_Off.svg';
-import { ChangeEvent, FC, useState } from 'react';
 import './PasswordInput.scss';
 
 interface PasswordInputProps {

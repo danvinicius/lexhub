@@ -1,6 +1,7 @@
 import { ChangeEvent, CSSProperties, FC, KeyboardEvent } from 'react';
-import './Input.scss';
+
 import Error from '../../helper/Error';
+import './Input.scss';
 
 interface InputProps {
   type: string;

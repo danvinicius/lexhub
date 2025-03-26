@@ -1,10 +1,11 @@
 import { FC, useState } from 'react';
+
 import LoginForm from '../components/login/login-form/LoginForm';
 import SignupForm from '../components/login/signup-form/SignupForm';
 import LoginBanner from '../components/login/login-banner/LoginBanner';
 import ForgotPasswordForm from '../components/login/forgot-password-form/ForgotPasswordForm';
-import './css/Login.scss';
 import { Navbar } from '../components/navbar/Navbar';
+import './css/Login.scss';
 
 const Login: FC = () => {
 	const [currentScreen, setCurrentScreen] = useState('login');

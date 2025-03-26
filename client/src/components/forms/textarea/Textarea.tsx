@@ -1,6 +1,7 @@
 import { ChangeEvent, FC, KeyboardEvent } from 'react';
-import './Textarea.scss';
+
 import Error from '../../helper/Error';
+import './Textarea.scss';
 
 interface TextareaProps {
   rows: number;

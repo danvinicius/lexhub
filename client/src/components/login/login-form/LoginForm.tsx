@@ -1,17 +1,19 @@
 import { FC, FormEvent, useContext, useState } from 'react';
-import Button from '../../forms/button/Button';
-import Input from '../../forms/input/Input';
-import Form from '../../forms/Form';
-import './LoginForm.scss';
-import PasswordInput from '../../forms/input/PasswordInput';
-import { AuthUserRequestDTO, UserContext } from '../../../context/UserContext';
-import Loading from '../../helper/Loading';
-import useForm from '../../../hooks/useForm';
-import Error from '../../helper/Error';
+import { AxiosError } from 'axios';
+
 import { AUTH_USER } from '../../../api';
 import api from '../../../lib/axios';
 import { ErrorResponse } from '../../../shared/interfaces';
-import { AxiosError } from 'axios';
+import useForm from '../../../hooks/useForm';
+import { AuthUserRequestDTO, UserContext } from '../../../context/UserContext';
+
+import Button from '../../forms/button/Button';
+import Input from '../../forms/input/Input';
+import Form from '../../forms/Form';
+import PasswordInput from '../../forms/input/PasswordInput';
+import Loading from '../../helper/Loading';
+import Error from '../../helper/Error';
+import './LoginForm.scss';
 interface LoginFormProps {
   setCurrentScreen: (screen: string) => void;
 }

@@ -13,9 +13,7 @@ import {
 } from '@/models';
 import { ScenarioRepository, SymbolRepository } from '@/repositories';
 import { BadRequestError, NotFoundError } from '@/utils/errors';
-import { Lexicon, LexiconService } from './lexicon-service';
-import { ProjectService } from './project-service';
-import { ChangeService } from './change-service';
+import { ProjectService, ChangeService, LexiconService, Lexicon } from '@/services';
 
 export interface ILexiconScenario {
   id: String;
@@ -129,7 +127,6 @@ export class ScenarioService {
       this.scenarioRepository.getAllScenarios(projectId),
     ]);
 
-    // retira o próprio cenário
     const scenarioIndex = scenarios.findIndex((current: IScenario) => {
       return current.id?.valueOf() === scenario?.id?.valueOf();
     });

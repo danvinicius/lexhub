@@ -1,13 +1,15 @@
+import { FC } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+
 import ProtectedRoute from './components/helper/ProtectedRoute';
 import { UserStorage } from './context/UserContext';
-import Login from './views/LoginView';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ProjectStorage } from './context/ProjectContext';
-import { FC } from 'react';
-import { Homepage } from './views/HomepageView';
+
+import Login from './views/LoginView';
 import ProjectRoute from './components/helper/ProjectRoute';
-import { UnderDevelopment } from './components/helper/under-development/UnderDevelopment';
+import { Homepage } from './views/HomepageView';
 import { About } from './components/external/about/About';
+import { UnderDevelopment } from './components/helper/under-development/UnderDevelopment';
 
 const App: FC = () => {
     return (

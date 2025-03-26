@@ -1,8 +1,10 @@
 import { FC, MouseEventHandler, ReactNode, useContext } from 'react';
-import './LexiconSpan.scss';
-import { ProjectContext } from '../../../context/ProjectContext';
+
 import { ILexiconSymbol } from '../../../shared/interfaces';
 import { useHelpers } from '../../../hooks/useHelpers';
+import { ProjectContext } from '../../../context/ProjectContext';
+
+import './LexiconSpan.scss';
 
 interface LexiconSpanProps {
     id: string;

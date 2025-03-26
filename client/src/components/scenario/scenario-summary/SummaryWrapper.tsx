@@ -1,22 +1,22 @@
 import { ReactNode, useContext, useEffect, useRef, useState } from 'react';
-import './SummaryWrapper.scss';
+
 import { ProjectContext } from '../../../context/ProjectContext';
+
 import { ScenariosSummary } from './ScenarioSummary';
 import Arrow from '../../assets/icon/Arrow_Left_M.svg';
 import SymbolDetails from '../../symbol/symbol-details/SymbolDetails';
+import './SummaryWrapper.scss';
 
 const SummaryWrapper = (): ReactNode => {
 	const { symbol, setSymbol } = useContext(ProjectContext || {});
 	const [isFixed, setIsFixed] = useState(false);
-	const summaryRef = useRef<HTMLDivElement>(null); // Referência ao componente
-	const placeholderRef = useRef<HTMLDivElement>(null); // Placeholder para manter o espaço do componente no layout
+	const summaryRef = useRef<HTMLDivElement>(null);
+	const placeholderRef = useRef<HTMLDivElement>(null);
 
-	// Efeito para monitorar o scroll
 	useEffect(() => {
 		const handleScroll = () => {
 			const summaryPosition = summaryRef.current?.getBoundingClientRect();
 			if (summaryPosition) {
-				// Verifica se o topo do componente atingiu o topo da tela
 				if (document.documentElement.scrollTop >= 284) {
 					setIsFixed(true);
 				} else {

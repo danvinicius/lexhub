@@ -1,8 +1,7 @@
 import { Dispatch, FC, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
-import { ProjectContext } from '../../../context/ProjectContext';
 
-// Supondo que o contexto das opções seja algo como o contexto abaixo:
+import { ProjectContext } from '../../../context/ProjectContext';
 
 interface AddActorComboBoxProps {
   scenarioId?: string;
@@ -21,7 +20,6 @@ export const AddActorComboBox: FC<AddActorComboBoxProps> = ({
 
 	const [localOptions, setLocalOptions] = useState<string[]>([]);
 
-	// Atualiza localOptions sempre que actors ou scenarioId mudam
 	useEffect(() => {
 		const updatedOptions = [
 			...new Set(

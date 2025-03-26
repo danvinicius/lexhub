@@ -1,10 +1,9 @@
-import { BcryptProvider, JwtProvider } from '@/infra/security';
+import { HashProvider, JwtProvider } from '@/utils/security';
 import { IUserProject, IUserRole, IUser } from '@/models';
 import { ProjectRepository, UserRepository } from '@/repositories';
 import { UnauthorizedError, BadRequestError } from '@/utils/errors';
 import { ForbiddenError } from '@/utils/errors/forbidden-error';
-import { ProjectService } from './project-service';
-import { ChangeService } from './change-service';
+import { ProjectService, ChangeService } from '@/services';
 import { AUTH_SECRET, HASH_SALT } from '@/config/env';
 import {
   AddUserToProjectRequestDTO,
@@ -17,9 +16,9 @@ import {
   UpdateUserRequestDTO,
 } from '@/infra/http/dtos';
 import { AuthenticateUserResponseDTO } from '@/infra/http/dtos/authenticate-user-response-dto';
-import { EmailService } from './email-service';
-import { HandlebarsProvider } from '@/utils/email/handlebars-provider';
-import { CryptoUtil } from '@/utils/authentication/crypto';
+import { CryptoProvider } from '@/utils/security/crypto-provider';
+import { EmailProvider } from '@/utils/email/email-provider';
+import { TemplateProvider } from '@/utils/email/template-provider';
 
 export class UserService {
   constructor(
@@ -28,8 +27,8 @@ export class UserService {
     private projectRepository = new ProjectRepository(),
     private projectService = new ProjectService(),
     private changeService = new ChangeService(),
-    private emailService = new EmailService(),
-    private templateProvider = new HandlebarsProvider()
+    private emailProvider = new EmailProvider(),
+    private templateProvider = new TemplateProvider()
   ) {}
 
   async addUserToProject(
@@ -117,7 +116,6 @@ export class UserService {
       }
     }
 
-    // Buscar o projeto para verificar se o usuário já está associado
     const targetUser = project?.users.find(
       (u: IUserProject) => u.user.id === data.userId
     );
@@ -126,24 +124,20 @@ export class UserService {
       throw new BadRequestError(`O usuário não faz parte deste projeto.`);
     }
 
-    // Obter o estado do projeto antes da alteração
     const beforeChange = await this.projectService.getCleanProject(
       data.projectId
     );
 
-    // Chamar o repositório para alterar o cargo
     const updatedUserProject = await this.userRepository.changeUserRole({
       userId: data.userId,
       projectId: data.projectId,
       newRole: data.newRole,
     });
 
-    // Obter o estado do projeto após a alteração
     const afterChange = await this.projectService.getCleanProject(
       data.projectId
     );
 
-    // Registrar a alteração
     if (beforeChange && afterChange) {
       await this.changeService.createChange(
         beforeChange,
@@ -163,7 +157,6 @@ export class UserService {
   ): Promise<void> {
     const requester = await this.userRepository.getUser({ _id: requesterId });
 
-    // Garantir que o solicitante tenha permissão para remover usuários
     const requesterProjectRole = requester?.projects?.find(
       (p: IUserProject) => p.project.toString() === data.projectId
     )?.role;
@@ -174,7 +167,6 @@ export class UserService {
         return userProject.user.id;
     });
 
-    // Impedir que um ADMIN remova um OWNER
     const targetUser = project?.users.find(
       (u: IUserProject) => u.user.id === data.userId
     );
@@ -194,23 +186,19 @@ export class UserService {
       );
     }
 
-    // Obter o estado do projeto antes da alteração
     const beforeChange = await this.projectService.getCleanProject(
       data.projectId
     );
 
-    // Chamar o repositório para remover o usuário
     await this.userRepository.removeUserFromProject({
       userId: data.userId,
       projectId: data.projectId,
     });
 
-    // Obter o estado do projeto após a alteração
     const afterChange = await this.projectService.getCleanProject(
       data.projectId
     );
 
-    // Registrar a remoção
     if (beforeChange && afterChange) {
       await this.changeService.createChange(
         beforeChange,
@@ -230,7 +218,7 @@ export class UserService {
     if (!user || !user?.id) {
       throw new ForbiddenError('Senha incorreta ou usuário inexistente');
     }
-    const hasher = new BcryptProvider(this.hashSalt);
+    const hasher = new HashProvider(this.hashSalt);
     const isPasswordCorrect = await hasher.compare(password, user.password);
     if (!isPasswordCorrect) {
       throw new ForbiddenError('Senha incorreta ou usuário inexistente');
@@ -255,14 +243,14 @@ export class UserService {
       throw new ForbiddenError('Usuário inexistente');
     }
     const firstName = user.name.split(' ')?.[0]
-    const token = CryptoUtil.encrypt(`${email}:${user.name}`);
+    const token = CryptoProvider.encrypt(`${email}:${user.name}`);
     const resetUrl = `${process.env.WEB_URL}/reset-password?token=${token}`
 
     const htmlTemplate = this.templateProvider.compileTemplate('forgot-password', {
       name: firstName,
       resetUrl
     })
-    await this.emailService.send(email, 'Recuperação de senha', htmlTemplate);
+    await this.emailProvider.send(email, 'Recuperação de senha', htmlTemplate);
     return {
       success: true
     }
@@ -272,7 +260,7 @@ export class UserService {
     data: ResetPasswordRequestDTO
   ): Promise<{ success: boolean }> {
     const { token, password } = data;
-    const decrypted = CryptoUtil.decrypt(token);
+    const decrypted = CryptoProvider.decrypt(token);
     if (!decrypted) {
       throw new ForbiddenError('Não autorizado.');
     }
@@ -285,7 +273,7 @@ export class UserService {
       throw new ForbiddenError('Usuário inexistente.');
     }
 
-    const hasher = new BcryptProvider(this.hashSalt);
+    const hasher = new HashProvider(this.hashSalt);
     const hash = await hasher.hash(password);
 
     await this.userRepository.updateUser(user.id, {
@@ -300,7 +288,7 @@ export class UserService {
   async createUser(
     data: CreateUserRequestDTO
   ): Promise<null | AuthenticateUserResponseDTO> {
-    const hasher = new BcryptProvider(this.hashSalt);
+    const hasher = new HashProvider(this.hashSalt);
     const hash = await hasher.hash(data.password);
     const alreadyExists = await this.userRepository.getUser({
       email: data.email,
@@ -364,7 +352,7 @@ export class UserService {
       throw new BadRequestError('Usuário inválido ou inexistente');
     }
     let hash: string = '';
-    const hasher = new BcryptProvider(this.hashSalt);
+    const hasher = new HashProvider(this.hashSalt);
     if (data.currentPassword?.length && data.newPassword?.length) {
       await this.checkPassword(data.currentPassword, user.password);
       hash = await hasher.hash(data.newPassword);
@@ -377,7 +365,7 @@ export class UserService {
   }
 
   private async checkPassword(checkPassword: string, userPassword: string) {
-    const hasher = new BcryptProvider(this.hashSalt);
+    const hasher = new HashProvider(this.hashSalt);
     const isPasswordCorrect = await hasher.compare(checkPassword, userPassword);
     if (!isPasswordCorrect) {
       throw new ForbiddenError('Senha incorreta');

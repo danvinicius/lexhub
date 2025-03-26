@@ -1,29 +1,31 @@
 import { FC, ReactNode, SyntheticEvent, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import './Project.scss';
-import { UserContext } from '../../context/UserContext';
+import Public from '@mui/icons-material/Public';
+import { Lock } from '@mui/icons-material';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { Box, Modal, Tab, Tabs } from '@mui/material';
+import { AxiosError } from 'axios';
+
 import { GET_PROJECT } from '../../api';
 import api from '../../lib/axios';
+import { ErrorResponse, IProject, IUserProject, IUserRole } from '../../shared/interfaces';
+import { UserContext } from '../../context/UserContext';
+import { ProjectContext } from '../../context/ProjectContext';
+
 import Loading from '../helper/Loading';
 import Error from '../helper/Error';
 import ScenariosList from '../scenario/scenario-list/ScenarioList';
 import Button from '../forms/button/Button';
-import { ProjectContext } from '../../context/ProjectContext';
 import Kebab from '../../assets/icon/Kebab_Vertical.svg';
-import { Box, Modal, Tab, Tabs } from '@mui/material';
-import { ErrorResponse, IProject, IUserProject, IUserRole } from '../../shared/interfaces';
 import { ProjectActionsOptionsMenu } from './project-actions-options-menu/ProjectActionsOptionsMenu';
 import DeleteProjectForm from './delete-projet/DeleteProject';
 import SymbolsList from '../symbol/symbol-list/SymbolList';
 import AddUserToProjectForm from './user/AddUserToProjectForm';
-import { AxiosError } from 'axios';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { ProfilePicture } from '../user/profile-picture/ProfilePicture';
-import Public from '@mui/icons-material/Public';
-import { Lock } from '@mui/icons-material';
 import { CreateMultipleScenariosForm } from '../scenario/multiple-scenarios-form/CreateMultipleScenariosForm';
 import ProjectForm from './project-form/ProjectForm';
 import ScenarioForm from '../scenario/scenario-form/ScenarioForm';
 import SymbolForm from '../symbol/symbol-form/SymbolForm';
+import './Project.scss';
 
 interface TabPanelProps {
     children?: ReactNode;
@@ -73,12 +75,10 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
     const [isAdministrador, setIsAdministrador] = useState(false);
     const [isProprietario, setIsProprietario] = useState(false);
 
-    // project actions options modal control
     const [isProjectActionsOptionsMenuOpen, setIsProjectActionsOptionsMenuOpen] = useState(false);
     const handleOpenProjectActionsOptionsMenu = () => setIsProjectActionsOptionsMenuOpen(true);
     const handleCloseProjectActionsOptionsMenu = () => setIsProjectActionsOptionsMenuOpen(false);
 
-    // update project modal control
     const [isUpdateProjectModalOpen, setIsUpdateProjectModalOpen] = useState(false);
     const handleCloseUpdateProjectModal = () => setIsUpdateProjectModalOpen(false);
     const handleOpenUpdateProjectModal = () => {
@@ -86,7 +86,6 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
         handleCloseProjectActionsOptionsMenu();
     };
 
-    // delete project modal control
     const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
     const handleOpenDeleteProjectModal = () => {
         setIsDeleteProjectModalOpen(true);
@@ -94,17 +93,14 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
     };
     const handleCloseDeleteProjectModal = () => setIsDeleteProjectModalOpen(false);
 
-    // create symbol modal control
     const [isCreateSymbolModalOpen, setIsCreateSymbolModalOpen] = useState(false);
     const handleOpenCreateSymbolModal = () => setIsCreateSymbolModalOpen(true);
     const handleCloseCreateSymbolModal = () => setIsCreateSymbolModalOpen(false);
 
-    // create scenario(s) options menu
     const [isCreateScenarioOptionsMenuOpen, setIsCreateScenarioOptionsMenuOpen] = useState(false);
     const handleOpenCreateScenarioOptionsMenu = () => setIsCreateScenarioOptionsMenuOpen(true);
     const handleCloseCreateScenarioOptionsMenu = () => setIsCreateScenarioOptionsMenuOpen(false);
 
-    // create scenario modal control
     const [isScenarioModalOpen, setIsScenarioModalOpen] = useState(false);
     const handleOpenCreateScenarioModal = () => {
         handleCloseCreateScenarioOptionsMenu();
@@ -112,7 +108,6 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
     };
     const handleCloseScenarioModal = () => setIsScenarioModalOpen(false);
 
-    // create multiple scenarios modal control
     const [isCreateMultipleScenariosModalOpen, setIsCreateMultipleScenariosModalOpen] = useState(false);
     const handleOpenCreateMultipleScenariosModal = () => {
         handleCloseCreateScenarioOptionsMenu();
@@ -120,7 +115,6 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
     };
     const handleCloseCreateMultipleScenariosModal = () => setIsCreateMultipleScenariosModalOpen(false);
 
-    // add user to project modal control
     const [isAddUserToProjectModalOpen, setIsAddUserToProjectModalOpen] = useState(false);
     const handleOpenAddUserToProjectModal = () => setIsAddUserToProjectModalOpen(true);
     const handleCloseAddUserToProjectModal = () => setIsAddUserToProjectModalOpen(false);
@@ -274,10 +268,10 @@ const Project: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                                 aria-label='basic tabs example'
                                 sx={{
                                     '.Mui-selected': {
-                                        color: 'var(--primary-color) !important', // Cor da aba ativa
+                                        color: 'var(--primary-color) !important',
                                     },
                                     '.MuiTabs-indicator': {
-                                        backgroundColor: 'var(--primary-color) !important', // Cor da barra abaixo da aba ativa
+                                        backgroundColor: 'var(--primary-color) !important',
                                     },
                                 }}
                             >

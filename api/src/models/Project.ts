@@ -1,8 +1,7 @@
-import Symbol, { ISymbol } from './Symbol';
-import Scenario, { IScenario } from './Scenario';
-import { IUserProject } from './User';
 import { model, Schema } from 'mongoose';
-import { IUserRole } from './User';
+import Symbol from '@/models/Symbol';
+import Scenario from '@/models/Scenario';
+import { IUserProject, IUserRole, IScenario, ISymbol } from '@/models';
 
 export interface IProject {
   readonly id?: string;
@@ -62,20 +61,16 @@ const projectSchema = new Schema<IProject>(
 
 projectSchema.pre('deleteOne', async function (next) {
   try {
-    // Obter o projeto que está sendo removido
     const project = await this.model.findOne(this.getFilter());
 
     if (!project) {
       return next(new Error('Projeto não encontrado'));
     }
 
-    // Remover todos os cenários associados
     await Scenario.deleteMany({ _id: { $in: project.scenarios } });
-
-    // Remover todos os símbolos associados
     await Symbol.deleteMany({ _id: { $in: project.symbols } });
 
-    next(); // Continuar com a remoção do projeto
+    next();
   } catch (error) {
     next(error);
   }

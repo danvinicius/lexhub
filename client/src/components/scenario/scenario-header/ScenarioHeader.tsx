@@ -1,8 +1,10 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { useLexicon } from '../../../hooks/useLexicon';
 import { ILexiconScenario } from '../../../shared/interfaces';
+
 import { ScenarioActionsOptionsMenu } from '../scenario-actions-options-menu/ScenarioActionsOptionsMenu';
 import KebabVertical from '../../../assets/icon/Kebab_Vertical.svg';
-import { Dispatch, SetStateAction } from 'react';
 
 interface ScenarioHeaderProps {
     title: ILexiconScenario['title'];

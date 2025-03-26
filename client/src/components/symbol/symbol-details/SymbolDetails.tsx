@@ -1,14 +1,16 @@
 import { CSSProperties, FC, ReactNode, useContext, useEffect, useState } from 'react';
-import { IUserRole, ILexiconSymbol } from '../../../shared/interfaces';
-import './SymbolDetails.scss';
-import KebabVertical from '../../../assets/icon/Kebab_Vertical.svg';
-import { SymbolActionsOptionsMenu } from '../symbol-actions-options-menu/SymbolActionsOptionsMenu';
 import { Modal } from '@mui/material';
-import DeleteSymbolForm from '../delete-symbol/DeleteSymbol';
+
+import { useLexicon } from '../../../hooks/useLexicon';
 import { UserContext } from '../../../context/UserContext';
 import { ProjectContext } from '../../../context/ProjectContext';
-import { useLexicon } from '../../../hooks/useLexicon';
+import { IUserRole, ILexiconSymbol } from '../../../shared/interfaces';
+
+import KebabVertical from '../../../assets/icon/Kebab_Vertical.svg';
+import { SymbolActionsOptionsMenu } from '../symbol-actions-options-menu/SymbolActionsOptionsMenu';
+import DeleteSymbolForm from '../delete-symbol/DeleteSymbol';
 import SymbolForm from '../symbol-form/SymbolForm';
+import './SymbolDetails.scss';
 
 interface SymbolDetailsProps {
     symbol?: ILexiconSymbol;

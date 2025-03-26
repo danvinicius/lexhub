@@ -1,13 +1,14 @@
 import { FC } from 'react';
 import { List, ListItem, ListItemText, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
 import LanguageIcon from '@mui/icons-material/Language';
-import { ILexiconRestriction, ILexiconScenario } from '../../../shared/interfaces';
-import { useLexicon } from '../../../hooks/useLexicon';
-import { StyledTableCell } from '../../../shared/table';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+
+import { ILexiconRestriction, ILexiconScenario } from '../../../shared/interfaces';
+import { useLexicon } from '../../../hooks/useLexicon';
+import { StyledTableCell } from '../../../shared/table';
 
 interface ContextProps {
     context: ILexiconScenario['context'];

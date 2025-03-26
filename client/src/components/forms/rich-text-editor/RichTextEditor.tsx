@@ -1,10 +1,11 @@
 import { Dispatch, FC } from 'react';
 import ReactQuill from 'react-quill';
 
-import 'react-quill/dist/quill.snow.css';
-import './RichTextEditor.scss';
-import Error from '../../helper/Error';
 import { useHelpers } from '../../../hooks/useHelpers';
+
+import Error from '../../helper/Error';
+import './RichTextEditor.scss';
+import 'react-quill/dist/quill.snow.css';
 
 interface RichTextEditorProps {
     label: string;

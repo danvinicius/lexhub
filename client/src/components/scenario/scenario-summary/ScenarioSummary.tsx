@@ -1,10 +1,12 @@
 import { ReactNode, useContext } from 'react';
+import { useParams } from 'react-router-dom';
+import { Link } from 'react-scroll';
+
 import { ProjectContext } from '../../../context/ProjectContext';
 import { ILexiconScenario } from '../../../shared/interfaces';
-import './ScenariosSummary.scss';
-import { Link } from 'react-scroll';
 import { useHelpers } from '../../../hooks/useHelpers';
-import { useParams } from 'react-router-dom';
+
+import './ScenariosSummary.scss';
 
 export const ScenariosSummary = (): ReactNode => {
 	const { project } = useContext(ProjectContext);

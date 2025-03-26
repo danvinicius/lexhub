@@ -1,22 +1,24 @@
 import { FC, FormEvent, ReactNode, SyntheticEvent, useContext, useState } from 'react';
+import { Snackbar, SnackbarCloseReason } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { AxiosError } from 'axios';
+
+import api from '../../../lib/axios';
+import { ADD_USER_TO_PROJECT, CHANGE_USER_ROLE, REMOVE_USER } from '../../../api';
+import { ErrorResponse, IUserProject, IUserRole } from '../../../shared/interfaces';
+import { AddUserRequestDTO, UserRoleRequestDTO, RemoveUserRequestDTO } from '../../../shared/dto';
+import { UserContext } from '../../../context/UserContext';
+import { ProjectContext } from '../../../context/ProjectContext';
+
 import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
 import Button from '../../forms/button/Button';
 import Error from '../../helper/Error';
-import api from '../../../lib/axios';
-import { ADD_USER_TO_PROJECT, CHANGE_USER_ROLE, REMOVE_USER } from '../../../api';
-import { UserContext } from '../../../context/UserContext';
-import './AddUserToProjectForm.scss';
 import Select from '../../forms/select/Select';
 import Close from '../../../assets/icon/Close_Dark.svg';
-import { ProjectContext } from '../../../context/ProjectContext';
 import { AddUserEmailComboBox } from './AddUserEmailComboBox';
-import { Snackbar, SnackbarCloseReason } from '@mui/material';
-import { ErrorResponse, IUserProject, IUserRole } from '../../../shared/interfaces';
-import { AxiosError } from 'axios';
 import { ProfilePicture } from '../../user/profile-picture/ProfilePicture';
-import CloseIcon from '@mui/icons-material/Close';
-import { AddUserRequestDTO, UserRoleRequestDTO, RemoveUserRequestDTO } from '../../../shared/dto';
+import './AddUserToProjectForm.scss';
 
 interface AddUserToProjectFormProps {
     onClose: () => void;
@@ -98,7 +100,6 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
     function copyCurrentUrlToClipboard() {
         const currentUrl = window.location.href;
 
-        // Verifica se a API Clipboard está disponível
         if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard
                 .writeText(currentUrl)
@@ -109,10 +110,9 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
                     console.error('Falha ao copiar a URL:', err);
                 });
         } else {
-            // Método de fallback para navegadores mais antigos
             const textArea = document.createElement('textarea');
             textArea.value = currentUrl;
-            textArea.style.position = 'fixed'; // Evita que o textarea afete o layout da página
+            textArea.style.position = 'fixed';
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();

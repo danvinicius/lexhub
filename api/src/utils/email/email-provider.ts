@@ -1,16 +1,16 @@
 import nodemailer, { Transporter } from 'nodemailer';
 
-export class EmailService {
+export class EmailProvider {
   transporter: Transporter;
   constructor() {
     this.transporter = nodemailer.createTransport({
-        host: process.env.MAILTRAP_HOST,
-        port: Number(process.env.MAILTRAP_PORT),
-        auth: {
-          user: process.env.MAILTRAP_USER,
-          pass: process.env.MAILTRAP_PASS,
-        },
-      });
+      host: process.env.MAILTRAP_HOST,
+      port: Number(process.env.MAILTRAP_PORT),
+      auth: {
+        user: process.env.MAILTRAP_USER,
+        pass: process.env.MAILTRAP_PASS,
+      },
+    });
   }
   public async send(to: string, subject: string, html: string) {
     try {

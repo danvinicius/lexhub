@@ -1,4 +1,5 @@
 import { CSSProperties, FC, FormEvent } from 'react';
+
 import './Button.scss';
 
 interface ButtonProps {

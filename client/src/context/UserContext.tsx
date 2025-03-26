@@ -9,10 +9,11 @@ import {
 	useState,
 } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
+
 import { ErrorResponse, IUserRole } from '../shared/interfaces';
 import api from '../lib/axios';
 import { GET_ME } from '../api';
-import { AxiosError } from 'axios';
 export interface CreateUserRequestDTO {
   name: string;
   email: string;

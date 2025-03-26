@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+
 import { IDifference, IProject, IUser } from '../shared/interfaces';
 import { UserContext } from '../context/UserContext';
 
@@ -108,12 +109,10 @@ export const useChanges = (): UseChangesReturn => {
 
 		const actionDescription = getDifferenceDescription(difference, entityName);
 
-		// Pega o nome do projeto e o nome da entidade (se existir).
 		const projectName = project.name || 'projeto desconhecido';
 
 		const username = responsible.id === userId ? 'Você' : responsible.name;
 
-		// Formata a mensagem final.
 		return `<b>${username}</b> ${actionDescription} <span class="action pointer"><a href="/projeto/${project.id}">${projectName}</a></span>.`;
 	};
 

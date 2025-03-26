@@ -1,16 +1,18 @@
 import { FC, ReactNode, useContext, useState } from 'react';
+import { AxiosError } from 'axios';
+
+import api from '../../../../lib/axios';
 import { UPDATE_SCENARIO } from '../../../../api';
 import { UserContext } from '../../../../context/UserContext';
-import api from '../../../../lib/axios';
 import { ErrorResponse, ILexiconScenario } from '../../../../shared/interfaces';
+import { ScenarioRequestDTO } from '../../../../shared/dto';
+
 import Close from '../../../../assets/icon/Close_Dark.svg';
-import { AxiosError } from 'axios';
 import Loading from '../../../helper/Loading';
 import Form from '../../../forms/Form';
 import Button from '../../../forms/button/Button';
 import Error from '../../../helper/Error';
 import './DeleteEpisode.scss';
-import { ScenarioRequestDTO } from '../../../../shared/dto';
 
 interface DeleteEpisodeProps {
     scenario: ILexiconScenario;

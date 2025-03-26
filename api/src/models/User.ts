@@ -1,5 +1,5 @@
-import { IProject } from './Project';
 import { model, Schema } from 'mongoose';
+import { IProject } from '@/models';
 
 export enum IUserRole {
   ADMINISTRADOR = 'Administrador',

@@ -1,11 +1,13 @@
-import ChevronRight from '../../../assets/icon/ChevronRight.svg';
-import '../Navbar.scss';
 import { FC, useContext, useEffect, useState } from 'react';
-import './NavbarMenuLinks.scss';
 import { Link, useLocation } from 'react-router-dom';
+
 import { UserContext } from '../../../context/UserContext';
+
+import ChevronRight from '../../../assets/icon/ChevronRight.svg';
 import { AuthMenu } from '../auth-menu/AuthMenu';
 import { LoginButton } from '../../login/buttons/LoginButton';
+import '../Navbar.scss';
+import './NavbarMenuLinks.scss';
 
 interface NavbarMenuLinksProps {
     toggleMenu?: () => void;

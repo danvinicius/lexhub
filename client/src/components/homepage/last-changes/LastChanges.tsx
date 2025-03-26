@@ -1,14 +1,16 @@
 import { ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import './LastChanges.scss';
-import api from '../../../lib/axios';
-import { UserContext } from '../../../context/UserContext';
-import { GET_CHANGES_BY_USER_PROJECTS } from '../../../api';
-import { AxiosError } from 'axios';
-import { ErrorResponse, IChange } from '../../../shared/interfaces';
-import { useChanges } from '../../../hooks/useChanges';
-import { ProfilePicture } from '../../user/profile-picture/ProfilePicture';
 import { formatDistance } from 'date-fns';
+import { AxiosError } from 'axios';
 import { ptBR } from 'date-fns/locale';
+
+import api from '../../../lib/axios';
+import { GET_CHANGES_BY_USER_PROJECTS } from '../../../api';
+import { ErrorResponse, IChange } from '../../../shared/interfaces';
+import { UserContext } from '../../../context/UserContext';
+import { useChanges } from '../../../hooks/useChanges';
+
+import { ProfilePicture } from '../../user/profile-picture/ProfilePicture';
+import './LastChanges.scss';
 
 export const LastChanges = (): ReactNode => {
     const { isAuthenticated } = useContext(UserContext) || {};

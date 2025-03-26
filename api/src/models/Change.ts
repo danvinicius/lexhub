@@ -1,6 +1,5 @@
-import { IProject } from './Project';
-import { IUser } from './User';
 import { model, Schema } from 'mongoose';
+import { IProject, IUser } from '@/models';
 
 export type DifferenceKind = 'N' | 'D' | 'E' | 'A';
 

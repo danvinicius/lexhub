@@ -17,17 +17,14 @@ const getRandomColorFromName = (name: string) => {
 
     const hash = hashString(name.toLocaleLowerCase());
     
-    // Gera cores dentro de um intervalo específico que evita rosa/roxo
-    let red = ((hash >> 16) & 0xFF) % 200;  // Reduz o máximo
-    let green = ((hash >> 8) & 0xFF) % 200; // Ajuste do limite superior
-    let blue = (hash & 0xFF) % 200;         // Ajuste do limite superior
+    let red = ((hash >> 16) & 0xFF) % 200;
+    let green = ((hash >> 8) & 0xFF) % 200;
+    let blue = (hash & 0xFF) % 200;
 
-    // Evitar tons com vermelho e azul elevados, mas verde baixo
     if (red > 150 && blue > 150 && green < 100) {
-        green += 100; // Aumenta o verde para equilibrar
+        green += 100;
     }
 
-    // Converter para string de cor hexadecimal
     const color = `#${red.toString(16).padStart(2, '0')}` +
                   `${green.toString(16).padStart(2, '0')}` +
                   `${blue.toString(16).padStart(2, '0')}`;

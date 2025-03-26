@@ -1,6 +1,8 @@
 import { useContext } from 'react';
-import { UserContext } from '../../../context/UserContext';
 import { LogoutOutlined } from '@mui/icons-material';
+
+import { UserContext } from '../../../context/UserContext';
+
 import './Authentication.scss';
 
 export const LogoutButton = () => {

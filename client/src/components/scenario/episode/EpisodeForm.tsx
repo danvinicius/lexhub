@@ -1,24 +1,25 @@
 import { FC, ReactNode, useContext, useState, KeyboardEvent, FormEvent, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { AxiosError } from 'axios';
 
+import { UPDATE_SCENARIO } from '../../../api';
+import api from '../../../lib/axios';
 import { ErrorResponse, ILexiconScenario } from '../../../shared/interfaces';
+import { UserContext } from '../../../context/UserContext';
+import { ProjectContext } from '../../../context/ProjectContext';
+import useForm from '../../../hooks/useForm';
+import { useSelect } from '../../../hooks/useSelect';
+import { ScenarioRequestDTO } from '../../../shared/dto';
+
 import Button from '../../forms/button/Button';
 import Close from '../../../assets/icon/Close_Dark.svg';
-import './EpisodeForm.scss';
-import { UPDATE_SCENARIO } from '../../../api';
-import { ProjectContext } from '../../../context/ProjectContext';
-import { UserContext } from '../../../context/UserContext';
-import api from '../../../lib/axios';
-import { AxiosError } from 'axios';
 import Error from '../../helper/Error';
 import Form from '../../forms/Form';
 import Input from '../../forms/input/Input';
 import Select from '../../forms/select/Select';
-import useForm from '../../../hooks/useForm';
-import { useSelect } from '../../../hooks/useSelect';
 import Loading from '../../helper/Loading';
 import Textarea from '../../forms/textarea/Textarea';
-import { ScenarioRequestDTO } from '../../../shared/dto';
+import './EpisodeForm.scss';
 
 interface EpisodesFormProps {
     onClose: () => void;

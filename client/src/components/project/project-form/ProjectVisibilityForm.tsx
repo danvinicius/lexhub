@@ -18,7 +18,7 @@ export const ProjectVisibilityForm = ({ visibility, setVisibility }: ProjectVisi
                 <FormLabel
                     id='demo-radio-buttons-group-label'
                     sx={{
-                        color: 'var(--primary-text-color)', // Altera a cor ao focar
+                        color: 'var(--primary-text-color)',
                         '&.Mui-focused': {
                             color: 'var(--primary-text-color)',
                         },
@@ -29,7 +29,7 @@ export const ProjectVisibilityForm = ({ visibility, setVisibility }: ProjectVisi
                 <RadioGroup
                     aria-labelledby='demo-radio-buttons-group-label'
                     name='radio-buttons-group'
-                    value={visibility} // Define o valor controlado
+                    value={visibility}
                     onChange={handleRadioChange}
                 >
                     <FormControlLabel
@@ -39,7 +39,7 @@ export const ProjectVisibilityForm = ({ visibility, setVisibility }: ProjectVisi
                                 sx={{
                                     color: '#B0BEC5',
                                     '&.Mui-checked': {
-                                        color: 'var(--primary-color)', // Cor roxa quando selecionado
+                                        color: 'var(--primary-color)',
                                     },
                                 }}
                                 icon={<LockIcon />}
@@ -55,7 +55,7 @@ export const ProjectVisibilityForm = ({ visibility, setVisibility }: ProjectVisi
                                 sx={{
                                     color: '#B0BEC5',
                                     '&.Mui-checked': {
-                                        color: 'var(--primary-color)', // Cor roxa quando selecionado
+                                        color: 'var(--primary-color)',
                                     },
                                 }}
                                 icon={<Public />}

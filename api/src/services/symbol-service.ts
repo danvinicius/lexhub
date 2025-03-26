@@ -6,9 +6,7 @@ import { IImpact, ISymbol, ISynonym } from '@/models';
 import { ScenarioRepository, SymbolRepository } from '@/repositories';
 import { BadRequestError } from '@/utils/errors';
 import { normalize } from '@/utils/string/normalize';
-import { Lexicon, LexiconService } from './lexicon-service';
-import { ChangeService } from './change-service';
-import { ProjectService } from './project-service';
+import { ChangeService, ProjectService, Lexicon, LexiconService } from '@/services';
 
 export interface ILexiconSymbol {
   id: String;
@@ -116,7 +114,6 @@ export class SymbolService {
       this.scenarioRepository.getAllScenarios(projectId),
     ]);
 
-    // retira o próprio símbolo
     const symbolIndex = symbols.findIndex((current: ISymbol) => {
       return current.id?.valueOf() === symbol?.id?.valueOf();
     });

@@ -1,5 +1,6 @@
-import Symbol, { ISynonym, IImpact, ISymbol } from '@/models/Symbol';
+import { ISynonym, IImpact, ISymbol } from '@/models';
 import Project from '@/models/Project';
+import Symbol from '@/models/Symbol';
 import { ServerError } from '@/utils/errors';
 
 export namespace SymbolRepository {

@@ -1,15 +1,17 @@
 import { FC, FormEvent, ReactNode, useContext, useState } from 'react';
-import Button from '../../forms/button/Button';
-import Form from '../../forms/Form';
-import './DeleteSymbol.scss';
-import { UserContext } from '../../../context/UserContext';
-import Loading from '../../helper/Loading';
+import { AxiosError } from 'axios';
+
 import { DELETE_SYMBOL } from '../../../api';
 import api from '../../../lib/axios';
-import Error from '../../helper/Error';
+import { UserContext } from '../../../context/UserContext';
 import { ErrorResponse, ILexiconSymbol } from '../../../shared/interfaces';
+
+import Button from '../../forms/button/Button';
+import Form from '../../forms/Form';
+import Loading from '../../helper/Loading';
+import Error from '../../helper/Error';
 import Close from '../../../assets/icon/Close_Dark.svg';
-import { AxiosError } from 'axios';
+import './DeleteSymbol.scss';
 
 interface DeleteSymbolProps {
   symbol: ILexiconSymbol;

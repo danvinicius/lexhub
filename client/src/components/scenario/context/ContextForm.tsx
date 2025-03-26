@@ -1,10 +1,13 @@
-import { AxiosError } from 'axios';
 import { FC, ReactNode, useEffect, useContext, useState, FormEvent } from 'react';
+import { AxiosError } from 'axios';
+
+import api from '../../../lib/axios';
+import { ScenarioRequestDTO } from '../../../shared/dto';
 import { UPDATE_SCENARIO } from '../../../api';
 import { UserContext } from '../../../context/UserContext';
 import useForm from '../../../hooks/useForm';
-import api from '../../../lib/axios';
 import { ILexiconScenario, ErrorResponse } from '../../../shared/interfaces';
+
 import Textarea from '../../forms/textarea/Textarea';
 import Loading from '../../helper/Loading';
 import Close from '../../../assets/icon/Close_Dark.svg';
@@ -12,9 +15,8 @@ import Form from '../../forms/Form';
 import Input from '../../forms/input/Input';
 import Error from '../../helper/Error';
 import Button from '../../forms/button/Button';
-import './ContextForm.scss';
 import { AddRestrictionComboBox } from '../restriction/RestrictionComboBox';
-import { ScenarioRequestDTO } from '../../../shared/dto';
+import './ContextForm.scss';
 
 interface ContextFormProps {
     scenario: ILexiconScenario;

@@ -1,17 +1,19 @@
 import { FC, FormEvent, ReactNode, useContext, useState } from 'react';
+import { AxiosError } from 'axios';
+
+import { DELETE_PROJECT } from '../../../api';
+import api from '../../../lib/axios';
+import { ErrorResponse, IProject } from '../../../shared/interfaces';
+import { UserContext } from '../../../context/UserContext';
+import useForm from '../../../hooks/useForm';
+
 import Button from '../../forms/button/Button';
 import Input from '../../forms/input/Input';
 import Form from '../../forms/Form';
-import './DeleteProject.scss';
-import { UserContext } from '../../../context/UserContext';
 import Loading from '../../helper/Loading';
-import { DELETE_PROJECT } from '../../../api';
-import useForm from '../../../hooks/useForm';
-import api from '../../../lib/axios';
 import Error from '../../helper/Error';
-import { ErrorResponse, IProject } from '../../../shared/interfaces';
 import Close from '../../../assets/icon/Close_Dark.svg';
-import { AxiosError } from 'axios';
+import './DeleteProject.scss';
 
 interface DeleteProjectProps {
   project: IProject;

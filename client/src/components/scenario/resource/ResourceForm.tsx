@@ -1,22 +1,23 @@
 import { FC, ReactNode, useContext, useEffect, useState } from 'react';
+import { AxiosError } from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
 import { UPDATE_SCENARIO } from '../../../api';
 import api from '../../../lib/axios';
 import { ErrorResponse, ILexiconScenario } from '../../../shared/interfaces';
-import Button from '../../forms/button/Button';
 import { ProjectContext } from '../../../context/ProjectContext';
 import { UserContext } from '../../../context/UserContext';
+import useForm from '../../../hooks/useForm';
+import { ScenarioRequestDTO } from '../../../shared/dto';
+
+import Button from '../../forms/button/Button';
 import Close from '../../../assets/icon/Close_Dark.svg';
-import './ResourceForm.scss';
-import { AxiosError } from 'axios';
 import Form from '../../forms/Form';
 import Input from '../../forms/input/Input';
 import { AddRestrictionComboBox } from '../restriction/RestrictionComboBox';
 import Loading from '../../helper/Loading';
 import Error from '../../helper/Error';
-import useForm from '../../../hooks/useForm';
-import { ScenarioRequestDTO } from '../../../shared/dto';
+import './ResourceForm.scss';
 
 interface ResourceFormProps {
     onClose: () => void;
@@ -76,7 +77,6 @@ export const ResourceForm: FC<ResourceFormProps> = ({ onClose, scenario, resourc
                 projectId: projectContext.project?.id || '',
                 resources: [
                     ...(scenario.resources?.filter((resource) => resource != null) ?? []).map((resource) => {
-                        // Caso seja edição, substitua o recurso correspondente
                         if (resourceId && resource.id === resourceId) {
                             return {
                                 id: resourceId,
@@ -88,7 +88,6 @@ export const ResourceForm: FC<ResourceFormProps> = ({ onClose, scenario, resourc
                                     })),
                             };
                         }
-                        // Caso contrário, mantenha o recurso existente
                         return {
                             id: resource.id,
                             name: resource.name.content,
@@ -97,7 +96,6 @@ export const ResourceForm: FC<ResourceFormProps> = ({ onClose, scenario, resourc
                             })),
                         };
                     }),
-                    // Adicione o novo recurso apenas se não for edição (não houver resourceId)
                     ...(resourceId
                         ? []
                         : [

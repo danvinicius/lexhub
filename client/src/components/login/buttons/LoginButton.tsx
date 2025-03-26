@@ -1,6 +1,7 @@
-import { LoginOutlined } from '@mui/icons-material';
-import './Authentication.scss';
 import { useNavigate } from 'react-router-dom';
+import { LoginOutlined } from '@mui/icons-material';
+
+import './Authentication.scss';
 
 interface LoginButtonProps {
 	light?: boolean;

@@ -63,14 +63,6 @@ export class LexiconService {
     return possibleLexicon;
   };
 
-  //   　　　　/)─―ヘ
-  // 　　　＿／　　　　＼
-  // 　 ／　　　　●　　　●丶
-  // 　｜　　　　　　　▼　|
-  // 　｜　　　　　　　▽ノ
-  // 　 U￣U￣￣￣￣U￣U
-  // aqui que a mágica acontece
-
   public processLexicon = (
     content: string,
     symbols: ISymbol[],
@@ -85,7 +77,6 @@ export class LexiconService {
       possibleScenarios = this.findPossibleLexicon(content, scenarios);
     }
 
-    // primeiro, o cenário compete com outros cenários dentro do text
     const scenariosFilter = (candidate: LexiconInfo) => {
       return !possibleScenarios.some((scenario) => {
         return (
@@ -96,7 +87,6 @@ export class LexiconService {
       });
     };
 
-    // depois, o símbolo compete com cenários (cenários tem prioridade) e depois com outros símbolos
     const symbolsFilter = (candidate: LexiconInfo) => {
       return (
         !possibleScenarios.some((scenario) => {

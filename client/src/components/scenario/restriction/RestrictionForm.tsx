@@ -1,18 +1,20 @@
 import { FC, ReactNode, useContext, useEffect, useState } from 'react';
+import { AxiosError } from 'axios';
+
 import { UPDATE_SCENARIO, GET_SCENARIO } from '../../../api';
 import api from '../../../lib/axios';
 import {
 	ErrorResponse,
 	IScenario,
 } from '../../../shared/interfaces';
+import { UserContext } from '../../../context/UserContext';
+import { ProjectContext } from '../../../context/ProjectContext';
+import { ScenarioRequestDTO } from '../../../shared/dto';
+
 import Button from '../../forms/button/Button';
 import { AddRestrictionComboBox } from './RestrictionComboBox';
-import { UserContext } from '../../../context/UserContext';
 import Close from '../../../assets/icon/Close_Dark.svg';
 import './RestrictionForm.scss';
-import { ProjectContext } from '../../../context/ProjectContext';
-import { AxiosError } from 'axios';
-import { ScenarioRequestDTO } from '../../../shared/dto';
 
 interface RestrictionFormProps {
   onClose: () => void;

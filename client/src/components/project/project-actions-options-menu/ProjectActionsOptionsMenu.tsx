@@ -1,7 +1,8 @@
-import './ProjectActionsOptionsMenu.scss';
 import { FC, ReactNode, useEffect, useRef } from 'react';
+
 import EditIcon from '../../helper/icons/EditIcon';
 import DeleteIcon from '../../helper/icons/DeleteIcon';
+import './ProjectActionsOptionsMenu.scss';
 
 interface ProjectActionsOptionsMenuProps {
     isProprietario: boolean;
@@ -22,18 +23,15 @@ export const ProjectActionsOptionsMenu: FC<ProjectActionsOptionsMenuProps> = ({
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            // Verifica se o clique foi fora do popup
             if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
                 handleCloseProjectActionsOptionsMenu();
             }
         };
 
-        // Adiciona o event listener quando o popup estiver aberto
         if (isProjectActionsOptionsMenuOpen) {
             document.addEventListener('mousedown', handleClickOutside);
         }
 
-        // Remove o event listener quando o popup fecha
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };

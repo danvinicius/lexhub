@@ -1,7 +1,7 @@
-import { ChangeRepository } from '@/repositories/change-repository';
 import diff from 'deep-diff';
-import { ProjectService } from './project-service';
-import { IDifference } from '@/models/Change';
+import { ChangeRepository } from '@/repositories/change-repository';
+import { ProjectService } from '@/services';
+import { IDifference } from '@/models';
 
 const changeRepository = new ChangeRepository();
 

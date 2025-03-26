@@ -1,26 +1,28 @@
-import './css/PublicProjectView.scss';
-import { GET_PROJECT } from '../api';
-import api from '../lib/axios';
-import Loading from '../components/helper/Loading';
-import Error from '../components/helper/Error';
-import ScenariosList from '../components/scenario/scenario-list/ScenarioList';
+import { useState, useContext, useEffect, useMemo, useCallback, FC, ReactNode, SyntheticEvent } from 'react';
 import { Box, Tab, Tabs } from '@mui/material';
-import SymbolsList from '../components/symbol/symbol-list/SymbolList';
-import { ProfilePicture } from '../components/user/profile-picture/ProfilePicture';
 import { extendTheme } from '@mui/material/styles';
+import { PageContainer } from '@toolpad/core/PageContainer';
 import { AppProvider, Router } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { PageContainer } from '@toolpad/core/PageContainer';
-import { Logo } from '../components/logo/Logo';
-import { ErrorResponse, ILexiconSymbol, IUserProject } from '../shared/interfaces';
 import { AxiosError } from 'axios';
-import { UserContext } from '../context/UserContext';
-import './css/Homepage.scss';
-import SymbolDetails from '../components/symbol/symbol-details/SymbolDetails';
+
+import { GET_PROJECT } from '../api';
+import api from '../lib/axios';
 import { ProjectContext } from '../context/ProjectContext';
+import { UserContext } from '../context/UserContext';
+import { ErrorResponse, ILexiconSymbol, IUserProject } from '../shared/interfaces';
+
+import Loading from '../components/helper/Loading';
+import ScenariosList from '../components/scenario/scenario-list/ScenarioList';
+import Error from '../components/helper/Error';
+import SymbolsList from '../components/symbol/symbol-list/SymbolList';
+import { ProfilePicture } from '../components/user/profile-picture/ProfilePicture';
+import { Logo } from '../components/logo/Logo';
+import SymbolDetails from '../components/symbol/symbol-details/SymbolDetails';
 import { LoginButton } from '../components/login/buttons/LoginButton';
-import { useState, useContext, useEffect, useMemo, useCallback, FC, ReactNode, SyntheticEvent } from 'react';
 import { NavbarMenuLinks } from '../components/navbar/navbar-menu-links/NavbarMenuLinks';
+import './css/PublicProjectView.scss';
+import './css/Homepage.scss';
 
 interface TabPanelProps {
     children?: ReactNode;
@@ -66,6 +68,7 @@ const LightNavbarMenuLinks = () => {
 const PublicProjectView: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
     const { isAuthenticated } = useContext(UserContext) || {};
     const { setProject, project, setSymbol, currentTab, setCurrentTab } = useContext(ProjectContext || {});
+    const [pagination, setPagination] = useState(1);
 
     const handleChange = (_: SyntheticEvent, newValue: number) => {
         setSymbol(null);
@@ -137,10 +140,10 @@ const PublicProjectView: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                                     aria-label='basic tabs example'
                                     sx={{
                                         '.Mui-selected': {
-                                            color: 'var(--primary-color) !important', // Cor da aba ativa
+                                            color: 'var(--primary-color) !important',
                                         },
                                         '.MuiTabs-indicator': {
-                                            backgroundColor: 'var(--primary-color) !important', // Cor da barra abaixo da aba ativa
+                                            backgroundColor: 'var(--primary-color) !important',
                                         },
                                     }}
                                 >
@@ -153,7 +156,7 @@ const PublicProjectView: FC<ProjectProps> = ({ projectId }: ProjectProps) => {
                                     <>
                                         <CustomTabPanel value={currentTab} index={0}>
                                             {project?.scenarios && (
-                                                <ScenariosList scenarios={project?.scenarios} resetProjectInfo={resetProjectInfo} />
+                                                <ScenariosList scenarios={project?.scenarios} resetProjectInfo={resetProjectInfo} pagination={pagination} setPagination={setPagination} />
                                             )}
                                         </CustomTabPanel>
                                     </>
@@ -191,7 +194,6 @@ function useDemoRouter(): Router {
     const { refreshUser } = useContext(UserContext) || {};
 
     useEffect(() => {
-        // Atualiza a URL do navegador sempre que o pathname mudar
         if (window.location.pathname !== pathname) {
             window.history.pushState(null, '', pathname);
         }
@@ -199,7 +201,6 @@ function useDemoRouter(): Router {
 
     useEffect(() => {
         refreshUser();
-        // Ouve as mudanças no histórico (ex.: botões de voltar/avançar do navegador)
         const handlePopState = () => setPathname(window.location.pathname);
 
         window.addEventListener('popstate', handlePopState);

@@ -1,5 +1,5 @@
 import { AUTH_SECRET } from '@/config/env';
-import { JwtProvider } from '@/infra/security';
+import { JwtProvider } from '@/utils/security';
 import { IUser } from '@/models';
 import { UserService } from '@/services';
 import { ForbiddenError } from '@/utils/errors/forbidden-error';

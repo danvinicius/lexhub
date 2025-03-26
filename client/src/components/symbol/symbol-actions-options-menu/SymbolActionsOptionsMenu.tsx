@@ -1,7 +1,8 @@
-import './SymbolActionsOptionsMenu.scss';
 import { Dispatch, FC, ReactNode, SetStateAction, useEffect, useRef } from 'react';
+
 import EditIcon from '../../helper/icons/EditIcon';
 import DeleteIcon from '../../helper/icons/DeleteIcon';
+import './SymbolActionsOptionsMenu.scss';
 
 interface SymbolActionsOptionsMenuProps {
     isSymbolActionsOptionsMenuOpen: boolean;
@@ -22,18 +23,15 @@ export const SymbolActionsOptionsMenu: FC<SymbolActionsOptionsMenuProps> = ({
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            // Verifica se o clique foi fora do popup
             if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-                setIsSymbolActionsOptionsMenuOpen(false); // Fecha o popup
+                setIsSymbolActionsOptionsMenuOpen(false);
             }
         };
 
-        // Adiciona o event listener quando o popup estiver aberto
         if (isSymbolActionsOptionsMenuOpen) {
             document.addEventListener('mousedown', handleClickOutside);
         }
 
-        // Remove o event listener quando o popup fecha
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };

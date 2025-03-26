@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 
-export class BcryptProvider {
+export class HashProvider {
   constructor(private readonly salt: number) {}
 
   async hash(text: string): Promise<string> {

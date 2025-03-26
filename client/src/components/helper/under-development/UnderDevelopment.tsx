@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
-import './UnderDevelopment.scss';
+
 import { Navbar } from '../../navbar/Navbar';
+import './UnderDevelopment.scss';
 
 export const UnderDevelopment = (): ReactNode => {
     return (

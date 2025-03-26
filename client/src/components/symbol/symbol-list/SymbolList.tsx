@@ -1,9 +1,11 @@
-import './SymbolList.scss';
-import { ILexiconSymbol } from '../../../shared/interfaces';
-import { Element } from 'react-scroll';
-import { useHelpers } from '../../../hooks/useHelpers';
-import SymbolDetails from '../symbol-details/SymbolDetails';
 import { FC, ReactNode } from 'react';
+import { Element } from 'react-scroll';
+
+import { ILexiconSymbol } from '../../../shared/interfaces';
+import { useHelpers } from '../../../hooks/useHelpers';
+
+import SymbolDetails from '../symbol-details/SymbolDetails';
+import './SymbolList.scss';
 
 interface ISymbolsListProps {
   symbols: ILexiconSymbol[];

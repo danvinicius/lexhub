@@ -1,15 +1,16 @@
-import './Scenario.scss';
+import { FC, ReactNode, useContext, useEffect, useState } from 'react';
+import { Modal } from '@mui/material';
+import FlagIcon from '@mui/icons-material/Flag';
+
 import { ILexiconScenario, IUserRole } from '../../shared/interfaces';
 import { useHelpers } from '../../hooks/useHelpers';
 import { useLexicon } from '../../hooks/useLexicon';
-import { FC, ReactNode, useContext, useEffect, useState } from 'react';
-import { Modal } from '@mui/material';
+import { ProjectContext } from '../../context/ProjectContext';
+import { UserContext } from '../../context/UserContext';
+
 import { ResourceForm } from './resource/ResourceForm';
 import DeleteScenarioForm from './delete-scenario/DeleteScenario';
-import { ProjectContext } from '../../context/ProjectContext';
 import { EpisodesForm } from './episode/EpisodeForm';
-import { UserContext } from '../../context/UserContext';
-import FlagIcon from '@mui/icons-material/Flag';
 import ActorsList from './actor/ActorList';
 import ExceptionsList from './exception/ExceptionList';
 import ResourcesList from './resource/ResourceList';
@@ -22,6 +23,7 @@ import ContextForm from './context/ContextForm';
 import DeleteEpisode from './episode/delete-episode/DeleteEpisode';
 import DeleteResource from './resource/delete-resource/DeleteResource';
 import ScenarioForm from './scenario-form/ScenarioForm';
+import './Scenario.scss';
 
 interface IScenarioProps {
     scenario: ILexiconScenario;
@@ -58,7 +60,6 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
         setIsColaborador(role == IUserRole.PROPRIETARIO || role == IUserRole.ADMINISTRADOR || role == IUserRole.COLABORADOR);
     }, [isAuthenticated, project?.id]);
 
-    // actors modal function
     const [isActorsModalOpen, setIsActorsModalOpen] = useState(false);
     const handleOpenActorsModal = () => {
         setIsActorsModalOpen(true);
@@ -67,7 +68,6 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
         setIsActorsModalOpen(false);
     };
 
-    // actors modal function
     const [isExceptionsModalOpen, setIsExceptionsModalOpen] = useState(false);
     const handleOpenExceptionsModal = () => {
         setIsExceptionsModalOpen(true);
@@ -76,7 +76,6 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
         setIsExceptionsModalOpen(false);
     };
 
-    // context modal function
     const [isContextModalOpen, setIsContextModalOpen] = useState(false);
     const handleOpenContextModal = () => {
         setIsContextModalOpen(true);
@@ -85,7 +84,6 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
         setIsContextModalOpen(false);
     };
 
-    // resources modal function
     const [currentResourceId, setCurrentResourceId] = useState('');
     const [isResourceModalOpen, setIsResourceModalOpen] = useState(false);
     const handleOpenResourceModal = (resourceId?: string) => {
@@ -99,7 +97,6 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
         setCurrentResourceId('');
     };
 
-    // Delete resource
     const [isDeleteResourceModalOpen, setIsDeleteResourceModalOpen] = useState(false);
     const handleOpenDeleteResourceModal = (episodeId?: string) => {
         if (episodeId) {
@@ -112,7 +109,6 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
         setCurrentResourceId('');
     };
 
-    // episode modal functions
     const [isEpisodesModalOpen, setIsEpisodesModalOpen] = useState(false);
     const [currentEpisodeId, setCurrentEpisodeId] = useState('');
     const handleOpenEpisodesModal = (episodeId?: string) => {
@@ -126,7 +122,6 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
         setCurrentEpisodeId('');
     };
 
-    // Delete episode
     const [isDeleteEpisodeModalOpen, setIsDeleteEpisodeModalOpen] = useState(false);
     const handleOpenDeleteEpisodeModal = (episodeId?: string) => {
         if (episodeId) {
@@ -139,13 +134,11 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
         setCurrentEpisodeId('');
     };
 
-    // scenario actions options modal functions
     const [isActionsOptionsMenuOpen, setIsActionsOptionsMenuOpen] = useState(false);
 
     const handleOpenActionsOptionsMenu = () => setIsActionsOptionsMenuOpen(true);
     const handleCloseActionsOptionsMenu = () => setIsActionsOptionsMenuOpen(false);
 
-    // update scenario modal functions
     const [isScenarioModalOpen, setIsScenarioModalOpen] = useState(false);
     const handleCloseScenarioModal = () => setIsScenarioModalOpen(false);
     const handleOpenScenarioModal = () => {
@@ -153,7 +146,6 @@ const Scenario: FC<IScenarioProps> = ({ scenario, resetProjectInfo }: IScenarioP
         handleCloseActionsOptionsMenu();
     };
 
-    // delete scenario modal functions
     const [isDeleteScenarioModalOpen, setIsDeleteScenarioModalOpen] = useState(false);
     const handleCloseDeleteScenarioModal = () => setIsDeleteScenarioModalOpen(false);
     const handleOpenDeleteScenarioModal = () => {

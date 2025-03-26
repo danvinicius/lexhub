@@ -1,20 +1,22 @@
+import { FormEvent, useContext, useEffect, useState } from 'react';
+import { AxiosError } from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import ChecklistIcon from '@mui/icons-material/Checklist';
-import { ErrorResponse, ILexiconScenario } from '../../../shared/interfaces';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableBody, TableCell, TableFooter } from '@mui/material';
-import { useLexicon } from '../../../hooks/useLexicon';
-import { StyledTableCell } from '../../../shared/table';
 import FormatListNumberedOutlinedIcon from '@mui/icons-material/FormatListNumberedOutlined';
 import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
+import ReorderIcon from '@mui/icons-material/Reorder';
+
 import { UPDATE_SCENARIO } from '../../../api';
-import { FormEvent, useContext, useEffect, useState } from 'react';
+import api from '../../../lib/axios';
+import { ErrorResponse, ILexiconScenario } from '../../../shared/interfaces';
+import { useLexicon } from '../../../hooks/useLexicon';
+import { StyledTableCell } from '../../../shared/table';
 import { UserContext } from '../../../context/UserContext';
 import { ProjectContext } from '../../../context/ProjectContext';
-import ReorderIcon from '@mui/icons-material/Reorder';
-import { AxiosError } from 'axios';
-import api from '../../../lib/axios';
-import { v4 as uuidv4 } from 'uuid';
+
 import DeleteIcon from '../../helper/icons/DeleteIcon';
 import EditIcon from '../../helper/icons/EditIcon';
 import { ScenarioRequestDTO } from '../../../shared/dto';
@@ -99,12 +101,11 @@ const EpisodesList = ({
     };
 
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-    const [localEpisodes, setLocalEpisodes] = useState([...episodes]); // Mantém o estado local para atualização instantânea
+    const [localEpisodes, setLocalEpisodes] = useState([...episodes]);
 
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>, index: number) => {
         setDraggedIndex(index);
 
-        // Criar uma imagem vazia para evitar o efeito padrão do navegador
         const img = new Image();
         img.src = '';
         event.dataTransfer.setDragImage(img, 0, 0);
@@ -113,7 +114,7 @@ const EpisodesList = ({
     };
 
     const handleDragOver = (event: React.DragEvent<HTMLTableRowElement>) => {
-        event.preventDefault(); // Permite o drop
+        event.preventDefault();
     };
 
     const handleDrop = (index: number) => {
@@ -123,10 +124,9 @@ const EpisodesList = ({
         const [movedItem] = reorderedEpisodes.splice(draggedIndex, 1);
         reorderedEpisodes.splice(index, 0, movedItem);
 
-        // Atualiza a posição corretamente
         const updatedEpisodes = reorderedEpisodes.map((episode, idx) => ({
             ...episode,
-            position: idx + 1, // Ajusta a posição para refletir a nova ordem
+            position: idx + 1,
         }));
 
         setLocalEpisodes(updatedEpisodes);
@@ -192,7 +192,6 @@ const EpisodesList = ({
                             <TableRow>
                                 {isColaborador && (
                                     <StyledTableCell style={{ width: '0.25%', textAlign: 'center' }}>
-                                        {/* Coluna com ícones */}
                                     </StyledTableCell>
                                 )}
                                 <StyledTableCell>
@@ -221,7 +220,6 @@ const EpisodesList = ({
                                 </StyledTableCell>
                                 {isColaborador && (
                                     <StyledTableCell style={{ width: '100px', textAlign: 'center' }}>
-                                        {/* Coluna com ícones */}
                                     </StyledTableCell>
                                 )}
                             </TableRow>

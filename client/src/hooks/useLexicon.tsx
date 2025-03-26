@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+
 import { ProjectContext } from '../context/ProjectContext';
 import LexiconSpan from '../components/lexicon/lexicon-span/LexiconSpan';
 
@@ -26,25 +27,21 @@ export const useLexicon = (): UseLexiconReturn => {
     content: string;
     foundLexicons: LexiconInfo[];
   }): (string | JSX.Element)[] {
-    // Ordena primeiro por posição inicial e depois pelo maior nome (evita sobreposição de palavras menores)
     foundLexicons.sort((a, b) => a.starts - b.starts || b.name.length - a.name.length);
 
     const elements: (string | JSX.Element)[] = [];
     let lastIndex = 0;
-    const occupiedIndexes = new Set<number>(); // Guarda os índices já processados
+    const occupiedIndexes = new Set<number>();
 
     foundLexicons.forEach((lexicon) => {
-      // Se qualquer índice da palavra já foi processado, ignoramos esse lexicon para evitar duplicação
       if ([...Array(lexicon.ends - lexicon.starts).keys()].some(i => occupiedIndexes.has(lexicon.starts + i))) {
         return;
       }
 
-      // Adiciona o texto antes do lexicon
       if (lastIndex < lexicon.starts) {
         elements.push(content.substring(lastIndex, lexicon.starts));
       }
 
-      // Adiciona o LexiconSpan com o conteúdo correspondente
       const id = lexicon.resource.match(/[^/]+$/)?.[0];
       elements.push(
         <LexiconSpan
@@ -52,7 +49,7 @@ export const useLexicon = (): UseLexiconReturn => {
           resource={lexicon.resource}
           name={lexicon.name}
           type={lexicon.type}
-          key={`${lexicon.name}-${lexicon.starts}`} // Unique key
+          key={`${lexicon.name}-${lexicon.starts}`}
           onClick={() =>
             setChosenType(lexicon.type === 'symbol' ? 'symbol' : 'scenario')
           }
@@ -61,16 +58,13 @@ export const useLexicon = (): UseLexiconReturn => {
         </LexiconSpan>
       );
 
-      // Marca os índices desse lexicon como ocupados
       for (let i = lexicon.starts; i < lexicon.ends; i++) {
         occupiedIndexes.add(i);
       }
 
-      // Atualiza o índice final
       lastIndex = lexicon.ends;
     });
 
-    // Adiciona o texto restante
     if (lastIndex < content?.length) {
       elements.push(content.substring(lastIndex));
     }

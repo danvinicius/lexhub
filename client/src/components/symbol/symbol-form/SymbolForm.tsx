@@ -1,23 +1,25 @@
 import { FC, FormEvent, ReactNode, useContext, useEffect, useState } from 'react';
-import Input from '../../forms/input/Input';
+import { AxiosError } from 'axios';
+
+import api from '../../../lib/axios';
+import { CREATE_SYMBOL, UPDATE_SYMBOL } from '../../../api';
 import useForm from '../../../hooks/useForm';
+import { useSelect } from '../../../hooks/useSelect';
+import { ProjectContext } from '../../../context/ProjectContext';
+import { UserContext } from '../../../context/UserContext';
+import { ErrorResponse, ILexiconSymbol } from '../../../shared/interfaces';
+import { SymbolRequestDTO } from '../../../shared/dto';
+
+import Input from '../../forms/input/Input';
 import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
 import Button from '../../forms/button/Button';
 import Error from '../../helper/Error';
-import api from '../../../lib/axios';
-import { CREATE_SYMBOL, UPDATE_SYMBOL } from '../../../api';
-import { UserContext } from '../../../context/UserContext';
-import './SymbolForm.scss';
 import Select from '../../forms/select/Select';
-import { useSelect } from '../../../hooks/useSelect';
 import { AddImpactComboBox } from '../impact/ImpactComboBox';
 import { AddSynonymComboBox } from '../synonym/SynonymComboBox';
 import Close from '../../../assets/icon/Close_Dark.svg';
-import { ProjectContext } from '../../../context/ProjectContext';
-import { ErrorResponse, ILexiconSymbol } from '../../../shared/interfaces';
-import { AxiosError } from 'axios';
-import { SymbolRequestDTO } from '../../../shared/dto';
+import './SymbolForm.scss';
 
 interface SymbolFormProps {
   symbol?: ILexiconSymbol;

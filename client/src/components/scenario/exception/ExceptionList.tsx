@@ -1,9 +1,10 @@
+import { FC } from 'react';
+import ErrorIcon from '@mui/icons-material/Error';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import { TableContainer, Paper, Table, TableBody, TableRow, TableCell } from '@mui/material';
+
 import { ILexiconScenario } from '../../../shared/interfaces';
-import { FC } from 'react';
 import { useLexicon } from '../../../hooks/useLexicon';
-import ErrorIcon from '@mui/icons-material/Error';
 
 interface ExceptionsListProps {
     exceptions: ILexiconScenario['exceptions'];

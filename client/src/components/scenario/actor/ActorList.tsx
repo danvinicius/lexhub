@@ -1,9 +1,10 @@
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import { TableContainer, Paper, Table, TableBody, TableRow, TableCell } from '@mui/material';
-import { ILexiconScenario } from '../../../shared/interfaces';
 import { FC } from 'react';
-import { useLexicon } from '../../../hooks/useLexicon';
+import { TableContainer, Paper, Table, TableBody, TableRow, TableCell } from '@mui/material';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+
+import { ILexiconScenario } from '../../../shared/interfaces';
+import { useLexicon } from '../../../hooks/useLexicon';
 
 interface ActorsListProps {
     actors: ILexiconScenario['actors'];

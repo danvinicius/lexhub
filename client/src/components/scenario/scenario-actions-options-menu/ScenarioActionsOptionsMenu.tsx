@@ -1,7 +1,8 @@
-import './ScenarioActionsOptionsMenu.scss';
 import { Dispatch, FC, ReactNode, SetStateAction, useEffect, useRef } from 'react';
+
 import EditIcon from '../../helper/icons/EditIcon';
 import DeleteIcon from '../../helper/icons/DeleteIcon';
+import './ScenarioActionsOptionsMenu.scss';
 
 interface ScenarioActionsOptionsMenuProps {
     isActionsOptionsMenuOpen: boolean;
@@ -22,18 +23,15 @@ export const ScenarioActionsOptionsMenu: FC<ScenarioActionsOptionsMenuProps> = (
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            // Verifica se o clique foi fora do popup
             if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-                setIsActionsOptionsMenuOpen(false); // Fecha o popup
+                setIsActionsOptionsMenuOpen(false);
             }
         };
 
-        // Adiciona o event listener quando o popup estiver aberto
         if (isActionsOptionsMenuOpen) {
             document.addEventListener('mousedown', handleClickOutside);
         }
 
-        // Remove o event listener quando o popup fecha
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };

@@ -1,15 +1,17 @@
 import { FC, FormEvent, ReactNode, useContext, useState } from 'react';
+import { AxiosError } from 'axios';
+
+import api from '../../../lib/axios';
+import { DELETE_SCENARIO } from '../../../api';
+import { UserContext } from '../../../context/UserContext';
+import { ErrorResponse, ILexiconScenario } from '../../../shared/interfaces';
+
 import Button from '../../forms/button/Button';
 import Form from '../../forms/Form';
-import './DeleteScenario.scss';
-import { UserContext } from '../../../context/UserContext';
 import Loading from '../../helper/Loading';
-import { DELETE_SCENARIO } from '../../../api';
-import api from '../../../lib/axios';
 import Error from '../../helper/Error';
-import { ErrorResponse, ILexiconScenario } from '../../../shared/interfaces';
 import Close from '../../../assets/icon/Close_Dark.svg';
-import { AxiosError } from 'axios';
+import './DeleteScenario.scss';
 
 export interface DeleteScenarioRequestDTO {
   name: string;

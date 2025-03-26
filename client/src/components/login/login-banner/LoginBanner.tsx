@@ -1,6 +1,7 @@
-import './LoginBanner.scss';
-import loginBannerImg from '../../../assets/img/login-banner3.png';
 import { ReactNode } from 'react';
+
+import loginBannerImg from '../../../assets/img/login-banner3.png';
+import './LoginBanner.scss';
 
 const LoginBanner = (): ReactNode => {
 	return (

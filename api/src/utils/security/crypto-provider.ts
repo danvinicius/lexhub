@@ -12,7 +12,7 @@ const base64UrlDecode = (input: string): any => {
   return Buffer.from(base64, 'base64');
 };
 
-export class CryptoUtil {
+export class CryptoProvider {
   private static readonly algorithm: string = 'aes-128-cbc' as any;
   private static readonly iv = Buffer.alloc(16, 0) as any;
 

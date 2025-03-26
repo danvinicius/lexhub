@@ -1,10 +1,10 @@
 .table-cell-fixed {
     width: 10px;
     text-align: center;
-    overflow: hidden; /* Garante que o conteúdo não ultrapasse o tamanho */
+    overflow: hidden;
 }
 
 .table-cell-auto {
     width: auto;
-    word-wrap: break-word; /* Garante que o texto quebra quando necessário */
+    word-wrap: break-word;
 }

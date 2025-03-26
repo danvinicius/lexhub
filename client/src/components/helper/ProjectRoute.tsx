@@ -1,12 +1,14 @@
 import { FC, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../context/UserContext';
 import { Navigate, useParams } from 'react-router-dom';
-import { IS_PROJECT_PRIVATE } from '../../api';
-import api from '../../lib/axios';
 import { AxiosError } from 'axios';
+
+import api from '../../lib/axios';
+import { IS_PROJECT_PRIVATE } from '../../api';
 import { ErrorResponse } from '../../shared/interfaces';
-import { Homepage } from '../../views/HomepageView';
+import { UserContext } from '../../context/UserContext';
+
 import ProtectedRoute from './ProtectedRoute';
+import { Homepage } from '../../views/HomepageView';
 import PublicHomepageView from '../../views/PublicHomepageView';
 
 const ProjectRoute: FC = (): ReactNode => {

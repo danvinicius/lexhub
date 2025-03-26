@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
-import './About.scss';
-import { Navbar } from '../../navbar/Navbar';
 import { Link } from 'react-router-dom';
 import { Email, GitHub, LinkedIn, WhatsApp } from '@mui/icons-material';
+
+import { Navbar } from '../../navbar/Navbar';
+import './About.scss';
 
 export const About = (): ReactNode => {
     const socialMediaLinks = [

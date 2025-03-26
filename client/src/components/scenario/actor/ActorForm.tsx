@@ -1,19 +1,20 @@
 import { FC, ReactNode, useContext, useEffect, useState } from 'react';
+import { AxiosError } from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 
 import { UPDATE_SCENARIO } from '../../../api';
 import api from '../../../lib/axios';
+import { ScenarioRequestDTO } from '../../../shared/dto';
+import { ProjectContext } from '../../../context/ProjectContext';
+import { UserContext } from '../../../context/UserContext';
 import {
 	ErrorResponse,
 } from '../../../shared/interfaces';
+
 import Button from '../../forms/button/Button';
-import { ProjectContext } from '../../../context/ProjectContext';
-import { UserContext } from '../../../context/UserContext';
 import Close from '../../../assets/icon/Close_Dark.svg';
-import './ActorForm.scss';
-import { AxiosError } from 'axios';
 import { AddActorComboBox } from './ActorComboBox';
-import { ScenarioRequestDTO } from '../../../shared/dto';
+import './ActorForm.scss';
 
 interface ActorsFormProps {
   onClose: () => void;

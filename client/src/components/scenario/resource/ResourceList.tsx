@@ -1,14 +1,16 @@
-import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
-import { TableContainer, Paper, Table, TableHead, TableRow, TableBody, List, ListItemText, ListItem } from '@mui/material';
-import { ILexiconScenario } from '../../../shared/interfaces';
 import { FC } from 'react';
-import { useLexicon } from '../../../hooks/useLexicon';
-import { StyledTableCell } from '../../../shared/table';
 import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import './ResourceList.scss';
+import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableBody, List, ListItemText, ListItem } from '@mui/material';
+
+import { ILexiconScenario } from '../../../shared/interfaces';
+import { useLexicon } from '../../../hooks/useLexicon';
+import { StyledTableCell } from '../../../shared/table';
+
 import EditIcon from '../../helper/icons/EditIcon';
 import DeleteIcon from '../../helper/icons/DeleteIcon';
+import './ResourceList.scss';
 
 interface ResourcesListProps {
     resources: ILexiconScenario['resources'];
@@ -61,7 +63,6 @@ const ResourcesList: FC<ResourcesListProps> = ({
                                 </StyledTableCell>
                                 {isColaborador && (
                                     <StyledTableCell style={{ width: '100px', textAlign: 'center' }}>
-                                        {/* Coluna com ícones */}
                                     </StyledTableCell>
                                 )}
                             </TableRow>

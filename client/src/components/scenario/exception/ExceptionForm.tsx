@@ -1,17 +1,18 @@
 import { FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { AxiosError } from 'axios';
 
 import { UPDATE_SCENARIO } from '../../../api';
 import api from '../../../lib/axios';
 import { ErrorResponse } from '../../../shared/interfaces';
-import Button from '../../forms/button/Button';
 import { ProjectContext } from '../../../context/ProjectContext';
 import { UserContext } from '../../../context/UserContext';
-import Close from '../../../assets/icon/Close_Dark.svg';
-import './ExceptionForm.scss';
-import { AxiosError } from 'axios';
-import { AddExceptionComboBox } from './ExceptionComboBox';
 import { ScenarioRequestDTO } from '../../../shared/dto';
+
+import Button from '../../forms/button/Button';
+import Close from '../../../assets/icon/Close_Dark.svg';
+import { AddExceptionComboBox } from './ExceptionComboBox';
+import './ExceptionForm.scss';
 
 interface ExceptionsFormProps {
     onClose: () => void;

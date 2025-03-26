@@ -1,3 +1,4 @@
+import { useState, useContext, useEffect, useMemo, useCallback } from 'react';
 import { extendTheme } from '@mui/material/styles';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FolderIcon from '@mui/icons-material/Folder';
@@ -6,21 +7,22 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { AppProvider, Navigation, Router } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
-import { Logo } from '../components/logo/Logo';
+import { AccountCircle } from '@mui/icons-material';
+import { AxiosError } from 'axios';
+
 import { GET_PROJECTS } from '../api';
 import api from '../lib/axios';
-import { ErrorResponse, ILexiconSymbol, IProject } from '../shared/interfaces';
-import { AxiosError } from 'axios';
 import { UserContext } from '../context/UserContext';
+import { ProjectContext } from '../context/ProjectContext';
+import { ErrorResponse, ILexiconSymbol, IProject } from '../shared/interfaces';
+
+import { Logo } from '../components/logo/Logo';
 import Project from '../components/project/Project';
 import { OverView } from '../components/homepage/overview/Overview';
-import './css/Homepage.scss';
 import SymbolDetails from '../components/symbol/symbol-details/SymbolDetails';
-import { ProjectContext } from '../context/ProjectContext';
 import { Configurations } from '../components/homepage/configurations/Configurations';
-import { AccountCircle } from '@mui/icons-material';
-import { useState, useContext, useEffect, useMemo, useCallback } from 'react';
 import { NavbarMenuLinks } from '../components/navbar/navbar-menu-links/NavbarMenuLinks';
+import './css/Homepage.scss';
 
 const demoTheme = extendTheme({
     colorSchemes: { light: true },
@@ -41,7 +43,6 @@ function useDemoRouter(): Router {
     const { refreshUser } = useContext(UserContext) || {};
 
     useEffect(() => {
-        // Atualiza a URL do navegador sempre que o pathname mudar
         if (window.location.pathname !== pathname) {
             window.history.pushState(null, '', pathname);
         }
@@ -49,7 +50,6 @@ function useDemoRouter(): Router {
 
     useEffect(() => {
         refreshUser();
-        // Ouve as mudanças no histórico (ex.: botões de voltar/avançar do navegador)
         const handlePopState = () => setPathname(window.location.pathname);
 
         window.addEventListener('popstate', handlePopState);

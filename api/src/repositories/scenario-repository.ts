@@ -1,12 +1,13 @@
 import Project from '@/models/Project';
-import Scenario, {
+import Scenario from '@/models/Scenario';
+import {
   IScenario,
   IActor,
   IContext,
   IException,
   IResource,
   IEpisode,
-} from '@/models/Scenario';
+} from '@/models';
 import { ServerError } from '@/utils/errors';
 
 export namespace ScenarioRepository {

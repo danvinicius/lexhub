@@ -1,20 +1,22 @@
 import { FC, FormEvent, ReactNode, useContext, useEffect, useState } from 'react';
+import { AxiosError } from 'axios';
+
+import api from '../../../lib/axios';
+import { CREATE_PROJECT, UPDATE_PROJECT } from '../../../api';
+import { ErrorResponse, IProject } from '../../../shared/interfaces';
+import { UserContext } from '../../../context/UserContext';
+import useForm from '../../../hooks/useForm';
+import { ProjectRequestDTO } from '../../../shared/dto';
+
 import Button from '../../forms/button/Button';
 import Input from '../../forms/input/Input';
 import Form from '../../forms/Form';
-import './ProjectForm.scss';
-import { UserContext } from '../../../context/UserContext';
 import Loading from '../../helper/Loading';
-import { CREATE_PROJECT, UPDATE_PROJECT } from '../../../api';
-import useForm from '../../../hooks/useForm';
-import api from '../../../lib/axios';
 import Error from '../../helper/Error';
-import { ErrorResponse, IProject } from '../../../shared/interfaces';
-import { AxiosError } from 'axios';
-import { RichTextEditor } from '../../forms/rich-text-editor/RichTextEditor';
 import { ProjectVisibilityForm } from './ProjectVisibilityForm';
-import { ProjectRequestDTO } from '../../../shared/dto';
 import CloseIcon from '@mui/icons-material/Close';
+import './ProjectForm.scss';
+import { RichTextEditor } from '../../forms/rich-text-editor/RichTextEditor';
 
 interface ProjectFormProps {
     project?: IProject;

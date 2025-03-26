@@ -1,15 +1,17 @@
-import { AxiosError } from "axios";
 import { FC, ReactNode, useContext, useState } from "react";
+import { AxiosError } from "axios";
+
+import api from "../../../lib/axios";
 import { CREATE_MULTIPLE_SCENARIOS } from "../../../api";
 import { ProjectContext } from "../../../context/ProjectContext";
 import { UserContext } from "../../../context/UserContext";
-import api from "../../../lib/axios";
 import { IScenario, ErrorResponse } from "../../../shared/interfaces";
+
 import ScenarioInputGroup from "./scenario-input-group/ScenarioInputGroup";
 import Close from '../../../assets/icon/Close_Dark.svg';
 import Button from "../../forms/button/Button";
-import './CreateMultipleScenariosForm.scss'
 import Error from "../../helper/Error";
+import './CreateMultipleScenariosForm.scss'
 
 export interface CreateMultipleScenariosRequestDTO {
     scenarios: {

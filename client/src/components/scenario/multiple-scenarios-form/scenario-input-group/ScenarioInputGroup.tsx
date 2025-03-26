@@ -1,8 +1,10 @@
 import { useRef, useCallback, SetStateAction, Dispatch, FC } from 'react';
 import { Button, TextField } from '@mui/material';
-import './ScenarioInputGroup.scss';
-import { IScenario } from '../../../../shared/interfaces';
 import DeleteIcon from '@mui/icons-material/Delete';
+
+import { IScenario } from '../../../../shared/interfaces';
+
+import './ScenarioInputGroup.scss';
 
 interface ScenarioInputGroupProps {
     scenarios: Omit<IScenario, 'project'>[];
@@ -21,7 +23,6 @@ const ScenarioInputGroup: FC<ScenarioInputGroupProps> = ({ scenarios, setScenari
             setScenarios((prevScenarios) =>
                 prevScenarios.map((scenario, i) => {
                     if (i === index) {
-                        // Atualizando o cenário principal
                         return { ...scenario, [field]: value };
                     }
                     return scenario;
@@ -49,7 +50,6 @@ const ScenarioInputGroup: FC<ScenarioInputGroupProps> = ({ scenarios, setScenari
         (index: number) => {
             setScenarios((prevScenarios) => {
                 {
-                    // Removendo um cenário principal
                     return prevScenarios
                         .filter((_, i) => i !== index)
                         .map((scenario) => ({

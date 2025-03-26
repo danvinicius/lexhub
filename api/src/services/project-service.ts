@@ -5,9 +5,13 @@ import {
 import { IProject } from '@/models';
 import { ProjectRepository, UserRepository } from '@/repositories';
 import { NotFoundError } from '@/utils/errors';
-import { ILexiconScenario, ScenarioService } from './scenario-service';
-import { ILexiconSymbol, SymbolService } from './symbol-service';
-import { ChangeService } from './change-service';
+import {
+  ILexiconScenario,
+  ScenarioService,
+  ILexiconSymbol,
+  SymbolService,
+  ChangeService,
+} from '@/services';
 
 export interface IProjectWithLexicon
   extends Omit<Omit<IProject, 'scenarios'>, 'symbols'> {
@@ -19,7 +23,7 @@ export class ProjectService {
   constructor(
     private projectRepository = new ProjectRepository(),
     private userRepository = new UserRepository(),
-    private changeService = new ChangeService(),
+    private changeService = new ChangeService()
   ) {}
 
   async createProject(
@@ -27,7 +31,7 @@ export class ProjectService {
     userId: String
   ): Promise<IProject | void> {
     const user = await this.userRepository.getUserById(userId);
-    if (user) {  
+    if (user) {
       return await this.projectRepository.createProject({ ...project, user });
     }
   }
@@ -42,20 +46,27 @@ export class ProjectService {
     const scenarioService = new ScenarioService();
     const symbolService = new SymbolService();
 
-    const scenarios = project?.scenarios ? await Promise.all(
-      project.scenarios.map(async (scenario) => {
-          return await scenarioService.getScenarioWithLexicon(
-            scenario.id || '',
-            project.id || ''
-          );
-      })
-    ) : [];
+    const scenarios = project?.scenarios
+      ? await Promise.all(
+          project.scenarios.map(async (scenario) => {
+            return await scenarioService.getScenarioWithLexicon(
+              scenario.id || '',
+              project.id || ''
+            );
+          })
+        )
+      : [];
 
-    const symbols = project.symbols ? await Promise.all(
-      project.symbols.map(async (symbol) => {
-        return await symbolService.getSymbolWithLexicon(symbol.id || '', project.id || '');
-      })
-    ) : [];
+    const symbols = project.symbols
+      ? await Promise.all(
+          project.symbols.map(async (symbol) => {
+            return await symbolService.getSymbolWithLexicon(
+              symbol.id || '',
+              project.id || ''
+            );
+          })
+        )
+      : [];
 
     return {
       ...project,
@@ -72,7 +83,10 @@ export class ProjectService {
     return false;
   }
 
-  async getCleanProject(id: String, excludeDeleted = true): Promise<null | IProject> {
+  async getCleanProject(
+    id: String,
+    excludeDeleted = true
+  ): Promise<null | IProject> {
     const project = await this.projectRepository.getProject(id, excludeDeleted);
 
     if (!project) {
@@ -82,8 +96,14 @@ export class ProjectService {
     return project;
   }
 
-  async getAllProjects(userId: String, excludeDeleted = true): Promise<IProject[]> {
-    const projects = await this.projectRepository.getAllProjects(userId, excludeDeleted);
+  async getAllProjects(
+    userId: String,
+    excludeDeleted = true
+  ): Promise<IProject[]> {
+    const projects = await this.projectRepository.getAllProjects(
+      userId,
+      excludeDeleted
+    );
     return projects;
   }
 
@@ -96,7 +116,13 @@ export class ProjectService {
     await this.projectRepository.updateProject(id, project);
     const afterChange = await this.getCleanProject(id);
     if (beforeChange && afterChange) {
-      await this.changeService.createChange(beforeChange, afterChange, id, project.name, userId);
+      await this.changeService.createChange(
+        beforeChange,
+        afterChange,
+        id,
+        project.name,
+        userId
+      );
       return afterChange;
     }
   }
@@ -106,7 +132,13 @@ export class ProjectService {
     await this.projectRepository.deleteProject(id);
     const afterChange = await this.getCleanProject(id, false);
     if (beforeChange && afterChange) {
-      await this.changeService.createChange(beforeChange, afterChange, id, beforeChange.name, userId);
+      await this.changeService.createChange(
+        beforeChange,
+        afterChange,
+        id,
+        beforeChange.name,
+        userId
+      );
     }
   }
 }

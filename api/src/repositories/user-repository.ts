@@ -1,6 +1,7 @@
 import { ServerError } from '@/utils/errors';
-import User, { IUser, IUserProject } from '@/models/User';
+import { IUser, IUserProject } from '@/models';
 import Project from '@/models/Project';
+import User from '@/models/User';
 import { Logger } from '@/utils/logger/logger';
 
 export namespace UserRepository {
@@ -99,7 +100,6 @@ export class UserRepository {
         throw new ServerError('O usuário não faz parte deste projeto');
       }
 
-      // Atualizar o cargo do usuário no projeto
       userProjectInUser.role = data.newRole;
       userProjectInProject.role = data.newRole;
 
@@ -127,12 +127,10 @@ export class UserRepository {
         throw new ServerError('Usuário ou projeto não encontrado');
       }
 
-      // Remover o usuário da lista de projetos do usuário
       user.projects = user.projects?.filter(
         (up: any) => up.project.toString() !== data.projectId
       );
 
-      // Remover o usuário da lista de usuários do projeto
       project.users = project.users.filter(
         (pu: any) => pu.user.toString() !== data.userId
       );

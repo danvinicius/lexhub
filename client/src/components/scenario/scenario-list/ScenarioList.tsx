@@ -1,10 +1,12 @@
-import './ScenarioList.scss';
-import { ILexiconScenario } from '../../../shared/interfaces';
-import Scenario from '../Scenario';
-import { Element } from 'react-scroll';
-import { useHelpers } from '../../../hooks/useHelpers';
 import { FC, ReactNode } from 'react';
 import { Pagination } from '@mui/material';
+import { Element } from 'react-scroll';
+
+import { ILexiconScenario } from '../../../shared/interfaces';
+import { useHelpers } from '../../../hooks/useHelpers';
+
+import Scenario from '../Scenario';
+import './ScenarioList.scss';
 
 interface IScenariosListProps {
   scenarios: ILexiconScenario[];

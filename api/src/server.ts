@@ -2,9 +2,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
 import helmet from 'helmet';
-import { Logger } from './utils/logger/logger';
-import { scenarioRouter } from '@/infra/http/routers/scenario-router';
 import express, { Application, Request, Response, Router } from 'express';
+
+import { Logger } from '@/utils/logger/logger';
+import { scenarioRouter } from '@/infra/http/routers/scenario-router';
 import { userRouter, projectRouter, symbolRouter, changeRouter } from '@/infra/http/routers';
 import {
   ChangeController,
@@ -13,8 +14,8 @@ import {
   SymbolController,
   UserController,
 } from '@/controllers';
-import { connect, close } from './infra/db/connection';
-import { PORT } from './config/env';
+import { connect, close } from '@/infra/db/connection';
+import { PORT } from '@/config/env';
 
 export class Server {
   private router = Router();

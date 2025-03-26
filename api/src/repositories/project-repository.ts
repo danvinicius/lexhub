@@ -1,7 +1,7 @@
 import { ServerError } from '@/utils/errors';
-import Project, { IProject } from '@/models/Project';
-import { IUser, IUserRole } from '@/models';
+import Project from '@/models/Project';
 import User from '@/models/User';
+import { IUser, IUserRole, IProject } from '@/models';
 import { Logger } from '@/utils/logger/logger';
 
 export namespace ProjectRepository {

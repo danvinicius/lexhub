@@ -1,18 +1,20 @@
 import { FC, FormEvent, KeyboardEvent, ReactNode, useContext, useEffect, useState } from 'react';
-import Input from '../../forms/input/Input';
+import { AxiosError } from 'axios';
+
+import { CREATE_SCENARIO, UPDATE_SCENARIO } from '../../../api';
+import api from '../../../lib/axios';
 import useForm from '../../../hooks/useForm';
+import { UserContext } from '../../../context/UserContext';
+import { ProjectContext } from '../../../context/ProjectContext';
+import { ErrorResponse, ILexiconScenario } from '../../../shared/interfaces';
+import { ScenarioRequestDTO } from '../../../shared/dto';
+
+import Input from '../../forms/input/Input';
 import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
 import Button from '../../forms/button/Button';
 import Error from '../../helper/Error';
-import api from '../../../lib/axios';
-import { CREATE_SCENARIO, UPDATE_SCENARIO } from '../../../api';
-import { UserContext } from '../../../context/UserContext';
-import { ProjectContext } from '../../../context/ProjectContext';
 import Textarea from '../../forms/textarea/Textarea';
-import { ErrorResponse, ILexiconScenario } from '../../../shared/interfaces';
-import { AxiosError } from 'axios';
-import { ScenarioRequestDTO } from '../../../shared/dto';
 import Close from '../../../assets/icon/Close_Dark.svg';
 import './ScenarioForm.scss';
 

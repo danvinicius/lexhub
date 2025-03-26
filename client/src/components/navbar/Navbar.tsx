@@ -1,9 +1,10 @@
 import { FC, useState } from 'react';
+
 import { Logo } from '../logo/Logo';
-import './Navbar.scss';
 import Hamburger from '../../assets/icon/Hamburger.svg';
 import Close from '../../assets/icon/Close.svg';
 import { NavbarMenuLinks } from './navbar-menu-links/NavbarMenuLinks';
+import './Navbar.scss';
 
 export const Navbar: FC = () => {
 	const [isMobileMenuActive, setIsMobileMenuActive] = useState(false);
@@ -31,7 +32,6 @@ export const Navbar: FC = () => {
 					</div>
 					<NavbarMenuLinks toggleMenu={toggleMenu}/>
 					<h3>Nos siga nas redes sociais</h3>
-					{/* <SocialMediaLinks /> */}
 				</div>
 			</div>
 		</nav>

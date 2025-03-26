@@ -1,9 +1,11 @@
 import { useContext, useState, useEffect, useRef } from 'react';
-import './AuthMenu.scss';
-import { ProfilePicture } from '../../user/profile-picture/ProfilePicture';
+
 import { UserContext } from '../../../context/UserContext';
 import { IUser } from '../../../shared/interfaces';
+
+import { ProfilePicture } from '../../user/profile-picture/ProfilePicture';
 import { LogoutButton } from '../../login/buttons/LogoutButton';
+import './AuthMenu.scss';
 
 export const AuthMenu = () => {
     const [isOpen, setIsOpen] = useState(false);

@@ -1,16 +1,18 @@
 import { FC, FormEvent, useContext, useState } from 'react';
+import { AxiosError } from 'axios';
+
+import api from '../../../lib/axios';
+import { CREATE_USER } from '../../../api';
+import { ErrorResponse } from '../../../shared/interfaces';
+import { CreateUserRequestDTO, UserContext } from '../../../context/UserContext';
+import useForm from '../../../hooks/useForm';
+
 import Button from '../../forms/button/Button';
 import Input from '../../forms/input/Input';
 import Form from '../../forms/Form';
-import '../login-form/LoginForm.scss';
-import { CreateUserRequestDTO, UserContext } from '../../../context/UserContext';
 import Loading from '../../helper/Loading';
-import { CREATE_USER } from '../../../api';
-import api from '../../../lib/axios';
-import useForm from '../../../hooks/useForm';
 import Error from '../../helper/Error';
-import { ErrorResponse } from '../../../shared/interfaces';
-import { AxiosError } from 'axios';
+import '../login-form/LoginForm.scss';
 
 interface LoginFormProps {
     setCurrentScreen: (screen: string) => void;

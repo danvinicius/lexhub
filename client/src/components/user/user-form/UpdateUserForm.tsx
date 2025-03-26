@@ -1,18 +1,20 @@
 import { FC, FormEvent, SyntheticEvent, useContext, useEffect, useState } from 'react';
+import { Accordion, AccordionSummary, AccordionDetails, Snackbar, SnackbarCloseReason } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { AxiosError } from 'axios';
+
+import {  UPDATE_USER } from '../../../api';
+import api from '../../../lib/axios';
+import { UserContext } from '../../../context/UserContext';
+import useForm from '../../../hooks/useForm';
+import { ErrorResponse } from '../../../shared/interfaces';
+
 import Button from '../../forms/button/Button';
 import Input from '../../forms/input/Input';
 import Form from '../../forms/Form';
-import './UpdateUserForm.scss';
-import { UserContext } from '../../../context/UserContext';
 import Loading from '../../helper/Loading';
-import {  UPDATE_USER } from '../../../api';
-import api from '../../../lib/axios';
-import useForm from '../../../hooks/useForm';
 import Error from '../../helper/Error';
-import { ErrorResponse } from '../../../shared/interfaces';
-import { AxiosError } from 'axios';
-import { Accordion, AccordionSummary, AccordionDetails, Snackbar, SnackbarCloseReason } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import './UpdateUserForm.scss';
 
 interface UpdateUserRequestDTO {
     name: string;

@@ -1,6 +1,7 @@
 import { FC, ChangeEvent, CSSProperties } from 'react';
-import './Select.scss';
+
 import Error from '../../helper/Error';
+import './Select.scss';
 
 interface Option {
   value: string;
