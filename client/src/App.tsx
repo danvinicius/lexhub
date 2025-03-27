@@ -10,6 +10,7 @@ import ProjectRoute from './components/helper/ProjectRoute';
 import { Homepage } from './views/HomepageView';
 import { About } from './components/external/about/About';
 import { UnderDevelopment } from './components/helper/under-development/UnderDevelopment';
+import ResetPasswordView from './views/ResetPasswordView';
 
 const App: FC = () => {
     return (
@@ -35,10 +36,11 @@ const App: FC = () => {
                                 </ProtectedRoute>
                             }
                         />
-                        <Route path='/login' element={<Login />} />
                     </Routes>
                 </ProjectStorage>
                 <Routes>
+                    <Route path='/login' element={<Login />} />
+                    <Route path='/reset-password' element={<ResetPasswordView />} />
                     <Route path='como-usar' element={<UnderDevelopment />} />
                     <Route path='sobre' element={<About />} />
                     <Route path='blog' element={<UnderDevelopment />} />

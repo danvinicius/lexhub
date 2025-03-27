@@ -35,6 +35,30 @@ export const AUTH_USER = (): RequestFormat => {
 	};
 };
 
+export const FORGOT_PASSWORD = (): RequestFormat => {
+	return {
+		url: '/user/forgot-password',
+		options: {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		},
+	};
+};
+
+export const RESET_PASSWORD = (): RequestFormat => {
+	return {
+		url: '/user/reset-password',
+		options: {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		},
+	};
+};
+
 export const GET_ME = (token: string): RequestFormat => {
 	return {
 		url: '/user/me',
