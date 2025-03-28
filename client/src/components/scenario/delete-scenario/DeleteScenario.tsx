@@ -4,12 +4,12 @@ import { AxiosError } from 'axios';
 import api from '../../../lib/axios';
 import { DELETE_SCENARIO } from '../../../api';
 import { UserContext } from '../../../context/UserContext';
+import { useToast } from '../../../context/ToastContext';
 import { ErrorResponse, ILexiconScenario } from '../../../shared/interfaces';
 
 import Button from '../../forms/button/Button';
 import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
-import Error from '../../helper/Error';
 import Close from '../../../assets/icon/Close_Dark.svg';
 import './DeleteScenario.scss';
 
@@ -28,8 +28,8 @@ interface DeleteScenarioProps {
 const DeleteScenario: FC<DeleteScenarioProps> = ({ scenario, projectId, onClose, resetScenarioInfo }: DeleteScenarioProps): ReactNode => {
 
 	const { isAuthenticated } = useContext(UserContext) || {};
+	const { success, error } = useToast()
 
-	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 
 	const deleteScenario = async () => {
@@ -44,9 +44,10 @@ const DeleteScenario: FC<DeleteScenarioProps> = ({ scenario, projectId, onClose,
 				);
 				await api[options.method](url, options);
 				resetScenarioInfo();
-			} catch (error) {
-				const err = error as AxiosError<ErrorResponse>;
-				setError(err?.response?.data?.error || 'Erro inesperado');
+				success('Cenário excluído com sucesso')
+			} catch (err) {
+				const typedError = err as AxiosError<ErrorResponse>;
+				error(typedError?.response?.data?.error || 'Erro inesperado');
 			} finally {
 				setLoading(false);
 			}
@@ -76,7 +77,6 @@ const DeleteScenario: FC<DeleteScenarioProps> = ({ scenario, projectId, onClose,
 				) : (
 					<Button theme="danger" text="Excluir" onClick={handleSubmit} />
 				)}
-				<Error error={error} />
 			</Form>
 		</section>
 	);

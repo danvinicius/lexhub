@@ -1,10 +1,12 @@
 import { FC, FormEvent, ReactNode, useContext, useEffect, useState } from 'react';
 import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 import api from '../../../lib/axios';
 import { CREATE_PROJECT, UPDATE_PROJECT } from '../../../api';
 import { ErrorResponse, IProject } from '../../../shared/interfaces';
 import { UserContext } from '../../../context/UserContext';
+import { useToast } from '../../../context/ToastContext';
 import useForm from '../../../hooks/useForm';
 import { ProjectRequestDTO } from '../../../shared/dto';
 
@@ -12,11 +14,10 @@ import Button from '../../forms/button/Button';
 import Input from '../../forms/input/Input';
 import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
-import Error from '../../helper/Error';
 import { ProjectVisibilityForm } from './ProjectVisibilityForm';
 import CloseIcon from '@mui/icons-material/Close';
-import './ProjectForm.scss';
 import { RichTextEditor } from '../../forms/rich-text-editor/RichTextEditor';
+import './ProjectForm.scss';
 
 interface ProjectFormProps {
     project?: IProject;
@@ -30,6 +31,9 @@ const ProjectForm: FC<ProjectFormProps> = ({ project, onClose, resetProjectInfo 
     const description = useForm('projectDescription');
     const [visibility, setVisibility] = useState('private');
 
+    const { success, error } = useToast();
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (isEditing && project) {
             name.setValue(project.name);
@@ -39,7 +43,6 @@ const ProjectForm: FC<ProjectFormProps> = ({ project, onClose, resetProjectInfo 
     }, [project]);
 
     const { isAuthenticated, refreshUser } = useContext(UserContext) || {};
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: FormEvent) => {
@@ -61,11 +64,13 @@ const ProjectForm: FC<ProjectFormProps> = ({ project, onClose, resetProjectInfo 
                     const { url, options } = CREATE_PROJECT(isAuthenticated()?.token || '');
                     const { data } = await api[options.method](url, body, options);
                     await refreshUser();
-                    window.location.href = `/projeto/${data.id}`;
+                    success('Projeto criado com sucesso')
+                    navigate(`/projeto/${data.id}`);
+                    navigate(0)
                 }
-            } catch (error) {
-                const err = error as AxiosError<ErrorResponse>;
-                setError(err?.response?.data?.error || 'Erro inesperado');
+            } catch (err) {
+                const typedError = err as AxiosError<ErrorResponse>;
+                error(typedError?.response?.data?.error || 'Erro inesperado');
             } finally {
                 setLoading(false);
             }
@@ -89,13 +94,12 @@ const ProjectForm: FC<ProjectFormProps> = ({ project, onClose, resetProjectInfo 
                             placeholder='Digite o nome do seu projeto'
                             label='Nome do projeto'
                             {...name}
-                            onInput={() => setError('')}
+                            onInput={() => name.setError('')}
                         />
                         <RichTextEditor label='Descrição' {...description} />
                         {loading ? <Loading /> : (
                             <Button theme='primary' text={isEditing ? 'Salvar' : 'Criar'} onClick={handleSubmit} />
                         )}
-                        <Error error={error} />
                     </Form>
                 </div>
                 <ProjectVisibilityForm visibility={visibility} setVisibility={setVisibility} />

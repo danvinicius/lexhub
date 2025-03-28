@@ -1,5 +1,4 @@
-import { FC, FormEvent, ReactNode, SyntheticEvent, useContext, useState } from 'react';
-import { Snackbar, SnackbarCloseReason } from '@mui/material';
+import { FC, FormEvent, ReactNode, useContext, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import { AxiosError } from 'axios';
 
@@ -9,11 +8,11 @@ import { ErrorResponse, IUserProject, IUserRole } from '../../../shared/interfac
 import { AddUserRequestDTO, UserRoleRequestDTO, RemoveUserRequestDTO } from '../../../shared/dto';
 import { UserContext } from '../../../context/UserContext';
 import { ProjectContext } from '../../../context/ProjectContext';
+import { useToast } from '../../../context/ToastContext';
 
 import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
 import Button from '../../forms/button/Button';
-import Error from '../../helper/Error';
 import Select from '../../forms/select/Select';
 import Close from '../../../assets/icon/Close_Dark.svg';
 import { AddUserEmailComboBox } from './AddUserEmailComboBox';
@@ -28,21 +27,11 @@ interface AddUserToProjectFormProps {
 const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetProjectInfo }: AddUserToProjectFormProps): ReactNode => {
     const { isAuthenticated } = useContext(UserContext || {});
 
-    const [error, setError] = useState('');
+    const { success, error } = useToast();
     const [loading, setLoading] = useState(false);
-    const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const [currentEmail, setCurrentEmail] = useState('');
     const [usersToRemove, setUsersToRemove] = useState<string[]>([]);
-
-
-    const handleCloseSnackbar = (_event: SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-
-        setOpenSnackbar(false);
-    };
 
     const [emails, setEmails] = useState<string[]>([]);
     const [roles, setRoles] = useState<Record<string, string>>({});
@@ -56,9 +45,10 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
                 const { url, options } = ADD_USER_TO_PROJECT(projectContext.project.id, isAuthenticated()?.token || '');
                 await api[options.method](url, body, options);
                 resetProjectInfo();
-            } catch (error) {
-                const err = error as AxiosError<ErrorResponse>;
-                setError(err?.response?.data?.error || 'Erro inesperado');
+                success('Usuário adicionado com sucesso');
+            } catch (err) {
+                const typedError = err as AxiosError<ErrorResponse>;
+                error(typedError?.response?.data?.error || 'Erro inesperado');
             } finally {
                 setLoading(false);
             }
@@ -72,9 +62,10 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
                 const { url, options } = CHANGE_USER_ROLE(projectContext.project.id, isAuthenticated()?.token || '');
                 await api[options.method](url, body, options);
                 resetProjectInfo();
-            } catch (error) {
-                const err = error as AxiosError<ErrorResponse>;
-                setError(err?.response?.data?.error || 'Erro inesperado');
+                success('Usuário atualizado com sucesso');
+            } catch (err) {
+                const typedError = err as AxiosError<ErrorResponse>;
+                error(typedError?.response?.data?.error || 'Erro inesperado');
             } finally {
                 setLoading(false);
             }
@@ -88,9 +79,10 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
                 const { url, options } = REMOVE_USER(projectContext.project.id, isAuthenticated()?.token || '');
                 await api[options.method](url, body, options);
                 resetProjectInfo();
-            } catch (error) {
-                const err = error as AxiosError<ErrorResponse>;
-                setError(err?.response?.data?.error || 'Erro inesperado');
+                success(`Usuário removido com sucesso`);
+            } catch (err) {
+                const typedError = err as AxiosError<ErrorResponse>;
+                error(typedError?.response?.data?.error || 'Erro inesperado');
             } finally {
                 setLoading(false);
             }
@@ -99,12 +91,11 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
 
     function copyCurrentUrlToClipboard() {
         const currentUrl = window.location.href;
-
         if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard
                 .writeText(currentUrl)
                 .then(() => {
-                    setOpenSnackbar(true);
+                    success('Link copiado para área de transferência');
                 })
                 .catch((err) => {
                     console.error('Falha ao copiar a URL:', err);
@@ -118,7 +109,7 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
             textArea.select();
             try {
                 document.execCommand('copy');
-                setOpenSnackbar(true);
+                success('Link copiado para área de transferência');
             } catch (err) {
                 console.error('Falha ao copiar a URL:', err);
             }
@@ -133,38 +124,45 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
             projectContext.project = { ...projectContext.project, users: updatedUsers };
         }
     };
-    
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         if (projectContext.project?.id) {
             if (emails.length) {
-                for (const email of [...emails, currentEmail.trim().length ? currentEmail : null].filter((email) => email != null)) {
-                    addUserToProject({
-                        email,
-                        role: roles[email],
-                        projectId: projectContext.project.id,
-                    });
-                }
+                await Promise.all(
+                    [...emails, currentEmail.trim().length ? currentEmail : null]
+                        .filter((email) => email != null)
+                        .map((email) => {
+                            addUserToProject({
+                                email,
+                                role: roles[email],
+                                projectId: projectContext.project?.id || '',
+                            });
+                        })
+                );
             }
-            for (const changedRoleEmail of Object.keys(roles)) {
-                const currentUser = projectContext.project.users.find((user) => user.user.email == changedRoleEmail);
-                if (roles[changedRoleEmail] !== currentUser?.role) {
-                    if (currentUser?.user.id) {
-                        changeUserRole({
-                            userId: currentUser?.user.id,
-                            projectId: projectContext.project.id,
-                            newRole: roles[changedRoleEmail],
-                        });
+            await Promise.all(
+                Object.keys(roles).map((changedRoleEmail) => {
+                    const currentUser = projectContext.project?.users.find((user) => user.user.email == changedRoleEmail);
+                    if (roles[changedRoleEmail] !== currentUser?.role) {
+                        if (currentUser?.user.id) {
+                            changeUserRole({
+                                userId: currentUser?.user.id,
+                                projectId: projectContext.project?.id || '',
+                                newRole: roles[changedRoleEmail],
+                            });
+                        }
                     }
-                }
-            }
-            for (const userId of usersToRemove) {
-                await removeUser({
-                    userId,
-                    projectId: projectContext.project.id,
-                });
-            }
+                })
+            );
+            await Promise.all(
+                usersToRemove.map((userId) => {
+                    removeUser({
+                        userId,
+                        projectId: projectContext.project?.id || '',
+                    });
+                })
+            );
         }
     };
 
@@ -221,7 +219,7 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
                 <div className='pessoas-com-acesso'>
                     <h3>Pessoas com acesso:</h3>
                     <br />
-                    <ul className='flex column gap-15' style={{ maxHeight: '10rem'}}>
+                    <ul className='flex column gap-15' style={{ maxHeight: '10rem' }}>
                         {projectContext.project?.users.map((user: IUserProject) => {
                             return (
                                 <li key={user.id} className='flex align-center gap-1'>
@@ -257,9 +255,9 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
                                             ></Select>
                                         </div>
                                     )}
-                                    {user.role !== IUserRole.PROPRIETARIO && user.user.email !== isAuthenticated()?.email && user.user.id && (
-                                        <CloseIcon className='pointer' onClick={() => handleRemoveUser(user.user.id)}/>
-                                    )}
+                                    {user.role !== IUserRole.PROPRIETARIO &&
+                                        user.user.email !== isAuthenticated()?.email &&
+                                        user.user.id && <CloseIcon className='pointer' onClick={() => handleRemoveUser(user.user.id)} />}
                                 </li>
                             );
                         })}
@@ -275,15 +273,7 @@ const AddUserToProjectForm: FC<AddUserToProjectFormProps> = ({ onClose, resetPro
                         <Button theme='primary' text='Salvar e compartilhar' onClick={handleSubmit} />
                     </div>
                 )}
-                <Error error={error} />
             </Form>
-
-            <Snackbar
-                open={openSnackbar}
-                autoHideDuration={2500}
-                onClose={handleCloseSnackbar}
-                message='Link copiado para a área de transferência'
-            />
         </section>
     );
 };

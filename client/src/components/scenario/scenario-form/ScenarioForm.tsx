@@ -6,6 +6,7 @@ import api from '../../../lib/axios';
 import useForm from '../../../hooks/useForm';
 import { UserContext } from '../../../context/UserContext';
 import { ProjectContext } from '../../../context/ProjectContext';
+import { useToast } from '../../../context/ToastContext';
 import { ErrorResponse, ILexiconScenario } from '../../../shared/interfaces';
 import { ScenarioRequestDTO } from '../../../shared/dto';
 
@@ -13,7 +14,6 @@ import Input from '../../forms/input/Input';
 import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
 import Button from '../../forms/button/Button';
-import Error from '../../helper/Error';
 import Textarea from '../../forms/textarea/Textarea';
 import Close from '../../../assets/icon/Close_Dark.svg';
 import './ScenarioForm.scss';
@@ -27,6 +27,7 @@ interface ScenarioFormProps {
 const ScenarioForm: FC<ScenarioFormProps> = ({ onClose, resetInfo, scenario }: ScenarioFormProps): ReactNode => {
     const { isAuthenticated } = useContext(UserContext) || {};
     const projectContext = useContext(ProjectContext);
+    const { success, error } = useToast();
 
     const title = useForm('dontValidateTitle');
     const goal = useForm('');
@@ -38,7 +39,6 @@ const ScenarioForm: FC<ScenarioFormProps> = ({ onClose, resetInfo, scenario }: S
         }
     }, [scenario]);
 
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: FormEvent) => {
@@ -64,9 +64,9 @@ const ScenarioForm: FC<ScenarioFormProps> = ({ onClose, resetInfo, scenario }: S
             const { url, options } = CREATE_SCENARIO(projectContext.project?.id || '', isAuthenticated()?.token || '');
             await api[options.method](url, body, options);
             resetInfo();
-        } catch (error) {
-            const err = error as AxiosError<ErrorResponse>;
-            setError(err?.response?.data?.error || 'Erro inesperado');
+        } catch (err) {
+            const typedError = err as AxiosError<ErrorResponse>;
+            error(typedError?.response?.data?.error || 'Erro inesperado');
         } finally {
             setLoading(false);
         }
@@ -78,9 +78,10 @@ const ScenarioForm: FC<ScenarioFormProps> = ({ onClose, resetInfo, scenario }: S
             const { url, options } = UPDATE_SCENARIO(projectContext.project?.id || '', scenario?.id || '', isAuthenticated()?.token || '');
             await api[options.method](url, body, options);
             resetInfo();
-        } catch (error) {
-            const err = error as AxiosError<ErrorResponse>;
-            setError(err?.response?.data?.error || 'Erro inesperado');
+            success('Cenário atualizado com sucesso');
+        } catch (err) {
+            const typedError = err as AxiosError<ErrorResponse>;
+            error(typedError?.response?.data?.error || 'Erro inesperado');
         } finally {
             setLoading(false);
         }
@@ -100,7 +101,7 @@ const ScenarioForm: FC<ScenarioFormProps> = ({ onClose, resetInfo, scenario }: S
                     label='Título'
                     autoFocus
                     {...title}
-                    onInput={() => setError('')}
+                    onInput={() => title.setError('')}
                     onKeyDown={(e: KeyboardEvent) => e.key === 'Enter' && e.preventDefault()}
                 />
                 <Textarea
@@ -109,12 +110,11 @@ const ScenarioForm: FC<ScenarioFormProps> = ({ onClose, resetInfo, scenario }: S
                     label='Objetivo'
                     rows={10}
                     {...goal}
-                    onInput={() => setError('')}
+                    onInput={() => goal.setError('')}
                     onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
                 />
             </Form>
             {loading ? <Loading /> : <Button theme='primary' text={scenario ? 'Salvar' : 'Criar'} onClick={handleSubmit} />}
-            <Error error={error} />
         </section>
     );
 };

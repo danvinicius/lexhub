@@ -1,5 +1,5 @@
-import { FC, FormEvent, SyntheticEvent, useContext, useEffect, useState } from 'react';
-import { Accordion, AccordionSummary, AccordionDetails, Snackbar, SnackbarCloseReason } from '@mui/material';
+import { FC, FormEvent, useContext, useEffect, useState } from 'react';
+import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { AxiosError } from 'axios';
 
@@ -7,13 +7,13 @@ import {  UPDATE_USER } from '../../../api';
 import api from '../../../lib/axios';
 import { UserContext } from '../../../context/UserContext';
 import useForm from '../../../hooks/useForm';
+import { useToast } from '../../../context/ToastContext';
 import { ErrorResponse } from '../../../shared/interfaces';
 
 import Button from '../../forms/button/Button';
 import Input from '../../forms/input/Input';
 import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
-import Error from '../../helper/Error';
 import './UpdateUserForm.scss';
 
 interface UpdateUserRequestDTO {
@@ -33,18 +33,7 @@ const UpdateUserForm: FC = () => {
 	const newPassword = useForm('password');
 	const confirmPassword = useForm('password');
 
-	const [openSnackbar, setOpenSnackbar] = useState(false);
-
-	const handleCloseSnackbar = (
-		_event: SyntheticEvent | Event,
-		reason?: SnackbarCloseReason
-	) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-
-		setOpenSnackbar(false);
-	};
+	const { success, error } = useToast();
 
 	useEffect(() => {
 		nameEdit.setValue(isAuthenticated()?.name || '');
@@ -52,7 +41,6 @@ const UpdateUserForm: FC = () => {
 	}, []);
 
 
-	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 
 	const updateUser = async (body: UpdateUserRequestDTO) => {
@@ -62,13 +50,13 @@ const UpdateUserForm: FC = () => {
 			);
 			await api[options.method](url, body, options);
 			refreshUser();
-			setOpenSnackbar(true);
+			success('Usuário atualizado com sucesso')
 			currentPassword.setValue('');
 			newPassword.setValue('');
 			confirmPassword.setValue('');
-		} catch (error) {
-			const err = error as AxiosError<ErrorResponse>;
-			setError(err?.response?.data?.error || 'Erro inesperado');
+		} catch (err) {
+			const typedError = err as AxiosError<ErrorResponse>;
+			error(typedError?.response?.data?.error || 'Erro inesperado');
 		} finally {
 			setLoading(false);
 		}
@@ -113,7 +101,7 @@ const UpdateUserForm: FC = () => {
 					label="Nome completo"
 					autoFocus
 					{...nameEdit}
-					onInput={() => {setError('');}}
+					onInput={() => {nameEdit.setError('');}}
 				/>
 				<Input
 					type="email"
@@ -122,7 +110,7 @@ const UpdateUserForm: FC = () => {
 					label="E-mail"
 					disabled={true}
 					{...emailEdit}
-					onInput={() => {setError('');}}
+					onInput={() => {emailEdit.setError('');}}
 				/>
 				<Accordion>
 					<AccordionSummary
@@ -140,7 +128,7 @@ const UpdateUserForm: FC = () => {
 								placeholder="***********"
 								label="Senha atual"
 								{...currentPassword}
-								onInput={() => {setError('');}}
+								onInput={() => {currentPassword.setError('');}}
 							/>
 							<Input
 								type="password"
@@ -148,7 +136,7 @@ const UpdateUserForm: FC = () => {
 								placeholder="***********"
 								label="Nova senha"
 								{...newPassword}
-								onInput={() => {setError('');}}
+								onInput={() => {newPassword.setError('');}}
 							/>
 							<Input
 								type="password"
@@ -156,26 +144,17 @@ const UpdateUserForm: FC = () => {
 								placeholder="***********"
 								label="Confirme sua nova senha"
 								{...confirmPassword}
-								onInput={() => {setError('');}}
+								onInput={() => {confirmPassword.setError('');}}
 							/>
 						</Form>
 					</AccordionDetails>
 				</Accordion>
-
-				<Snackbar
-					open={openSnackbar}
-					autoHideDuration={2500}
-					onClose={handleCloseSnackbar}
-					message="Informações atualizadas com sucesso"
-				/>
 				
-
 				{loading ? (
 					<Loading />
 				) : (
 					<Button theme="primary" text="Atualizar" onClick={handleSubmit}/>
 				)}
-				<Error error={error} />
 			</Form>
 		</section>
 	);

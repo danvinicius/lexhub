@@ -1,9 +1,11 @@
 import { FC, FormEvent, ReactNode, useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import { DELETE_PROJECT } from '../../../api';
 import api from '../../../lib/axios';
 import { ErrorResponse, IProject } from '../../../shared/interfaces';
+import { useToast } from '../../../context/ToastContext';
 import { UserContext } from '../../../context/UserContext';
 import useForm from '../../../hooks/useForm';
 
@@ -11,7 +13,6 @@ import Button from '../../forms/button/Button';
 import Input from '../../forms/input/Input';
 import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
-import Error from '../../helper/Error';
 import Close from '../../../assets/icon/Close_Dark.svg';
 import './DeleteProject.scss';
 
@@ -24,8 +25,10 @@ const DeleteProject: FC<DeleteProjectProps> = ({ project, onClose }: DeleteProje
 	const nameDelete = useForm('dontValidateName');
 
 	const { isAuthenticated } = useContext(UserContext) || {};
+	const { success, error } = useToast();
 
-	const [error, setError] = useState('');
+	const navigate = useNavigate()
+
 	const [loading, setLoading] = useState(false);
 
 	const deleteProject = async () => {
@@ -37,10 +40,12 @@ const DeleteProject: FC<DeleteProjectProps> = ({ project, onClose }: DeleteProje
 					isAuthenticated()?.token || ''
 				);
 				await api[options.method](url, options);
-				window.location.href = '/home';
-			} catch (error) {
-				const err = error as AxiosError<ErrorResponse>;
-				setError(err?.response?.data?.error || 'Erro inesperado');
+				success('Projeto excluído com sucesso')
+				navigate('/home')
+				navigate(0)
+            } catch (err) {
+                const typedError = err as AxiosError<ErrorResponse>;
+                error(typedError?.response?.data?.error || 'Erro inesperado');
 			} finally {
 				setLoading(false);
 			}
@@ -79,7 +84,7 @@ const DeleteProject: FC<DeleteProjectProps> = ({ project, onClose }: DeleteProje
 					placeholder=""
 					label=""
 					{...nameDelete}
-					onInput={() => setError('')}
+					onInput={() => nameDelete.setError('')}
 					onBlur={() => null}
 				/>
 				{loading ? (
@@ -87,7 +92,6 @@ const DeleteProject: FC<DeleteProjectProps> = ({ project, onClose }: DeleteProje
 				) : (
 					<Button theme="danger" text="Excluir" onClick={handleSubmit} />
 				)}
-				<Error error={error} />
 			</Form>
 		</section>
 	);

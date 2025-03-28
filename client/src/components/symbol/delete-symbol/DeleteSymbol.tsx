@@ -4,12 +4,12 @@ import { AxiosError } from 'axios';
 import { DELETE_SYMBOL } from '../../../api';
 import api from '../../../lib/axios';
 import { UserContext } from '../../../context/UserContext';
+import { useToast } from '../../../context/ToastContext';
 import { ErrorResponse, ILexiconSymbol } from '../../../shared/interfaces';
 
 import Button from '../../forms/button/Button';
 import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
-import Error from '../../helper/Error';
 import Close from '../../../assets/icon/Close_Dark.svg';
 import './DeleteSymbol.scss';
 
@@ -23,8 +23,8 @@ interface DeleteSymbolProps {
 const DeleteSymbol: FC<DeleteSymbolProps> = ({ symbol, projectId, onClose, resetSymbolInfo }: DeleteSymbolProps): ReactNode => {
 
 	const { isAuthenticated } = useContext(UserContext) || {};
+	const { success, error } = useToast()
 
-	const [error, setError] = useState('');
 	const [loading, setLoading] = useState(false);
 
 	const deleteSymbol = async () => {
@@ -39,9 +39,10 @@ const DeleteSymbol: FC<DeleteSymbolProps> = ({ symbol, projectId, onClose, reset
 				);
 				await api[options.method](url, options);
 				resetSymbolInfo();
-			} catch (error) {
-				const err = error as AxiosError<ErrorResponse>;
-				setError(err?.response?.data?.error || 'Erro inesperado');
+				success('Símbolo excluído com sucesso')
+			} catch (err) {
+				const typedError = err as AxiosError<ErrorResponse>;
+				error(typedError?.response?.data?.error || 'Erro inesperado');
 			} finally {
 				setLoading(false);
 			}
@@ -71,7 +72,6 @@ const DeleteSymbol: FC<DeleteSymbolProps> = ({ symbol, projectId, onClose, reset
 				) : (
 					<Button theme="danger" text="Excluir" onClick={handleSubmit} />
 				)}
-				<Error error={error} />
 			</Form>
 		</section>
 	);

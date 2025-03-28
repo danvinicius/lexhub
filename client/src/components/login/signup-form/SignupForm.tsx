@@ -5,13 +5,13 @@ import api from '../../../lib/axios';
 import { CREATE_USER } from '../../../api';
 import { ErrorResponse } from '../../../shared/interfaces';
 import { CreateUserRequestDTO, UserContext } from '../../../context/UserContext';
+import { useToast } from '../../../context/ToastContext';
 import useForm from '../../../hooks/useForm';
 
 import Button from '../../forms/button/Button';
 import Input from '../../forms/input/Input';
 import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
-import Error from '../../helper/Error';
 import '../login-form/LoginForm.scss';
 
 interface LoginFormProps {
@@ -19,10 +19,10 @@ interface LoginFormProps {
 }
 
 const LoginForm: FC<LoginFormProps> = ({ setCurrentScreen }: LoginFormProps) => {
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const { setUser } = useContext(UserContext) || {};
+    const { success, error } = useToast();
 
     const name = useForm();
     const email = useForm('email');
@@ -34,9 +34,10 @@ const LoginForm: FC<LoginFormProps> = ({ setCurrentScreen }: LoginFormProps) => 
             const { url, options } = CREATE_USER();
             const response = await api[options.method](url, body);
             if (setUser) setUser(response.data);
-        } catch (error) {
-            const err = error as AxiosError<ErrorResponse>;
-            setError(err?.response?.data?.error || 'Erro inesperado');
+            success('Usuário cadastrado com sucesso');
+        } catch (err) {
+            const typedError = err as AxiosError<ErrorResponse>;
+            error(typedError?.response?.data?.error || 'Erro inesperado');
         } finally {
             setLoading(false);
         }
@@ -69,7 +70,7 @@ const LoginForm: FC<LoginFormProps> = ({ setCurrentScreen }: LoginFormProps) => 
                     autoFocus
                     {...name}
                     onInput={() => {
-                        setError('');
+                        name.setError('');
                     }}
                 />
                 <Input
@@ -79,7 +80,7 @@ const LoginForm: FC<LoginFormProps> = ({ setCurrentScreen }: LoginFormProps) => 
                     label='E-mail'
                     {...email}
                     onInput={() => {
-                        setError('');
+                        email.setError('');
                     }}
                 />
                 <Input
@@ -89,11 +90,10 @@ const LoginForm: FC<LoginFormProps> = ({ setCurrentScreen }: LoginFormProps) => 
                     label='Senha'
                     {...password}
                     onInput={() => {
-                        setError('');
+                        password.setError('');
                     }}
                 />
                 {loading ? <Loading /> : <Button theme='primary' text='Entrar' onClick={handleSubmit} />}
-                <Error error={error} />
             </Form>
         </section>
     );
