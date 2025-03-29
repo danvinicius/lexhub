@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 const base64UrlEncode = (input: ArrayBuffer) => {
     return btoa(String.fromCharCode(...new Uint8Array(input)))
@@ -24,37 +24,48 @@ export function useCrypto() {
     const iv = new Uint8Array(16);
     const [cryptoKey, setCryptoKey] = useState<CryptoKey | null>(null);
 
-    const getKey: () => Promise<{
-        readonly algorithm: {
-            name: string;
-        };
-        readonly extractable: boolean;
-        readonly type: KeyType;
-        readonly usages: KeyUsage[];
-    } | null> = async () => {
-        if (!cryptoKey) {
+    const getKey = useCallback(async () => {
+        if (cryptoKey) {
+            return cryptoKey;
+        }
+        
+        try {
+            if (typeof crypto === 'undefined' || !crypto.subtle) {
+                throw new Error('Web Crypto API não está disponível neste ambiente');
+            }
+            
             const secret = import.meta.env.VITE_CRYPTO_SECRET_KEY || 'default_secret_16';
             const rawKey = new TextEncoder().encode(secret.slice(0, 16));
             const key = await crypto.subtle.importKey('raw', rawKey, algorithm, false, ['encrypt', 'decrypt']);
+            
             setCryptoKey(key);
+            return key;
+        } catch (error) {
+            console.error('Erro ao gerar chave criptográfica:', error);
+            throw error;
         }
-        return cryptoKey;
-    };
+    }, [cryptoKey]);
 
-    const encrypt = async (data: string): Promise<string | void> => {
-        const key = await getKey();
-        const encodedData = new TextEncoder().encode(data);
-        if (key) {
+    const encrypt = async (data: string): Promise<string> => {
+        try {
+            const key = await getKey();
+            const encodedData = new TextEncoder().encode(data);
             const encrypted = await crypto.subtle.encrypt({ name: algorithm.name, iv }, key, encodedData);
             return base64UrlEncode(encrypted);
+        } catch (error) {
+            console.error('Erro ao criptografar:', error);
+            throw error;
         }
     };
 
-    const decrypt = async (encryptedText: string): Promise<string | void> => {
-        const key = await getKey();
-        if (key) {
+    const decrypt = async (encryptedText: string): Promise<string> => {
+        try {
+            const key = await getKey();
             const decrypted = await crypto.subtle.decrypt({ name: algorithm.name, iv }, key, base64UrlDecode(encryptedText));
             return new TextDecoder().decode(decrypted);
+        } catch (error) {
+            console.error('Erro ao descriptografar:', error);
+            throw error;
         }
     };
 
