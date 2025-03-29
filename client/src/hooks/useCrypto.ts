@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 const base64UrlEncode = (input: ArrayBuffer) => {
     return btoa(String.fromCharCode(...new Uint8Array(input)))
@@ -19,22 +19,29 @@ const base64UrlDecode = (input: string): Uint8Array => {
     );
 };
 
+const isBrowser = () => typeof window !== 'undefined';
+
 export function useCrypto() {
     const algorithm = { name: 'AES-CBC', length: 128 };
     const iv = new Uint8Array(16);
     const [cryptoKey, setCryptoKey] = useState<CryptoKey | null>(null);
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     const getKey = useCallback(async () => {
         if (cryptoKey) {
             return cryptoKey;
         }
         
+        if (!isBrowser() || typeof crypto === 'undefined' || !crypto.subtle) {
+            throw new Error('Web Crypto API não está disponível neste ambiente');
+        }
+        
         try {
-            if (typeof crypto === 'undefined' || !crypto.subtle) {
-                throw new Error('Web Crypto API não está disponível neste ambiente');
-            }
-            
-            const secret = import.meta.env.VITE_CRYPTO_SECRET_KEY || 'default_secret_16';
+            const secret = typeof import.meta !== 'undefined' && import.meta.env?.VITE_CRYPTO_SECRET_KEY || 'default_secret_16';
             const rawKey = new TextEncoder().encode(secret.slice(0, 16));
             const key = await crypto.subtle.importKey('raw', rawKey, algorithm, false, ['encrypt', 'decrypt']);
             
@@ -47,6 +54,11 @@ export function useCrypto() {
     }, [cryptoKey]);
 
     const encrypt = async (data: string): Promise<string> => {
+        if (!isClient) {
+            console.warn('Tentativa de criptografar durante SSR - operação adiada para o lado do cliente');
+            return '';
+        }
+
         try {
             const key = await getKey();
             const encodedData = new TextEncoder().encode(data);
@@ -59,7 +71,14 @@ export function useCrypto() {
     };
 
     const decrypt = async (encryptedText: string): Promise<string> => {
+        if (!isClient) {
+            console.warn('Tentativa de descriptografar durante SSR - operação adiada para o lado do cliente');
+            return '';
+        }
+
         try {
+            if (!encryptedText) return '';
+            
             const key = await getKey();
             const decrypted = await crypto.subtle.decrypt({ name: algorithm.name, iv }, key, base64UrlDecode(encryptedText));
             return new TextDecoder().decode(decrypted);
@@ -72,5 +91,6 @@ export function useCrypto() {
     return {
         encrypt,
         decrypt,
+        isClient,
     };
 }
