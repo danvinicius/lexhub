@@ -52,24 +52,35 @@ const DeleteEpisode: FC<DeleteEpisodeProps> = ({
 
     const handleDeleteEpisode = async (episodeId: string) => {
         if (scenario) {
+            const deletedEpisodeInfo = scenario.episodes.find((episode) => episode.id === episodeId);
+            const deletedEpisodePosition = deletedEpisodeInfo?.position;
+            const isInNonSequentialGroup = scenario.episodes.some(
+                ep => ep.nonSequentialEpisodes?.some(nse => nse.id === episodeId)
+            );
+    
             await updateScenarioWithEpisodes({
                 projectId: projectId || '',
                 episodes: (scenario.episodes?.filter((episode) => episode != null) ?? [])
                     .filter((episode) => episode.id !== episodeId)
                     .map((episode) => {
                         if (!episode.nonSequentialEpisodes) {
-                            const episodePosition = scenario.episodes.find((episode) => episode.id === episodeId)?.position;
                             return {
                                 id: episode.id,
                                 description: episode.description.content,
                                 restriction: episode.restriction.content,
                                 type: episode.type,
-                                position: episodePosition && episode.position > episodePosition ? episode.position - 1 : episode.position,
+                                position: !isInNonSequentialGroup && deletedEpisodePosition && 
+                                         episode.position > deletedEpisodePosition 
+                                        ? episode.position - 1 
+                                        : episode.position,
                             };
                         }
                         return {
                             id: episode.id,
-                            position: episode.position,
+                            position: !isInNonSequentialGroup && deletedEpisodePosition && 
+                                     episode.position > deletedEpisodePosition 
+                                    ? episode.position - 1 
+                                    : episode.position,
                             nonSequentialEpisodes: episode.nonSequentialEpisodes
                                 ?.map((nse) => ({
                                     id: nse.id,
@@ -77,7 +88,7 @@ const DeleteEpisode: FC<DeleteEpisodeProps> = ({
                                     restriction: nse.restriction.content,
                                     type: nse.type,
                                 }))
-                                .filter((episode) => episode.id !== episodeId),
+                                .filter((nse) => nse.id !== episodeId),
                         };
                     }),
             });

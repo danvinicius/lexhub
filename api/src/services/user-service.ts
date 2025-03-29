@@ -70,7 +70,7 @@ export class UserService {
     const userProject = await this.userRepository.addUserToProject({
       userId: user.id,
       projectId: data.projectId,
-      role: data.role,
+      role: data.role!,
     });
     const afterChange = await this.projectService.getCleanProject(
       data.projectId

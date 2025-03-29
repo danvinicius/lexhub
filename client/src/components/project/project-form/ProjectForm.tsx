@@ -16,8 +16,8 @@ import Form from '../../forms/Form';
 import Loading from '../../helper/Loading';
 import { ProjectVisibilityForm } from './ProjectVisibilityForm';
 import CloseIcon from '@mui/icons-material/Close';
-import { RichTextEditor } from '../../forms/rich-text-editor/RichTextEditor';
 import './ProjectForm.scss';
+import { RichTextEditor } from '../../forms/rich-text-editor/RichTextEditor';
 
 interface ProjectFormProps {
     project?: IProject;
@@ -31,7 +31,7 @@ const ProjectForm: FC<ProjectFormProps> = ({ project, onClose, resetProjectInfo 
     const description = useForm('projectDescription');
     const [visibility, setVisibility] = useState('private');
 
-    const { success, error } = useToast();
+    const { error } = useToast();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -64,7 +64,6 @@ const ProjectForm: FC<ProjectFormProps> = ({ project, onClose, resetProjectInfo 
                     const { url, options } = CREATE_PROJECT(isAuthenticated()?.token || '');
                     const { data } = await api[options.method](url, body, options);
                     await refreshUser();
-                    success('Projeto criado com sucesso')
                     navigate(`/projeto/${data.id}`);
                     navigate(0)
                 }

@@ -16,6 +16,9 @@ COPY . .
 # Compilar o TypeScript
 RUN npm run build
 
+# Copiar os templates para a pasta dist
+RUN mkdir -p dist/src/utils/email/templates && cp -r src/utils/email/templates/*.hbs dist/src/utils/email/templates/
+
 # Porta em que a aplicação escutará
 EXPOSE 3000
 
