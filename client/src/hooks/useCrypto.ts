@@ -41,7 +41,7 @@ export function useCrypto() {
         }
         
         try {
-            const secret = typeof import.meta !== 'undefined' && import.meta.env?.VITE_CRYPTO_SECRET_KEY || 'default_secret_16';
+            const secret = 'default_secret_16';
             const rawKey = new TextEncoder().encode(secret.slice(0, 16));
             const key = await crypto.subtle.importKey('raw', rawKey, algorithm, false, ['encrypt', 'decrypt']);
             
