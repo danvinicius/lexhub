@@ -27,24 +27,29 @@ export function useCrypto() {
     const [cryptoKey, setCryptoKey] = useState<CryptoKey | null>(null);
     const [isClient, setIsClient] = useState(false);
 
+    const SECRET_KEY = 'default_secret_16';
+
     useEffect(() => {
         setIsClient(true);
+
+        if (isBrowser() && window.crypto && window.crypto.subtle) {
+            getKey().catch(console.error);
+        }
     }, []);
 
     const getKey = useCallback(async () => {
         if (cryptoKey) {
             return cryptoKey;
         }
-        
-        if (!isBrowser() || typeof crypto === 'undefined' || !crypto.subtle) {
+
+        if (!isBrowser() || !window.crypto || !window.crypto.subtle) {
             throw new Error('Web Crypto API não está disponível neste ambiente');
         }
-        
+
         try {
-            const secret = typeof import.meta !== 'undefined' && import.meta.env?.VITE_CRYPTO_SECRET_KEY || 'default_secret_16';
-            const rawKey = new TextEncoder().encode(secret.slice(0, 16));
-            const key = await crypto.subtle.importKey('raw', rawKey, algorithm, false, ['encrypt', 'decrypt']);
-            
+            const rawKey = new TextEncoder().encode(SECRET_KEY.slice(0, 16));
+            const key = await window.crypto.subtle.importKey('raw', rawKey, algorithm, false, ['encrypt', 'decrypt']);
+
             setCryptoKey(key);
             return key;
         } catch (error) {
@@ -62,7 +67,7 @@ export function useCrypto() {
         try {
             const key = await getKey();
             const encodedData = new TextEncoder().encode(data);
-            const encrypted = await crypto.subtle.encrypt({ name: algorithm.name, iv }, key, encodedData);
+            const encrypted = await window.crypto.subtle.encrypt({ name: algorithm.name, iv }, key, encodedData);
             return base64UrlEncode(encrypted);
         } catch (error) {
             console.error('Erro ao criptografar:', error);
@@ -78,9 +83,9 @@ export function useCrypto() {
 
         try {
             if (!encryptedText) return '';
-            
+
             const key = await getKey();
-            const decrypted = await crypto.subtle.decrypt({ name: algorithm.name, iv }, key, base64UrlDecode(encryptedText));
+            const decrypted = await window.crypto.subtle.decrypt({ name: algorithm.name, iv }, key, base64UrlDecode(encryptedText));
             return new TextDecoder().decode(decrypted);
         } catch (error) {
             console.error('Erro ao descriptografar:', error);
