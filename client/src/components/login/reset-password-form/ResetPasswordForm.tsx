@@ -1,12 +1,10 @@
 import { FC, FormEvent, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 import { RESET_PASSWORD } from '../../../api';
 import api from '../../../lib/axios';
 import { ErrorResponse } from '../../../shared/interfaces';
 import useForm from '../../../hooks/useForm';
-import { useCrypto } from '../../../hooks/useCrypto';
 import { ResetPasswordRequestDTO } from '../../../context/UserContext';
 
 import Button from '../../forms/button/Button';
@@ -17,17 +15,18 @@ import Loading from '../../helper/Loading';
 import Error from '../../helper/Error';
 import './ResetPasswordForm.scss';
 
-const ResetPasswordForm: FC = () => {
-    const email = useForm('dontValidateEmail');
-    const password = useForm('dontValidatePassword');
+interface ResetPasswordFormProps {
+    verifyToken: string;
+    email: string;
+}
+
+const ResetPasswordForm: FC<ResetPasswordFormProps> = ({ verifyToken, email }: ResetPasswordFormProps) => {
+    const formEmail = useForm('dontValidateEmail');
+    const password = useForm('password');
+    const confirmPassword = useForm('password');
 
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-
-    const { decrypt } = useCrypto();
-	
-    const [searchParams] = useSearchParams();
-	const token = searchParams.get('token');
 
     const resetPassword = async (body: ResetPasswordRequestDTO) => {
         setLoading(true);
@@ -35,8 +34,8 @@ const ResetPasswordForm: FC = () => {
             const { url, options } = RESET_PASSWORD();
             const { data } = await api[options.method](url, body);
             if (data.success) {
-				window.location.href = '/login'
-			}
+                window.location.href = '/login';
+            }
         } catch (error) {
             const err = error as AxiosError<ErrorResponse>;
             setError(err?.response?.data?.error || 'Erro inesperado');
@@ -47,30 +46,18 @@ const ResetPasswordForm: FC = () => {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        if (password.validate() && token) {
-            resetPassword({ password: password.value, token });
+        if (password.value !== confirmPassword.value) {
+            confirmPassword.setError('As senhas não coincidem.');
+            return;
+        }
+        if (password.validate()  && verifyToken) {
+            resetPassword({ password: password.value, verifyToken });
         }
     };
 
     useEffect(() => {
-        const fetchDecryptedToken = async () => {
-			if (!token) return window.location.href = '/login'
-            if (token) {
-                try {
-                    const decrypted = await decrypt(token);
-                    if (decrypted) {
-                        const [userEmail] = decrypted.split(':');
-                        email.setValue(userEmail);
-                    }
-                } catch (error) {
-                    console.error('Erro ao descriptografar o token:', error);
-					window.location.href = '/login'
-                }
-            }
-        };
-
-        fetchDecryptedToken();
-    }, [searchParams, email]);
+        if (email) formEmail.setValue(email);
+    }, []);
 
     return (
         <section className='reset-password-form flex column gap-125'>
@@ -85,16 +72,25 @@ const ResetPasswordForm: FC = () => {
                     label='E-mail'
                     disabled
                     autoFocus
-                    {...email}
+                    {...formEmail}
                     onInput={() => {
                         setError('');
                     }}
                 />
                 <PasswordInput
                     placeholder='*********'
-                    label='Senha'
+                    label='Nova senha'
                     enableForgotPassword={false}
                     {...password}
+                    onInput={() => {
+                        setError('');
+                    }}
+                />
+                <PasswordInput
+                    placeholder='*********'
+                    label='Confirme sua nova senha'
+                    enableForgotPassword={false}
+                    {...confirmPassword}
                     onInput={() => {
                         setError('');
                     }}

@@ -32,7 +32,7 @@ const PasswordInput: FC<PasswordInputProps> = ({
     return (
         <div className='password-input-wrapper'>
             {enableForgotPassword && (
-                <small className='third-text-color pointer' onClick={() => (setCurrentScreen ? setCurrentScreen('forgot') : {})}>
+                <small className='third-text-color pointer' onClick={() => (setCurrentScreen ? setCurrentScreen('forgot-password') : {})}>
                     Esqueceu sua senha?
                 </small>
             )}

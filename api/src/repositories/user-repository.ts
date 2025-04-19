@@ -26,6 +26,8 @@ export namespace UserRepository {
   export interface UpdateUserParams {
     name?: string;
     password?: string;
+    recoveryCode?: string | null
+    validated?: boolean;
   }
 
   export interface RemoveUserFromProjectParams {
@@ -145,7 +147,7 @@ export class UserRepository {
   async getUser(query: any): Promise<null | IUser> {
     try {
       const user = await User.findOne(query).select(
-        'id name email projects password'
+        'id name email recoveryCode validated projects password'
       );
       if (user) {
         return user.toJSON();

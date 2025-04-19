@@ -35,9 +35,33 @@ export const AUTH_USER = (): RequestFormat => {
 	};
 };
 
+export const VALIDATE_USER = (): RequestFormat => {
+	return {
+		url: '/user/validate-user',
+		options: {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		},
+	};
+};
+
 export const FORGOT_PASSWORD = (): RequestFormat => {
 	return {
 		url: '/user/forgot-password',
+		options: {
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		},
+	};
+};
+
+export const VERIFY_RECOVERY_CODE = (): RequestFormat => {
+	return {
+		url: '/user/verify-recovery-code',
 		options: {
 			method: 'post',
 			headers: {

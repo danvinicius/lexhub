@@ -16,13 +16,22 @@ export interface AuthUserRequestDTO {
     password: string;
 }
 
+export interface ValidateUserRequestDTO {
+    verifyToken: string;
+}
+
 export interface ForgotPasswordDTO {
     email: string;
 }
 
+export interface VerifyRecoveryCodeDTO {
+    email: string;
+    recoveryCode: string;
+}
+
 export interface ResetPasswordRequestDTO {
     password: string;
-    token: string;
+    verifyToken: string;
 }
 
 export interface AuthUserResponseDTO {

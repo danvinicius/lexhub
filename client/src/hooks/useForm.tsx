@@ -30,9 +30,9 @@ const types: Record<string, ValidationRule> = {
 	},
 	password: {
 		validator: (value: string) => {
-			return /.{6,}/.test(value);
+			return /.{8,}/.test(value);
 		},
-		message: 'A senha deve conter pelo menos 6 caracteres.',
+		message: 'A senha deve conter pelo menos 8 caracteres.',
 	},
 };
 

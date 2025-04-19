@@ -1,10 +1,10 @@
-import { FC, FormEvent, useContext, useState } from 'react';
+import { FC, FormEvent, useState } from 'react';
 import { AxiosError } from 'axios';
 
 import api from '../../../lib/axios';
 import { CREATE_USER } from '../../../api';
 import { ErrorResponse } from '../../../shared/interfaces';
-import { CreateUserRequestDTO, UserContext } from '../../../context/UserContext';
+import { CreateUserRequestDTO } from '../../../context/UserContext';
 import { useToast } from '../../../context/ToastContext';
 import useForm from '../../../hooks/useForm';
 
@@ -21,7 +21,6 @@ interface LoginFormProps {
 const LoginForm: FC<LoginFormProps> = ({ setCurrentScreen }: LoginFormProps) => {
     const [loading, setLoading] = useState(false);
 
-    const { setUser } = useContext(UserContext) || {};
     const { success, error } = useToast();
 
     const name = useForm();
@@ -33,8 +32,10 @@ const LoginForm: FC<LoginFormProps> = ({ setCurrentScreen }: LoginFormProps) => 
         try {
             const { url, options } = CREATE_USER();
             const response = await api[options.method](url, body);
-            if (setUser) setUser(response.data);
-            success('Usuário cadastrado com sucesso');
+            if (response.data.success) {
+                success(`Um email de validação foi enviado para ${email.value}.`);
+                setCurrentScreen('login');
+            }
         } catch (err) {
             const typedError = err as AxiosError<ErrorResponse>;
             error(typedError?.response?.data?.error || 'Erro inesperado');
@@ -56,7 +57,7 @@ const LoginForm: FC<LoginFormProps> = ({ setCurrentScreen }: LoginFormProps) => 
                 <h1>Se inscreva</h1>
                 <p className='signup'>
                     Já possui uma conta? &nbsp;
-                    <span onClick={() => setCurrentScreen('login')} className='action pointer blue'>
+                    <span onClick={() => setCurrentScreen('login')} className='action pointer'>
                         Faça login.
                     </span>
                 </p>

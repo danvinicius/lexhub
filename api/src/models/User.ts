@@ -19,6 +19,7 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
+  recoveryCode: string | null;
   validated: boolean;
   projects?: IUserProject[];
 }
@@ -28,6 +29,11 @@ const userSchema = new Schema<IUser>(
     name: String,
     email: String,
     password: String,
+    recoveryCode: {
+      type: String,
+      nullable: true,
+    },
+    validated: Boolean,
     projects: [
       {
         role: {

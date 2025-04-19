@@ -10,15 +10,18 @@ import {
   AuthenticateUserRequestDTO,
   ChangeUserRoleRequestDTO,
   CreateUserRequestDTO,
-  ForgotPassworRequestDTO,
+  ForgotPasswordRequestDTO,
   RemoveUserFromProjectRequestDTO,
   ResetPasswordRequestDTO,
   UpdateUserRequestDTO,
+  ValidateUserRequestDTO,
 } from '@/infra/http/dtos';
 import { AuthenticateUserResponseDTO } from '@/infra/http/dtos/authenticate-user-response-dto';
 import { CryptoProvider } from '@/utils/security/crypto-provider';
 import { EmailProvider } from '@/utils/email/email-provider';
 import { TemplateProvider } from '@/utils/email/template-provider';
+import { generatePasswordRecoveryCode } from '@/utils/security/random-code-generator';
+import { VerifyRecoveryCodeRequestDTO } from '@/infra/http/dtos/verify-recovery-code-dto';
 
 export class UserService {
   constructor(
@@ -176,10 +179,9 @@ export class UserService {
     }
 
     if (
-      targetUser.role === IUserRole.PROPRIETARIO && (
-        requesterProjectRole !== IUserRole.PROPRIETARIO ||
-        admins?.includes(data.userId)
-      )
+      targetUser.role === IUserRole.PROPRIETARIO &&
+      (requesterProjectRole !== IUserRole.PROPRIETARIO ||
+        admins?.includes(data.userId))
     ) {
       throw new UnauthorizedError(
         `Somente o proprietário do projeto pode remover outro proprietário ou administrador.`
@@ -223,6 +225,9 @@ export class UserService {
     if (!isPasswordCorrect) {
       throw new ForbiddenError('Senha incorreta ou usuário inexistente');
     }
+    if (!user.validated) {
+      throw new ForbiddenError('Valide sua conta através do e-mail enviado');
+    }
     const encrypter = new JwtProvider(AUTH_SECRET || '');
     const token = await encrypter.encrypt(user.id);
     return new AuthenticateUserResponseDTO({
@@ -235,36 +240,62 @@ export class UserService {
   }
 
   async forgotPassword(
-    data: ForgotPassworRequestDTO
+    data: ForgotPasswordRequestDTO
   ): Promise<{ success: boolean }> {
     const { email } = data;
     const user = await this.userRepository.getUser({ email });
     if (!user || !user?.id) {
       throw new ForbiddenError('Usuário inexistente');
     }
-    const firstName = user.name.split(' ')?.[0]
-    const token = CryptoProvider.encrypt(`${email}:${user.name}`);
-    const resetUrl = `${process.env.WEB_URL}/reset-password?token=${token}`
+    const firstName = user.name.split(' ')?.[0];
+    const recoveryCode = generatePasswordRecoveryCode();
 
-    const htmlTemplate = this.templateProvider.compileTemplate('forgot-password', {
-      name: firstName,
-      resetUrl
-    })
+    const htmlTemplate = this.templateProvider.compileTemplate(
+      'forgot-password',
+      {
+        name: firstName,
+        recoveryCode,
+      }
+    );
     await this.emailProvider.send(email, 'Recuperação de senha', htmlTemplate);
+    await this.userRepository.updateUser(user.id, { recoveryCode });
     return {
-      success: true
+      success: true,
+    };
+  }
+
+  async verifyRecoveryCode(
+    data: VerifyRecoveryCodeRequestDTO
+  ): Promise<{ verifyToken: string }> {
+    const { email } = data;
+    const user = await this.userRepository.getUser({ email });
+    if (!user || !user?.id) {
+      throw new ForbiddenError('Usuário inexistente');
     }
+
+    if (data.recoveryCode !== user.recoveryCode) {
+      throw new ForbiddenError('Código de recuperação inválido');
+    }
+    const verifyToken = CryptoProvider.encrypt(`${email}:${user.name}`);
+
+    await this.userRepository.updateUser(user.id, {
+      validated: true,
+      recoveryCode: null,
+    });
+    return {
+      verifyToken,
+    };
   }
 
   async resetPassword(
     data: ResetPasswordRequestDTO
   ): Promise<{ success: boolean }> {
-    const { token, password } = data;
-    const decrypted = CryptoProvider.decrypt(token);
+    const { verifyToken, password } = data;
+    const decrypted = CryptoProvider.decrypt(verifyToken);
     if (!decrypted) {
       throw new ForbiddenError('Não autorizado.');
     }
-    const [ email ] = decrypted.split(':');
+    const [email] = decrypted.split(':');
     if (!email) {
       throw new ForbiddenError('Não autorizado.');
     }
@@ -277,17 +308,41 @@ export class UserService {
     const hash = await hasher.hash(password);
 
     await this.userRepository.updateUser(user.id, {
-      password: hash
+      password: hash,
     });
 
     return {
-      success: true
-    }
+      success: true,
+    };
   }
 
-  async createUser(
-    data: CreateUserRequestDTO
-  ): Promise<null | AuthenticateUserResponseDTO> {
+  async validateUser(
+    data: ValidateUserRequestDTO
+  ): Promise<{ success: boolean }> {
+    const { verifyToken } = data;
+    const decrypted = CryptoProvider.decrypt(verifyToken);
+    if (!decrypted) {
+      throw new ForbiddenError('Não autorizado.');
+    }
+    const [email] = decrypted.split(':');
+    if (!email) {
+      throw new ForbiddenError('Não autorizado.');
+    }
+    const user = await this.userRepository.getUser({ email });
+    if (!user || !user?.id) {
+      throw new ForbiddenError('Usuário inexistente.');
+    }
+
+    await this.userRepository.updateUser(user.id, {
+      validated: true,
+    });
+
+    return {
+      success: true,
+    };
+  }
+
+  async createUser(data: CreateUserRequestDTO): Promise<{ success: boolean }> {
     const hasher = new HashProvider(this.hashSalt);
     const hash = await hasher.hash(data.password);
     const alreadyExists = await this.userRepository.getUser({
@@ -305,17 +360,29 @@ export class UserService {
     const user = await this.userRepository.getUser({ email });
 
     if (user && user?.id) {
-      const { name, email, projects } = user;
-      const encrypter = new JwtProvider(AUTH_SECRET || '');
-      const token = await encrypter.encrypt(user.id);
-      return new AuthenticateUserResponseDTO({
-        name,
+      const firstName = user.name.split(' ')?.[0];
+      const verifyToken = CryptoProvider.encrypt(`${email}:${user.name}`);
+      const validateUrl = `${process.env.WEB_URL}/login?verifyToken=${verifyToken}`;
+      const htmlTemplate = this.templateProvider.compileTemplate(
+        'validate-user',
+        {
+          name: firstName,
+          validateUrl,
+        }
+      );
+
+      await this.emailProvider.send(
         email,
-        token,
-        projects,
-      });
+        'Ativação de conta',
+        htmlTemplate
+      );
+      return {
+        success: true,
+      };
     }
-    return null;
+    return {
+      success: false,
+    };
   }
 
   async getMe(id: String): Promise<null | AuthenticateUserResponseDTO> {

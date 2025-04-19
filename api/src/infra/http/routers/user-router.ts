@@ -10,7 +10,9 @@ export const userRouter = async (
   router.get('/user/me', authMiddleware, responseHandler(controller.getMe));
   router.post('/user/register', responseHandler(controller.createUser));
   router.post('/user/forgot-password', responseHandler(controller.forgotPassword));
+  router.post('/user/verify-recovery-code', responseHandler(controller.verifyRecoveryCode));
   router.post('/user/reset-password', responseHandler(controller.resetPassword));
+  router.post('/user/validate-user', responseHandler(controller.validateUser));
   router.post(
     '/user/auth',
     responseHandler(controller.authenticateUser)

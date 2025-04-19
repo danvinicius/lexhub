@@ -19,7 +19,7 @@ export const ToastStorage = ({ children }: { children: ReactNode }) => {
   return (
     <ToastContext.Provider value={{ success, error, info }}>
       {children}
-      <ToastContainer position="top-right" autoClose={3000} style={{ marginTop: '1rem' }}/>
+      <ToastContainer position="top-right" autoClose={5000} style={{ marginTop: '1rem' }}/>
     </ToastContext.Provider>
   );
 };

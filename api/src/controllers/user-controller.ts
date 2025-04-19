@@ -105,10 +105,46 @@ export class UserController {
     }
   };
 
+  verifyRecoveryCode = async (req: Request) => {
+    try {
+      const data = validate(DTO.VerifyRecoveryCodeSchema, req.body);
+      const success = await userService.verifyRecoveryCode(data);
+      return ok(success);
+    } catch (error: any) {
+      if (
+        error instanceof BadRequestError
+      ) {
+        return badRequest(error.message);
+      }
+      if (error instanceof ForbiddenError) {
+        return forbidden(error.message);
+      }
+      return serverError(error.message);
+    }
+  };
+
   resetPassword = async (req: Request) => {
     try {
       const data = validate(DTO.ResetPasswordSchema, req.body);
       const success = await userService.resetPassword(data);
+      return ok(success);
+    } catch (error: any) {
+      if (
+        error instanceof BadRequestError
+      ) {
+        return badRequest(error.message);
+      }
+      if (error instanceof ForbiddenError) {
+        return forbidden(error.message);
+      }
+      return serverError(error.message);
+    }
+  };
+
+  validateUser = async (req: Request) => {
+    try {
+      const data = validate(DTO.ValidateUserSchema, req.body);
+      const success = await userService.validateUser(data);
       return ok(success);
     } catch (error: any) {
       if (
