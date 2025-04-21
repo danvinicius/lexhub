@@ -28,15 +28,14 @@ Essa plataforma visa auxiliar engenheiros de software e analistas de requisitos 
 
 ### V3:
 - [ ] Aprimorar sistema de alterações
-- [ ] Paginar alterações e cenários
+- [x] Paginar cenários
 - [ ] Permitir abrir calendário, relógio e dias da semana na localização temporal
 - [ ] Permitir adicionar/alterar foto de perfil
-- [ ] Enviar e-mails para convidar usuários para projetos, confirmação de e-mail e recuperação de conta
-- [ ] Exportar projetos em PDF e/ou DOCX
-- [ ] Exportar projetos em .feature para casos de teste
+- [ ] Permitir excluir conta
+- [ ] Enviar e-mail para convidar usuários para projetos
+- [x] Enviar e-mails para confirmação de e-mail e redefinição de senha
 - [ ] Checar responsividade
-- [ ] Refatoração de código
-- [ ] ESLint no back-end
+- [ ] Passar API para Nest
 - [ ] Autenticação com Google / Facebook
 - [ ] Integração com Trello e/ou Jira
 - [ ] Checar SEO e performance
