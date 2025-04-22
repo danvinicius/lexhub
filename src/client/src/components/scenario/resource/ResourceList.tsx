@@ -61,10 +61,7 @@ const ResourcesList: FC<ResourcesListProps> = ({
                                         Restrições
                                     </div>
                                 </StyledTableCell>
-                                {isColaborador && (
-                                    <StyledTableCell style={{ width: '100px', textAlign: 'center' }}>
-                                    </StyledTableCell>
-                                )}
+                                {isColaborador && <StyledTableCell style={{ width: '100px', textAlign: 'center' }}></StyledTableCell>}
                             </TableRow>
                         </TableHead>
 
@@ -74,10 +71,9 @@ const ResourcesList: FC<ResourcesListProps> = ({
                                     <StyledTableCell>{processContent(resource.name)}</StyledTableCell>
                                     <StyledTableCell>
                                         <div className='flex column'>
-                                            {!resource.restrictions?.length && (
+                                            {!resource.restrictions?.length ? (
                                                 <small className='empty'>Nenhuma restrição cadastrada</small>
-                                            )}
-                                            {resource.restrictions?.length && (
+                                            ) : (
                                                 <List>
                                                     {resource.restrictions?.map((restriction) => (
                                                         <ListItem disablePadding key={restriction.id}>

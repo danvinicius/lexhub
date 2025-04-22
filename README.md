@@ -31,7 +31,7 @@ Essa plataforma visa auxiliar engenheiros de software e analistas de requisitos 
 - [x] Paginar cenários
 - [ ] Permitir abrir calendário, relógio e dias da semana na localização temporal
 - [ ] Permitir adicionar/alterar foto de perfil
-- [ ] Permitir excluir conta
+- [x] Permitir excluir conta
 - [ ] Enviar e-mail para convidar usuários para projetos
 - [x] Enviar e-mails para confirmação de e-mail e redefinição de senha
 - [ ] Checar responsividade

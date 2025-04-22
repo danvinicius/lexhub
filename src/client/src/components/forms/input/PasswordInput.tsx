@@ -11,7 +11,7 @@ interface PasswordInputProps {
     enableForgotPassword: boolean;
     value: string;
     placeholder: string;
-    label: string;
+    label?: string;
     error?: string | null;
     onInput: (e: ChangeEvent<HTMLInputElement>) => void;
     onBlur: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -30,7 +30,7 @@ const PasswordInput: FC<PasswordInputProps> = ({
 }: PasswordInputProps) => {
     const [type, setType] = useState('password');
     return (
-        <div className='password-input-wrapper'>
+        <div className={`password-input-wrapper ${label ? 'hasLabel' : ''}`}>
             {enableForgotPassword && (
                 <small className='third-text-color pointer' onClick={() => (setCurrentScreen ? setCurrentScreen('forgot-password') : {})}>
                     Esqueceu sua senha?

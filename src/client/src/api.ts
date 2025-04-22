@@ -203,6 +203,18 @@ export const DELETE_SYMBOL = (projectId: string, symbolId: string, token: string
 		},
 	};
 };
+export const DELETE_USER = (token: string): RequestFormat => {  
+	return {
+		url: `/user`,
+		options: {
+			method: 'delete',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${token}`
+			},
+		},
+	};
+};
 
 export const CREATE_SYMBOL = (projectId: string, token: string): RequestFormat => {  
 	return {

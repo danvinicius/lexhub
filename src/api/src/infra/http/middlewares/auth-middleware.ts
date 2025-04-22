@@ -21,7 +21,7 @@ export const authMiddleware = async (
     
     if (!token) {
       return res.status(403).json({
-        error: new ForbiddenError('Senha incorreta ou usuário inexistente').message,
+        error: new ForbiddenError('Senha incorreta').message,
         code: 403,
       });
     }
@@ -31,7 +31,7 @@ export const authMiddleware = async (
 
     if (!id) {
       return res.status(403).json({
-        error: new ForbiddenError('Senha incorreta ou usuário inexistente').message,
+        error: new ForbiddenError('Senha incorreta').message,
         code: 403,
       });
     }
@@ -41,7 +41,7 @@ export const authMiddleware = async (
 
     if (!user) {
       return res.status(403).json({
-        error: new ForbiddenError('Senha incorreta ou usuário inexistente').message,
+        error: new ForbiddenError('Senha incorreta').message,
         code: 403,
       });
     }
@@ -51,7 +51,7 @@ export const authMiddleware = async (
     next();
   } catch (error) {
     return res.status(401).json({
-      error: new ForbiddenError('Senha incorreta ou usuário inexistente').message,
+      error: new ForbiddenError('Senha incorreta').message,
       code: 403,
     });
   }

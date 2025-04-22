@@ -1,74 +1,74 @@
 .symbol-details {
-  display: flex;
-  gap: 1.5rem;
-  flex-direction: column;
-  font-size: 1rem;
-  border-radius: 5px;
-  padding: 1.25rem;
-  margin-bottom: auto;
-  overflow: auto;
-
-  .symbol-details-notion {
     display: flex;
+    gap: 1.5rem;
     flex-direction: column;
-    gap: 0.25rem;
-    h3 {
-      color: var(--primary-text-color);
-    }
-    p.notion {
-      font-size: 1rem;
-      margin-top: 1rem;
-    }
+    font-size: 1rem;
+    border-radius: 5px;
+    padding: 1.25rem;
+    margin-bottom: auto;
+    overflow: auto;
 
-    .symbol-name {
-      align-items: flex-start;
-      display: flex;
-      gap: 1rem;
-      width: 100%;
-      position: relative;
-      .classification {
+    .symbol-details-notion {
         display: flex;
-        align-items: center;
-
-        p {
-          font-size: 0.75rem;
-          padding: 0.25rem 0.75rem;
-          background: var(--primary-color);
-          color: #fff;
-          border-radius: 20px;
+        flex-direction: column;
+        gap: 0.25rem;
+        h3 {
+            color: var(--primary-text-color);
         }
-      }
+        p.notion {
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
 
+        .classification {
+            display: flex;
+            align-items: center;
+            margin-bottom: .25rem;
 
-      img.symbol-options-button {
-        position: absolute;
-        top: 0;
-        right: 0;
-        cursor: pointer;
-      }
+            p {
+                font-size: 0.75rem;
+                padding: 0.25rem 0.75rem;
+                background: var(--primary-color);
+                color: #fff;
+                border-radius: 20px;
+            }
+        }
+        .symbol-name {
+            align-items: flex-start;
+            display: flex;
+            width: 100%;
+            position: relative;
+            padding-right: 2rem;
+
+            img.symbol-options-button {
+                position: absolute;
+                top: 0;
+                right: 0;
+                cursor: pointer;
+            }
+        }
     }
-  }
-  .symbol-details-synonyms,
-  .symbol-details-impacts {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    h4 {
-      font-size: 1.25rem;
-      color: var(--primary-text-color);
-    }
+    .symbol-details-synonyms,
+    .symbol-details-impacts {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        h4 {
+            font-size: 1.25rem;
+            color: var(--primary-text-color);
+        }
 
-    ul {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
 
-      li {
-        padding: 0.5rem 1rem;
-        background: #dedede;
-        color: var(--primary-text-color);
-        border-radius: 20px;
-      }
+            li {
+                padding: 0.5rem 1rem;
+                background: #dedede;
+                color: var(--primary-text-color);
+                border-radius: 20px;
+            }
+        }
     }
-  }
 }

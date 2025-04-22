@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import UpdateUserForm from '../../user/user-form/UpdateUserForm';
+import UpdateUserForm from '../../user/update-user/UpdateUserForm';
 import '../overview/Overview.scss';
 
 export const Configurations = (): ReactNode => {

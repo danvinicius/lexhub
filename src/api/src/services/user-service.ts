@@ -218,12 +218,12 @@ export class UserService {
     const { email, password } = data;
     const user = await this.userRepository.getUser({ email });
     if (!user || !user?.id) {
-      throw new ForbiddenError('Senha incorreta ou usuário inexistente');
+      throw new ForbiddenError('Senha incorreta');
     }
     const hasher = new HashProvider(this.hashSalt);
     const isPasswordCorrect = await hasher.compare(password, user.password);
     if (!isPasswordCorrect) {
-      throw new ForbiddenError('Senha incorreta ou usuário inexistente');
+      throw new ForbiddenError('Senha incorreta');
     }
     if (!user.validated) {
       throw new ForbiddenError('Valide sua conta através do e-mail enviado');
@@ -371,11 +371,7 @@ export class UserService {
         }
       );
 
-      await this.emailProvider.send(
-        email,
-        'Ativação de conta',
-        htmlTemplate
-      );
+      await this.emailProvider.send(email, 'Ativação de conta', htmlTemplate);
       return {
         success: true,
       };
@@ -420,22 +416,22 @@ export class UserService {
     }
     let hash: string = '';
     const hasher = new HashProvider(this.hashSalt);
-    if (data.currentPassword?.length && data.newPassword?.length) {
-      await this.checkPassword(data.currentPassword, user.password);
+    if (data.newPassword?.length) {
       hash = await hasher.hash(data.newPassword);
     }
 
     return this.userRepository.updateUser(id, {
       ...data,
-      password: data.currentPassword ? hash : user.password,
+      password: data.newPassword ? hash : user.password,
     });
   }
 
-  private async checkPassword(checkPassword: string, userPassword: string) {
-    const hasher = new HashProvider(this.hashSalt);
-    const isPasswordCorrect = await hasher.compare(checkPassword, userPassword);
-    if (!isPasswordCorrect) {
-      throw new ForbiddenError('Senha incorreta');
+  async deleteUser(id: String): Promise<void> {
+    const user = await this.userRepository.getUser({ _id: id });
+    if (!user) {
+      throw new BadRequestError('Usuário inválido ou inexistente');
     }
+
+    await this.userRepository.deleteUser(id);
   }
 }

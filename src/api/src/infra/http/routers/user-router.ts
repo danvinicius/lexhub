@@ -38,4 +38,9 @@ export const userRouter = async (
     authMiddleware,
     responseHandler(controller.updateUser)
   );
+  router.delete(
+    '/user',
+    authMiddleware,
+    responseHandler(controller.deleteUser)
+  );
 };

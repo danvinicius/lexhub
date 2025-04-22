@@ -97,7 +97,7 @@ const ScenarioForm: FC<ScenarioFormProps> = ({ onClose, resetInfo, scenario }: S
                 <Input
                     type='text'
                     name='title'
-                    placeholder='Logar no sistema'
+                    placeholder='Insira o título do cenário'
                     label='Título'
                     autoFocus
                     {...title}
@@ -106,7 +106,7 @@ const ScenarioForm: FC<ScenarioFormProps> = ({ onClose, resetInfo, scenario }: S
                 />
                 <Textarea
                     name='goal'
-                    placeholder='Permitir ao usuário se identificar'
+                    placeholder='Insira o objetivo do cenário'
                     label='Objetivo'
                     rows={10}
                     {...goal}

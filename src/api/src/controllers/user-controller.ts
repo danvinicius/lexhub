@@ -211,4 +211,18 @@ export class UserController {
       return serverError(error.message);
     }
   };
+
+  public deleteUser = async (req: Request) => {
+    try {
+      await userService.deleteUser(req.userId || '');
+      return ok({ message: 'User deleted' });
+    } catch (error: any) {
+      if (
+        error instanceof BadRequestError
+      ) {
+        return badRequest(error.message);
+      }
+      return serverError(error.message);
+    }
+  };
 }

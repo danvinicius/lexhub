@@ -9,7 +9,7 @@ interface InputProps {
   placeholder: string;
   value: string;
   required?: boolean;
-  label: string;
+  label?: string;
   error?: string | null;
   style?: CSSProperties;
   autoFocus?: boolean;
