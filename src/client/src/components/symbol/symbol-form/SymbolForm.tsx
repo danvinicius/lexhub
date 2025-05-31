@@ -98,8 +98,8 @@ const SymbolForm: FC<SymbolFormProps> = ({ symbol, onClose, resetInfo }: SymbolF
                     name='classification'
                     label='Classificação'
                     options={[
-                        { value: 'Recurso', label: 'Recurso' },
-                        { value: 'Ator', label: 'Ator' },
+                        { value: 'Verbo', label: 'Verbo' },
+                        { value: 'Sujeito', label: 'Sujeito' },
                         { value: 'Estado', label: 'Estado' },
                         { value: 'Objeto', label: 'Objeto' },
                     ]}
