@@ -1,0 +1,26 @@
+@startuml external-libs
+skinparam componentStyle rectangle
+
+left to right direction
+
+package "External libs" {
+    [mongoose]
+    [bcryptjs]
+    [deep-diff]
+    [handlebars]
+    [jet-logger]
+    [jsonwebtoken]
+    [nodemailer]
+    [zod]
+}
+
+[ChangeService] --> [deep-diff]
+[TemplateProvider] --> [handlebars]
+[EmailProvider] --> [nodemailer]
+[JWTProvider] --> [jsonwebtoken]
+[Logger] --> [jet-logger]
+[DTOs] --> [zod]
+[HashProvider] --> [bcryptjs]
+[DBConnection] --> [mongoose]
+
+@enduml

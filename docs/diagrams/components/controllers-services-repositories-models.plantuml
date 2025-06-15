@@ -1,0 +1,58 @@
+@startuml controllers-services-repositories-models
+skinparam componentStyle rectangle
+
+left to right direction
+
+package "Controllers" {
+  [UserController]
+  [ProjectController]
+  [ScenarioController]
+  [SymbolController]
+  [ChangeController]
+}
+
+package "Services" {
+  [UserService]
+  [ProjectService]
+  [ScenarioService]
+  [SymbolService]
+  [ChangeService]
+  [LexiconService]
+}
+
+package "Repositories" {
+  [UserRepository]
+  [ProjectRepository]
+  [ScenarioRepository]
+  [SymbolRepository]
+  [ChangeRepository]
+}
+
+package "Models" {
+  [UserModel]
+  [ProjectModel]
+  [ScenarioModel]
+  [SymbolModel]
+  [ChangeModel]
+}
+
+
+[UserController] --> [UserService]
+[ProjectController] --> [ProjectService]
+[ScenarioController] --> [ScenarioService]
+[SymbolController] --> [SymbolService]
+[ChangeController] --> [ChangeService]
+
+[UserService] --> [UserRepository]
+[ProjectService] --> [ProjectRepository]
+[ScenarioService] --> [ScenarioRepository]
+[SymbolService] --> [SymbolRepository]
+[ChangeService] --> [ChangeRepository]
+
+[UserRepository] --> [UserModel]
+[ProjectRepository] --> [ProjectModel]
+[ScenarioRepository] --> [ScenarioModel]
+[SymbolRepository] --> [SymbolModel]
+[ChangeRepository] --> [ChangeModel]
+
+@enduml

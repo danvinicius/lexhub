@@ -1,0 +1,10 @@
+@startuml services-services
+skinparam componentStyle rectangle
+
+left to right direction
+
+[ScenarioService] --> [LexiconService]
+[SymbolService] --> [LexiconService]
+
+
+@enduml

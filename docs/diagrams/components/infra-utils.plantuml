@@ -1,0 +1,32 @@
+@startuml infra-utils
+skinparam componentStyle rectangle
+
+top to bottom direction
+
+package "Infra" {
+  [DBConnection]
+  [HTTPHandlers]
+  [DTOs]
+  [Middlewares]
+  [Routers]
+}
+
+package "Utils" {
+  [Authentication]
+  [Email]
+  [Errors]
+  [Logger]
+  [Security]
+}
+[AllControllers] --> [DTOs]
+
+[Middlewares] --> [Authentication]
+[Middlewares] --> [Security]
+[Middlewares] --> [Errors]
+[Errors] --> [Logger]
+[Routers] --> [Middlewares]
+
+[main.ts] --> [server.ts]
+[server.ts] --> [Routers]
+[server.ts] --> [DBConnection]
+@enduml
